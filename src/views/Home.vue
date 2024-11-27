@@ -135,7 +135,7 @@
                     </div>
                 </div>
             </div>
-            <div class="2xl:w-full 2xs:w-[390px] lg:w-full md:w-full xs:w-full 2xl:h-screen 2xs:h-[400px] flex bg-gray-100">
+            <div class="pl-2 2xl:w-full 2xs:w-[390px] lg:w-full md:w-full xs:w-full 2xl:h-screen 2xs:h-[400px] flex bg-gray-100">
                     <div class="flex w-full  justify-center items-center 2xl:gap-10 2xs:gap-5">
 
                         <!-- Left Side: Lettuce Images with Animation -->

@@ -64,6 +64,7 @@
                 </div>
             </div>
         </div>
+
         <div class="items-center flex justify-center 2xl:gap-10 2xs:gap-3 h-screen">
             <div class="bg-[#608C54] shadow-lg rounded-md 2xl:w-52 2xs:w-40  lg:w-52 md:w-52 2xl:h-52 2xs:h-44 lg:h-52 border-4 border-[#608C54] flex items-center justify-center">
                 <h1 class="text-start 2xl:text-lg 2xs:text-sm lg:text-lg  text-white font-bold px-4">
@@ -78,6 +79,7 @@
                 </div>
             </div>
         </div>
+
         <div class=" min-h-screen p-5">
             <div class="items-center  text-center">
                 <h1 class="2xl:text-4xl 2xs:text-2xl font-serif font-bold mb-3">Introducing the leader steering the <br> vision that fuels our mission.</h1>
@@ -86,45 +88,52 @@
             </div>
             <!-- Pictures Section -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-center mt-8">
-                <!-- Member 1 -->
-                 <div class="flex justify-center col-span-full">
+                <!-- Members Row 1 -->
+                <div class="flex justify-center col-span-full">
                     <div class="flex 2xl:gap-20 2xs:gap-10 mt-4">
-                        <div class="space-y-1">
-                            <img :src="Document" alt="Leader 1" class="2xl:w-52 2xs:w-32 2xl:h-52 2xs:h-34 mx-auto rounded-full">
-                            <hr class="2xl:w-[200px] 2xs:w-[90px] mt-1 justify-start ml-1  border-t-8 border-[#608C54]" />
+                        <!-- Member 1 -->
+                        <div class="space-y-2">
+                            <img :src="Document" alt="Leader 1" 
+                                class="2xl:w-52 2xs:w-32 2xl:h-52 2xs:h-34 mx-auto rounded-full border-4 border-[#608C54]">
+                            <hr class="2xl:w-[200px] 2xs:w-[90px]  lg:w-[120px] mt-1 justify-start ml-1 border-t-8 border-[#608C54]" />
                             <p class="2xl:text-sm 2xs:text-xs font-semibold">ABELA, Ace Seann</p>
                             <p class="text-xs">Documentary</p>
                         </div>
                         <!-- Member 2 -->
                         <div class="space-y-2">
-                            <img :src="Designer" alt="Leader 2" class="2xl:w-52 2xs:w-32 2xl:h-52 2xs:h-34 mx-auto rounded-full">
-                            <hr class="2xl:w-[200px] 2xs:w-[90px] mt-1 justify-start ml-1  border-t-8 border-[#608C54]" />
-                            <p class="2xl:text-sm 2xs:text-xs font-semibold">ARCIGA,Kurt Steven</p>
+                            <img :src="Designer" alt="Leader 2" 
+                                class="2xl:w-52 2xs:w-32 2xl:h-52 2xs:h-34 mx-auto rounded-full border-4 border-[#608C54]">
+                            <hr class="2xl:w-[200px] 2xs:w-[90px] lg:w-[120px] mt-1 justify-start ml-1 border-t-8 border-[#608C54]" />
+                            <p class="2xl:text-sm 2xs:text-xs font-semibold">ARCIGA, Kurt Steven</p>
                             <p class="text-xs">UI/UX</p>
                         </div>
                         <!-- Member 3 -->
                         <div class="space-y-2">
-                            <img :src="FrontEnd" alt="Leader 3" class="2xl:w-52 2xs:w-32 2xl:h-52 2xs:h-34 mx-auto rounded-full">
-                            <hr class="2xl:w-[200px] 2xs:w-[90px] mt-1 justify-start ml-1  border-t-8 border-[#608C54]" />
+                            <img :src="FrontEnd" alt="Leader 3" 
+                                class="2xl:w-52 2xs:w-28 2xl:h-52 2xs:h-28 mx-auto rounded-full border-4 border-[#608C54]">
+                            <hr class="2xl:w-[200px] 2xs:w-[90px] lg:w-[150px] xs:w-[130px] mt-1 justify-start ml-1 border-t-8 border-[#608C54]" />
                             <p class="2xl:text-sm 2xs:text-xs font-semibold">DELA CRUZ, James Warren</p>
                             <p class="text-xs">Front End</p>
                         </div>
                     </div>
-                 </div>
-                <!-- Member 4 -->
+                </div>
+
+                <!-- Members Row 2 -->
                 <div class="flex justify-center col-span-full">
                     <div class="flex gap-10 mt-4">
                         <!-- Member 4 -->
                         <div class="space-y-2">
-                            <img :src="BackEnd" alt="Leader 4" class="2xl:w-52 2xs:w-32 2xl:h-52 2xs:h-[120px] mx-auto rounded-full">
-                            <hr class="2xl:w-[200px] 2xs:w-[120px] mt-1 justify-start ml-1  border-t-8 border-[#608C54]" />
+                            <img :src="BackEnd" alt="Leader 4" 
+                                class="2xl:w-52 2xs:w-32 2xl:h-52 2xs:h-[120px] mx-auto rounded-full border-4 border-[#608C54]">
+                            <hr class="2xl:w-[200px] 2xs:w-[120px] mt-1 justify-start ml-1 border-t-8 border-[#608C54]" />
                             <p class="2xl:text-sm 2xs:text-xs font-semibold">GARINGA, Milbert</p>
                             <p class="text-xs">Back End</p>
                         </div>
                         <!-- Member 5 -->
                         <div class="space-y-2">
-                            <img :src="BackEnd2" alt="Leader 5" class="2xl:w-52 2xs:w-32 2xl:h-52 2xs:h-[120px] mx-auto rounded-full">
-                            <hr class="2xl:w-[200px] 2xs:w-[150px] mt-1 justify-start ml-1  border-t-8 border-[#608C54]" />
+                            <img :src="BackEnd2" alt="Leader 5" 
+                                class="2xl:w-52 2xs:w-32 2xl:h-52 2xs:h-[120px] mx-auto rounded-full border-4 border-[#608C54]">
+                            <hr class="2xl:w-[200px] 2xs:w-[150px] mt-1 justify-start ml-1 border-t-8 border-[#608C54]" />
                             <p class="2xl:text-sm 2xs:text-xs font-semibold">LEONOR, John Meynard</p>
                             <p class="text-xs">Back End</p>
                         </div>
