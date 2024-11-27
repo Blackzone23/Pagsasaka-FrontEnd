@@ -1,39 +1,54 @@
 <template>
     <div>
         <HomeNavbar/>
-        <div class="relative">
-            <!-- Background Image -->
-            <img :src="Farm2" alt="" class="2xl:w-full 2xs:w-[400px] lg:w-full  md:w-full sm:w-full 2xl:h-full 2xs:h-[300px] lg:h-[400px] md:h-[400px]">
-
-            <!-- Box Overlay -->
-            <div class="absolute inset-0 flex items-center justify-center 2xl:top-72 2xs:top-28 lg:top-36 md:top-40">
-                <div class="bg-[#608C54] shadow-lg rounded-md 2xl:w-1/2 2xs:w-96 lg:w-1/2 md:w-1/2 2xl:h-72 2xs:h-50 lg:h-68 border-4 border-[#608C54]">
-                    <h1 class="text-center text-white 2xl:text-4xl 2xs:text-xl lg:text-4xl  md:text-3xl font-semibold 2xl:py-5 2xs:py-2 lg:py-5">About Us</h1>
+        <div class="relative bg-cover bg-center" :style="{ backgroundImage: `url(${Farm2})` }">
+            <!-- Main Content Section -->
+            <div class="flex flex-col items-center justify-center h-full 2xl:py-32 2xs:py-16 lg:py-28 md:py-24 px-4">
+                <div class="bg-[#608C54] shadow-lg rounded-md 2xl:w-1/2 2xs:w-96 lg:w-1/2 md:w-1/2 2xl:h-72 2xs:h-auto lg:h-68 border-4 border-[#608C54] p-6">
+                    <h1 class="text-center text-white 2xl:text-4xl 2xs:text-xl lg:text-4xl md:text-3xl font-semibold 2xl:py-5 2xs:py-2 lg:py-5">About Us</h1>
                     <hr class="w-1/2 mx-auto border-t-8 border-[#DAA520]" />
-                    <p class="text-center 2xl:text-lg 2xs:text-xs lg:text-lg md:text-lg text-[#e6e1e1] py-4">Pagsasaka connects farmers directly with consumers, ensuring fair pricing <br> and access to fresh produce, livestock, and farming tools. Our platform <br> supports sustainable farming while empowering communities to make <br> informed food choices and fostering a thriving agricultural future.</p>
+                    <p class="text-center 2xl:text-lg 2xs:text-xs lg:text-lg md:text-lg text-[#e6e1e1] py-4">
+                        Pagsasaka connects farmers directly with consumers, ensuring fair pricing <br>
+                        and access to fresh produce, livestock, and farming tools. Our platform <br>
+                        supports sustainable farming while empowering communities to make <br>
+                        informed food choices and fostering a thriving agricultural future.
+                    </p>
                 </div>
             </div>
         </div>
-        <div class=" flex items-center justify-center 2xl:gap-10 2xs:gap-5 2xl:p-32 2xs:p-8 lg:p-28 md:p-24">
+
+        <!-- Small Boxes Section -->
+        <div class="flex flex-wrap items-center justify-center gap-10 2xl:p-32 2xs:p-8 lg:p-28 md:p-24">
             <!-- Small Box on the Left Side -->
-            <div class="bg-[#608C54] shadow-lg rounded-md w-96 2xl:h-96 2xs:h-70 border-4 ">
+            <div class="bg-[#608C54] shadow-lg rounded-md 2xl:w-[500px] 2xl:h-[580px] 2xs:h-auto border-4">
                 <img :src="CSA" alt="" class="w-full h-auto">
-                <hr class="w-1/2 mt-1 justify-start ml-1  border-t-8 border-[#DAA520]" />
-                <p class="text-xs text-white text-start ml-1">Community-Supported Agriculture (CSA) by Pagsasaka <br> enhances the livelihoods of smallholder farmers while <br> delivering the freshest produce to consumers every week.</p>
+                <hr class="w-1/2 mt-1 ml-1 border-t-8 border-[#DAA520]" />
+                    <p class="2xl:text-lg 2xs:text-xs text-white text-start ml-1">
+                    Community-Supported Agriculture (CSA) by Pagsasaka <br>
+                    enhances the livelihoods of smallholder farmers while <br>
+                    delivering the freshest produce to consumers every week.
+                    </p>
                 <div class="flex justify-end mt-auto">
                     <a href="/services" class="text-xs px-2 mt-10 text-white hover:text-gray-300">Read More</a>
                 </div>
             </div>
-             <!-- Small Box on the Right Side -->
-            <div class="bg-[#608C54] shadow-lg rounded-md w-96 2xl:h-96 2xs:h-68 border-4">
+
+            <!-- Small Box on the Right Side -->
+            <div class="bg-[#608C54] shadow-lg rounded-md 2xl:w-[500px] 2xl:h-[580px] 2xs:h-auto border-4">
                 <img :src="meetF" alt="" class="w-full h-auto">
-                <hr class="w-1/2 justify-start mt-1 ml-1 border-t-8 border-[#DAA520]" />
-                <p class="text-xs text-white text-start ml-1">Meet our farmers, the champions behind the exceptional <br> food we cherish. Their dedication empowers us to thrive <br> as a community, and we are proud to support their <br> commitment to quality and sustainability.</p>
+                <hr class="w-1/2 mt-1 ml-1 border-t-8 border-[#DAA520]" />
+                    <p class="2xl:text-lg 2xs:text-xs text-white text-start ml-1">
+                    Meet our farmers, the champions behind the exceptional <br>
+                    food we cherish. Their dedication empowers us to thrive <br>
+                    as a community, and we are proud to support their <br>
+                    commitment to quality and sustainability.
+                    </p>
                 <div class="flex justify-end mt-auto">
                     <a href="/meet" class="text-xs px-2 mt-6 text-white hover:text-gray-300">Read More</a>
                 </div>
             </div>
         </div>
+
         <div>
             <div class="bg-[#608C54] flex items-center 2xl:py-0 2xs:py-5 lg:py-10 md:py-10">
                 <div class="flex items-center">
@@ -65,9 +80,9 @@
         </div>
         <div class=" min-h-screen p-5">
             <div class="items-center  text-center">
-                <h1 class="text-3xl font-serif font-bold mb-3">Introducing the leader steering the <br> vision that fuels our mission.</h1>
+                <h1 class="2xl:text-4xl 2xs:text-2xl font-serif font-bold mb-3">Introducing the leader steering the <br> vision that fuels our mission.</h1>
                 <hr class="w-[200px] p-2 mx-auto border-t-8 border-[#608C54]" />
-                <p class="text-xs font-sans">We are a diverse team with roots in various farming communities, each contributing unique perspectives, experiences, <br>  and expertise. This rich blend of backgrounds allows us to bring innovative solutions that bridge the gap between <br>  farmers and consumers, creating a more efficient and sustainable agricultural marketplace.</p>
+                <p class="2xl:text-lg 2xs:text-xs font-sans">We are a diverse team with roots in various farming communities, each contributing unique perspectives, experiences, <br>  and expertise. This rich blend of backgrounds allows us to bring innovative solutions that bridge the gap between <br>  farmers and consumers, creating a more efficient and sustainable agricultural marketplace.</p>
             </div>
             <!-- Pictures Section -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-center mt-8">
