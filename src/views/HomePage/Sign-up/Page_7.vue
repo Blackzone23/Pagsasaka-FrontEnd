@@ -15,7 +15,7 @@
                     <input type="file" ref="fileInput" @change="handleFileUpload" class="hidden" />
                 </div>
                 
-                <div class="space-y-3 text-sm w-1/2 mt-6">
+                <div class="space-y-3 text-sm 2xl:w-1/2 2xs:w-[250px] mt-6">
                     <BaseLabel>Payment Method</BaseLabel>
                     <div class="flex space-x-4">
                         <BaseRadioButton v-for="option in ['Gcash', 'MasterCard']" :key="option" :name="'tinIdOption'" :label="option" :value="option" v-model="tinIdSelected"></BaseRadioButton>
@@ -43,7 +43,7 @@
                 </div>
                 
                 <div class="mt-10 text-center">
-                    <a href="/page8" class="px-32 py-2 bg-[#608C54] text-white text-sm rounded-md hover:bg-gray-400 transition">
+                    <a href="/page8" class="2xl:px-32 2xs:px-20 py-2 bg-[#608C54] text-white text-sm rounded-md hover:bg-gray-400 transition">
                         Continue
                     </a>
                      <!-- <button class="w-full py-2 bg-[#608C54] text-white text-sm font-medium rounded-full hover:bg-[#4e7344] transition duration-200">

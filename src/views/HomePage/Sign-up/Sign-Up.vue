@@ -1,8 +1,8 @@
 <template>
     <div>
         <SignUp_Navbar/>
-        <div class="p-10">
-            <div class="bg-white min-h-screen flex flex-col mt-5 items-center space-y-2 border-2 border-gray-300 p-10 rounded-md">
+        <div class="2xl:p-10 2xs:p-0">
+            <div class="bg-white h-full w-full flex flex-col mt-5 items-center space-y-2 border-2 border-gray-300 p-10 rounded-md">
             <!-- Logo at the top -->
             <img :src="Logo2" alt="Logo2" class="h-16 mb-2">
             
@@ -15,8 +15,8 @@
                     <BaseInputField placeholder="Enter Your Name"></BaseInputField>
                     <BaseError></BaseError>
 
-                    <BaseLabel class="font-semibold">Mobile number or email</BaseLabel>
-                    <BaseInputField placeholder="Enter Mobile number or email"></BaseInputField>
+                    <BaseLabel class="font-semibold">Email Address</BaseLabel>
+                    <BaseInputField placeholder="Enter email"></BaseInputField>
 
                     <BaseLabel class="font-semibold">Password</BaseLabel>
                     <BaseInputField placeholder="Enter Your Password "></BaseInputField>
@@ -37,7 +37,7 @@
                     <hr class="w-full  mx-auto border-t-2 border-[#608C54]" />
                     <p>Want to be part of Logistics? <br> Email us now and apply <span class="text-[#608C54]">Pagsasaka@gmail.com.</span></p>
                     <hr class="w-full mx-auto border-t-2 border-[#608C54]" />
-                    <p>Already have an account?<a href="/login" class="text-[#608C54] hover:underline">Sign in</a></p>
+                    <p>Already have an account?<a href="/login" class="text-[#608C54] hover:underline"> Sign in</a></p>
                 </div>
             </div>
             <div class="text-xs">

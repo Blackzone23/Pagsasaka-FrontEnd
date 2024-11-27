@@ -1,7 +1,7 @@
 <template>
     <div>
         <SignUp_Navbar/>
-        <div class="flex items-center justify-end space-x-3 p-2 text-sm">
+        <div class="flex items-center justify-end space-x-3 p-2 2xl:text-sm 2xs:text-xs">
             <Icon icon="cuida:alert-outline" width="2rem" height="2rem" style="color: black" />
             <p>Please ensure your business type selection is correct. <br><span class="text-[#FF0000]">An incorrect selection may affect the status of your account</span></p>
         </div>
@@ -31,7 +31,7 @@
 
                     <div>
                         <BaseLabel>Do you have Tin-ID?</BaseLabel>
-                        <div class="space-y-3 text-sm">
+                        <div class="space-y-3 2xl:text-sm 2xs:text-xs">
                             <div class="flex space-x-4">
                                 <BaseRadioButton v-for="option in ['Yes', 'No']" :key="option" :name="'tinIdOption'" :label="option" :value="option" v-model="tinIdSelected"></BaseRadioButton>
                             </div>
@@ -41,7 +41,7 @@
                                 <BaseInputField placeholder="TIN-ID Number"></BaseInputField>
                                 <div class="flex space-y-4 gap-3">
                                     <BaseLabel>Certificate of Registration</BaseLabel>
-                                    <button @click="triggerFileInput" class="bg-gray-200 p-2 w-40 flex items-center justify-center gap-2 rounded-full text-center text-xs">
+                                    <button @click="triggerFileInput" class="bg-gray-200 p-2 2xl:w-40 2xs:w-20 flex items-center justify-center gap-2 rounded-full text-center text-xs">
                                         <Icon icon="material-symbols:upload-file-sharp" width="1.2rem" height="1.2rem" style="color: black" />
                                         Upload
                                     </button>
@@ -57,10 +57,10 @@
                             </div>
 
                             <div class="mt-3 text-center">
-                                <a href="/page7" class="px-32 py-2 bg-[#608C54] text-white text-sm rounded-md hover:bg-gray-400 transition">
+                                <a href="/page7" class="2xl:px-32 2xs:px-20 md:px-16 py-2 bg-[#608C54] text-white 2xl:text-sm 2xs:text-xs rounded-md hover:bg-gray-400 transition">
                                     Continue
                                 </a>
-                                                <!-- <button class="w-full py-2 bg-[#608C54] text-white text-sm font-medium rounded-full hover:bg-[#4e7344] transition duration-200">
+                                <!-- <button class="w-full py-2 bg-[#608C54] text-white text-sm font-medium rounded-full hover:bg-[#4e7344] transition duration-200">
                                     Continue
                                 </button> -->
                             </div>

@@ -12,8 +12,8 @@
                 </p>
 
                 <!-- Image Section -->
-                <div class="flex justify-center mt-10">
-                    <img :src="Vegetable2" alt="Vegetables" class="2xl:h-[450px] 2xs:h-[100px] md:h-[300px] sm:h-[200px] w-full max-w-5xl">
+                <div class="flex justify-center 2xl:mt-24 2xs:mt-32 sm:mt-44">
+                    <img :src="Vegetable2" alt="Vegetables" class="2xl:h-[450px] 2xs:h-[290px] md:h-[300px] sm:h-[200px] 2xl:w-full 2xs:w-[300px] md:w-full sm:w-full ">
                 </div>
             </div>
         </div>

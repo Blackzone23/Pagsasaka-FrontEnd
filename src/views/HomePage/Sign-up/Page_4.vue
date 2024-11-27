@@ -1,7 +1,7 @@
 <template>
     <div>
         <SignUp_Navbar/>
-        <div class="p-10">
+        <div class="2xl:p-10 2xs:p-0 md:p-5">
             <div class="border-2 border-gray-300  rounded-lg bg-white p-10 shadow-lg">
                 <div class="bg-white min-h-screen flex flex-col items-center space-y-2">
                     <!-- Logo at the top -->

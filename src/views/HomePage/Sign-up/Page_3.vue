@@ -1,7 +1,7 @@
 <template>
     <div>
         <SignUp_Navbar/>
-        <div class="p-10">
+        <div class="2xl:p-10 2xs:p-0 md:p-5">
             <div class="bg-white min-h-screen flex flex-col items-center space-y-2 border-2 border-gray-300 p-10 rounded-md">
             <!-- Logo at the top -->
             <img :src="Logo2" alt="Logo2" class="h-16 mb-2">

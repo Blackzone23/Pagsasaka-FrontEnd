@@ -29,7 +29,7 @@
                     delivering the freshest produce to consumers every week.
                     </p>
                 <div class="flex justify-end mt-auto">
-                    <a href="/services" class="text-xs px-2 mt-10 text-white hover:text-gray-300">Read More</a>
+                    <a href="/services" class="2xl:text-lg 2xs:text-xs px-2 mt-10 text-white hover:text-gray-300">Read More</a>
                 </div>
             </div>
 
@@ -44,7 +44,7 @@
                     commitment to quality and sustainability.
                     </p>
                 <div class="flex justify-end mt-auto">
-                    <a href="/meet" class="text-xs px-2 mt-6 text-white hover:text-gray-300">Read More</a>
+                    <a href="/meet" class="2xl:text-lg 2xs:text-xs px-2 mt-6 text-white hover:text-gray-300">Read More</a>
                 </div>
             </div>
         </div>
