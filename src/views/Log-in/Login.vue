@@ -1,6 +1,6 @@
 <template>
     <div>
-        <SignUp_Navbar/>
+        <Login_Navbar/>
         <div class="2xl:p-10 2xs:p-0 md:p-5">
             <div class="h-full flex items-center justify-center border-2 border-gray-300 rounded-lg p-6 shadow-lg">
                 <!-- Main Container -->
@@ -63,7 +63,7 @@
 </template>
 
 <script setup>
-import SignUp_Navbar from '@/components/Navbar/SignUp_Navbar.vue';
+import Login_Navbar from '@/components/Navbar/Login_Navbar.vue';
 import BaseLabel from '@/components/Input-Fields/BaseLabel.vue';
 import BaseError from '@/components/Input-Fields/BaseError.vue';
 import BaseInputField from '@/components/Input-Fields/BaseInputField.vue';
@@ -74,6 +74,7 @@ import { required, email, helpers } from '@vuelidate/validators';
 import { Icon } from '@iconify/vue';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
+
 
 const store = useStore();
 const router = useRouter();

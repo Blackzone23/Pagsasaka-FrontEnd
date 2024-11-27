@@ -2,50 +2,37 @@
     <div>
         <HomeNavbar/>
         <!-- Cover Photo Section -->
-        <div class="relative w-full h-screen bg-cover bg-center text-white" :style="{ backgroundImage: `url(${HomeCover1})` }">
+        <div class="coverPS" :style="{ backgroundImage: `url(${HomeCover1})` }">
             <!-- Main Content Wrapper -->
-            <div class="flex flex-col justify-center h-full px-10 space-y-8">
+            <div class="mainCW">
                 <!-- Main Text Section -->
-                <div class="font-bold 2xl:text-5xl 2xs:text-3xl md:text-3xl">
-                    <p>
-                        Food's Journey <br>
-                        Connecting Farmers and <br>
-                        Consumers for a Healthier Future
-                    </p>
+                <div class="mainTS">
+                    <p> Food's Journey <br>Connecting Farmers and <br> Consumers for a Healthier Future</p>
                 </div>
 
                 <!-- Subtext Section -->
                 <div class="text-gray-300 2xl:text-lg 2xs:text-sm md:text-md">
-                    <p>
-                        We bridge the gap between those who grow our <br>
-                        food and those who consume it, creating a healthier, <br>
-                        more connected food system for everyone.
-                    </p>
+                    <p>We bridge the gap between those who grow our <br>food and those who consume it, creating a healthier, <br>more connected food system for everyone.</p>
                 </div>
 
                 <!-- Button Section -->
                 <div class="flex justify-end w-full">
                     <div class="flex space-x-4">
-                        <button class="bg-[#608C54] text-white py-2 px-12 rounded-lg text-sm hover:bg-[#4e7345]">
-                        Log in
-                        </button>
-                        <button class="bg-white text-[#608C54] py-2 px-12 rounded-lg text-sm hover:bg-gray-200">
-                        Sign up
-                        </button>
+                        <button class="bg-[#608C54] text-white py-2 px-12 rounded-lg text-sm hover:bg-[#4e7345]">Log in</button>
+                        <button class="bg-white text-[#608C54] py-2 px-12 rounded-lg text-sm hover:bg-gray-200">Sign up</button>
                     </div>
                 </div>
             </div>
         </div>
 
-
         <!--Mid Cover-->
-        <div class="Gradient 2xl:pt-[170px] 2xs:pt-[100px]">
+        <div class="Gradient">
             <div class=" flex justify-between p-7">
                     <!-- Small Box on the Left Side -->
-                    <div class="bg-white 2xl:p-6 2xs:p-2 shadow-lg rounded-md 2xl:w-1/2  2xs:w-[200px] lg:w-1/2 md:w-1/2 sm:w-1/2 2xl:h-80  2xs:h-80 border-4 border-[#608C54] 2xl:overflow-auto 2xs:overflow-y-auto">
-                        <h3 class="2xl:text-lg 2xs:text-sm text-black font-semibold mb-4 text-center">Monthly Products Sold</h3>
+                    <div class="smallbox">
+                        <h3 class="smallboxh">Monthly Products Sold</h3>
                     <!-- Table inside the box -->
-                    <table class="2xl:w-full 2xs:w-40 lg:w-full md:w-full sm:w-full table-auto">
+                    <table class="tablehome">
                         <thead>
                             <tr class="bg-[#608C54] text-white text-sm">
                                 <th class="py-2 2xl:px-4 2xs:px-2 border-b">Item Sold</th>
@@ -53,69 +40,69 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr class="bg-white text-sm  text-black">
-                                <td class=" 2xl:px-4 2xs:px-2 border-b">Dinorado Rice</td>
-                                <td class=" 2xl:px-4 2xs:px-2 border-b">875 KG</td> 
+                            <tr class="tablerowhome">
+                                <td class=" tabledatahome">Dinorado Rice</td>
+                                <td class=" tabledatahome">875 KG</td> 
                             </tr>
-                            <tr class="bg-gray-300 text-sm text-black">
-                                <td class=" 2xl:px-4 2xs:px-2 border-b">Sugarcane</td>
-                                <td class=" 2xl:px-4 2xs:px-2 border-b">564 KG</td>
+                            <tr class="tablerowhome">
+                                <td class=" tablerowhome2">Sugarcane</td>
+                                <td class=" tablerowhome2">564 KG</td>
                             </tr>
-                            <tr class="bg-white text-sm text-black">
-                                <td class=" 2xl:px-4 2xs:px-2 border-b">Banana</td>
-                                <td class=" 2xl:px-4 2xs:px-2 border-b">432 KG</td>
+                            <tr class="tablerowhome">
+                                <td class=" tabledatahome">Banana</td>
+                                <td class=" tabledatahome">432 KG</td>
                             </tr>
-                            <tr class="bg-gray-300 text-sm text-black">
-                                <td class=" 2xl:px-4 2xs:px-2 border-b">Coffee Beans</td>
-                                <td class=" 2xl:px-4 2xs:px-2 border-b">345 KG</td>
+                            <tr class="tablerowhome">
+                                <td class=" tablerowhome2">Coffee Beans</td>
+                                <td class=" tablerowhome2">345 KG</td>
                             </tr>
-                            <tr class="bg-white text-sm text-black">
-                                <td class=" 2xl:px-4 2xs:px-2 border-b">Garlic</td>
-                                <td class=" 2xl:px-4 2xs:px-2 border-b">333 KG</td>
+                            <tr class="tablerowhome">
+                                <td class=" tabledatahome">Garlic</td>
+                                <td class="tabledatahome">333 KG</td>
                             </tr>
-                            <tr class="bg-gray-300 text-sm text-black">
-                                <td class=" 2xl:px-4 2xs:px-2 border-b">Pineapple</td>
-                                <td class=" 2xl:px-4 2xs:px-2 border-b">250 KG</td>
+                            <tr class="tablerowhome">
+                                <td class=" tablerowhome2">Pineapple</td>
+                                <td class=" tablerowhome2">250 KG</td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
 
                 <!-- Philippine Map Image with Matching Size -->
-                <div class="  2xs:w-40 lg:w-1/2 md:w-1/2  sm:w-1/2 2xl:h-80 2xs:h-64 lg:h-80  flex justify-center items-center">
-                <img :src="philippine" alt="Philippine Map" class="2xl:w-[600px] 2xs:w-[200px] lg:w-full md:w-full sm:w-full">
+                <div class="philippine">
+                <img :src="philippine" alt="Philippine Map" class="imageP">
                 </div>
             </div>
         </div>
 
         <!--Below Cover-->
         <div class="mt-5">
-            <div class="items-center text-center 2xl:p-24 2xs:p-10 space-y-2">
-                <h1 class="font-bold 2xl:text-5xl 2xs:text-lg">Pagsasaka Services</h1>
-                <p class="2xl:text-lg 2xs:text-xs">Provides services designed to help you</p>
+            <div class="belowCover">
+                <h1 class="belowCoverh">Pagsasaka Services</h1>
+                <p class="belowCoverp">Provides services designed to help you</p>
             </div>
 
-            <div class="container mx-auto flex justify-center 2xl:space-x-16 2xs:space-x-4">
+            <div class="belowCoverContainer">
 
                 <!-- Hassle-Free Trading Section -->
-                <div class="flex flex-col items-center text-center">
-                    <img :src="tractor" alt="Hassle-Free Trading" class="2xl:h-24 2xs:h-16 2xl:w-24 2xs:w-16">
-                    <h2 class="font-bold 2xl:text-lg 2xs:text-sm mt-2">Hassle-Free Trading</h2>
-                    <p class="2xl:text-sm 2xs:text-xs mt-1">Experience fast, secure, and <br> straightforward trading without the <br> complexities. Get started quickly and manage <br> your trades effortlessly, all in one intuitive platform.</p>
+                <div class="belowCoverContainer2">
+                    <img :src="tractor" alt="Hassle-Free Trading" class="THFcontainer">
+                    <h2 class="THFheader">Hassle-Free Trading</h2>
+                    <p class="THFparagraph">Experience fast, secure, and <br> straightforward trading without the <br> complexities. Get started quickly and manage <br> your trades effortlessly, all in one intuitive platform.</p>
                 </div>
 
                 <!-- Farmer Support Hub Section -->
-                <div class="flex flex-col items-center text-center">
-                    <img :src="barn" alt="Farmer Support Hub" class="2xl:h-24 2xs:h-16 2xl:w-24 2xs:w-16">
-                    <h2 class="font-bold 2xl:text-lg 2xs:text-sm mt-2">Farmer Support Hub</h2>
-                    <p class="2xl:text-sm 2xs:text-xs mt-1">Access expert tools, tips, and resources to <br> improve yields, manage your farm <br> efficiently, and stay informed on market <br> trends for better profitability.</p>
+                <div class="belowCoverContainer2">
+                    <img :src="barn" alt="Farmer Support Hub" class="THFcontainer">
+                    <h2 class="THFheader">Farmer Support Hub</h2>
+                    <p class="THFparagraph">Access expert tools, tips, and resources to <br> improve yields, manage your farm <br> efficiently, and stay informed on market <br> trends for better profitability.</p>
                 </div>
 
                 <!-- Connect with Farmers Section -->
-                <div class="flex flex-col items-center text-center">
-                    <img :src="person" alt="Connect with Farmers" class="2xl:h-24 2xs:h-16 2xl:w-24 2xs:w-16">
-                    <h2 class="font-bold 2xl:text-lg 2xs:text-sm mt-2">Connect with Farmers</h2>
-                    <p class="2xl:text-sm 2xs:text-xs mt-1"> Connect directly with farmers <br> for fresh, high-quality produce <br> at fair prices, cutting out the middleman and <br> supporting local agriculture.</p>
+                <div class="belowCoverContainer2">
+                    <img :src="person" alt="Connect with Farmers" class="THFcontainer">
+                    <h2 class="THFheader">Connect with Farmers</h2>
+                    <p class="THFparagraph"> Connect directly with farmers <br> for fresh, high-quality produce <br> at fair prices, cutting out the middleman and <br> supporting local agriculture.</p>
                 </div>
             </div>
 
@@ -123,8 +110,8 @@
                 <h1 class="2xl:text-lg 2xs:text-xs font-semibold">Elevate Your Agricultural Business with Pagsasaka Services!</h1>
             </div>
 
-            <div class="bg-gray-200 w-full h-full mt-10 flex justify-center items-center 2xl:p-24 2xs:p-10">
-                <div class="flex text-gray-500 2xl:text-4xl 2xs:xl 2xl:gap-9 2xs:gap-3">
+            <div class="freshConatainer">
+                <div class="freshConatainer2">
 
                     <!-- Left Text -->
                     <p class="text-end"> We offer fresh products <br> while empowering <br> farmers to use <br> technology for <br> sustainable practices <br> and a steady supply of <br> quality goods. </p>
@@ -135,23 +122,22 @@
                     </div>
                 </div>
             </div>
-            <div class="pl-2 2xl:w-full 2xs:w-[390px] lg:w-full md:w-full xs:w-full 2xl:h-screen 2xs:h-[400px] flex bg-gray-100">
-                    <div class="flex w-full  justify-center items-center 2xl:gap-10 2xs:gap-5">
 
+            <div class="bottomcontainer">
+                    <div class="bottomcontainer2">
                         <!-- Left Side: Lettuce Images with Animation -->
-                        <div class="text-center text-[#608C54]">
-                            <h1 class="2xl:text-9xl 2xs:text-2xl font-semibold 2xl:mb-4 2xs:mb-2">Join Us!</h1>
-                            <hr class="w-1/2 mx-auto border-t-4 border-[#608C54]" />
-                            <p class="2xl:text-3xl 2xs:text-xs mt-2">Start buying and selling with <br> bulk discounts and <br> affordable prices.</p>
+                        <div class="lettuce">
+                            <h1 class="joinUs">Join Us!</h1>
+                            <hr class="borderL" />
+                            <p class="paragraphL">Start buying and selling with <br> bulk discounts and <br> affordable prices.</p>
                            <div class="mt-7">
-                                <a href="/signup" class=" px-8 py-3 bg-[#608C54] text-white 2xl:text-xl 2xs:text-xs font-medium rounded-lg hover:bg-[#4e7344] transition duration-200"> Sign Up</a>
+                                <a href="/signup" class="signupL"> Sign Up</a>
                            </div>
                         </div>
                         
-
                         <!-- Right Side: Join Us Text -->
-                        <div class="relative 2xl:w-96 2xs:w-72 2xl:h-96 2xs:h-72 animate-wave">
-                            <img :src="Lettuce" alt="Lettuce on the left" class="absolute top-0 left-0 2xl:w-full 2xs:w-[240px] 2xl:h-full 2xs:h-[240px] opacity-90">
+                        <div class="Wave">
+                            <img :src="Lettuce" alt="Lettuce on the left" class="imgL">
                         </div>
                     </div>
                 </div>

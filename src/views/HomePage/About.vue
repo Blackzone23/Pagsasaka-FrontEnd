@@ -50,15 +50,19 @@
         </div>
 
         <div>
-            <div class="bg-[#608C54] flex items-center 2xl:py-0 2xs:py-5 lg:py-10 md:py-10">
-                <div class="flex items-center">
-                    <img :src="tractor2" alt="Farmer" class="2xl:w-full 2xs:w-full lg:w-[400px] md:w-[400px] 2xl:h-full 2xs:h-28 lg:h-[200px] md:h-[300px] sm:h-[200px]">
-                    <div class="">
-                        <hr class="2xl:w-60 2xs:w-32 border-t-8 border-[#DAA520] ml-3 bottom-5 " />
-                        <p class="2xl:text-xl 2xs:text-xs lg:text-lg md:text-lg sm:text-md ml-3 mt-2 text-white">
-                            Our work is deeply connected to care and community. We prioritize <br> personal relationships while recognizing the links 
-                            between the food we consume, <br> the future we aspire to create for  our children, and the role of biodiversity in <br> shaping 
-                            our identity and sovereignty as Filipinos.
+            <div class="bg-[#608C54] flex items-center 2xl:py-10 2xs:py-5 lg:py-10 md:py-10">
+                <div class="flex flex-col lg:flex-row items-center lg:items-start w-full space-y-5 lg:space-y-0 lg:space-x-5 px-4">
+                    <!-- Image Section -->
+                    <img :src="tractor2" alt="Farmer" class="2xl:w-auto 2xs:w-full md:w-[600px] sm:w-[500px] 2xl:h-auto 2xs:h-[200px]  md:h-[300px] sm:h-[260px]"/>
+
+                    <!-- Text Section -->
+                    <div class="text-center lg:text-left">
+                        <hr class="2xl:w-60 2xs:w-32 border-t-8 border-[#DAA520] mx-auto lg:ml-3 lg:mx-0" />
+                        <p class="2xl:text-xl 2xs:text-sm lg:text-lg md:text-md sm:text-sm text-white mt-2 lg:ml-3">
+                            Our work is deeply connected to care and community. We prioritize <br class="hidden md:block" />
+                            personal relationships while recognizing the links between the food we consume, <br class="hidden md:block" />
+                            the future we aspire to create for our children, and the role of biodiversity in <br class="hidden md:block" />
+                            shaping our identity and sovereignty as Filipinos.
                         </p>
                     </div>
                 </div>
@@ -94,7 +98,7 @@
                         <!-- Member 1 -->
                         <div class="space-y-2">
                             <img :src="Document" alt="Leader 1" 
-                                class="2xl:w-52 2xs:w-32 2xl:h-52 2xs:h-34 mx-auto rounded-full border-4 border-[#608C54]">
+                                class="2xl:w-52 2xs:w-32 2xl:h-52 2xs:h-34 xs:w-28 xs:h-28 mx-auto rounded-full border-4 border-[#608C54]">
                             <hr class="2xl:w-[200px] 2xs:w-[90px]  lg:w-[120px] mt-1 justify-start ml-1 border-t-8 border-[#608C54]" />
                             <p class="2xl:text-sm 2xs:text-xs font-semibold">ABELA, Ace Seann</p>
                             <p class="text-xs">Documentary</p>
@@ -102,15 +106,15 @@
                         <!-- Member 2 -->
                         <div class="space-y-2">
                             <img :src="Designer" alt="Leader 2" 
-                                class="2xl:w-52 2xs:w-32 2xl:h-52 2xs:h-34 mx-auto rounded-full border-4 border-[#608C54]">
-                            <hr class="2xl:w-[200px] 2xs:w-[90px] lg:w-[120px] mt-1 justify-start ml-1 border-t-8 border-[#608C54]" />
+                                class="2xl:w-52 2xs:w-32 2xl:h-52 2xs:h-34 xs:w-28 xs:h-28 mx-auto rounded-full border-4 border-[#608C54]">
+                            <hr class="2xl:w-[200px] 2xs:w-[90px] lg:w-[120px] xs:w-[110px] mt-1 justify-start ml-1 border-t-8 border-[#608C54]" />
                             <p class="2xl:text-sm 2xs:text-xs font-semibold">ARCIGA, Kurt Steven</p>
                             <p class="text-xs">UI/UX</p>
                         </div>
                         <!-- Member 3 -->
                         <div class="space-y-2">
                             <img :src="FrontEnd" alt="Leader 3" 
-                                class="2xl:w-52 2xs:w-28 2xl:h-52 2xs:h-28 mx-auto rounded-full border-4 border-[#608C54]">
+                                class="2xl:w-52 2xs:w-28 2xl:h-52 2xs:h-28 xs:w-28 xs:h-28 mx-auto rounded-full border-4 border-[#608C54]">
                             <hr class="2xl:w-[200px] 2xs:w-[90px] lg:w-[150px] xs:w-[130px] mt-1 justify-start ml-1 border-t-8 border-[#608C54]" />
                             <p class="2xl:text-sm 2xs:text-xs font-semibold">DELA CRUZ, James Warren</p>
                             <p class="text-xs">Front End</p>
@@ -124,7 +128,7 @@
                         <!-- Member 4 -->
                         <div class="space-y-2">
                             <img :src="BackEnd" alt="Leader 4" 
-                                class="2xl:w-52 2xs:w-32 2xl:h-52 2xs:h-[120px] mx-auto rounded-full border-4 border-[#608C54]">
+                                class="2xl:w-52 2xs:w-32 2xl:h-52 xs:w-28 xs:h-28 2xs:h-[120px] mx-auto rounded-full border-4 border-[#608C54]">
                             <hr class="2xl:w-[200px] 2xs:w-[120px] mt-1 justify-start ml-1 border-t-8 border-[#608C54]" />
                             <p class="2xl:text-sm 2xs:text-xs font-semibold">GARINGA, Milbert</p>
                             <p class="text-xs">Back End</p>
@@ -132,7 +136,7 @@
                         <!-- Member 5 -->
                         <div class="space-y-2">
                             <img :src="BackEnd2" alt="Leader 5" 
-                                class="2xl:w-52 2xs:w-32 2xl:h-52 2xs:h-[120px] mx-auto rounded-full border-4 border-[#608C54]">
+                                class="2xl:w-52 2xs:w-32 2xl:h-52 xs:w-28 xs:h-28 2xs:h-[120px] mx-auto rounded-full border-4 border-[#608C54]">
                             <hr class="2xl:w-[200px] 2xs:w-[150px] mt-1 justify-start ml-1 border-t-8 border-[#608C54]" />
                             <p class="2xl:text-sm 2xs:text-xs font-semibold">LEONOR, John Meynard</p>
                             <p class="text-xs">Back End</p>
