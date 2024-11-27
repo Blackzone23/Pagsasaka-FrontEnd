@@ -173,13 +173,4 @@ import HomeNavbar from '@/components/Navbar/HomeNavbar.vue';
 </script>
 
 <style scoped>
-@keyframes wave {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
-}
-
-.animate-wave img:nth-child(1) { animation: wave 1s ease-in-out infinite; }
-.animate-wave img:nth-child(2) { animation: wave 1s ease-in-out 0.2s infinite; }
-.animate-wave img:nth-child(3) { animation: wave 1s ease-in-out 0.4s infinite; }
-
 </style>
