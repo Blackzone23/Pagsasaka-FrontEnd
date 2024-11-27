@@ -1,50 +1,57 @@
 <template>
-    <div>
+   <div>
         <!-- Footer Section -->
-        <footer class="bg-[#608C54] text-white py-10">
-            <div class="container mx-auto flex justify-between items-start">
-                
+        <footer class="bg-[#608C54] text-white py-8">
+            <div class="container mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
                 <!-- Column 1: About Us -->
-                <div class="w-1/3 px-4">
-                    <img :src="Logo" alt="Logo" class="h-20">
-                    <p class="text-sm">Pagsasaka connects farmers with consumers for <br> buying and selling fresh, local produce, supporting <br> sustainable agriculture</p>
-                    <div class="flex">
-                        <Icon icon="ic:twotone-facebook" width="24" height="24" style="color: white" />
-                        <Icon icon="mage:instagram-circle" width="24" height="24" style="color: white" />
+                <div class="text-center md:text-left">
+                    <img :src="Logo" alt="Logo" class="h-16 mx-auto md:mx-1">
+                    <p class="text-sm ml-2 mt-4">
+                        Pagsasaka connects farmers with consumers for buying and selling fresh, local produce, supporting sustainable agriculture.
+                    </p>
+                    <div class="flex justify-center md:justify-start 2xl:gap-4 2xs:gap-2 ml-2 mt-4">
+                        <Icon icon="ic:twotone-facebook" width="24" height="24" />
+                        <Icon icon="mage:instagram-circle" width="24" height="24" />
                     </div>
                 </div>
 
                 <!-- Column 2: Quick Links -->
-                <div class="w-1/3 px-4">
-                    <h3 class="font-bold text-lg mb-2">Quick Links</h3>
-                    <div class="flex gap-20">
-                        <!-- Left Links Column -->
-                        <ul class="text-sm">
-                            <li><a href="/about" target="_blank" class="hover:text-gray-300 flex items-center"><Icon icon="ic:round-arrow-right" width="24" height="24" style="color: white" />About Us</a></li>
-                            <li><a href="/market" target="_blank" class="hover:text-gray-300 flex items-center"><Icon icon="ic:round-arrow-right" width="24" height="24" style="color: white" />Market</a></li>
-                            <li><a href="/services" target="_blank" class="hover:text-gray-300 flex items-center"><Icon icon="ic:round-arrow-right" width="24" height="24" style="color: white" />CSA</a></li>
+                <div class="text-center md:text-left">
+                    <h3 class="font-bold 2xl:text-lg 2xs:text-sm mb-4">Quick Links</h3>
+                    <div class="grid grid-cols-2 2xl:gap-4 2xs:gap-2 text-sm 2xl:ml-0 2xs:ml-10 md:ml-0 lg:ml-0 sm:ml-24">
+                        <ul>
+                            <li><a href="/about" target="_blank" class="hover:text-gray-300 flex items-center gap-2"><Icon icon="ic:round-arrow-right" width="16" height="16" />About Us</a></li>
+                            <li><a href="/market" target="_blank" class="hover:text-gray-300 flex items-center gap-2"><Icon icon="ic:round-arrow-right" width="16" height="16" />Market</a></li>
+                            <li><a href="/services" target="_blank" class="hover:text-gray-300 flex items-center gap-2"><Icon icon="ic:round-arrow-right" width="16" height="16" />CSA</a></li>
                         </ul>
-
-                        <!-- Right Links Column -->
-                        <ul class="text-sm">
-                            <li><a href="/contact" target="_blank" class="hover:text-gray-300 flex items-center"><Icon icon="ic:round-arrow-right" width="24" height="24" style="color: white" />Contact Us</a></li>
-                            <li><a href="/policy" target="_blank" class="hover:text-gray-300 flex items-center"><Icon icon="ic:round-arrow-right" width="24" height="24" style="color: white" />Privacy Policy</a></li>
-                            <li><a href="/meet" target="_blank" class="hover:text-gray-300 flex items-center"><Icon icon="ic:round-arrow-right" width="24" height="24" style="color: white" />Meet our Farmers</a></li>
+                        <ul>
+                            <li><a href="/contact" target="_blank" class="hover:text-gray-300 flex items-center gap-2"><Icon icon="ic:round-arrow-right" width="16" height="16" />Contact Us</a></li>
+                            <li><a href="/policy" target="_blank" class="hover:text-gray-300 flex items-center gap-2"><Icon icon="ic:round-arrow-right" width="16" height="16" />Privacy Policy</a></li>
+                            <li><a href="/meet" target="_blank" class="hover:text-gray-300 flex items-center gap-2"><Icon icon="ic:round-arrow-right" width="16" height="16" />Meet our Farmers</a></li>
                         </ul>
                     </div>
                 </div>
 
                 <!-- Column 3: Contact Us -->
-                <div class="w-1/3 px-4">
-                    <h3 class="font-bold text-lg mb-2">Contact Us</h3>
-                    <p class="text-xs hover:text-gray-300">Need support?</p>
-                    <p class="text-sm flex items-center gap-2 text-gray-200 mt-2 hover:text-gray-300"><Icon icon="subway:location-3" width="1em" height="1em" style="color: white" />619 West side , Los Angeles Pampanga</p>
-                    <p class="text-sm flex items-center gap-2 text-gray-200 mt-2 hover:text-gray-300"><Icon icon="mdi:telephone" style="color: white" />(+63 912 345 6789)</p>
-                    <p class="text-sm flex items-center gap-2 text-gray-200 mt-2 hover:text-gray-300"><Icon icon="carbon:email" style="color: white" />Pagsasaka@gmail.com </p>
+                <div class="text-center md:text-left 2xl:ml-10 sm:ml-1">
+                    <h3 class="font-bold 2xl:text-lg 2xs:text-sm mb-4">Contact Us</h3>
+                    <p class="2xl:text-sm 2xs:text-xs">Need support?</p>
+                    <div class="mt-4 2xl:ml-0 xs:ml-24 xl:ml-0 md:ml-0 2xs:ml-16 space-y-4 2xs:text-sm">
+                        <p class="flex items-center gap-2 text-gray-200 hover:text-gray-300">
+                            <Icon icon="subway:location-3" width="16" height="16" /> 619 West side, Los Angeles, Pampanga
+                        </p>
+                        <p class="flex items-center gap-2 text-gray-200 hover:text-gray-300">
+                            <Icon icon="mdi:telephone" width="16" height="16" /> (+63 912 345 6789)
+                        </p>
+                        <p class="flex items-center gap-2 text-gray-200 hover:text-gray-300">
+                            <Icon icon="carbon:email" width="16" height="16" /> Pagsasaka@gmail.com
+                        </p>
+                    </div>
                 </div>
             </div>
         </footer>
     </div>
+
 </template>
 
 <script setup>

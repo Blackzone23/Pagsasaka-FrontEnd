@@ -156,7 +156,7 @@ Gradient Background
 -------------------------------------------------------------------------------------------------*/
 .Gradient {
     @apply
-    aurora-gradient w-full h-screen
+    aurora-gradient 2xl:w-full 2xs:w-[390px] 2xl:h-screen 2xs:h-[600px] lg:w-full md:w-full xs:w-full
 }
 .aurora-gradient {
     background: linear-gradient(120deg, #608C54, #2C3644, #EC7803);

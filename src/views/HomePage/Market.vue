@@ -3,26 +3,26 @@
         <Market_NavBar/>
         <div class="relative">
             <!-- Background Image -->
-            <img :src="Mfarmer" alt="" class="w-full h-auto object-cover">
+            <img :src="Mfarmer" alt="" class="2xl:w-full 2xs:w-full  2xl:h-full 2xs:h-[300px]  xl:h-[500px]">
             
             <!-- Box Overlay -->
-            <div class="absolute inset-0 flex items-center p-48 ">
-                <div class="bg-white shadow-lg rounded-md w-96 h-72 border-4 text-center relative">
+            <div class="absolute inset-0 flex items-center 2xl:p-48 2xs:p-24 ">
+                <div class="bg-white shadow-lg rounded-md 2xl:w-96 2xs:w-[400px] sm:w-[300px] xl:w-[400px] 2xl:h-72 2xs:h-[270px]  sm:h-[200px] xl:h-[290px] border-4 text-center relative">
 
-                    <h1 class="text-center text-3xl font-semibold py-2">Pagsasaka Box</h1>
-                        <p class="text-center text-sm py-2 text-gray-500">
+                    <h1 class="text-center 2xl:text-3xl 2xs:text-md lg:text-xl font-semibold py-2">Pagsasaka Box</h1>
+                        <p class="text-center 2xl:text-sm 2xs:text-xs lg:text-sm py-2 text-gray-500">
                         This month’s Pagsasaka Box connects <br> consumers and farmers, featuring seasonal <br>
                         produce, livestock, sustainable farming <br> practices, and essential tools for efficient,
                         local <br> sourcing.
                         </p>
                     <!-- Button to open modal -->
-                    <button @click="isModalOpen = true" class="px-2 mt-5 py-2 bg-green-600 text-white rounded-md hover:bg-green-500 transition text-sm">
+                    <button @click="isModalOpen = true" class="px-2 2xl:mt-5 2xs:mt-2 py-2 bg-green-600 text-white rounded-md hover:bg-green-500 transition 2xl:text-sm 2xs:text-xs">
                         Open Pagsasaka Box
                     </button>
 
                     <!-- Modal -->
                     <div v-if="isModalOpen" class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50">
-                        <div class="bg-white shadow-lg rounded-md w-[800px] border-4 relative">
+                        <div class="bg-white shadow-lg rounded-md 2xl:w-[800px] 2xs:w-[400px] lg:w-[800px] md:w-[500px] border-4 relative">
 
                             <!-- Close button -->
                             <button @click="isModalOpen = false" class="absolute top-2 right-2 text-gray-400 hover:text-gray-600">
@@ -32,8 +32,8 @@
                             <!-- Flex Container -->
                             <div class="flex justify-between p-8 space-x-4">
                                 <!-- Information Section -->
-                                <div class="flex-1 text-sm space-y-4 text-start">
-                                    <BaseLabel class="text-2xl font-semibold">Pagsasaka Box</BaseLabel>
+                                <div class="flex-1 2xl:text-sm 2xs:text-xs space-y-4 text-start">
+                                    <BaseLabel class="2xl:text-2xl 2xs:text-xl font-semibold">Pagsasaka Box</BaseLabel>
                                     <p class="text-gray-500">
                                         Our CSA packages feature a selection of fresh, locally-grown produce that varies with the seasons.
                                     </p>
@@ -49,7 +49,7 @@
                                     <div class="flex flex-col bg-green-100 p-8 space-y-6 rounded-md max-h-[500px] overflow-y-auto">
                                         <!-- Weekly Section -->
                                         <div class="text-start space-y-4 text-gray-500">
-                                            <BaseLabel class="text-2xl font-semibold">Weekly Package (500 PHP)</BaseLabel>
+                                            <BaseLabel class="2xl:text-2xl 2xs:text-xl font-semibold">Weekly Package (500 PHP)</BaseLabel>
                                             <p>a. Vegetables: 1 kg of tomatoes</p>
                                             <p>500 grams of eggplant</p>
                                             <p>500 grams of kangkong (water spinach)</p>
@@ -64,7 +64,7 @@
                                             <p>d. Additional Item: 5-6 pieces of farm-fresh eggs</p>
 
                                             <div class="mt-8">
-                                                <a href="/page7" class="px-4 py-2 bg-[#DAA520] text-sm text-white rounded-md hover:bg-gray-400 transition">
+                                                <a href="/page7" class="2xl:px-4 2xs:px-2 2xl:text-sm 2xs:text-xs py-2 bg-[#DAA520] text-sm text-white rounded-md hover:bg-gray-400 transition">
                                                     Grab it now!
                                                 </a>
                                             </div>
@@ -72,7 +72,7 @@
 
                                         <!-- Monthly Section -->
                                         <div class="text-start space-y-4 text-gray-500">
-                                            <BaseLabel class="text-2xl font-semibold">Monthly Package (1,000 PHP)</BaseLabel>
+                                            <BaseLabel class="2xl:text-2xl 2xs:text-xl  font-semibold">Monthly Package (1,000 PHP)</BaseLabel>
                                             <p>a. Vegetables: 2 kg of assorted vegetables (e.g., 1 kg of tomatoes, 500 grams of eggplant, 500 grams of bell peppers, 1 kg of leafy greens, 1 small head of cabbage)</p>
 
                                             <p>b. Fruits: 2 kg of seasonal fruits (e.g., 1 kg of mangoes, 1 kg of bananas)</p>
@@ -82,7 +82,7 @@
                                             <p>d. Additional Item: 5-6 pieces of farm-fresh eggs, 500 grams of local rice</p>
 
                                             <div class="mt-8">
-                                                <a href="/page7" class="px-4 py-2 bg-[#DAA520] text-sm text-white rounded-md hover:bg-gray-400 transition">
+                                                <a href="/page7" class="2xl:px-4 2xs:px-2 2xl:text-sm 2xs:text-xs py-2 bg-[#DAA520] text-sm text-white rounded-md hover:bg-gray-400 transition">
                                                     Grab it now!
                                                 </a>
                                             </div>
@@ -95,42 +95,39 @@
                 </div>
             </div>
         </div>
-        <div class="flex items-center space-x-4 p-8 bg-white">
+        <div class="flex items-center space-x-4 2xl:p-8 2xs:p-4 bg-white">
                 <!-- Text Section -->
                 <div class="w-1/3">
-                    <h2 class="text-2xl font-bold">Grab this now</h2>
-                    <p class="mt-2 text-gray-600">
+                    <h2 class="2xl:text-2xl 2xs:text-md xl:text-2xl lg:text-2xl font-bold">Grab this now</h2>
+                    <p class="mt-2 2xl:text-lg 2xs:text-xs lg:text-lg xl:text-lg text-gray-600">
                         Explore our curated selection of high-quality goods, featuring fresh produce, artisanal items, and everyday essentials, all while supporting local farmers and communities.
                     </p>
                 </div>
 
             <!-- Image Section -->
-            <div class="flex space-x-4 items-center">
+            <div class="flex flex-col md:flex-row space-y-4 md:space-y-0 space-x-0 md:space-x-4 items-center">
                 <!-- Previous button -->
-                <button  @click="prevImage"  :disabled="currentImageIndex === 0"  class="px-4 py-2 rounded-lg disabled:opacity-50">
-                    <Icon icon="ei:arrow-left" width="56" height="56" style="color: black" />
+                <button @click="prevImage" :disabled="currentImageIndex === 0" class="px-2 py-1 md:px-4 md:py-2 rounded-lg disabled:opacity-50" >
+                    <Icon icon="ei:arrow-left" class="w-6 h-6 sm:w-8 xl:w-14 sm:h-8 md:w-12 md:h-12 lg:w-16 lg:h-16 xl:h-14" />
                 </button>
 
                 <!-- Image display -->
-                <div class="relative flex space-x-4">
-                    <div  v-for="(image, index) in visibleImages"  :key="index" class="relative group w-72 h-72 rounded-lg overflow-hidden">
-                        <img  :src="image"  alt="Carousel Image"  class="w-full h-full object-cover transition-transform duration-300 transform group-hover:scale-110"/>
+                <div class="relative flex space-x-2 md:space-x-4 overflow-x-auto">
+                    <div v-for="(image, index) in visibleImages" :key="index" class="relative group w-20 h-20 sm:w-32 xl:w-48 sm:h-32 md:w-32 md:h-32 xl:h-48 lg:w-56 lg:h-56 rounded-lg overflow-hidden">
+                        <img :src="image" alt="Carousel Image" class="w-full h-full object-cover transition-transform duration-300 transform group-hover:scale-110"/>
 
                         <!-- "View Product" Button -->
                         <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                            <a href="/marketpage1" class="px-4 py-2 text-white bg-green-500 rounded-lg">
+                            <a href="/marketpage1" class="px-2 py-1 2xl:px-4 md:px-2 2xl:py-2 text-xs sm:text-sm md:text-xs  text-white bg-green-500 rounded-lg">
                                 View Product
                             </a>
                         </div>
-                        <!-- <div  class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                            <button class="px-4 py-2 text-white bg-green-500 rounded-lg">View Product</button>
-                        </div> -->
                     </div>
                 </div>
 
                 <!-- Next button -->
-                <button  @click="nextImage"  :disabled="currentImageIndex + 2 >= images.length"  class="px-4 py-2 rounded-lg disabled:opacity-50">
-                    <Icon icon="ei:arrow-right" width="56" height="56" style="color: black" />
+                <button @click="nextImage" :disabled="currentImageIndex + 2 >= images.length" class="px-2 py-1 md:px-4 md:py-2 rounded-lg disabled:opacity-50">
+                    <Icon icon="ei:arrow-right" class="w-6 h-6 sm:w-8 xl:w-14 sm:h-8 md:w-12 md:h-12 lg:w-16 lg:h-16 xl:h-14" />
                 </button>
             </div>
         </div>
