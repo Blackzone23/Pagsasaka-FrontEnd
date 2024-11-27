@@ -7,7 +7,7 @@
             <img :src="HomeCover1" alt="Home Cover" class="w-full object-cover 2xl:h-screen 2xs:h-[580px]">
 
             <!-- Main Text Section -->
-            <div class="absolute z-20 text-white font-bold  2xl:text-5xl 2xs:text-2xl md:text-3xl  2xl:top-64 2xs:top-10  2xl:left-24 2xs:left-10">
+            <div class="absolute z-20 text-white font-bold  2xl:text-5xl 2xs:text-2xl md:text-3xl  2xl:top-52 2xs:top-10  2xl:left-24 2xs:left-10">
                 <p>
                     Food's Journey <br>
                     Connecting Farmers and <br>
@@ -81,8 +81,8 @@
                 </div>
 
                 <!-- Philippine Map Image with Matching Size -->
-                <div class=" 2xl:w-1/2 2xs:w-40 lg:w-1/2 md:w-1/2  sm:w-1/2 2xl:h-80 2xs:h-64 lg:h-80  flex justify-center items-center">
-                <img :src="philippine" alt="Philippine Map" class="2xl:w-full 2xs:w-[200px] lg:w-full md:w-full sm:w-full">
+                <div class=" 2xl:w-full 2xs:w-40 lg:w-1/2 md:w-1/2  sm:w-1/2 2xl:h-80 2xs:h-64 lg:h-80  flex justify-center items-center">
+                <img :src="philippine" alt="Philippine Map" class="2xl:w-[600px] 2xs:w-[200px] lg:w-full md:w-full sm:w-full">
                 </div>
             </div>
         </div>
@@ -130,7 +130,7 @@
 
                     <div class="flex flex-col items-center text-black">
                         <img :src="Farm" alt="Farmer" class="h-32 w-56 mt-2">
-                        <p class="2xl:text-lg 2xs:text-sm text-center mt-2"> Advancements in farming technology <br> boost efficiency, sustainability, and <br> yields. With precision farming, <br> automation, and AI, farmers optimize <br> resources, track supply and demand, <br> and increase profitability while <br> addressing food security. </p>
+                        <p class="2xl:text-lg 2xs:text-xs text-center mt-2"> Advancements in farming technology <br> boost efficiency, sustainability, and <br> yields. With precision farming, <br> automation, and AI, farmers optimize <br> resources, track supply and demand, <br> and increase profitability while <br> addressing food security. </p>
                     </div>
                 </div>
             </div>
@@ -141,9 +141,9 @@
                         <div class="text-center text-[#608C54]">
                             <h1 class="2xl:text-9xl 2xs:text-2xl font-semibold 2xl:mb-4 2xs:mb-2">Join Us!</h1>
                             <hr class="w-1/2 mx-auto border-t-4 border-[#608C54]" />
-                            <p class="2xl:text-3xl 2xs:text-md mt-2">Start buying and selling with <br> bulk discounts and <br> affordable prices.</p>
+                            <p class="2xl:text-3xl 2xs:text-xs mt-2">Start buying and selling with <br> bulk discounts and <br> affordable prices.</p>
                            <div class="mt-7">
-                                <a href="/signup" class=" px-8 py-3 bg-[#608C54] text-white 2xl:text-xl 2xs:text-sm font-medium rounded-lg hover:bg-[#4e7344] transition duration-200"> Sign Up</a>
+                                <a href="/signup" class=" px-8 py-3 bg-[#608C54] text-white 2xl:text-xl 2xs:text-xs font-medium rounded-lg hover:bg-[#4e7344] transition duration-200"> Sign Up</a>
                            </div>
                         </div>
                         
