@@ -23,6 +23,8 @@
 
                     <BaseLabel class="font-semibold">Re-enter password</BaseLabel>
                     <BaseInputField placeholder="Re-enter password"></BaseInputField>
+                    <BaseLabel class="font-semibold">Select your type</BaseLabel>
+                    <BaseRadioButton v-for="option in ['Consumer', 'Seller']" :key="option" :name="'usertype'" :label="option" :value="option" v-model="usertype" class="text-sm"></BaseRadioButton>
                 </div>
                 <!-- Sign Up Button -->
                 <a href="/page2" class="w-full py-2 bg-[#608C54] text-white text-sm font-medium rounded-full hover:bg-[#4e7344] transition duration-200 text-center block">
@@ -55,4 +57,5 @@ import BaseError from '@/components/Input-Fields/BaseError.vue';
 import SignUp_Navbar from '@/components/Navbar/SignUp_Navbar.vue';
 import BaseInputField from '@/components/Input-Fields/BaseInputField.vue';
 import BaseLabel from '@/components/Input-Fields/BaseLabel.vue';
+import BaseRadioButton from '@/components/Input-Fields/BaseRadioButton.vue';
 </script>

@@ -1,8 +1,8 @@
 <template>
     <div>
         <SignUp_Navbar/>
-        <div class="p-10">
-            <div class="min-h-screen flex items-center justify-center border-2 border-gray-300 rounded-lg p-6 shadow-lg">
+        <div class="2xl:p-10 2xs:p-0 md:p-5">
+            <div class="h-full flex items-center justify-center border-2 border-gray-300 rounded-lg p-6 shadow-lg">
                 <!-- Main Container -->
                 <div class="w-full max-w-5xl flex shadow-lg rounded-lg overflow-hidden">
                     <div>
@@ -10,8 +10,8 @@
                     </div>
 
                     <!-- Right Side (Login Form) -->
-                    <div class="w-1/2 p-8 bg-white border-gray-200 border-2">
-                        <h2 class="text-2xl font-semibold text-[#608C54] mb-6">Login</h2>
+                    <div class="2xl:w-1/2 2xs:w-[700px] 2xl:p-8 2xs:p-1 md:p-4 bg-white border-gray-200 border-2">
+                        <h2 class="2xl:text-2xl 2xs:text-lg font-semibold text-[#608C54] mb-6">Login</h2>
                         <form>
                             <!-- Email Field -->
                             <div class="mb-4">
@@ -36,7 +36,7 @@
 
                             <!-- Login Button -->
                         <div class="text-center">
-                                <button class="w-52 text-center items-center justify-center py-2 bg-[#608C54] text-white text-sm font-medium rounded-full hover:bg-[#4e7344] transition duration-200">
+                                <button class="2xl:w-52 2xs:w-28 md:w-44 text-center items-center justify-center py-2 bg-[#608C54] text-white text-sm font-medium rounded-full hover:bg-[#4e7344] transition duration-200">
                                     Login
                                 </button>
                         </div>
