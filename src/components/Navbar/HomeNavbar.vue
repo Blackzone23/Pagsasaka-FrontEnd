@@ -1,6 +1,6 @@
 <template>
        <nav class="bg-[#608C54] text-white">
-            <div class="container mx-auto flex justify-between items-center px-4 py-3">
+            <div class="container mx-auto flex justify-between items-center px-2 py-2">
                 <!-- Logo -->
                 <div>
                     <img :src="Logo" alt="Logo" class="2xl:h-20 2xs:h-14">

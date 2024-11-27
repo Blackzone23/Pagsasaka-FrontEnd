@@ -2,28 +2,43 @@
     <div>
         <HomeNavbar/>
         <!-- Cover Photo Section -->
-        <div class="relative flex">
-            <img :src="HomeCover1" alt="" class="w-full 2xl:h-screen 2xs:h-[580px]">
+        <div class="relative flex flex-col items-start">
+            <!-- Background Image -->
+            <img :src="HomeCover1" alt="Home Cover" class="w-full object-cover 2xl:h-screen 2xs:h-[580px]">
 
             <!-- Main Text Section -->
-            <div class="absolute 2xl:top-64 2xs:top-80 2xl:left-24 2xs:left-10 2xl:transform 2xl:-translate-y-40 2xs:transform 2xs:-translate-y-60 lg:transform lg:-translate-y-52 text-white 2xl:text-5xl 2xs:text-2xl md:text-3xl font-bold">
-                <p>Food's Journey <br> Connecting Farmers and <br> Consumers for a Healthier Future</p>
+            <div class="absolute z-20 text-white font-bold  2xl:text-5xl 2xs:text-2xl md:text-3xl  2xl:top-64 2xs:top-10  2xl:left-24 2xs:left-10">
+                <p>
+                    Food's Journey <br>
+                    Connecting Farmers and <br>
+                    Consumers for a Healthier Future
+                </p>
             </div>
 
             <!-- Subtext Section -->
-            <div class="absolute 2xl:top-96 2xs:top-80 2xl:left-24 2xs:left-9 2xl:transform 2xl:-translate-y-[120px] 2xs:transform 2xs:-translate-y-24 lg:transform lg:-translate-y-20 text-gray-300 2xl:text-lg 2xs:text-xs  md:text-md">
-                <p>We bridge the gap between those who grow our <br> food and those who consume it, creating a healthier, <br> more connected food system for everyone</p>
+            <div class="absolute text-gray-300  2xl:text-lg 2xs:text-xs md:text-md  2xl:top-96 2xs:top-44 2xl:left-24 2xs:left-10">
+                <p>
+                    We bridge the gap between those who grow our <br>
+                    food and those who consume it, creating a healthier, <br>
+                    more connected food system for everyone.
+                </p>
+            </div>
+
+            <!-- Button Section -->
+            <div class="absolute flex space-x-4  2xl:bottom-32 2xs:bottom-32  2xl:right-32 2xs:right-10">
+                <button class="bg-[#608C54] text-white py-2 px-12 rounded-lg text-sm hover:bg-[#4e7345]">
+                    Log in
+                </button>
+                <button class="bg-white text-[#608C54] py-2 px-12 rounded-lg text-sm hover:bg-gray-200">
+                    Sign up
+                </button>
             </div>
         </div>
-          <!-- Button Section on the Right -->
-          <div class="absolute flex 2xl:bottom-32 2xs:bottom-52 2xl:right-32 2xs:right-14 2xl:transform 2xl:-translate-y-1/2 2xs:transform 2xs:-translate-y-16">
-                <button class="bg-[#608C54] text-white 2xl:px-14 2xs:px-12 py-2 rounded-lg mr-4 hover:bg-[#4e7345] text-sm">Log in</button>
-                <button class="bg-white text-[#608C54] 2xl:px-14 2xs:px-10 py-2 rounded-lg hover:bg-gray-200 text-sm">Sign up</button>
-            </div>
+
 
         <!--Mid Cover-->
         <div class="Gradient">
-            <div class="content flex justify-between items-start p-7 top-32">
+            <div class="content flex justify-between items-start p-7 top-32 object-cover">
                     <!-- Small Box on the Left Side -->
                     <div class="bg-white 2xl:p-6 2xs:p-2 shadow-lg rounded-md 2xl:w-1/2  2xs:w-[200px] lg:w-1/2 md:w-1/2 sm:w-1/2 2xl:h-96  2xs:h-80 border-4 border-[#608C54] 2xl:overflow-auto 2xs:overflow-y-auto">
                         <h3 class="2xl:text-lg 2xs:text-sm text-black font-semibold mb-4">Monthly Products Sold</h3>
@@ -104,7 +119,7 @@
             </div>
 
             <div class="text-center mt-20">
-                <h1 class="text-md font-semibold">Elevate Your Agricultural Business with Pagsasaka Services!</h1>
+                <h1 class="2xl:text-md 2xs:text-xs font-semibold">Elevate Your Agricultural Business with Pagsasaka Services!</h1>
             </div>
 
             <div class="bg-gray-200 w-full h-full mt-10 flex justify-center items-center 2xl:p-24 2xs:p-10">
@@ -135,7 +150,7 @@
 
                         <!-- Right Side: Join Us Text -->
                         <div class="relative 2xl:w-96 2xs:w-72 2xl:h-96 2xs:h-72 animate-wave">
-                            <img :src="Lettuce" alt="Lettuce on the left" class="absolute top-0 left-0 2xl:w-full 2xs:w-[250px] 2xl:h-full 2xs:h-[250px] opacity-90">
+                            <img :src="Lettuce" alt="Lettuce on the left" class="absolute top-0 left-0 2xl:w-full 2xs:w-[240px] 2xl:h-full 2xs:h-[240px] opacity-90">
                         </div>
                     </div>
                 </div>
