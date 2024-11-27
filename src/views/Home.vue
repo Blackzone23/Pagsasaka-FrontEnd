@@ -2,47 +2,45 @@
     <div>
         <HomeNavbar/>
         <!-- Cover Photo Section -->
-        <div class="relative flex flex-col items-start">
-            <!-- Background Image -->
-            <img :src="HomeCover1" alt="Home Cover" class="w-full object-cover 2xl:h-screen 2xs:h-[580px]">
+        <div class="relative w-full h-screen bg-cover bg-center text-white" :style="{ backgroundImage: `url(${HomeCover1})` }">
+            <!-- Main Content Wrapper -->
+            <div class="flex flex-col justify-center items-start h-full px-10 space-y-8">
+                <!-- Main Text Section -->
+                <div class="font-bold 2xl:text-5xl 2xs:text-2xl md:text-3xl">
+                    <p>
+                        Food's Journey <br>
+                        Connecting Farmers and <br>
+                        Consumers for a Healthier Future
+                    </p>
+                </div>
 
-            <!-- Main Text Section -->
-            <div class="absolute z-20 text-white font-bold  2xl:text-5xl 2xs:text-2xl md:text-3xl  2xl:top-52 2xs:top-10  2xl:left-24 2xs:left-10">
-                <p>
-                    Food's Journey <br>
-                    Connecting Farmers and <br>
-                    Consumers for a Healthier Future
-                </p>
-            </div>
+                <!-- Subtext Section -->
+                <div class="text-gray-300 2xl:text-lg 2xs:text-xs md:text-md">
+                    <p>
+                        We bridge the gap between those who grow our <br>
+                        food and those who consume it, creating a healthier, <br>
+                        more connected food system for everyone.
+                    </p>
+                </div>
 
-            <!-- Subtext Section -->
-            <div class="absolute text-gray-300  2xl:text-lg 2xs:text-xs md:text-md  2xl:top-96 2xs:top-44 2xl:left-24 2xs:left-10">
-                <p>
-                    We bridge the gap between those who grow our <br>
-                    food and those who consume it, creating a healthier, <br>
-                    more connected food system for everyone.
-                </p>
-            </div>
-
-            <!-- Button Section -->
-            <div class="absolute flex space-x-4  2xl:bottom-32 2xs:bottom-32  2xl:right-32 2xs:right-10">
-                <button class="bg-[#608C54] text-white py-2 px-12 rounded-lg text-sm hover:bg-[#4e7345]">
-                    Log in
-                </button>
-                <button class="bg-white text-[#608C54] py-2 px-12 rounded-lg text-sm hover:bg-gray-200">
-                    Sign up
-                </button>
+                <!-- Button Section -->
+                <div class="flex space-x-4">
+                    <button class="bg-[#608C54] text-white py-2 px-12 rounded-lg text-sm hover:bg-[#4e7345]">
+                        Log in
+                    </button>
+                    <button class="bg-white text-[#608C54] py-2 px-12 rounded-lg text-sm hover:bg-gray-200">
+                        Sign up
+                    </button>
+                </div>
             </div>
         </div>
 
-
         <!--Mid Cover-->
-        <div class="Gradient">
-            <div class="content flex justify-between items-start p-7 top-32 object-cover">
+        <div class="Gradient pt-[170px]">
+            <div class=" flex justify-between p-7">
                     <!-- Small Box on the Left Side -->
-                    <div class="bg-white 2xl:p-6 2xs:p-2 shadow-lg rounded-md 2xl:w-1/2  2xs:w-[200px] lg:w-1/2 md:w-1/2 sm:w-1/2 2xl:h-96  2xs:h-80 border-4 border-[#608C54] 2xl:overflow-auto 2xs:overflow-y-auto">
-                        <h3 class="2xl:text-lg 2xs:text-sm text-black font-semibold mb-4">Monthly Products Sold</h3>
-                        <p class="text-xs text-black mb-6">This is a small box on the right side of the screen.</p>
+                    <div class="bg-white 2xl:p-6 2xs:p-2 shadow-lg rounded-md 2xl:w-1/2  2xs:w-[200px] lg:w-1/2 md:w-1/2 sm:w-1/2 2xl:h-80  2xs:h-80 border-4 border-[#608C54] 2xl:overflow-auto 2xs:overflow-y-auto">
+                        <h3 class="2xl:text-lg 2xs:text-sm text-black font-semibold mb-4 text-center">Monthly Products Sold</h3>
                     <!-- Table inside the box -->
                     <table class="2xl:w-full 2xs:w-40 lg:w-full md:w-full sm:w-full table-auto">
                         <thead>
@@ -54,7 +52,7 @@
                         <tbody>
                             <tr class="bg-white text-sm  text-black">
                                 <td class=" 2xl:px-4 2xs:px-2 border-b">Dinorado Rice</td>
-                                <td class=" 2xl:px-4 2xs:px-2 border-b">875 KG</td>
+                                <td class=" 2xl:px-4 2xs:px-2 border-b">875 KG</td> 
                             </tr>
                             <tr class="bg-gray-300 text-sm text-black">
                                 <td class=" 2xl:px-4 2xs:px-2 border-b">Sugarcane</td>
@@ -81,7 +79,7 @@
                 </div>
 
                 <!-- Philippine Map Image with Matching Size -->
-                <div class=" 2xl:w-full 2xs:w-40 lg:w-1/2 md:w-1/2  sm:w-1/2 2xl:h-80 2xs:h-64 lg:h-80  flex justify-center items-center">
+                <div class="  2xs:w-40 lg:w-1/2 md:w-1/2  sm:w-1/2 2xl:h-80 2xs:h-64 lg:h-80  flex justify-center items-center">
                 <img :src="philippine" alt="Philippine Map" class="2xl:w-[600px] 2xs:w-[200px] lg:w-full md:w-full sm:w-full">
                 </div>
             </div>
