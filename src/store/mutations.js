@@ -8,4 +8,13 @@ export default {
         state.toast.toastMessage = toastMessage;
         state.toast.toastType = toastType;
     },
+
+    setUserData: (state, userData) => {
+        state.userData.data = userData;
+    },
+
+    // setLogout: (state) => {
+    //     state.userData.data = [];
+    //     sessionStorage.removeItem('USER')
+    // },
 }

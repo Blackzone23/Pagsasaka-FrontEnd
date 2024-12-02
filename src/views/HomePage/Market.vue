@@ -159,36 +159,91 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="border border-gray-300 flex flex-col rounded-lg p-4">
+                            <BaseLabel class="font-bold">Product Type</BaseLabel>
+                            <!-- Example Filters -->
+                            <div class="mb-4 text-xs">
+                                <label class="block mb-2">
+                                    <input type="checkbox" v-model="filters.all" @change="toggleAll" /> All
+                                </label>
+                                <label class="block mb-2">
+                                    <input type="checkbox" v-model="filters.vegetable" @change="selectCategory('vegetable')" /> Vegetable
+                                </label>
+                                <label class="block mb-2">
+                                    <input type="checkbox" v-model="filters.seed" @change="selectCategory('seed')" /> Seed
+                                </label>
+                                <label class="block mb-2">
+                                    <input type="checkbox" v-model="filters.grains" @change="selectCategory('grains')" /> Grains
+                                </label>
+                                <label class="block mb-2">
+                                    <input type="checkbox" v-model="filters.soil" @change="selectCategory('soil')" /> Soil
+                                </label>
+                                <label class="block mb-2">
+                                    <input type="checkbox" v-model="filters.fruits" @change="selectCategory('fruits')" /> Fruits
+                                </label>
+                                <label class="block mb-2">
+                                    <input type="checkbox" v-model="filters.pelletes" @change="selectCategory('pelletes')" /> Pellets
+                                </label>
+                                <label class="block mb-2">
+                                    <input type="checkbox" v-model="filters.process" @change="selectCategory('process')" /> Processed
+                                </label>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
                 <!-- Main Content -->
-                <div class="w-full md:w-3/4">
-                    <div class="bg-white shadow-md rounded-lg p-4">
-                        <h1 class="text-xl font-bold mb-4">Products</h1>
-                        <div>
-                            <!-- Product Posting Form -->
-                            <div class="mb-4 items-center">
-                                <BaseInputField v-model="newProduct.name" type="text" placeholder="Enter product name" class="border p-2 rounded w-full"/>
-                                <BaseInputField type="file" accept="image/*" @change="handleImageUpload" class="border  rounded w-full mt-2"/>
-                                <BaseInputField v-model="newProduct.price" type="number" placeholder="Enter price" class="border p-2 rounded w-full mt-2"/>
-                                <BaseInputField v-model="newProduct.rating" type="number" placeholder="Enter rating (1-5)" class="border p-2 rounded w-full mt-2"/>
-                                <BaseInputField v-model="newProduct.location" type="text" placeholder="Enter location" class="border p-2 rounded w-full mt-2"/>
-
-                                <button @click="postProduct" class="mt-2 bg-blue-500 text-white py-2 px-4 rounded" :disabled="!newProduct.image">Post Product</button>
+                <div class="p-4 mt-12">
+                    <!-- Product Grid -->
+                    <div class="grid grid-cols-3 gap-4">
+                        <div v-for="product in filteredProducts.slice(0, 6)" :key="product.id" class="border rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow">
+                        <img :src="product.image" alt="Product Image" class="w-full h-40 object-cover" />
+                        <div class="p-2">
+                            <h3 class="text-sm font-semibold">{{ product.title }}</h3>
+                            <div class="text-red-500 font-bold text-sm">₱{{ product.price }}</div>
+                            <div class="flex justify-between items-center mt-2">
+                            <div v-if="product.rating" class="text-yellow-500 text-xs flex items-center">
+                                <Icon v-for="star in 5" :key="star" :icon="star <= product.rating ? 'mdi:star' : 'mdi:star-outline'" class="mr-1"/>
                             </div>
-
-                            <!-- Product Grid -->
-                            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                                <div v-for="(product, index) in products" :key="index" class="border p-4 rounded shadow">
-                                    <img :src="product.image" alt="Product Image" class="w-full h-40 object-cover rounded"/>
-                                    <p class="text-gray-700">Price: ₱{{ product.price }}</p>
-                                    <p class="text-lg font-semibold mt-2">{{ product.name }}</p>
-                                    <p class="text-yellow-500">Rating: {{ product.rating }} ★</p>
-                                    <p class="text-gray-500 text-sm">Location: {{ product.location }}</p>
-                                </div>
+                            </div>
+                            <div v-if="product.location" class="text-gray-600 text-xs mt-2">
+                            📍 {{ product.location }}
                             </div>
                         </div>
+                        </div>
+                    </div>
+
+                    <!-- Pagination -->
+                    <div class="flex justify-center text-sm mt-10">
+                        <button @click="prevPage" :disabled="currentPage === 1" class="bg-gray-300 p-2 rounded">Previous</button>
+                        <span>Page {{ currentPage }} of {{ totalPages }}</span>
+                        <button @click="nextPage" :disabled="currentPage === totalPages" class="bg-gray-300 p-2 rounded">Next</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="h-full w-full p-10">
+            <div class="max-w-4xl mx-auto p-4 border-2 border-green-500 rounded-lg">
+                <!-- Title Section -->
+                <h2 class="text-3xl text-center font-bold text-green-600 mb-4">Delivery Policy</h2>
+
+                <!-- Content Section -->
+                <div class="flex items-center mb-6">
+                    <!-- Image Section -->
+                    <div class="mr-6">
+                        <Icon icon="material-symbols-light:delivery-truck-speed" width="112" height="112"  style="color: #12a246" />
+                    </div>
+                    <!-- Text Section -->
+                    <div>
+                        <p class="text-gray-800 text-base mb-4">
+                            We work with a team of regular drivers and third-party providers to handle all of our deliveries. Please make sure you are contactable by our drivers on the day and that clear instructions are given for the receiving of items to avoid delays and possible issues.
+                        </p>
+                        <p class="text-gray-800 text-base font-semibold">
+                            We implement a 15-minute waiting time for all our deliveries. In the event that the recipient cannot be contacted, our personnel will return your order to us. You can pick it up in our office.
+                        </p>
+                        <p class="text-gray-800 text-base mt-4">
+                            To reduce food waste, for orders involving fresh produce—<span class="font-bold">all items that are not picked up within the same week of the scheduled pickup or delivery will be considered good as sold.</span>
+                        </p>
                     </div>
                 </div>
             </div>
@@ -206,16 +261,89 @@ import MVegetable3 from '@/assets/MVegetable3.png';
 import MVegetable4 from '@/assets/MVegetable4.png';
 import Market_NavBar from '@/components/Navbar/Market_NavBar.vue';
 import BaseLabel from '@/components/Input-Fields/BaseLabel.vue';
-import BaseInputField from '@/components/Input-Fields/BaseInputField.vue';
-import BaseCheckBox from '@/components/Input-Fields/BaseCheckBox.vue';
 import { reactive, computed, ref } from 'vue';
 import { required, email, helpers } from '@vuelidate/validators';
 import { Icon } from '@iconify/vue';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 
+const products = ref([
+  { id: 1, title: "50pcs Green Purple Seedless Grape Seeds....", price: 40, rating: 4, location: "Manila, Philippines", image: "https://i0.wp.com/www.tulipgardencentre.co.za/wp-content/uploads/2022/05/Catawba.jpg?fit=689%2C520&ssl=1", category: "Seed" },
+  { id: 2, title: "Blue Jasmine Rice 25kg", price: '1,679', rating: 4, location: "Manila, Philippines", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4QqALaS15k-h3RC1ExCa928HA1LD5ju4KLQ&s", category: "grains" },
+  { id: 3, title: "QUALITY LOAM SOIL / ORGANIC SOIL", price: 50, rating: 4, location: "Manila, Philippines", image: "https://down-ph.img.susercontent.com/file/58ab165cdd0a18de2a87b531db5431c6_tn", category: "soil" },
+  { id: 4, title: "Pechay Seeds | Vegetable Seeds | Golden Plant and Seed Store", price: 55, rating: 4, location: "Manila, Philippines", image: "https://down-ph.img.susercontent.com/file/3a2563d65cb3dc5b0356298a07216f6a", category: "Seed" },
+  { id: 5, title: "50pcs Green Purple Seedless Grape Seeds....", price: 46, rating: 4, location: "Manila, Philippines", image: "https://www.mtechgardens.com/cdn/shop/products/pv5AIs.jpg?v=1681897072", category: "fruit" },
+  { id: 6, title: "Blood Worm Pellets", price: 125, rating: 4, location: "Manila, Philippines", image: "https://down-ph.img.susercontent.com/file/ph-11134207-7qul4-ljv0kx1q45n342", category: "pelletes" },
+  { id: 7, title: "Basket of Apple", price: 200, rating: 4, location: "Manila, Philippines", image: "https://s3.envato.com/files/163445038/01(Ikea_Byholma1(brown)apple).jpg", category: "fruits" },
+  { id: 8, title: "1kg of Onion", price: 130, rating: 4, location: "Manila, Philippines", image: "https://www.jiomart.com/images/product/original/590003515/onion-1-kg-product-images-o590003515-p590003515-0-202408070949.jpg?im=Resize=(1000,1000)", category: "vegetable" },
+  { id: 9, title: "1pack of Corn Seeds", price: 500, rating: 4, location: "Manila, Philippines", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSo2vJtt0yKG4igoevwRpcBcOKYnshOgeI2qA&s", category: "Seed" },
+  { id: 10, title: "Feeds for Pigs", price: 1000, rating: 4, location: "Manila, Philippines", image: "https://www.genmil.com.ph/wp-content/uploads/2021/06/KHPSPP.png", category: "pelletes" },
+  { id: 11, title: "Tomato", price: 50, rating: 4, location: "Manila, Philippines", image: "https://lh5.googleusercontent.com/proxy/r7LOPGxHIUWak00os0ZLV_3HtXKKuTSrV_wsWEQMVnFnQmNwhBHDhxFu100NEA3_g_FPm0J8RV9wqiTbzGuosuwv8Ibvzf_ijrsXA-O7E8jFr3NLYuwvH_LrdwyOBeN3zzhG23fLMsVoqf-6FyM9dpSIeFdoH_4", category: "vegetable" },
+  { id: 12, title: "Pics peanut butter", price: 800, rating: 4, location: "Manila, Philippines", image: "https://picspeanutbutter.nz/cdn/shop/files/Pic_sSmooth380g-Straight_1200x1200.jpg?v=1701380041", category: "process" },
+]);
 
 
+const filters = reactive({
+  all: true,
+  vegetable: false,
+  seed: false,
+  grains: false,
+  soil: false,
+  fruits: false,
+  pelletes: false,
+  process: false,
+});
+
+const filteredProducts = computed(() => {
+  let filtered = products.value;
+
+  // Apply filters based on selected checkboxes
+  if (!filters.all) {
+    const activeFilters = Object.keys(filters).filter(key => filters[key] && key !== 'all');
+    if (activeFilters.length > 0) {
+      filtered = filtered.filter(product => activeFilters.includes(product.category));
+    }
+  }
+
+  return filtered.slice((currentPage.value - 1) * itemsPerPage, currentPage.value * itemsPerPage);
+});
+
+const currentPage = ref(1);
+const itemsPerPage = 6;
+
+const totalPages = computed(() => Math.ceil(filteredProducts.value.length / itemsPerPage));
+
+const nextPage = () => {
+  if (currentPage.value < totalPages.value) {
+    currentPage.value++;
+  }
+};
+
+const prevPage = () => {
+  if (currentPage.value > 1) {
+    currentPage.value--;
+  }
+};
+
+const toggleAll = () => {
+  if (filters.all) {
+    Object.keys(filters).forEach(key => { filters[key] = true; });
+  } else {
+    Object.keys(filters).forEach(key => { filters[key] = false; });
+  }
+};
+
+const selectCategory = (category) => {
+  // Unselect all filters except the selected category
+  Object.keys(filters).forEach(key => {
+    if (key !== category && key !== 'all') {
+      filters[key] = false;
+    }
+  });
+
+  // Ensure 'all' is unchecked when a specific filter is selected
+  filters.all = false;
+};
 /******************************************************************
   FUNCTION FOR IMAGE CAROUSEL
 ******************************************************************/
@@ -259,7 +387,7 @@ const newProduct = ref({
   location: "",
 });
 
-const products = ref([]);
+// const products = ref([]);
 
 // Handle file upload
 const handleImageUpload = (event) => {
@@ -292,6 +420,7 @@ const postProduct = () => {
 .group-hover:scale-110 {
   transform: scale(1.1);
 }
+
 
 
 </style>

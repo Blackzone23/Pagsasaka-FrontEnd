@@ -283,10 +283,7 @@
                                     <td class="px-4 py-2 font-bold">{{ product.amount }}</td>
                                     <td class="px-4 py-2 space-x-2 text-end">
                                         <!-- Edit Button -->
-                                        <button
-                                        class="text-blue-500 hover:text-blue-700"
-                                        @click="openUpdateProductModal(product.id)"
-                                        >
+                                        <button class="text-blue-500 hover:text-blue-700" @click="openUpdateProductModal(product.id)">
                                         <Icon icon="lucide:pencil-line" width="1.2rem" height="1.2rem" style="color: #578CCB" />
                                         </button>
 

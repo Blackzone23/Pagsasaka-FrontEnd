@@ -15,8 +15,5 @@ export default {
         data: [],
     },
 
-    request: {
-        data:[],
-        selectedRequestData:[],
-    },
+
 }

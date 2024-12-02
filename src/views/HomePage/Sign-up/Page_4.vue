@@ -16,10 +16,10 @@
                             <h1 class="font-semibold text-sm">What product category you will sell</h1>
                             <p>Selecting the correct category for your product ensures optimal placement and visibility within our platform’s algorithm</p>
                         </div>
-                        
+
                         <div class="space-y-3">
-                            <h2 class="text-xs font-semibold text-[#608C54]">Select a Category</h2>
-                            <BaseRadioButton v-for="category in categories" :key="category" :name="'productCategory'" :label="category" :value="category" v-model="selectedCategory" class="text-xs"/>
+                            <h2 class="text-xs font-semibold text-[#608C54]">Select Categories</h2>
+                            <BaseCheckBox v-for="category in categories" :key="category" :id="`category-${category}`" :label="category" :value="category" :modelValue="selectedCategory.includes(category)" @update:modelValue="(isChecked) => handleSelect(category, isChecked)" />
                         </div>
                         
                         <div class="text-xs text-start">
@@ -48,10 +48,19 @@
 import Logo from '@/assets/Logo.png';
 import Logo2 from '@/assets/Logo2.png';
 import SignUp_Navbar from '@/components/Navbar/SignUp_Navbar.vue';
-import BaseRadioButton from '@/components/Input-Fields/BaseRadioButton.vue';
+import BaseCheckBox from '@/components/Input-Fields/BaseCheckBox.vue';
 import { ref} from 'vue';
 
 
-const selectedCategory = ref('');
+const selectedCategory  = ref([]);
 const categories = ['Seeds and Saplings', 'Fruits', 'Vagetables', 'Raw materials', 'Processed','Flowers & Plants'];
+
+// Handle checkbox selection
+function handleSelect(category, isChecked) {
+  if (isChecked) {
+    selectedCategory.value.push(category);  // Add the category if checked
+  } else {
+    selectedCategory.value = selectedCategory.value.filter(item => item !== category);  // Remove if unchecked
+  }
+}
 </script>

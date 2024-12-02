@@ -7,7 +7,6 @@
                 <!-- Left Section: Logo and Links -->
                 <div class="flex items-center space-x-4">
                     <a href="/about" class="hover:underline hidden md:inline">About</a>
-                    <a href="#" class="hover:underline hidden md:inline">Farming Seller</a>
                     <span class="hidden md:inline">|</span>
                     <span class="hidden md:inline">Follow us on</span>
                     <a href="#" class="hidden md:inline">
@@ -65,7 +64,9 @@
         <div class="flex items-center justify-center mt-2 space-y-2">
             <!-- Logo -->
             <div class="text-2xl font-bold">
-                <img :src="Logo" alt="Logo" class="2xl:h-24 2xs:h-16">
+                <a href="/market" class="flex items-center">
+                        <img :src="Logo" alt="Logo" class="2xl:h-20 2xs:h-14">
+                    </a>
                 <!-- <a href="/" class="text-white">Your Logo</a> -->
             </div>
 

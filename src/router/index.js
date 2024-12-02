@@ -59,6 +59,18 @@ const routes = [
                 component: () => import('../views/HomePage/Meet_Farmers.vue'),
                 meta: { requiresAuth: false, roles: ['Home','About','Market,','Services','Meet_Farmers','Sign-Up'] }, 
             },
+            {
+                path: '/shop',
+                name: 'Viewshop',
+                component: () => import('../views/HomePage/Viewshop.vue'),
+                meta: { requiresAuth: false, roles: ['Home','About','Market,','Services','Meet_Farmers','Sign-Up'] }, 
+            },
+            {
+                path: '/profile',
+                name: 'MyProfile',
+                component: () => import('../views/HomePage/MyProfile.vue'),
+                meta: { requiresAuth: false, roles: ['Home','About','Market,','Services','Meet_Farmers','Sign-Up'] }, 
+            },
 
             {
                 path: '/signup',
@@ -230,26 +242,26 @@ const router = createRouter({
     routes,
 })
 
-router.beforeEach((to, from, next) => {
-    const token = store.state.userData.data.token;
-    const user_type = store.state.userData.data.user_type;
+// router.beforeEach((to, from, next) => {
+//     const token = store.state.userData.data.token;
+//     const user_type = store.state.userData.data.user_type;
 
-    if (to.meta.requiresAuth && !token) {
-        // Redirect to login if not authenticated
-        next({ name: 'Login' });
-    } else if (token && to.name === 'Login') {
-        // Redirect to the dashboard if already logged in and trying to access login page
-        const redirectName = user_type ? `${user_type}_Dashboard` : '/';
-        next({ name: redirectName });
-    } else if (token && to.meta.roles && !to.meta.roles.includes(user_type)) {
-        // Redirect if user role is not in the allowed roles for the route
-        const redirectName = user_type ? `${user_type}_Dashboard` : '/';
-        next({ name: redirectName });
-    } else {
-        // Proceed to the requested route
-        next();
-    }
-});
+//     if (to.meta.requiresAuth && !token) {
+//         // Redirect to login if not authenticated
+//         next({ name: 'Login' });
+//     } else if (token && to.name === 'Login') {
+//         // Redirect to the dashboard if already logged in and trying to access login page
+//         const redirectName = user_type ? `${user_type}_Dashboard` : '/';
+//         next({ name: redirectName });
+//     } else if (token && to.meta.roles && !to.meta.roles.includes(user_type)) {
+//         // Redirect if user role is not in the allowed roles for the route
+//         const redirectName = user_type ? `${user_type}_Dashboard` : '/';
+//         next({ name: redirectName });
+//     } else {
+//         // Proceed to the requested route
+//         next();
+//     }
+// });
 
 
 

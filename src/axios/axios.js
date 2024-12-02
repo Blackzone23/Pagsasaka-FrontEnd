@@ -1,10 +1,10 @@
 import axios from 'axios';
 import store from '@/store';
-import state from '@/store/state';
+
 
 const axiosClient = axios.create({
      
-    baseURL: '',
+    baseURL: 'https://pagsasaka-server.bpc-bsis4d.com/public/api/',
     headers: {
         'Content-Type': 'Application/json',
         'X-Requested-With': 'XMLHttpRequest',

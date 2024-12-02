@@ -96,9 +96,12 @@
                                     <Icon icon="mdi:chat" width="20" height="20" style="color: white" /> Chat Now
                                 </button>
                                 <!-- View Shop Button -->
-                                <button class="flex gap-1 px-4 py-2 bg-white text-sm font-medium rounded-lg hover:bg-gray-300 transition-colors border border-gray-300">
+                                <a href="/shop" class="flex gap-1 px-4 py-2 bg-white text-sm font-medium rounded-lg hover:bg-gray-300 transition-colors border border-gray-300">
                                     <Icon icon="bx:store" width="20" height="20" style="color: black" /> View Shop
-                                </button>
+                                </a>
+                                <!-- <button class="flex gap-1 px-4 py-2 bg-white text-sm font-medium rounded-lg hover:bg-gray-300 transition-colors border border-gray-300">
+                                    <Icon icon="bx:store" width="20" height="20" style="color: black" /> View Shop
+                                </button> -->
                             </div>
                         </div>
                     </div>
