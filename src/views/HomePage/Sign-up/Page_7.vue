@@ -60,8 +60,15 @@ import SignUp_Navbar from '@/components/Navbar/SignUp_Navbar.vue';
 import BaseLabel from '@/components/Input-Fields/BaseLabel.vue';
 import BaseInputField from '@/components/Input-Fields/BaseInputField.vue';
 import BaseRadioButton from '@/components/Input-Fields/BaseRadioButton.vue';
-import { ref} from 'vue';
+import useVuelidate from '@vuelidate/core';
+import { reactive, computed, ref, onMounted } from 'vue';
+import { required, email, helpers } from '@vuelidate/validators';
 import { Icon } from '@iconify/vue';
+import { useRouter } from 'vue-router';
+import { useStore } from 'vuex';
+
+const store = useStore();
+const router = useRouter();
 
 const tinIdSelected = ref(null);
 const fileInput = ref(null);

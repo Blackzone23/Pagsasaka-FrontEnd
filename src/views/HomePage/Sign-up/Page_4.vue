@@ -49,7 +49,15 @@ import Logo from '@/assets/Logo.png';
 import Logo2 from '@/assets/Logo2.png';
 import SignUp_Navbar from '@/components/Navbar/SignUp_Navbar.vue';
 import BaseCheckBox from '@/components/Input-Fields/BaseCheckBox.vue';
-import { ref} from 'vue';
+import useVuelidate from '@vuelidate/core';
+import { reactive, computed, ref, onMounted } from 'vue';
+import { required, email, helpers } from '@vuelidate/validators';
+import { Icon } from '@iconify/vue';
+import { useRouter } from 'vue-router';
+import { useStore } from 'vuex';
+
+const store = useStore();
+const router = useRouter();
 
 
 const selectedCategory  = ref([]);

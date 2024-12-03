@@ -18,8 +18,8 @@
                 <!-- Button Section -->
                 <div class="flex justify-end w-full">
                     <div class="flex space-x-4">
-                        <button class="bg-[#608C54] text-white py-2 px-12 rounded-lg text-sm hover:bg-[#4e7345]">Log in</button>
-                        <button class="bg-white text-[#608C54] py-2 px-12 rounded-lg text-sm hover:bg-gray-200">Sign up</button>
+                        <a href="/login" class="bg-[#608C54] text-white py-2 px-12 rounded-lg text-sm hover:bg-[#4e7345]">Log in</a>
+                        <a href="/signup" class="bg-white text-[#608C54] py-2 px-12 rounded-lg text-sm hover:bg-gray-200">Sign up</a>
                     </div>
                 </div>
             </div>

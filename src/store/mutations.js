@@ -13,8 +13,19 @@ export default {
         state.userData.data = userData;
     },
 
-    // setLogout: (state) => {
-    //     state.userData.data = [];
-    //     sessionStorage.removeItem('USER')
-    // },
+    setLogout: (state) => {
+        state.userData.data = [];
+        sessionStorage.removeItem('USER')
+    },
+
+    
+     setSignData: (state, signup) => {
+        state.signup.data = signup;
+    },
+
+    // DIVISION DROPDOWN LIST FOR SUPERVISOR
+    setRoleDropdown: (state, roleDropdown) => {
+        state.roleDropdown.data = roleDropdown;
+    },
+
 }

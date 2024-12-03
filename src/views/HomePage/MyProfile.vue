@@ -12,21 +12,7 @@
 
                 <!-- User Name -->
                 <div>
-                    <BaseLabel class="text-lg font-semibold text-gray-800">Norman Cruz</BaseLabel>
-
-                    <!-- User Info (Stacked below the name) -->
-                    <div class="flex-1">
-                        <div class="text-sm">
-                            <div class="flex items-center space-x-2">
-                                <BaseLabel class="w-32">UserID:</BaseLabel>
-                                <span class="mt-3">132434567</span>
-                            </div>
-                            <div class="flex items-center space-x-2">
-                                <BaseLabel class="w-32">Email Address:</BaseLabel>
-                                <span class="mt-3">NormanCruz143@gmail.com</span>
-                            </div>
-                        </div>
-                    </div>
+                    <BaseLabel class="text-xl font-semibold text-gray-800">Norman Cruz</BaseLabel>
                 </div>
             </div>
             <div class="w-full mt-8">
@@ -108,7 +94,10 @@
                                                     <div>
                                                     <p class="text-sm font-medium text-gray-700">Seller <span class="font-bold">Janromil Dela Cruz</span></p>
                                                     </div>
-                                                    <p class="text-sm font-semibold text-green-700">₱820</p>
+                                                    <div class="flex items-center gap-3">
+                                                        <h1 class="text-sm">Order Total:</h1>
+                                                        <p class="text-sm font-semibold text-green-700">₱820</p>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -117,7 +106,7 @@
                                         <div>
                                             <!-- Order Status Section -->
                                             <div class="mt-4 flex items-center justify-between">
-                                                <span class="text-xs font-medium text-gray-500">Pending</span>
+                                                <span class="text-sm font-medium text-gray-500">Pending</span>
                                                 <div class="flex space-x-2">
                                                     <button class="px-3 py-1 text-sm font-semibold text-green-700 border border-green-600 rounded hover:bg-green-50">
                                                     Contact Seller
@@ -130,18 +119,36 @@
 
                                             <!-- Cancel Order Modal -->
                                             <div v-if="isshowCancelModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-                                            <div class="bg-white p-6 rounded-lg shadow-lg max-w-sm">
-                                                <h2 class="text-lg font-semibold text-gray-800 text-center">Select Cancellation Reason</h2>
-                                                <p class="mt-2 text-sm text-white p-4 bg-[#608C54]">Please select a cancellation reason. Once your order is successfully canceled, your refund will be processed immediately and may take 10 to 45 minutes to reflect in your account.</p>
-                                                <div class="mt-4 flex justify-end space-x-2">
-                                                    <button @click="closeshowCancelModalModal" class="px-4 py-2 text-sm font-semibold text-gray-700 border border-gray-300 rounded hover:bg-gray-100">
-                                                        Close
-                                                    </button>
-                                                    <button @click="Save" class="px-4 py-2 text-sm font-semibold text-red-700 bg-red-100 border border-red-500 rounded hover:bg-red-200">
-                                                        Confirm
-                                                    </button>
+                                                <div class="bg-white p-7 rounded-lg shadow-lg w-[500px] items-center">
+                                                    <div class="text-end">
+                                                        <button @click="closeshowCancelModalModal" class="text-gray-400 hover:text-gray-600">
+                                                            <Icon icon="icon-park-solid:close-one" width="20" height="20" />
+                                                        </button>
+                                                    </div>
+                                                    <div class="flex justify-center items-center mb-4">   
+                                                        <h3 class="text-xl font-semibold ml-4">Select Cancellation Reason</h3>
+                                                    </div>
+
+                                                    <!-- Notification Section -->
+                                                    <div class="mt-4 p-4 bg-[#608C54] rounded-md flex flex-col items-center text-center">
+                                                        <!-- Bell Icon -->
+                                                        <Icon icon="noto:bell" width="50" height="50" class="mb-4" />
+                                                        <!-- Text -->
+                                                        <p class="text-sm text-white"> Please select a cancellation reason. Once your order is successfully canceled, your refund will be processed immediately and may take 10 to 45 minutes to reflect in your account.</p>
+                                                    </div>
+                                                    <div class="text-sm mt-3">
+                                                        <BaseRadioButton v-for="option in ['Need to change delivery address', 'Seller is not responsive to my inquries', 'Others /Change of mind']" :key="option" :name="'tinIdOption'" :label="option" :value="option" v-model="tinIdSelected"></BaseRadioButton>
+                                                    </div>
+                                                    <!-- Buttons -->
+                                                    <div class="mt-4 flex justify-end space-x-2">
+                                                        <button @click="closeshowCancelModalModal" class="px-4 py-2 text-sm font-semibold text-gray-700 border border-gray-300 rounded hover:bg-gray-100">
+                                                            Close
+                                                        </button>
+                                                        <button @click="Save" class="px-4 py-2 text-sm font-semibold text-red-700 bg-red-100 border border-red-500 rounded hover:bg-red-200" >
+                                                            Confirm
+                                                        </button>
+                                                    </div>
                                                 </div>
-                                            </div>
                                             </div>
                                         </div>
                                     </div>
@@ -149,9 +156,80 @@
 
                                 <!--To Ship-->
                                 <div v-else-if="currentTab === 'To Ship'">
-                                <div class="bg-green-100 border border-green-300 rounded-lg p-4">
-                                    <p class="text-sm">You have pending items to ship.</p>
-                                </div>
+                                    <div class="mt-4 bg-green-100 border border-green-300 rounded-lg p-4">
+                                        <div class="flex items-center">
+                                            <!-- Image -->
+                                            <img src="https://via.placeholder.com/80" alt="Product Image" class="w-20 h-20 rounded object-cover border"/>
+
+                                            <!-- Details -->
+                                            <div class="ml-4 flex-grow">
+                                                <h3 class="text-sm font-semibold">Salad package</h3>
+                                                <p class="text-xs text-gray-600">Variants: 500 Grams</p>
+                                                <div class="mt-2 flex items-center justify-between">
+                                                    <div>
+                                                    <p class="text-sm font-medium text-gray-700">Seller <span class="font-bold">Janromil Dela Cruz</span></p>
+                                                    </div>
+                                                    <div class="flex items-center gap-3">
+                                                        <h1 class="text-sm">Order Total:</h1>
+                                                        <p class="text-sm font-semibold text-green-700">₱820</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Order Status -->
+                                        <div>
+                                            <!-- Order Status Section -->
+                                            <div class="mt-4 flex items-center justify-between">
+                                               <div class="flex items-center gap-3">
+                                                <h1 class="text-sm">Seller Preparing your Goods:</h1>
+                                                <span class="text-sm font-medium text-gray-500">Pending</span>
+                                               </div>
+                                                <div class="flex space-x-2">
+                                                    <button class="px-3 py-1 text-sm font-semibold text-green-700 border border-green-600 rounded hover:bg-green-50">
+                                                    Contact Seller
+                                                    </button>
+                                                    <button class="px-3 py-1 text-sm font-semibold text-red-600 border border-red-500 rounded hover:bg-red-50" @click="openshowCancelModalModal">
+                                                    Cancel Order
+                                                    </button>
+                                                </div>
+                                            </div>
+
+                                            <!-- Cancel Order Modal -->
+                                            <div v-if="isshowCancelModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+                                                <div class="bg-white p-7 rounded-lg shadow-lg w-[500px] items-center">
+                                                    <div class="text-end">
+                                                        <button @click="closeshowCancelModalModal" class="text-gray-400 hover:text-gray-600">
+                                                            <Icon icon="icon-park-solid:close-one" width="20" height="20" />
+                                                        </button>
+                                                    </div>
+                                                    <div class="flex justify-center items-center mb-4">   
+                                                        <h3 class="text-xl font-semibold ml-4">Select Cancellation Reason</h3>
+                                                    </div>
+
+                                                    <!-- Notification Section -->
+                                                    <div class="mt-4 p-4 bg-[#608C54] rounded-md flex flex-col items-center text-center">
+                                                        <!-- Bell Icon -->
+                                                        <Icon icon="noto:bell" width="50" height="50" class="mb-4" />
+                                                        <!-- Text -->
+                                                        <p class="text-sm text-white"> Please select a cancellation reason. Once your order is successfully canceled, your refund will be processed immediately and may take 10 to 45 minutes to reflect in your account.</p>
+                                                    </div>
+                                                    <div class="text-sm mt-3">
+                                                        <BaseRadioButton v-for="option in ['Need to change delivery address', 'Seller is not responsive to my inquries', 'Others /Change of mind']" :key="option" :name="'tinIdOption'" :label="option" :value="option" v-model="tinIdSelected"></BaseRadioButton>
+                                                    </div>
+                                                    <!-- Buttons -->
+                                                    <div class="mt-4 flex justify-end space-x-2">
+                                                        <button @click="closeshowCancelModalModal" class="px-4 py-2 text-sm font-semibold text-gray-700 border border-gray-300 rounded hover:bg-gray-100">
+                                                            Close
+                                                        </button>
+                                                        <button @click="Save" class="px-4 py-2 text-sm font-semibold text-red-700 bg-red-100 border border-red-500 rounded hover:bg-red-200" >
+                                                            Confirm
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
 
                                 <!--To Receive-->
@@ -176,7 +254,10 @@
 
                                         <!-- Order Status -->
                                         <div class="mt-4 flex items-center justify-between">
-                                            <span class="text-xs font-medium text-gray-500">Pending</span>
+                                            <div class="flex items-center gap-3">
+                                                <h1 class="text-sm">Seller Has shipped your goods:</h1>
+                                                <span class="text-sm font-medium text-gray-500">To Receive</span>
+                                            </div>
                                             <div class="flex space-x-2">
                                                 <button class="px-3 py-1 text-sm font-semibold text-green-700 border border-green-600 rounded hover:bg-green-50">
                                                     Contact Seller
@@ -207,30 +288,14 @@
 
                             <!-- Pagination (Optional, if applicable to all tabs) -->
                             <div v-if="hasPagination(currentTab)" class="mt-6 flex justify-center items-center space-x-2">
-                                <button
-                                class="px-3 py-1 text-sm font-medium text-gray-500 border border-gray-300 rounded hover:bg-gray-100"
-                                :disabled="currentPage === 1"
-                                @click="prevPage"
-                                >
-                                Previous
+                                <button class="px-3 py-1 text-sm font-medium text-gray-500 border border-gray-300 rounded hover:bg-gray-100" :disabled="currentPage === 1" @click="prevPage">
+                                     Previous
                                 </button>
-                                <button
-                                v-for="page in totalPages"
-                                :key="page"
-                                @click="currentPage = page"
-                                :class="[ 
-                                    'px-3 py-1 text-sm font-medium rounded',
-                                    currentPage === page ? 'bg-green-600 text-white' : 'text-gray-600 border border-gray-300 hover:bg-gray-100'
-                                ]"
-                                >
-                                {{ page }}
+                                <button v-for="page in totalPages" :key="page" @click="currentPage = page" :class="[  'px-3 py-1 text-sm font-medium rounded', currentPage === page ? 'bg-green-600 text-white' : 'text-gray-600 border border-gray-300 hover:bg-gray-100']" >
+                                     {{ page }}
                                 </button>
-                                <button
-                                class="px-3 py-1 text-sm font-medium text-gray-500 border border-gray-300 rounded hover:bg-gray-100"
-                                :disabled="currentPage === totalPages"
-                                @click="nextPage"
-                                >
-                                Next
+                                <button class="px-3 py-1 text-sm font-medium text-gray-500 border border-gray-300 rounded hover:bg-gray-100" :disabled="currentPage === totalPages" @click="nextPage">
+                                     Next
                                 </button>
                             </div>
                         </div>
@@ -251,7 +316,7 @@
                                     <div class="flex justify-between items-center mb-4">
                                     <h3 class="text-xl font-semibold">Add Address</h3>
                                     <button @click="closeModal" class="text-gray-400 hover:text-gray-600">
-                                        <Icon icon="mdi:close" width="20" height="20" />
+                                        <Icon icon="icon-park-solid:close-one" width="20" height="20" />
                                     </button>
                                     </div>
 
@@ -301,9 +366,9 @@
                                 <div class="bg-white rounded-lg shadow-lg max-w-lg w-full p-6">
                                     <!-- Modal Header -->
                                     <div class="flex justify-between items-center mb-4">
-                                    <h3 class="text-xl font-semibold">Add Address</h3>
+                                    <h3 class="text-xl font-semibold">Update Address</h3>
                                     <button @click="closeUpdateAddressPowerModal" class="text-gray-400 hover:text-gray-600">
-                                        <Icon icon="mdi:close" width="20" height="20" />
+                                        <Icon icon="icon-park-solid:close-one" width="20" height="20" />
                                     </button>
                                     </div>
 
@@ -312,26 +377,26 @@
                                         <!-- Division -->
                                         <div class="mb-4">
                                             <BaseLabel>Full Name:</BaseLabel>
-                                            <BaseInputField v-model="address.fullname" />
+                                            <BaseInputField v-model="updateaddress.fullname" />
                                             <BaseError></BaseError>
                                         </div>
 
                                         <!-- Note -->
                                         <div class="mb-4">
                                             <BaseLabel>Phone Number:</BaseLabel>
-                                            <BaseInputField v-model="address.phone_number" />
+                                            <BaseInputField v-model="updateaddress.phone_number" />
                                             <BaseError></BaseError>
                                         </div>
 
                                         <div class="mb-4">
                                             <BaseLabel>Region,Province,City,Barangay:</BaseLabel>
-                                            <BaseInputField v-model="address.fulladdress" />
+                                            <BaseInputField v-model="updateaddress.fulladdress" />
                                             <BaseError></BaseError>
                                         </div>
 
                                         <div class="mb-4">
                                             <BaseLabel>Postal code:</BaseLabel>
-                                            <BaseInputField v-model="address.postalcode" />
+                                            <BaseInputField v-model="updateaddress.postalcode" />
                                             <BaseError></BaseError>
                                         </div>
 

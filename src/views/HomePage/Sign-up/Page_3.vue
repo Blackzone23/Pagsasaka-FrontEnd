@@ -51,4 +51,13 @@ import SignUp_Navbar from '@/components/Navbar/SignUp_Navbar.vue';
 import BaseOptionDefaultField from '@/components/Input-Fields/BaseOptionDefaultField.vue';
 import BaseOptionField from '@/components/Input-Fields/BaseOptionField.vue';
 import BaseSelectField from '@/components/Input-Fields/BaseSelectField.vue';
+import useVuelidate from '@vuelidate/core';
+import { reactive, computed, ref, onMounted } from 'vue';
+import { required, email, helpers } from '@vuelidate/validators';
+import { Icon } from '@iconify/vue';
+import { useRouter } from 'vue-router';
+import { useStore } from 'vuex';
+
+const store = useStore();
+const router = useRouter();
 </script>

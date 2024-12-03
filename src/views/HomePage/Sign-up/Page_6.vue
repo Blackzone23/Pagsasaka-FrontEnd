@@ -79,8 +79,15 @@ import BaseOptionDefaultField from '@/components/Input-Fields/BaseOptionDefaultF
 import BaseOptionField from '@/components/Input-Fields/BaseOptionField.vue';
 import BaseSelectField from '@/components/Input-Fields/BaseSelectField.vue';
 import BaseRadioButton from '@/components/Input-Fields/BaseRadioButton.vue';
-import { ref} from 'vue';
+import useVuelidate from '@vuelidate/core';
+import { reactive, computed, ref, onMounted } from 'vue';
+import { required, email, helpers } from '@vuelidate/validators';
 import { Icon } from '@iconify/vue';
+import { useRouter } from 'vue-router';
+import { useStore } from 'vuex';
+
+const store = useStore();
+const router = useRouter();
 
 const tinIdSelected = ref(null);
 const fileInput = ref(null);

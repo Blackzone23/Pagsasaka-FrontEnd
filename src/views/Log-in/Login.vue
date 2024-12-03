@@ -121,7 +121,7 @@ async function login() {
         await store.dispatch('login', formData)
         .then((response) => {
             if(response.isSuccess == true) {
-                router.push({name: 'User_Dashboard'}) 
+                router.push({name: 'Administrator_Dashboard'}) 
             }
         })
     }

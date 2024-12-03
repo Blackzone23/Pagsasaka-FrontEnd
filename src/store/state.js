@@ -15,5 +15,12 @@ export default {
         data: [],
     },
 
+    signup: {
+        data:[],
+    },
+    roleDropdown: {
+        data:[],
+    },
+
 
 }

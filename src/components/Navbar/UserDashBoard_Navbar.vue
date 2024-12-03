@@ -1,5 +1,5 @@
 <template>
-    <div class="w-64 bg-[#608C54] shadow-md">
+    <div class="w-64 bg-[#608C54]">
         <nav>
             <div> <img :src="Logo" alt="Logo" class="h-32 w-58"></div>
 

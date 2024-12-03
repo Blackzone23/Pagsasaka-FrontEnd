@@ -1,17 +1,23 @@
 <template>  
-    <!-- <HomeNavbar v-if="user_type === 'Home'"/>
-    <SignUp_Navbar v-if="user_type === 'Sign-Up'"/> -->
+    <div class="flex h-screen">
+        <!-- Navbar -->
+    
+            <UserDashBoard_Navbar v-if="role === 'User'"/>
+            <Administrator_Navbar v-if="role === 'Admin'"/>
+        
 
-    <div class=""> 
-        <router-view :key="$route.path"></router-view>    
-    </div>  
+        <!-- Main Content -->
+        <div class="flex-1">
+            <router-view :key="$route.path"></router-view>
+        </div>
+    </div>
 </template>
 
 <script setup>
+import UserDashBoard_Navbar from '@/components/Navbar/UserDashBoard_Navbar.vue';
+import Administrator_Navbar from '@/components/Navbar/Administrator_Navbar.vue';
 import { useStore } from 'vuex';
-import HomeNavbar from '@/components/Navbar/HomeNavbar.vue';
-import SignUp_Navbar from '@/components/Navbar/SignUp_Navbar.vue';
-const store = useStore();
 
-const user_type = store.state.userData.data.user_type;
+const store = useStore();
+const role = store.state.userData.data.role;
 </script>

@@ -73,5 +73,13 @@
 import SignUp_Navbar from '@/components/Navbar/SignUp_Navbar.vue';
 import BaseLabel from '@/components/Input-Fields/BaseLabel.vue';
 import { Icon } from '@iconify/vue';
+import useVuelidate from '@vuelidate/core';
+import { reactive, computed, ref, onMounted } from 'vue';
+import { required, email, helpers } from '@vuelidate/validators';
+import { useRouter } from 'vue-router';
+import { useStore } from 'vuex';
+
+const store = useStore();
+const router = useRouter();
 
 </script>

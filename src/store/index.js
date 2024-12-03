@@ -15,7 +15,7 @@ const store = createStore({
     actions,
     modules: {
         Administrator,
-        User,
+        User
        
     }
 })

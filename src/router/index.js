@@ -15,7 +15,6 @@ const routes = [
     *********************************************************************/
     {
         path: '/',
-        component: BaseLayout,
         children: [
 
             {
@@ -76,54 +75,54 @@ const routes = [
                 path: '/signup',
                 name: 'Sign-up',
                 component: () => import('../views/HomePage/Sign-up/Sign-Up.vue'),
-                meta: { requiresAuth: false, roles: ['Sign-Up'] }, 
+                meta: { requiresAuth: false, roles: ['Sign-Up','Page_2','Page_3','Page_4','Page_5','Page_6','Page_7','Page_8'] }, 
             },
             {
                 path: '/page2',
                 name: 'Page_2',
                 component: () => import('../views/HomePage/Sign-up/Page_2.vue'),
-                meta: { requiresAuth: false, roles: ['Sign-Up'] }, 
+                meta: { requiresAuth: false, roles: ['Sign-Up','Page_2','Page_3','Page_4','Page_5','Page_6','Page_7','Page_8'] }, 
             },
             
             {
                 path: '/page3',
                 name: 'Page_3',
                 component: () => import('../views/HomePage/Sign-up/Page_3.vue'),
-                meta: { requiresAuth: false, roles: ['Sign-Up'] }, 
+                meta: { requiresAuth: false, roles: ['Sign-Up','Page_2','Page_3','Page_4','Page_5','Page_6','Page_7','Page_8'] }, 
             },
 
             {
                 path: '/page4',
                 name: 'Page_4',
                 component: () => import('../views/HomePage/Sign-up/Page_4.vue'),
-                meta: { requiresAuth: false, roles: ['Sign-Up'] }, 
+                meta: { requiresAuth: false, roles: ['Sign-Up','Page_2','Page_3','Page_4','Page_5','Page_6','Page_7','Page_8'] }, 
             },
 
             {
                 path: '/page5',
                 name: 'Page_5',
                 component: () => import('../views/HomePage/Sign-up/Page_5.vue'),
-                meta: { requiresAuth: false, roles: ['Sign-Up'] }, 
+                meta: { requiresAuth: false, roles: ['Sign-Up','Page_2','Page_3','Page_4','Page_5','Page_6','Page_7','Page_8'] }, 
             },
 
             {
                 path: '/page6',
                 name: 'Page_6',
                 component: () => import('../views/HomePage/Sign-up/Page_6.vue'),
-                meta: { requiresAuth: false, roles: ['Sign-Up'] }, 
+                meta: { requiresAuth: false, roles: ['Sign-Up','Page_2','Page_3','Page_4','Page_5','Page_6','Page_7','Page_8'] }, 
             },
             {
                 path: '/page7',
                 name: 'Page_7',
                 component: () => import('../views/HomePage/Sign-up/Page_7.vue'),
-                meta: { requiresAuth: false, roles: ['Sign-Up'] }, 
+                meta: { requiresAuth: false, roles: ['Sign-Up','Page_2','Page_3','Page_4','Page_5','Page_6','Page_7','Page_8'] }, 
             },
 
             {
                 path: '/page8',
                 name: 'Page_8',
                 component: () => import('../views/HomePage/Sign-up/Page_8.vue'),
-                meta: { requiresAuth: false, roles: ['Sign-Up'] }, 
+                meta: { requiresAuth: false, roles: ['Sign-Up','Page_2','Page_3','Page_4','Page_5','Page_6','Page_7','Page_8'] }, 
             },
   
         ]
@@ -141,13 +140,6 @@ const routes = [
 
         
     },
-    // {
-    //     path: '/page8',
-    //     name: 'Page_8',
-    //     component: () => import('../views/HomePage/Sign-up/Page_8.vue'),
-    //     meta: { requiresAuth: false, roles: ['Sign-Up'] }, 
-    // },
-
 
     /*********************************************************************
     MARKET PAGE ROUTES
@@ -173,10 +165,40 @@ const routes = [
         
             // Dashboard route
             {
-                path: '/dashboard',
+                path: '/admin-dashboard',
                 name: 'Administrator_Dashboard',
                 component: () => import('../views/Account/Administrator/Administrator_Dashboard.vue'),
             },
+            {
+                path: '/admin-product',
+                name: 'Administrator_Product',
+                component: () => import('../views/Account/Administrator/Administrator_Product.vue'),
+            },
+
+            {
+                path: '/admin-ship',
+                name: 'Administrator_Shipment',
+                component: () => import('../views/Account/Administrator/Administrator_Shipment.vue'),
+            },
+
+            {
+                path: '/admin-pay',
+                name: 'Administrator_Payment',
+                component: () => import('../views/Account/Administrator/Administrator_Payment.vue'),
+            },
+
+            {
+                path: '/admin-order',
+                name: 'Administrator_Order',
+                component: () => import('../views/Account/Administrator/Administrator_Order.vue'),
+            },
+
+            {
+                path: '/admin-archive',
+                name: 'Administrator_Archive',
+                component: () => import('../views/Account/Administrator/Administrator_Archive.vue'),
+            },
+
 
            
         ]
@@ -190,7 +212,7 @@ const routes = [
         path: '/',
         name: 'User',
         component: BaseLayout,
-        meta: { requiresAuth: false, roles: 'User', },
+        meta: { requiresAuth: true, roles: 'User' },
         children: [
         
             // Dashboard route
@@ -230,9 +252,73 @@ const routes = [
                 component: () => import('../views/Account/User/Archive.vue')
             },
 
+            {
+                path: '/seller-profile',
+                name: 'Seller_Profile',
+                component: () => import('../views/Account/User/Seller_Profile.vue')
+            },
 
         ]
+
     },
+    //    /*********************************************************************
+    //         USER ROUTES
+    //         *********************************************************************/
+    //         {
+    //             path: '/signup',
+    //             name: 'Sign-up',
+    //             meta: { requiresAuth: false, roles: 'Sign-up' },
+    //             children: [
+
+    //                 {
+    //                     path: '/page2',
+    //                     name: 'Page_2',
+    //                     component: () => import('../views/HomePage/Sign-up/Page_2.vue'),
+                        
+    //                 },
+                    
+    //                 {
+    //                     path: '/page3',
+    //                     name: 'Page_3',
+    //                     component: () => import('../views/HomePage/Sign-up/Page_3.vue'),
+                        
+    //                 },
+        
+    //                 {
+    //                     path: '/page4',
+    //                     name: 'Page_4',
+    //                     component: () => import('../views/HomePage/Sign-up/Page_4.vue'),
+                        
+    //                 },
+        
+    //                 {
+    //                     path: '/page5',
+    //                     name: 'Page_5',
+    //                     component: () => import('../views/HomePage/Sign-up/Page_5.vue'),
+                       
+    //                 },
+        
+    //                 {
+    //                     path: '/page6',
+    //                     name: 'Page_6',
+    //                     component: () => import('../views/HomePage/Sign-up/Page_6.vue'),
+                      
+    //                 },
+    //                 {
+    //                     path: '/page7',
+    //                     name: 'Page_7',
+    //                     component: () => import('../views/HomePage/Sign-up/Page_7.vue'),
+                        
+    //                 },
+        
+    //                 {
+    //                     path: '/page8',
+    //                     name: 'Page_8',
+    //                     component: () => import('../views/HomePage/Sign-up/Page_8.vue'),
+                     
+    //                 },
+    //             ]
+    //         },
 
 
 ]
@@ -242,27 +328,26 @@ const router = createRouter({
     routes,
 })
 
-// router.beforeEach((to, from, next) => {
-//     const token = store.state.userData.data.token;
-//     const user_type = store.state.userData.data.user_type;
+router.beforeEach((to, from, next) => {
+    const token = store.state.userData.data.token;
+    const role = store.state.userData.data.role;
 
-//     if (to.meta.requiresAuth && !token) {
-//         // Redirect to login if not authenticated
-//         next({ name: 'Login' });
-//     } else if (token && to.name === 'Login') {
-//         // Redirect to the dashboard if already logged in and trying to access login page
-//         const redirectName = user_type ? `${user_type}_Dashboard` : '/';
-//         next({ name: redirectName });
-//     } else if (token && to.meta.roles && !to.meta.roles.includes(user_type)) {
-//         // Redirect if user role is not in the allowed roles for the route
-//         const redirectName = user_type ? `${user_type}_Dashboard` : '/';
-//         next({ name: redirectName });
-//     } else {
-//         // Proceed to the requested route
-//         next();
-//     }
-// });
-
+    if (to.meta.requiresAuth && !token) {
+        // Redirect to login if not authenticated
+        next({ name: 'Login' });
+    } else if (token && to.name === 'Login') {
+        // Redirect to the dashboard if already logged in and trying to access login page
+        const redirectName = role ? `${role}_Dashboard` : '/';
+        next({ name: redirectName });
+    } else if (token && to.meta.roles && !to.meta.roles.includes(role)) {
+        // Redirect if user role is not in the allowed roles for the route
+        const redirectName = role ? `${role}_Dashboard` : '/';
+        next({ name: redirectName });
+    } else {
+        // Proceed to the requested route
+        next();
+    }
+});
 
 
 export default router
