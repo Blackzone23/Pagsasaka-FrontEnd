@@ -28,7 +28,7 @@
                                 <BaseLabel>Password</BaseLabel>
                                 <div class="relative">
                                     <BaseInputField :type="showPassword ? 'text' : 'password'" v-model="formData.password"  class="w-full" placeholder="Password"></BaseInputField>
-                                        <button  type="button" @click="togglePasswordVisibility" class="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer">
+                                        <button  type="button" @click="togglePasswordVisibility" class="absolute right-3 top-5 transform -translate-y-1/2 items-center justify-center cursor-pointer">
                                             <Icon :icon="showPassword ? 'mdi:eye-off' : 'mdi:eye'" class="text-gray-400" />
                                         </button>
                                     <BaseError v-if="$validateLoginRules.password.$error">{{ $validateLoginRules.password.$errors[0].$message }}</BaseError>

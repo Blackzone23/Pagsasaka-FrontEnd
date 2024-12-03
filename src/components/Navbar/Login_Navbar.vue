@@ -6,7 +6,7 @@
                 <img :src="Logo" alt="Logo" class="h-20">
                </a>
                <!-- Page Title -->
-               <h1 class="text-lg font-bold">Register of Account</h1>
+               <h1 class="text-lg font-bold">Log In</h1>
        </div>
 </nav>
 </template>
