@@ -27,13 +27,26 @@
                         <BaseInputField v-model="signdata.middle_name" placeholder="Enter Middle Name"></BaseInputField>
                         <BaseError v-if="$validatesignuprules.middle_name.$error">{{ $validatesignuprules.middle_name.$errors[0].$message }}</BaseError>
 
-                        <BaseLabel class="font-semibold">Password</BaseLabel>
-                        <BaseInputField v-model="signdata.password" placeholder="Enter Your Password "></BaseInputField>
-                        <BaseError v-if="$validatesignuprules.password.$error">{{ $validatesignuprules.password.$errors[0].$message }}</BaseError>
+                        <div class="relative">
+                            <BaseLabel class="font-semibold">Password</BaseLabel>
+                            <BaseInputField v-model="signdata.password"  :type="showPassword ? 'text' : 'password'"  placeholder="Enter Your Password" ></BaseInputField>
 
-                        <BaseLabel class="font-semibold">Re-enter password</BaseLabel>
-                        <BaseInputField v-model="signdata.password_confirmation" placeholder="Re-enter password"></BaseInputField>
-                        <BaseError v-if="$validatesignuprules.password_confirmation.$error">{{ $validatesignuprules.password_confirmation.$errors[0].$message }}</BaseError>
+                            <!-- Password visibility toggle icon -->
+                            <button  type="button"  class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 mt-4" @click="togglePasswordVisibility">
+                                <Icon :icon="showPassword ? 'ic:twotone-visibility-off' : 'ic:twotone-visibility'" />
+                            </button>
+                            <BaseError v-if="$validatesignuprules.password.$error">{{ $validatesignuprules.password.$errors[0].$message }}</BaseError>
+                        </div>
+
+                        <div class="relative">
+                            <BaseLabel class="font-semibold">Re-enter password</BaseLabel>
+                            <BaseInputField v-model="signdata.password_confirmation" :type="reshowPassword ? 'text' : 'password'"  placeholder="Re-enter password"></BaseInputField>
+                            <!-- Password visibility toggle icon -->
+                            <button  type="button"  class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 mt-4" @click="retogglePasswordVisibility">
+                                    <Icon :icon="reshowPassword ? 'ic:twotone-visibility-off' : 'ic:twotone-visibility'" />
+                                </button>
+                            <BaseError v-if="$validatesignuprules.password_confirmation.$error">{{ $validatesignuprules.password_confirmation.$errors[0].$message }}</BaseError>
+                        </div>
 
                         <BaseLabel class="font-semibold">Email Address</BaseLabel>
                         <BaseInputField v-model="signdata.email" placeholder="Enter email"></BaseInputField>
@@ -115,6 +128,19 @@ const signdata = reactive({
   email: '',
   role: '',
 });
+
+//password
+const showPassword = ref(false);
+
+const togglePasswordVisibility = () => {
+  showPassword.value = !showPassword.value;
+};
+//re-password
+const reshowPassword = ref(false);
+
+const retogglePasswordVisibility = () => {
+  reshowPassword.value = !reshowPassword.value;
+};
 
 // Validation rules
 const signuprules = computed(() => {
