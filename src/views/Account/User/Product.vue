@@ -6,7 +6,6 @@
                 <h1 class="text-xl font-bold">Product</h1>
                 <div class="flex items-center space-x-4">
                     <div class="flex space-x-2">
-                        <Icon icon="gridicons:bell" width="24" height="24" style="color: white" />
                     <!-- Settings Icon with Dropdown -->
                     <div class="relative">
                         <Icon icon="uil:setting" width="24" height="24" style="color: white" @click="toggleDropdown" />

@@ -1,10 +1,10 @@
 <template>
     <div>
         <HomeNavbar/>
-        <div class="Gradient relative">
+        <div class="Gradient">
             <div class="relative text-white">
                 <!-- Top Section: Text -->
-                <div class="text-center px-4 lg:px-32 py-16 space-y-6">
+                <div class="text-center px-4 lg:px-32 space-y-2 mb-2">
                     <h1 class="2xl:text-6xl 2xs:text-2xl md:text-4xl sm:text-3xl font-sans font-bold">
                         Meet our Farmers
                     </h1>
@@ -16,9 +16,9 @@
                 </div>
 
                 <!-- Bottom Section: Image -->
-                <div class="flex items-center justify-center mt-5">
+                <div class="flex items-center justify-center ">
                     <div class="w-full max-w-4xl">
-                        <img :src="Farmer2"  alt="Farmer" class="mx-auto 2xl:w-full 2xs:w-[500px] md:w-[80px] sm:w-full 2xl:h-[430px] 2xs:h-[170px] sm:h-[300px] object-cover rounded-lg shadow-lg">
+                        <img :src="Farmer2"  alt="Farmer" class="mx-auto 2xl:w-full 2xs:w-[200px] md:w-[80px] sm:w-full 2xl:h-[350px] 2xs:h-[170px] sm:h-[300px] object-cover rounded-lg shadow-lg">
                     </div>
                 </div>
             </div>

@@ -240,8 +240,8 @@ import { required, email, helpers } from '@vuelidate/validators';
   FUNCTION FOR LAYER 1
 ******************************************************************/
 const shippingData = reactive({
-  to: 'New York, USA',
-  fee: '$20.00',
+  to: 'Davao del Sur',
+  fee: '₱20.00',
   weight: '2kg',
   stock: '133',
 });
