@@ -61,20 +61,29 @@
                                         </button>  
                                    </div>
                                 </div>
-                                <div class="flex space-x-16 items-center p-8 text-lg">
+                                <div class="flex space-x-5 items-center p-8 text-lg">
                                     <!-- Add to Cart Button -->
-                                    <button
+                                    <!-- <button
                                         class="bg-white text-black font-bold py-2 px-6 border border-gray-200 rounded shadow hover:shadow-lg transition-shadow duration-300"
                                     >
                                         Add to Cart
-                                    </button>
+                                    </button> -->
                                     
                                     <!-- Buy Now Button -->
-                                    <button
+                                    <!-- <button
                                         class="bg-[#608C54] text-white font-bold py-2 px-6 rounded hover:bg-[#4e7343] transition-colors duration-300"
                                     >
                                         Buy Now
-                                    </button>
+                                    </button> -->
+                                    <!-- Add to Cart Button as Link -->
+                                    <a href="/cart" class="bg-white text-black font-bold py-2 px-6 border border-gray-200 rounded shadow hover:shadow-lg transition-shadow duration-300">
+                                        Add to Cart
+                                    </a>
+
+                                    <!-- Buy Now Button as Link -->
+                                    <a href="/checkout" class="bg-[#608C54] text-white font-bold py-2 px-7 rounded hover:bg-[#4e7343] transition-colors duration-300">
+                                        Buy Now
+                                    </a>
                                 </div>
                             </div>
                         </div>

@@ -1,4 +1,8 @@
 <template>
+    <!-- Loading screen and toast message -->
+    <Loading v-if="showLoading" class="loading"></Loading>
+    <Toast></Toast>
+
      <div>
         <SignUp_Navbar/>
         <div class="2xl:p-10 2xs:p-0 md:p-5">
@@ -18,12 +22,13 @@
 
                     <!-- OTP Input Fields (for 6 digits) -->
                     <div class="flex justify-center space-x-2">
-                        <BaseInputField class="w-12 text-center" maxlength="1"></BaseInputField>
-                        <BaseInputField class="w-12 text-center" maxlength="1"></BaseInputField>
-                        <BaseInputField class="w-12 text-center" maxlength="1"></BaseInputField>
-                        <BaseInputField class="w-12 text-center" maxlength="1"></BaseInputField>
-                        <BaseInputField class="w-12 text-center" maxlength="1"></BaseInputField>
-                        <BaseInputField class="w-12 text-center" maxlength="1"></BaseInputField>
+                        <BaseInputField v-model="otpdata.otp[0]" class="w-12 text-center" maxlength="1" />
+                        <BaseInputField v-model="otpdata.otp[1]" class="w-12 text-center" maxlength="1" />
+                        <BaseInputField v-model="otpdata.otp[2]" class="w-12 text-center" maxlength="1" />
+                        <BaseInputField v-model="otpdata.otp[3]" class="w-12 text-center" maxlength="1" />
+                        <BaseInputField v-model="otpdata.otp[4]" class="w-12 text-center" maxlength="1" />
+                        <BaseInputField v-model="otpdata.otp[5]" class="w-12 text-center" maxlength="1" />
+                        <BaseError v-if="$validateotprules.otp.$error">{{ $validateotprules.otp.$errors[0].$message }}</BaseError>
                     </div>
 
                     <!-- Resend OTP Link (Optional) -->
@@ -32,12 +37,9 @@
                     </div>
 
                     <!-- Verify Button -->
-                    <a href="/page3" class="w-full py-2 bg-[#608C54] text-white text-sm font-medium rounded-full hover:bg-[#4e7344] transition duration-200 text-center block">
-                        Verify OTP
-                    </a>
-                    <!-- <button class="w-full py-2 bg-[#608C54] text-white text-sm font-medium rounded-full hover:bg-[#4e7344] transition duration-200">
-                        Continue
-                    </button> -->
+                    <button @click="createOTP" class="w-full py-2 bg-[#608C54] text-white text-sm font-medium rounded-full hover:bg-[#4e7344] transition duration-200">
+                        Verify
+                    </button>
 
                     <!-- Footer Text -->
                     <div class="text-xs space-y-2">
@@ -51,7 +53,8 @@
 </template>
 
 <script setup>
-import Logo from '@/assets/Logo.png';
+import Loading from '@/components/Alerts/Loading.vue';
+import Toast from '@/components/Alerts/Toast.vue';
 import Logo2 from '@/assets/Logo2.png';
 import BaseError from '@/components/Input-Fields/BaseError.vue';
 import SignUp_Navbar from '@/components/Navbar/SignUp_Navbar.vue';
@@ -66,4 +69,47 @@ import { useStore } from 'vuex';
 
 const store = useStore();
 const router = useRouter();
+const showLoading = computed(() => store.state.showLoading.state);
+
+
+// Reactive state for OTP data
+const otpdata = reactive({
+  otp: ['', '', '', '', '', ''], // Array to store each OTP digit
+});
+
+// Validation rules for OTP input fields
+const otprules = computed(() => ({
+  otp: {
+    $each: {
+      required: helpers.withMessage('Each OTP field is required', required),
+    },
+  },
+}));
+
+// OTP
+// Vuelidate setup
+const $validateotprules = useVuelidate(otprules, otpdata);
+
+// Function to handle OTP submission
+async function createOTP() {
+  const isValid = await $validateotprules.value.$validate();
+
+  if (isValid) {
+    const otpString = otpdata.otp.join(''); // Concatenate OTP digits into a single string
+    console.log('OTP:', otpString);
+
+    try {
+      const response = await store.dispatch('createOTP', { otp: otpString });
+
+      if (response.isSuccess) {
+        console.log('OTP verification successful');
+        router.push({ name: 'Login' }); // Redirect to the login page
+      }
+    } catch (error) {
+      console.error('Error verifying OTP:', error);
+    }
+  }
+}
+
+
 </script>

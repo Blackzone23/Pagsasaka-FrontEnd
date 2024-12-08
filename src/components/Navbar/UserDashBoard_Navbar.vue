@@ -1,5 +1,5 @@
 <template>
-    <div class="w-64 bg-[#608C54]">
+    <div class="h-full w-64 bg-[#608C54]">
         <nav>
             <div> <img :src="Logo" alt="Logo" class="h-32 w-58"></div>
 
@@ -7,7 +7,7 @@
                 <!-- Dashboard Link with Icon -->
                 <div class="flex items-center space-x-2 ">
                     <Icon icon="material-symbols:dashboard" width="24" height="24" style="color: white" />
-                    <router-link :to="{name: 'User_Dashboard'}" active-class="text-gray-400" class="hover:text-gray-400">Dashboard</router-link>
+                    <router-link :to="{name: 'Farmer_Dashboard'}" active-class="text-gray-400" class="hover:text-gray-400">Dashboard</router-link>
                 </div>
                 <div  class="flex items-center space-x-2">
                     <Icon icon="icon-park-outline:ad-product" width="24" height="24"  style="color: white" />

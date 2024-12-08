@@ -11,11 +11,18 @@ export default {
 
     setUserData: (state, userData) => {
         state.userData.data = userData;
+        // sessionStorage.setItem('USER', encryptData(JSON.stringify(userData)));
+        // state.isLoggedIn = true;
+        // state.userProfilePic = userData.profilePic; // Set profile pic if available
+        // state.userName = userData.name; // Set user name if available
     },
 
     setLogout: (state) => {
         state.userData.data = [];
         sessionStorage.removeItem('USER')
+        // state.isLoggedIn = false;
+        // state.userProfilePic = '';
+        // state.userName = '';
     },
 
     
@@ -27,5 +34,10 @@ export default {
     setRoleDropdown: (state, roleDropdown) => {
         state.roleDropdown.data = roleDropdown;
     },
+
+    setSecurityQuestionDropdown: (state, securityDropdown) => {
+        state.securityDropdown.data = securityDropdown;
+    },
+
 
 }

@@ -72,6 +72,20 @@ const routes = [
             },
 
             {
+                path: '/cart',
+                name: 'Add_Cart',
+                component: () => import('../views/HomePage/Add_Cart.vue'),
+                meta: { requiresAuth: false, roles: ['Home','About','Market,','Services','Meet_Farmers','Sign-Up'] }, 
+            },
+
+            {
+                path: '/checkout',
+                name: 'Checkout',
+                component: () => import('../views/Market_Page/Checkout.vue'),
+                meta: { requiresAuth: false, roles: ['Home','About','Market,','Services','Meet_Farmers','Sign-Up'] }, 
+            },
+
+            {
                 path: '/signup',
                 name: 'Sign-up',
                 component: () => import('../views/HomePage/Sign-up/Sign-Up.vue'),
@@ -84,13 +98,7 @@ const routes = [
                 meta: { requiresAuth: false, roles: ['Sign-Up','Page_2','Page_3','Page_4','Page_5','Page_6','Page_7','Page_8'] }, 
             },
             
-            {
-                path: '/page3',
-                name: 'Page_3',
-                component: () => import('../views/HomePage/Sign-up/Page_3.vue'),
-                meta: { requiresAuth: false, roles: ['Sign-Up','Page_2','Page_3','Page_4','Page_5','Page_6','Page_7','Page_8'] }, 
-            },
-
+            
             {
                 path: '/page4',
                 name: 'Page_4',
@@ -165,7 +173,7 @@ const routes = [
         
             // Dashboard route
             {
-                path: '/admin-dashboard',
+                path: '/dashboard',
                 name: 'Administrator_Dashboard',
                 component: () => import('../views/Account/Administrator/Administrator_Dashboard.vue'),
             },
@@ -210,16 +218,16 @@ const routes = [
     *********************************************************************/
     {
         path: '/',
-        name: 'User',
+        name: 'Farmer',
         component: BaseLayout,
-        meta: { requiresAuth: true, roles: 'User' },
+        meta: { requiresAuth: true, roles: 'Farmer' },
         children: [
         
             // Dashboard route
             {
-                path: '/userdashboard',
-                name: 'User_Dashboard',
-                component: () => import('../views/Account/User/User_Dashboard.vue')
+                path: '/dashboard',
+                name: 'Farmer_Dashboard',
+                component: () => import('../views/Account/User/Farmer_Dashboard.vue')
             },
 
             {
@@ -330,18 +338,18 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
     const token = store.state.userData.data.token;
-    const role = store.state.userData.data.role;
+    const role_name = store.state.userData.data.role_name;
 
     if (to.meta.requiresAuth && !token) {
         // Redirect to login if not authenticated
         next({ name: 'Login' });
     } else if (token && to.name === 'Login') {
         // Redirect to the dashboard if already logged in and trying to access login page
-        const redirectName = role ? `${role}_Dashboard` : '/';
+        const redirectName = role_name ? `${role_name}_Dashboard` : '/';
         next({ name: redirectName });
-    } else if (token && to.meta.roles && !to.meta.roles.includes(role)) {
+    } else if (token && to.meta.roles && !to.meta.roles.includes(role_name)) {
         // Redirect if user role is not in the allowed roles for the route
-        const redirectName = role ? `${role}_Dashboard` : '/';
+        const redirectName = role_name ? `${role_name}_Dashboard` : '/';
         next({ name: redirectName });
     } else {
         // Proceed to the requested route
@@ -351,3 +359,5 @@ router.beforeEach((to, from, next) => {
 
 
 export default router
+
+

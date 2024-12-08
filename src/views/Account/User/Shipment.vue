@@ -20,255 +20,178 @@
             </header>
 	
 			<div class="p-5">
-				<!-- Dropdown to switch between interfaces -->
-				<div class="flex justify-end mb-4">
-				<BaseSelectField v-model="selectedInterface" class="w-48">
-					<BaseOptionField value="myOrders">My Orders</BaseOptionField>
-					<BaseOptionField value="cancellation">Cancellation</BaseOptionField>
-				</BaseSelectField>
-				</div>
-
-				<!-- Conditionally render content -->
-				<div v-if="selectedInterface === 'myOrders'" class="border-2 border-gray-300 p-10 rounded-md">
-					<div class="text-center font-bold ">
-						<BaseLabel class="text-2xl">MY ORDERS</BaseLabel>
-					</div>
-					<!-- My Orders Content -->
-					<div class="border-b">
-						<div class="flex justify-center space-x-10 text-sm font-medium">
-						<button v-for="tab in tabs" :key="tab.name" @click="activeTab = tab.name" :class="[	'px-4 py-2 relative',activeTab === tab.name ? 'text-green-600 font-bold' : 'text-black',]">
-							{{ tab.label }}
-							<div v-if="activeTab === tab.name" class="absolute bottom-0 left-0 right-0 h-1 bg-green-600"></div>
+				<div v-if="!selectedShipment">
+					<!-- Tabs Navigation -->
+					<div class="mb-4 text-sm">
+						<button 
+						class="px-4 py-2 rounded" 
+						:class="{ 'bg-blue-500 text-white': activeTab === 'orders', 'bg-gray-200': activeTab !== 'orders' }" 
+						@click="activeTab = 'orders'">
+						My Orders
 						</button>
-						</div>
-						<div class="mt-3">
-							<div class="space-y-3">
-								<BaseLabel class="text-xl font-bold text-black">Shipping tracing event</BaseLabel>
-								<p class="text-xs">
-									This page provides details on all the shipments you are working on and those you
-									have sent to logistics
-								</p>
-								<h2 class="text-lg">{{ getTabLabel(activeTab) }}</h2>
-							</div>
-							<!-- Filters and Table -->
-							<!-- Include the same filters and table from the My Orders interface -->
-							<div class="flex space-x-4 mb-4">
-								<!-- Last Updated Filter -->
-								<div >
-									<BaseLabel class="block text-sm font-medium mb-1" for="lastUpdatedFilter">Last Updated</BaseLabel>
-									<BaseSelectField id="lastUpdatedFilter" v-model="filters.lastUpdated">
-										<BaseOptionDefaultField>All</BaseOptionDefaultField>
-										<BaseOptionField v-for="date in uniqueLastUpdatedDates" :key="date" :value="date">
-											{{ date }}
-										</BaseOptionField>
-									</BaseSelectField>
-								</div>
-
-								<!-- Status Filter -->
-								<div>
-									<BaseLabel class="block text-sm font-medium mb-1" for="statusFilter">Status</BaseLabel>
-									<BaseSelectField id="statusFilter" v-model="filters.status" class="border border-gray-300 rounded px-3 py-2 text-sm">
-										<BaseOptionDefaultField value="">All</BaseOptionDefaultField>
-										<BaseOptionField v-for="status in uniqueStatuses" :key="status" :value="status">
-											{{ status }}
-										</BaseOptionField>
-									</BaseSelectField>
-								</div>
-							</div>
-
-							<!-- Table -->
-							<div class="w-full">
-								<div class="overflow-x-auto">
-									<table class="w-full">
-										<thead>
-											<tr class="bg-gray-300 text-sm">
-											<th class="px-4 py-2 text-left">Shipment Name</th>
-											<th class="px-4 py-2 text-left">Created</th>
-											<th class="px-4 py-2 text-left">Last Updated</th>
-											<th class="px-4 py-2 text-left">Ship To</th>
-											<th class="px-4 py-2 text-end">Status</th>
-											</tr>
-										</thead>
-										<tbody>
-											<tr v-for="item in filteredData" :key="item.id" class="even:bg-gray-50 text-sm">
-											<td class="px-4 py-2">{{ item.name }}</td>
-											<td class="px-4 py-2">{{ item.created }}</td>
-											<td class="px-4 py-2">{{ item.lastUpdated }}</td>
-											<td class="px-4 py-2">{{ item.shipTo }}</td>
-											<td class="px-4 py-2 text-end">{{ item.status }}</td>
-											</tr>
-										</tbody>
-									</table>
-								</div>
-							</div>
-						</div>
+						<button 
+						class="ml-2 px-4 py-2 rounded" 
+						:class="{ 'bg-blue-500 text-white': activeTab === 'cancellations', 'bg-gray-200': activeTab !== 'cancellations' }" 
+						@click="activeTab = 'cancellations'">
+						Cancellations
+						</button>
+						<button 
+						class="ml-2 px-4 py-2 rounded" 
+						:class="{ 'bg-blue-500 text-white': activeTab === 'Rrefund', 'bg-gray-200': activeTab !== 'Rrefund' }" 
+						@click="activeTab = 'Rrefund'">
+						Return and Refund
+						</button>
 					</div>
+
+					<!-- Table for Orders or Cancellations -->
+					<table class="table-auto w-full border-collapse border border-gray-300">
+						<thead>
+							<tr class="bg-gray-300 text-start">
+							<th class="px-4 py-2 text-start">Name</th>
+							<th class="px-4 py-2 text-start">Created</th>
+							<th class="px-4 py-2 text-start">Last Updated</th>
+							<th class="px-4 py-2 text-start">Ship To</th>
+							<th class="px-4 py-2 text-start">Status</th>
+							<th class="px-4 py-2 text-start">Action</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr v-for="item in filteredData" :key="item.id" class="even:bg-gray-50 text-sm cursor-pointer hover:bg-gray-200" @click="handleRowClick(item)">
+								<td class="px-4 py-2 text-start">{{ item.name }}</td>
+								<td class="px-4 py-2 text-start">{{ item.created }}</td>
+								<td class="px-4 py-2 text-start">{{ item.lastUpdated }}</td>
+								<td class="px-4 py-2 text-start">{{ item.shipTo }}</td>
+								<td class="px-4 py-2 text-start">{{ item.status }}</td>
+								<td class="px-4 py-2 text-start">
+
+								</td>
+							</tr>
+						</tbody>
+					</table>
 				</div>
 
-				<div v-else-if="selectedInterface === 'cancellation'" class="border-2 border-gray-300 p-10 rounded-md">
-					<div class="text-center font-bold">
-						<BaseLabel class="text-2xl">CANCELLATION</BaseLabel>
+				<!-- Tracking Method Interface -->
+				<div v-else class="p-5 border-2 border-[#608C54] rounded-md">
+					<h1 class="text-xl font-bold">Tracking Details</h1>
+					<div class="text-sm">
+						<p><strong>Shipment Name:</strong> {{ selectedShipment.name }}</p>
+						<p><strong>Created:</strong> {{ selectedShipment.created }}</p>
+						<p><strong>Last Updated:</strong> {{ selectedShipment.lastUpdated }}</p>
+						<p><strong>Ship To:</strong> {{ selectedShipment.shipTo }}</p>
+						<p><strong>Status:</strong> {{ selectedShipment.status }}</p>
 					</div>
-					<!-- Cancellation Content -->
-					<div class="mt-5">
-						<div class="border-b">
-							<div class="flex justify-center space-x-10 text-sm font-medium">
-							<button v-for="tab in cancelTabs" :key="tab.name" @click="cancelActiveTab = tab.name" :class="[	'px-4 py-2 relative',cancelActiveTab === tab.name ? 'text-green-600 font-bold' : 'text-black',]">
-								{{ tab.label }}
-								<div v-if="cancelActiveTab === tab.name" class="absolute bottom-0 left-0 right-0 h-1 bg-green-600"></div>
-							</button>
+
+					<!-- Tracking Process -->
+					<div class="mt-6">
+						<div class="flex space-x-12 justify-center">
+							<div :class="['w-24 h-24 rounded-full flex items-center justify-center', getStatusClass('processing')]">
+							<span class="text-white font-bold">
+								<Icon icon="hugeicons:package-process" width="32" height="32" style="color: #276d22" />
+							</span>
 							</div>
-							<div class="mt-3">
-								<div class="space-y-3">
-									<BaseLabel class="text-xl font-bold text-black">Shipping tracing event</BaseLabel>
-									<p class="text-xs">
-										This page provides details on all the shipments you are working on and those you
-										have sent to logistics
-									</p>
-									<h2 class="text-lg">{{ getCancelTabLabel(cancelActiveTab) }}</h2>
-								</div>
-								<!-- Filters and Table -->
-								<!-- Include the same filters and table from the My Orders interface -->
-								<div class="flex space-x-4 mb-4">
-									<!-- Last Updated Filter -->
-									<div >
-										<BaseLabel class="block text-sm font-medium mb-1" for="lastUpdatedFilter">Last Updated</BaseLabel>
-										<BaseSelectField id="lastUpdatedFilter" v-model="cancelfilters.lastUpdated">
-											<BaseOptionDefaultField>All</BaseOptionDefaultField>
-											<BaseOptionField v-for="date in uniqueCancelLastUpdatedDates" :key="date" :value="date">
-												{{ date }}
-											</BaseOptionField>
-										</BaseSelectField>
-									</div>
-
-									<!-- Status Filter -->
-									<div>
-										<BaseLabel class="block text-sm font-medium mb-1" for="statusFilter">Status</BaseLabel>
-										<BaseSelectField id="statusFilter" v-model="cancelfilters.status" class="border border-gray-300 rounded px-3 py-2 text-sm">
-											<BaseOptionDefaultField value="">All</BaseOptionDefaultField>
-											<BaseOptionField v-for="status in uniqueCancelStatuses" :key="status" :value="status">
-												{{ status }}
-											</BaseOptionField>
-										</BaseSelectField>
-									</div>
-								</div>
-
-								<!-- Table -->
-								<div class="w-full">
-									<div class="overflow-x-auto">
-										<table class="w-full">
-											<thead>
-												<tr class="bg-gray-300 text-sm">
-												<th class="px-4 py-2 text-left">Shipment Name</th>
-												<th class="px-4 py-2 text-left">Created</th>
-												<th class="px-4 py-2 text-left">Last Updated</th>
-												<th class="px-4 py-2 text-left">Status</th>
-												<th v-if="cancelActiveTab !== 'cancelled'" class="px-4 py-2 text-end">Action</th>
-												<th v-if="cancelActiveTab === 'cancelled'" class="px-4 py-2 text-end">Reason</th>
-												</tr>
-											</thead>
-											<tbody>
-												<tr v-for="item in cancelFilteredData" :key="item.id" class="even:bg-gray-50 text-sm">
-												<td class="px-4 py-2">{{ item.name }}</td>
-												<td class="px-4 py-2">{{ item.created }}</td>
-												<td class="px-4 py-2">{{ item.lastUpdated }}</td>
-												<td class="px-4 py-2">{{ item.status }}</td>
-												<td v-if="cancelActiveTab !== 'cancelled'" class="px-4 py-2 text-end">{{ item.action }}</td>
-												<td v-if="cancelActiveTab === 'cancelled'" class="px-4 py-2 text-end">{{ item.reason }}</td>
-												</tr>
-											</tbody>
-										</table>
-									</div>
-								</div>
+							<div :class="['w-24 h-24 rounded-full flex items-center justify-center', getStatusClass('to_ship')]">
+							<span class="text-white font-bold">
+								<Icon icon="ic:outline-local-shipping" width="32" height="32" style="color: #276d22" />
+							</span>
+							</div>
+							<div :class="['w-24 h-24 rounded-full flex items-center justify-center', getStatusClass('shipping')]">
+							<span class="text-white font-bold">
+								<Icon icon="la:shipping-fast" width="32" height="32" style="color: #276d22" />
+							</span>
+							</div>
+							<div :class="['w-24 h-24 rounded-full flex items-center justify-center', getStatusClass('to_receive')]">
+							<span class="text-white font-bold">
+								<Icon icon="hugeicons:package-receive" width="32" height="32" style="color: #276d22" />
+							</span>
+							</div>
+							<div :class="['w-24 h-24 rounded-full flex items-center justify-center', getStatusClass('Completed')]">
+							<span class="text-white font-bold">
+								<Icon icon="fluent-mdl2:completed" width="32" height="32" style="color: #276d22" />
+							</span>
 							</div>
 						</div>
+						
+						<div class="flex space-x-[68px] justify-center text-center mt-2">
+							<a>Processing</a>
+							<a >To Ship</a>
+							<a>Shipping</a>
+							<a>To Receive</a>
+							<a>Completed</a>
+						</div>
 					</div>
+
+
+					<!-- Back Button -->
+					<button class="mt-24 px-4 py-2 bg-gray-300 rounded text-sm" @click="selectedShipment = null">
+						Back to Shipments
+					</button>
 				</div>
 			</div>
 		</div>
 	</div>
-  </template>
+</template>
   
 
-  <script setup>
-  import BaseLabel from '@/components/Input-Fields/BaseLabel.vue';
-  import BaseSelectField from '@/components/Input-Fields/BaseSelectField.vue';
-  import BaseOptionField from '@/components/Input-Fields/BaseOptionField.vue';
-  import { ref, computed } from 'vue';
-  import { Icon } from '@iconify/vue';
-  
-  // Dropdown selection for interfaces
-  const selectedInterface = ref('myOrders'); // Default interface is "My Orders"
-  
-  // Tabs and table data (same as before)
-  const tabs = [
-	{ name: 'toShip', label: 'To Ship' },
-	{ name: 'shipping', label: 'Shipping' },
-	{ name: 'completed', label: 'Completed' },
-  ];
-  
-  const activeTab = ref('toShip');
-  const tableData = ref([
-	{ id: 1, name: 'Salad Package', created: 'Nov 3, 2024', lastUpdated: 'Nov 4, 2024', shipTo: 'TEB9', status: 'In Progress', tab: 'toShip' },
-	{ id: 2, name: 'Fruit Basket', created: 'Nov 2, 2024', lastUpdated: 'Nov 5, 2024', shipTo: 'TXB8', status: 'Shipped', tab: 'shipping' },
-	{ id: 3, name: 'Salad Package', created: 'Nov 3, 2024', lastUpdated: 'Nov 6, 2024', shipTo: 'TEB9', status: 'Closed', tab: 'completed' },
-  ]);
-  
-  const filters = ref({
-	lastUpdated: '',
-	status: '',
-  });
-  
-  const filteredData = computed(() =>
-	tableData.value.filter(item => {
-	  const matchesTab = item.tab === activeTab.value;
-	  const matchesLastUpdated = !filters.value.lastUpdated || item.lastUpdated === filters.value.lastUpdated;
-	  const matchesStatus = !filters.value.status || item.status === filters.value.status;
-	  return matchesTab && matchesLastUpdated && matchesStatus;
-	})
-  );
-  
-  const uniqueLastUpdatedDates = computed(() => [...new Set(tableData.value.map(item => item.lastUpdated))]);
-  const uniqueStatuses = computed(() => [...new Set(tableData.value.map(item => item.status))]);
-  const getTabLabel = tabName => tabs.find(tab => tab.name === tabName)?.label || '';
+<script setup>
+import { Icon } from '@iconify/vue';
+import { ref, computed } from 'vue';
+import { useRouter } from 'vue-router';
+import { useStore } from 'vuex';
 
-  //cancellation interface
+const store = useStore();
+const router = useRouter();
+const activeTab = ref('orders');
+// const selectedShipment = ref(null);
 
-  const cancelTabs = [
-	{ name: 'tocancel', label: 'To Cancel' },
-	{ name: 'cancelled', label: 'Cancelled' },
-  ];
-  
-  const cancelActiveTab = ref('tocancel');
-  const cancelTableData = ref([
-	{ id: 1, name: 'Salad Package', created: 'Nov 3, 2024', lastUpdated: 'Nov 4, 2024', status: 'change of mind', tab: 'tocancel' },
-	{ id: 2, name: 'Fruit Basket', created: 'Nov 2, 2024', lastUpdated: 'Nov 5, 2024', status: 'approved', tab: 'cancelled' },
-  ]);
+const selectedShipment = ref({
+  name: 'Shipment 1',
+  created: '2024-12-01',
+  lastUpdated: '2024-12-05',
+  shipTo: '123 Main St',
+  status: 'processing', // Example status
+});
 
-  const cancelfilters = ref({
-	lastUpdated: '',
-	status: '',
-  });
-  
-  const cancelFilteredData = computed(() =>
-  cancelTableData.value.filter(item => {
-	  const matchesTab = item.tab === cancelActiveTab.value;
-	  const matchesLastUpdated = !filters.value.lastUpdated || item.lastUpdated === filters.value.lastUpdated;
-	  const matchesStatus = !filters.value.status || item.status === filters.value.status;
-	  return matchesTab && matchesLastUpdated && matchesStatus;
-	})
-  );
-  
-  const uniqueCancelLastUpdatedDates = computed(() => [...new Set(cancelTableData.value.map(item => item.lastUpdated))]);
-  const uniqueCancelStatuses = computed(() => [...new Set(cancelTableData.value.map(item => item.status))]);
-  const getCancelTabLabel = tabName => tabs.find(tab => tab.name === tabName)?.label || '';
 
-  const dropdownVisible = ref(false);
-  
-  // Toggle the dropdown visibility
-  const toggleDropdown = () => {
-    dropdownVisible.value = !dropdownVisible.value;
+const orders = ref([
+  { id: 1, name: 'Order 1', created: '2024-12-01', lastUpdated: '2024-12-05', shipTo: 'Davao', status: 'Shipped' },
+  { id: 2, name: 'Order 2', created: '2024-12-02', lastUpdated: '2024-12-04', shipTo: 'Bulacan', status: 'Processing' },
+]);
+
+const cancellations = ref([
+  { id: 3, name: 'Order 3', created: '2024-12-01', lastUpdated: '2024-12-03', shipTo: 'Calumpit', status: 'Cancelled' },
+]);
+
+const Rrefund = ref([
+  { id: 3, name: 'Order 3', created: '2024-12-01', lastUpdated: '2024-12-03', shipTo: 'Calumpit', status: 'Refund' },
+  { id: 4, name: 'Order 4', created: '2024-13-01', lastUpdated: '2024-12-03', shipTo: 'Calumpit', status: 'Return' },
+]);
+
+const filteredData = computed(() => {
+  return activeTab.value === 'orders' 
+    ? orders.value 
+    : activeTab.value === 'cancellations' 
+    ? cancellations.value 
+    : Rrefund.value;
+});
+
+const handleRowClick = (item) => {
+  selectedShipment.value = item;
+};
+ 
+const getStatusClass = (status) => {
+  // Define status colors
+  const statusOrder = {
+    processing: 'bg-blue-500',  // Blue when ordered
+    to_ship: 'bg-yellow-500',  // Yellow when shipped
+    shipping: 'bg-green-500',  // Green when in transit
+    to_receive: 'bg-gray-500',  // Gray when delivered
+	Completed: 'bg-red-500',  // Gray when delivered
   };
+
+  return selectedShipment.value.status === status
+    ? `${statusOrder[status]} text-white`  // Active status
+    : 'bg-gray-300';  // Inactive status
+};
   
   const logout = async () => {
   try {

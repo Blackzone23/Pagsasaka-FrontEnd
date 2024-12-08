@@ -25,7 +25,6 @@
 
                         <BaseLabel class="font-semibold">Middle Name</BaseLabel>
                         <BaseInputField v-model="signdata.middle_name" placeholder="Enter Middle Name"></BaseInputField>
-                        <BaseError v-if="$validatesignuprules.middle_name.$error">{{ $validatesignuprules.middle_name.$errors[0].$message }}</BaseError>
 
                         <div class="relative">
                             <BaseLabel class="font-semibold">Password</BaseLabel>
@@ -57,16 +56,24 @@
                         <BaseSelectField v-model="signdata.role">
                             <BaseOptionDefaultField>Select your type</BaseOptionDefaultField>
                             <BaseOptionField v-for="sign in roleDropdown" :key="sign.id" :value="sign.id">
-                                {{ sign.name }}
+                                {{ sign.role }}
                             </BaseOptionField>
                         </BaseSelectField>
                          <BaseError v-if="$validatesignuprules.role.$error">{{ $validatesignuprules.role.$errors[0].$message }}</BaseError>
-                        
+
+                         <BaseLabel>Select Question</BaseLabel>
+                         <BaseSelectField v-model="signdata.security_question_id">
+                            <BaseOptionDefaultField>Select your question</BaseOptionDefaultField>
+                            <BaseOptionField v-for="sign in securityDropdown" :key="sign.id" :value="sign.id">
+                                {{ sign.question }}
+                            </BaseOptionField>
+                        </BaseSelectField>
+                        <BaseError v-if="$validatesignuprules.security_question_id.$error">{{ $validatesignuprules.security_question_id.$errors[0].$message }}</BaseError>
+
+                        <BaseLabel>Answer:</BaseLabel>
+                        <BaseInputField class="mt-3" v-model="signdata.security_answer" placeholder="Enter your answer" ></BaseInputField>
+                        <BaseError v-if="$validatesignuprules.security_answer.$error">{{ $validatesignuprules.security_answer.$errors[0].$message }}</BaseError>
                     </div>
-                    <!-- Sign Up Button -->
-                    <!-- <a href="/page2" class="w-full py-2 bg-[#608C54] text-white text-sm font-medium rounded-full hover:bg-[#4e7344] transition duration-200 text-center block">
-                        Continue
-                        </a> -->
 
                     <button @click="createUser" class="w-full py-2 bg-[#608C54] text-white text-sm font-medium rounded-full hover:bg-[#4e7344] transition duration-200">Continue</button>
 
@@ -111,9 +118,12 @@ const router = useRouter();
 
 const showLoading = computed(() => store.state.showLoading.state);
 const roleDropdown= computed(() => store.state.roleDropdown.data)
+const securityDropdown= computed(() => store.state.securityDropdown.data)
 
 
 store.dispatch('getRoleDropdown');
+store.dispatch('getSecurityDropdown');
+
 
 
 /******************************************************************
@@ -127,6 +137,8 @@ const signdata = reactive({
   password_confirmation: '',
   email: '',
   role: '',
+  security_question_id:'',
+  security_answer:''
 });
 
 //password
@@ -151,9 +163,6 @@ const signuprules = computed(() => {
       last_name: {
           required: helpers.withMessage('Last Name is required', required),
       },
-      middle_name: {
-          required: helpers.withMessage('Middle Name is required', required),
-      },
       password: {
           required: helpers.withMessage('Password is required', required),
       },
@@ -165,6 +174,12 @@ const signuprules = computed(() => {
       },
       role: {
           required: helpers.withMessage('Role is required', required),
+      },
+      security_question_id: {
+          required: helpers.withMessage('Question is required', required),
+      },
+      security_answer: {
+          required: helpers.withMessage('Answer is required', required),
       },
   };
 });
