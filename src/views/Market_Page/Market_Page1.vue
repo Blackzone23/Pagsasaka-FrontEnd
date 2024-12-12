@@ -237,7 +237,7 @@ const store = useStore();
 const router = useRouter();
 
 const productItemListinfo = computed(() => store.state.Consumer.productItem.productItemInfo);
-//hudhauhwudhauwhduahduhw
+//damwdmawmdkmawkdadw
 
 /******************************************************************
   FUNCTION FOR LAYER 1
