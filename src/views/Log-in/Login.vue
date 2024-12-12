@@ -82,7 +82,7 @@ const store = useStore();
 const router = useRouter();
 
 const showLoading = computed(() => store.state.showLoading.state);
-
+const isLoggedIn = computed(() => store.state.isLoggedIn.value);
 // Reactive form data
 const formData = reactive({
     email:'',
@@ -115,12 +115,13 @@ const loginRules = computed(() => {
 const $validateLoginRules = useVuelidate(loginRules, formData);
 
 async function login() {
-    console.log("account", formData)
     const validationResult = await $validateLoginRules.value.$validate();
     if (validationResult) {
         await store.dispatch('login', formData)
         .then((response) => {
             if(response.isSuccess == true) {
+               store.commit('setIsLoggedIn', true)
+               sessionStorage.setItem('isLoggedIn', 'true');
                 router.push({name: 'Farmer_Dashboard'}) 
             }
         })

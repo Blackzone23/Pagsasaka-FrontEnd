@@ -2,7 +2,7 @@
     <nav class="bg-[#608C54] text-white">
        <div class="container mx-auto flex items-center  py-2">
                <!-- Logo with Link -->
-               <a href="/" class="flex items-center">
+               <a href="/market" class="flex items-center">
                 <img :src="Logo" alt="Logo" class="h-20">
                </a>
                <!-- Page Title -->

@@ -22,7 +22,7 @@
                         <ul>
                             <li><a href="/about" target="_blank" class="hover:text-gray-300 flex items-center gap-2"><Icon icon="ic:round-arrow-right" width="16" height="16" />About Us</a></li>
                             <li><a href="/market" target="_blank" class="hover:text-gray-300 flex items-center gap-2"><Icon icon="ic:round-arrow-right" width="16" height="16" />Market</a></li>
-                            <li><a href="/services" target="_blank" class="hover:text-gray-300 flex items-center gap-2"><Icon icon="ic:round-arrow-right" width="16" height="16" />CSA</a></li>
+                            <!-- <li><a href="/services" target="_blank" class="hover:text-gray-300 flex items-center gap-2"><Icon icon="ic:round-arrow-right" width="16" height="16" />CSA</a></li> -->
                         </ul>
                         <ul>
                             <li><a href="/contact" target="_blank" class="hover:text-gray-300 flex items-center gap-2"><Icon icon="ic:round-arrow-right" width="16" height="16" />Contact Us</a></li>

@@ -134,6 +134,7 @@ async getSecurityDropdown({commit}) {
     })
 },
 
+//verify Otp
 async createOTP({commit}, otpdata) {
     commit('toggleLoader', true, { root: true })
     return await axiosClient.post('verify-otp', otpdata)
@@ -163,6 +164,5 @@ async createOTP({commit}, otpdata) {
         }   
     })
 },
-
 
 }

@@ -21,81 +21,75 @@ const routes = [
                 path: '/about',
                 name: 'About',
                 component: () => import('../views/HomePage/About.vue'),  
-                meta: { requiresAuth: false, roles: ['Home','About','Market','Services','Privacy_Policy','Meet_Farmers','Sign-Up'] }, 
+                meta: { requiresAuth: false },
             }, 
 
             {
                 path: '/market',
                 name: 'Market',
                 component: () => import('../views/HomePage/Market.vue'),
-                meta: { requiresAuth: false, roles: ['Home','About','Market','Services','Privacy_Policy','Meet_Farmers','Sign-Up'] }, 
+                meta: { requiresAuth: false },
             },
             
             {
                 path: '/services',
                 name: 'Services',
                 component: () => import('../views/HomePage/Services.vue'),
-                meta: { requiresAuth: false, roles: ['Home','About','Market','Services','Privacy_Policy','Meet_Farmers','Sign-Up'] }, 
+                meta: { requiresAuth: false },
             },
 
             {
                 path: '/contact',
                 name: 'Contacts',
                 component: () => import('../views/HomePage/Contacts.vue'),
-                meta: { requiresAuth: false, roles: ['Home','About','Market,','Services','Contacts','Privacy_Policy','Meet_Farmers','Sign-Up'] }, 
+                meta: { requiresAuth: false },
             },
 
             {
                 path: '/policy',
                 name: 'Privacy_Policy',
                 component: () => import('../views/HomePage/Privacy_Policy.vue'),
-                meta: { requiresAuth: false, roles: ['Home','About','Market,','Services','Privacy_Policy','Meet_Farmers','Sign-Up'] }, 
+                meta: { requiresAuth: false },
             },
 
             {
                 path: '/meet',
                 name: 'Meet_Farmers',
                 component: () => import('../views/HomePage/Meet_Farmers.vue'),
-                meta: { requiresAuth: false, roles: ['Home','About','Market,','Services','Meet_Farmers','Sign-Up'] }, 
+                meta: { requiresAuth: false },
             },
             {
                 path: '/shop',
                 name: 'Viewshop',
                 component: () => import('../views/HomePage/Viewshop.vue'),
-                meta: { requiresAuth: false, roles: ['Home','About','Market,','Services','Meet_Farmers','Sign-Up'] }, 
-            },
-            {
-                path: '/profile',
-                name: 'MyProfile',
-                component: () => import('../views/HomePage/MyProfile.vue'),
-                meta: { requiresAuth: false, roles: ['Home','About','Market,','Services','Meet_Farmers','Sign-Up'] }, 
+                meta: { requiresAuth: false },
             },
 
             {
                 path: '/cart',
                 name: 'Add_Cart',
                 component: () => import('../views/HomePage/Add_Cart.vue'),
-                meta: { requiresAuth: false, roles: ['Home','About','Market,','Services','Meet_Farmers','Sign-Up'] }, 
+                meta: { requiresAuth: false },
             },
 
             {
                 path: '/checkout',
                 name: 'Checkout',
                 component: () => import('../views/Market_Page/Checkout.vue'),
-                meta: { requiresAuth: false, roles: ['Home','About','Market,','Services','Meet_Farmers','Sign-Up'] }, 
+                meta: { requiresAuth: false }, 
             },
 
             {
                 path: '/signup',
                 name: 'Sign-up',
                 component: () => import('../views/HomePage/Sign-up/Sign-Up.vue'),
-                meta: { requiresAuth: false, roles: ['Sign-Up','Page_2','Page_3','Page_4','Page_5','Page_6','Page_7','Page_8'] }, 
+                meta: { requiresAuth: false },
             },
             {
                 path: '/page2',
                 name: 'Page_2',
                 component: () => import('../views/HomePage/Sign-up/Page_2.vue'),
-                meta: { requiresAuth: false, roles: ['Sign-Up','Page_2','Page_3','Page_4','Page_5','Page_6','Page_7','Page_8'] }, 
+                meta: { requiresAuth: false },
             },
             
             
@@ -103,34 +97,34 @@ const routes = [
                 path: '/page4',
                 name: 'Page_4',
                 component: () => import('../views/HomePage/Sign-up/Page_4.vue'),
-                meta: { requiresAuth: false, roles: ['Sign-Up','Page_2','Page_3','Page_4','Page_5','Page_6','Page_7','Page_8'] }, 
+                meta: { requiresAuth: false },
             },
 
             {
                 path: '/page5',
                 name: 'Page_5',
                 component: () => import('../views/HomePage/Sign-up/Page_5.vue'),
-                meta: { requiresAuth: false, roles: ['Sign-Up','Page_2','Page_3','Page_4','Page_5','Page_6','Page_7','Page_8'] }, 
+                meta: { requiresAuth: false },
             },
 
             {
                 path: '/page6',
                 name: 'Page_6',
                 component: () => import('../views/HomePage/Sign-up/Page_6.vue'),
-                meta: { requiresAuth: false, roles: ['Sign-Up','Page_2','Page_3','Page_4','Page_5','Page_6','Page_7','Page_8'] }, 
+                meta: { requiresAuth: false }, 
             },
             {
                 path: '/page7',
                 name: 'Page_7',
                 component: () => import('../views/HomePage/Sign-up/Page_7.vue'),
-                meta: { requiresAuth: false, roles: ['Sign-Up','Page_2','Page_3','Page_4','Page_5','Page_6','Page_7','Page_8'] }, 
+                meta: { requiresAuth: false },
             },
 
             {
                 path: '/page8',
                 name: 'Page_8',
                 component: () => import('../views/HomePage/Sign-up/Page_8.vue'),
-                meta: { requiresAuth: false, roles: ['Sign-Up','Page_2','Page_3','Page_4','Page_5','Page_6','Page_7','Page_8'] }, 
+                meta: { requiresAuth: false },
             },
   
         ]
@@ -214,7 +208,7 @@ const routes = [
 
 
     /*********************************************************************
-    USER ROUTES
+    FARMER ROUTES
     *********************************************************************/
     {
         path: '/',
@@ -269,65 +263,34 @@ const routes = [
         ]
 
     },
-    //    /*********************************************************************
-    //         USER ROUTES
-    //         *********************************************************************/
-    //         {
-    //             path: '/signup',
-    //             name: 'Sign-up',
-    //             meta: { requiresAuth: false, roles: 'Sign-up' },
-    //             children: [
 
-    //                 {
-    //                     path: '/page2',
-    //                     name: 'Page_2',
-    //                     component: () => import('../views/HomePage/Sign-up/Page_2.vue'),
-                        
-    //                 },
-                    
-    //                 {
-    //                     path: '/page3',
-    //                     name: 'Page_3',
-    //                     component: () => import('../views/HomePage/Sign-up/Page_3.vue'),
-                        
-    //                 },
+    /*********************************************************************
+    CONSUMER ROUTES
+    *********************************************************************/
+    {
         
-    //                 {
-    //                     path: '/page4',
-    //                     name: 'Page_4',
-    //                     component: () => import('../views/HomePage/Sign-up/Page_4.vue'),
-                        
-    //                 },
-        
-    //                 {
-    //                     path: '/page5',
-    //                     name: 'Page_5',
-    //                     component: () => import('../views/HomePage/Sign-up/Page_5.vue'),
-                       
-    //                 },
-        
-    //                 {
-    //                     path: '/page6',
-    //                     name: 'Page_6',
-    //                     component: () => import('../views/HomePage/Sign-up/Page_6.vue'),
-                      
-    //                 },
-    //                 {
-    //                     path: '/page7',
-    //                     name: 'Page_7',
-    //                     component: () => import('../views/HomePage/Sign-up/Page_7.vue'),
-                        
-    //                 },
-        
-    //                 {
-    //                     path: '/page8',
-    //                     name: 'Page_8',
-    //                     component: () => import('../views/HomePage/Sign-up/Page_8.vue'),
-                     
-    //                 },
-    //             ]
-    //         },
+            path: '/',
+            name: 'Consumer',
+            meta: { requiresAuth: true, roles: 'Consumer' },
+            children: [
+                {
+                    path: '/',
+                    redirect: '/market',
+                },
 
+                {
+                    path: '/dashboard',
+                    name: 'Consumer_Dashboard',
+                    component: () => import('../views/Account/Consumer/Consumer_Dashboard.vue'),
+                },
+                
+                {
+                    path: '/profile',
+                    name: 'MyProfile',
+                    component: () => import('../views/HomePage/MyProfile.vue'),
+                },
+            ]
+        },
 
 ]
 

@@ -19,20 +19,7 @@
 
         <!-- Small Boxes Section -->
         <div class="flex flex-wrap items-center justify-center gap-10 2xl:p-32 2xs:p-8 lg:p-28 md:p-24">
-            <!-- Small Box on the Left Side -->
-            <div class="bg-[#608C54] shadow-lg rounded-md 2xl:w-[500px] 2xl:h-[580px] 2xs:h-auto border-4">
-                <img :src="CSA" alt="" class="w-full h-auto">
-                <hr class="w-1/2 mt-1 ml-1 border-t-8 border-[#DAA520]" />
-                    <p class="2xl:text-lg 2xs:text-xs text-white text-start ml-1">
-                    Community-Supported Agriculture (CSA) by Pagsasaka <br>
-                    enhances the livelihoods of smallholder farmers while <br>
-                    delivering the freshest produce to consumers every week.
-                    </p>
-                <div class="flex justify-end mt-auto">
-                    <a href="/services" class="2xl:text-lg 2xs:text-xs px-2 mt-10 text-white hover:text-gray-300">Read More</a>
-                </div>
-            </div>
-
+            
             <!-- Small Box on the Right Side -->
             <div class="bg-[#608C54] shadow-lg rounded-md 2xl:w-[500px] 2xl:h-[580px] 2xs:h-auto border-4">
                 <img :src="meetF" alt="" class="w-full h-auto">

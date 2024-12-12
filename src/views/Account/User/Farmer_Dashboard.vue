@@ -1,4 +1,8 @@
 <template>
+    <!-- Loading screen and toast message -->
+    <Loading v-if="showLoading" class="loading"></Loading>
+    <Toast></Toast>
+
     <div class="flex h-screen bg-gray-100">
       <!-- Main Content -->
       <div class="flex-1 flex flex-col">
@@ -149,7 +153,9 @@
   </template>
   
 
-  <script setup>
+<script setup>
+import Loading from '@/components/Alerts/Loading.vue';
+import Toast from '@/components/Alerts/Toast.vue';
 import { reactive, computed, ref } from 'vue';
 import { required, email, helpers } from '@vuelidate/validators';
 import { Icon } from '@iconify/vue';

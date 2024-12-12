@@ -28,7 +28,7 @@
                 </div>
 
                 <!-- Product section -->
-                <div class="overflow-y-auto h-96 border rounded-md p-4">
+                <div class="overflow-y-auto h-64 border rounded-md p-4">
                     <!-- Dynamically render products -->
                     <div v-for="(product, index) in products" :key="index"  class="flex items-center justify-between mb-6">
                         <div class="flex space-x-4">
@@ -154,20 +154,6 @@ const products = ref([
     unitPrice: 520,
     quantity: 1,
   },
-  {
-    name: 'Fruit basket',
-    variant: '1 KG',
-    image: 'https://via.placeholder.com/100',
-    unitPrice: 520,
-    quantity: 1,
-  },
-  {
-    name: 'Fruit basket',
-    variant: '1 KG',
-    image: 'https://via.placeholder.com/100',
-    unitPrice: 520,
-    quantity: 1,
-  },
 ]);
 const selectedPayment = ref(false); // Default to GCash
 
@@ -182,4 +168,6 @@ const shippingSubtotal = computed(() => {
 const totalPayment = computed(() => {
   return merchandiseSubtotal.value + shippingSubtotal.value;
 });
+
+
 </script>

@@ -3,41 +3,62 @@ export default {
         state.showLoading.state = value;
     },
 
+    setIsLoggedIn: (state, value) => {
+        state.isLoggedIn.value = value;
+    },
+
     showToast: (state, { showToast, toastMessage, toastType }) => {
         state.toast.showToast = showToast;
         state.toast.toastMessage = toastMessage;
         state.toast.toastType = toastType;
     },
+    
 
     setUserData: (state, userData) => {
         state.userData.data = userData;
-        // sessionStorage.setItem('USER', encryptData(JSON.stringify(userData)));
-        // state.isLoggedIn = true;
-        // state.userProfilePic = userData.profilePic; // Set profile pic if available
-        // state.userName = userData.name; // Set user name if available
+        state.userProfilePic = userData.profilePic; // Set profile pic if available
+        state.userName = userData.name; // Set user name if available
     },
 
+    // LOG OUT
     setLogout: (state) => {
         state.userData.data = [];
         sessionStorage.removeItem('USER')
-        // state.isLoggedIn = false;
-        // state.userProfilePic = '';
-        // state.userName = '';
+        sessionStorage.removeItem('isLoggedIn');
+        state.userProfilePic = '';
+        state.userName = '';
     },
 
-    
+    // SIGN UP
      setSignData: (state, signup) => {
         state.signup.data = signup;
     },
 
-    // DIVISION DROPDOWN LIST FOR SUPERVISOR
+    // ROLE DROPDOWN
     setRoleDropdown: (state, roleDropdown) => {
         state.roleDropdown.data = roleDropdown;
     },
 
+    // SECURITY QUESTION
     setSecurityQuestionDropdown: (state, securityDropdown) => {
         state.securityDropdown.data = securityDropdown;
     },
+    
+     //SEARCH LIST
+     setSearchTerm: (state, searchTerm) => {
+        state.searchTerm = searchTerm;
+     },
 
+     setCurrentPage(state, currentPage) {
+        state.currentPage = currentPage;
+    },
+
+    setItemsPerPage(state, itemsPerPage) {
+        state.itemsPerPage = itemsPerPage;
+    },
+
+    setTotalPages(state, totalPages) {
+        state.totalPages = totalPages;
+    },
 
 }

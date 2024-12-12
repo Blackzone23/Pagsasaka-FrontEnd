@@ -3,10 +3,9 @@
         <Market_NavBar/>
         <div class="relative">
             <!-- Background Image -->
-            <img :src="Mfarmer" alt="" class="2xl:w-full 2xs:w-full  2xl:h-full 2xs:h-[300px]  xl:h-[500px]">
-            
-            <!-- Box Overlay -->
-            <div class="absolute inset-0 flex items-center 2xl:p-48 2xs:p-24 ">
+            <img :src="Mfarmer" alt="" class="2xl:w-full 2xs:w-full  2xl:h-80 2xs:h-[300px]  xl:h-[500px]">
+           
+            <!-- <div class="absolute inset-0 flex items-center 2xl:p-48 2xs:p-24 ">
                 <div class="bg-white shadow-lg rounded-md 2xl:w-96 2xs:w-[400px] sm:w-[300px] xl:w-[400px] 2xl:h-72 2xs:h-[270px]  sm:h-[200px] xl:h-[290px] border-4 text-center relative">
 
                     <h1 class="text-center 2xl:text-3xl 2xs:text-md lg:text-xl font-semibold py-2">Pagsasaka Box</h1>
@@ -15,23 +14,22 @@
                         produce, livestock, sustainable farming <br> practices, and essential tools for efficient,
                         local <br> sourcing.
                         </p>
-                    <!-- Button to open modal -->
+                    
                     <button @click="isModalOpen = true" class="px-2 2xl:mt-5 2xs:mt-2 py-2 bg-green-600 text-white rounded-md hover:bg-green-500 transition 2xl:text-sm 2xs:text-xs">
                         Open Pagsasaka Box
                     </button>
 
-                    <!-- Modal -->
+                  
                     <div v-if="isModalOpen" class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50">
                         <div class="bg-white shadow-lg rounded-md 2xl:w-[800px] 2xs:w-[400px] lg:w-[800px] md:w-[500px] border-4 relative">
 
-                            <!-- Close button -->
+                          
                             <button @click="isModalOpen = false" class="absolute top-2 right-2 text-gray-400 hover:text-gray-600">
                                 <Icon icon="fontisto:close" width="1.2rem" height="1.2rem" style="color: #5D5F5D" />
                             </button>
 
-                            <!-- Flex Container -->
                             <div class="flex justify-between p-8 space-x-4">
-                                <!-- Information Section -->
+                              
                                 <div class="flex-1 2xl:text-sm 2xs:text-xs space-y-4 text-start">
                                     <BaseLabel class="2xl:text-2xl 2xs:text-xl font-semibold">Pagsasaka Box</BaseLabel>
                                     <p class="text-gray-500">
@@ -47,7 +45,7 @@
 
                                 <div class="flex-1 text-xs flex flex-col items-center space-y-4">
                                     <div class="flex flex-col bg-green-100 p-8 space-y-6 rounded-md max-h-[500px] overflow-y-auto">
-                                        <!-- Weekly Section -->
+                                      
                                         <div class="text-start space-y-4 text-gray-500">
                                             <BaseLabel class="2xl:text-2xl 2xs:text-xl font-semibold">Weekly Package (500 PHP)</BaseLabel>
                                             <p>a. Vegetables: 1 kg of tomatoes</p>
@@ -70,7 +68,7 @@
                                             </div>
                                         </div>
 
-                                        <!-- Monthly Section -->
+                                     
                                         <div class="text-start space-y-4 text-gray-500">
                                             <BaseLabel class="2xl:text-2xl 2xs:text-xl  font-semibold">Monthly Package (1,000 PHP)</BaseLabel>
                                             <p>a. Vegetables: 2 kg of assorted vegetables (e.g., 1 kg of tomatoes, 500 grams of eggplant, 500 grams of bell peppers, 1 kg of leafy greens, 1 small head of cabbage)</p>
@@ -93,7 +91,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> -->
         </div>
         <div class="flex items-center space-x-4 2xl:p-8 2xs:p-4 bg-white">
                 <!-- Text Section -->
@@ -107,28 +105,28 @@
             <!-- Image Section -->
             <div class="flex flex-col md:flex-row space-y-4 md:space-y-0 space-x-0 md:space-x-4 items-center">
                 <!-- Previous button -->
-                <button @click="prevImage" :disabled="currentImageIndex === 0" class="px-2 py-1 md:px-4 md:py-2 rounded-lg disabled:opacity-50" >
+                <!-- <button @click="prevImage" :disabled="currentImageIndex === 0" class="px-2 py-1 md:px-4 md:py-2 rounded-lg disabled:opacity-50" >
                     <Icon icon="ei:arrow-left" class="w-6 h-6 sm:w-8 xl:w-14 sm:h-8 md:w-12 md:h-12 lg:w-16 lg:h-16 xl:h-14" />
-                </button>
+                </button> -->
 
                 <!-- Image display -->
                 <div class="relative flex space-x-2 md:space-x-4 overflow-x-auto">
-                    <div v-for="(image, index) in visibleImages" :key="index" class="relative group w-20 h-20 sm:w-32 xl:w-48 sm:h-32 md:w-32 md:h-32 xl:h-48 lg:w-56 lg:h-56 rounded-lg overflow-hidden">
-                        <img :src="image" alt="Carousel Image" class="w-full h-full object-cover transition-transform duration-300 transform group-hover:scale-110"/>
+                    <div v-for="productItem in productItemList" :key="productItem.id"  class="border-2 border-[#608C54] relative group w-20 h-20 sm:w-32 xl:w-48 sm:h-32 md:w-32 md:h-32 xl:h-48 lg:w-56 lg:h-56 rounded-lg overflow-hidden">
+                        <img :src="productItem.product_img[0]" alt="Carousel Image" class="w-full h-full object-cover transition-transform duration-300 transform group-hover:scale-110"/>
 
                         <!-- "View Product" Button -->
                         <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                            <a href="/marketpage1" class="px-2 py-1 2xl:px-4 md:px-2 2xl:py-2 text-xs sm:text-sm md:text-xs  text-white bg-green-500 rounded-lg">
+                            <button @click="goToItemInfo(productItem.id)" class="px-2 py-1 2xl:px-4 md:px-2 2xl:py-2 text-xs sm:text-sm md:text-xs  text-white bg-green-500 rounded-lg">
                                 View Product
-                            </a>
+                            </button>
                         </div>
                     </div>
                 </div>
 
                 <!-- Next button -->
-                <button @click="nextImage" :disabled="currentImageIndex + 2 >= images.length" class="px-2 py-1 md:px-4 md:py-2 rounded-lg disabled:opacity-50">
+                <!-- <button @click="nextImage" :disabled="currentImageIndex + 2 >= images.length" class="px-2 py-1 md:px-4 md:py-2 rounded-lg disabled:opacity-50">
                     <Icon icon="ei:arrow-right" class="w-6 h-6 sm:w-8 xl:w-14 sm:h-8 md:w-12 md:h-12 lg:w-16 lg:h-16 xl:h-14" />
-                </button>
+                </button> -->
             </div>
         </div>
         <div class="bg-gray-100 min-h-screen p-4">
@@ -261,12 +259,36 @@ import MVegetable3 from '@/assets/MVegetable3.png';
 import MVegetable4 from '@/assets/MVegetable4.png';
 import Market_NavBar from '@/components/Navbar/Market_NavBar.vue';
 import BaseLabel from '@/components/Input-Fields/BaseLabel.vue';
-import { reactive, computed, ref } from 'vue';
-import { required, email, helpers } from '@vuelidate/validators';
-import { Icon } from '@iconify/vue';
-import { useRouter } from 'vue-router';
-import { useStore } from 'vuex';
+import { debounce } from 'lodash';
+import { ref, computed, reactive, onMounted } from "vue";
+import { useVuelidate } from "@vuelidate/core";
+import { required, helpers } from "@vuelidate/validators";
+import { Icon } from "@iconify/vue";
+import { useRouter } from "vue-router";
+import { useStore } from "vuex";
 
+const store = useStore();
+const router = useRouter();
+
+const productItemList= computed(() => store.state.Consumer.productItem.data);
+
+/******************************************************************
+  FUNCTION FOR ADVERTISE PRODUCT
+******************************************************************/
+function getItemList() {
+    store.dispatch('Consumer/getItemList');
+}
+onMounted(() => {
+    getItemList();
+})
+async function goToItemInfo(productId){
+    sessionStorage.setItem('ItemInfo', productId)
+    router.push({name: 'Market_Page1'})
+}
+
+/******************************************************************
+  FUNCTION FOR LIST OF PRODUCTS
+******************************************************************/
 const products = ref([
   { id: 1, title: "50pcs Green Purple Seedless Grape Seeds....", price: 40, rating: 4, location: "Manila, Philippines", image: "https://i0.wp.com/www.tulipgardencentre.co.za/wp-content/uploads/2022/05/Catawba.jpg?fit=689%2C520&ssl=1", category: "Seed" },
   { id: 2, title: "Blue Jasmine Rice 25kg", price: '1,679', rating: 4, location: "Manila, Philippines", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4QqALaS15k-h3RC1ExCa928HA1LD5ju4KLQ&s", category: "grains" },
@@ -349,12 +371,7 @@ const selectCategory = (category) => {
 ******************************************************************/
 const isModalOpen = ref(false);
 
-const images = ref([
-  MVegetable,
-  MVegetable2, 
-  MVegetable3, 
-  MVegetable4   
-])
+
 
 const currentImageIndex = ref(0)
 
