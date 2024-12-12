@@ -7,7 +7,7 @@ export default {
 
       //API for get item list
       async getItemList({commit}) {
-        return await axiosClient.post('product/list')
+        return await axiosClient.post('list')
         .then((response) => {
             commit('setViewListData', response.data.products);
             return response.data.orders.products;
@@ -30,7 +30,7 @@ export default {
     // API for get item list info
  async getItemListInfo({commit}, productId) {
     commit('toggleLoader', true, { root: true })
-    return await axiosClient.get(`product/by-id/${productId}`, productId)
+    return await axiosClient.get(`by-id/${productId}`, productId)
     .then((response) => {
         commit('toggleLoader', false, { root: true });
         commit('setGetViewList', response.data.product);

@@ -30,15 +30,15 @@
                             <div class="space-y-3 mt-1">
                                 <h1 class="font-bold text-lg">Shipping</h1>
                                 <div class="flex space-x-4 text-lg">
-                                    <h2>Shipping To:</h2>
+                                    <!-- <h2>Shipping To:</h2> -->
                                     <!-- <span class="font-semibold">{{ productItemInfo.shippingto }}</span> -->
                                 </div>
                                 <div class="flex space-x-4 text-lg">
-                                    <h2>Shipping Fee:</h2>
+                                    <!-- <h2>Shipping Fee:</h2> -->
                                     <!-- <span class="font-semibold">{{ productItemInfo.shipping.fee }}</span> -->
                                 </div>
                                 <div class="flex space-x-4 text-lg">
-                                    <h2>Weight:</h2>
+                                    <!-- <h2>Weight:</h2> -->
                                     <!-- <span class="font-semibold">{{ productItemInfo.shipping.weight }}</span> -->
                                 </div>
                                 <BaseLabel class="font-poppins font-bold">Min Order Quantity 1 KG</BaseLabel>
