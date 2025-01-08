@@ -18,7 +18,7 @@
                     <router-link :to="{ name: 'Home' }"  class="hover:text-gray-300 block md:inline" active-class="text-gray-400">
                     Home
                     </router-link>
-                    <router-link :to="{ name: 'About' }" target="_blank" class="hover:text-gray-300 block md:inline" active-class="text-gray-400">
+                    <router-link :to="{ name: 'About' }"  class="hover:text-gray-300 block md:inline" active-class="text-gray-400">
                     About
                     </router-link>
                     <router-link :to="{ name: 'Market' }"  class="hover:text-gray-300 block md:inline" active-class="text-gray-400">

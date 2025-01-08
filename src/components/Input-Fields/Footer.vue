@@ -20,14 +20,14 @@
                     <h3 class="font-bold 2xl:text-lg 2xs:text-sm mb-4">Quick Links</h3>
                     <div class="grid grid-cols-2 2xl:gap-4 2xs:gap-2 text-sm 2xl:ml-0 2xs:ml-10 md:ml-0 lg:ml-0 sm:ml-24">
                         <ul>
-                            <li><a href="/about" target="_blank" class="hover:text-gray-300 flex items-center gap-2"><Icon icon="ic:round-arrow-right" width="16" height="16" />About Us</a></li>
-                            <li><a href="/market" target="_blank" class="hover:text-gray-300 flex items-center gap-2"><Icon icon="ic:round-arrow-right" width="16" height="16" />Market</a></li>
+                            <li><a href="/about"  class="hover:text-gray-300 flex items-center gap-2"><Icon icon="ic:round-arrow-right" width="16" height="16" />About Us</a></li>
+                            <li><a href="/market" class="hover:text-gray-300 flex items-center gap-2"><Icon icon="ic:round-arrow-right" width="16" height="16" />Market</a></li>
                             <!-- <li><a href="/services" target="_blank" class="hover:text-gray-300 flex items-center gap-2"><Icon icon="ic:round-arrow-right" width="16" height="16" />CSA</a></li> -->
                         </ul>
                         <ul>
-                            <li><a href="/contact" target="_blank" class="hover:text-gray-300 flex items-center gap-2"><Icon icon="ic:round-arrow-right" width="16" height="16" />Contact Us</a></li>
-                            <li><a href="/policy" target="_blank" class="hover:text-gray-300 flex items-center gap-2"><Icon icon="ic:round-arrow-right" width="16" height="16" />Privacy Policy</a></li>
-                            <li><a href="/meet" target="_blank" class="hover:text-gray-300 flex items-center gap-2"><Icon icon="ic:round-arrow-right" width="16" height="16" />Meet our Farmers</a></li>
+                            <li><a href="/contact" class="hover:text-gray-300 flex items-center gap-2"><Icon icon="ic:round-arrow-right" width="16" height="16" />Contact Us</a></li>
+                            <li><a href="/policy"  class="hover:text-gray-300 flex items-center gap-2"><Icon icon="ic:round-arrow-right" width="16" height="16" />Privacy Policy</a></li>
+                            <li><a href="/meet"  class="hover:text-gray-300 flex items-center gap-2"><Icon icon="ic:round-arrow-right" width="16" height="16" />Meet our Farmers</a></li>
                         </ul>
                     </div>
                 </div>

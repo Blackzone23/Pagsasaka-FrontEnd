@@ -88,7 +88,7 @@ import Toast from '@/components/Alerts/Toast.vue'
 import Logo from '@/assets/Logo.png';
 import BaseSearchField from '@/components/Input-Fields/BaseSearchField.vue';
 import { debounce } from 'lodash';
-import { ref, computed} from "vue";
+import { ref, computed, onMounted} from "vue";
 import { Icon } from "@iconify/vue";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
@@ -96,14 +96,25 @@ import { useStore } from "vuex";
 const store = useStore();
 const router = useRouter();
 
+onMounted(() => {
+    // Retrieve the userName from sessionStorage if it exists
+    const storedUserName = sessionStorage.getItem('userName');
+    if (storedUserName) {
+        store.commit('setName', { first_name: storedUserName.split(' ')[0], last_name: storedUserName.split(' ')[1] });
+    }
+});
+
 // State for dropdown menu
 const isMenuOpen = ref(false);
 
 // Get login status, profile picture, and user name from Vuex store
 const showLoading = computed(() => store.state.showLoading.state);
-const isLoggedIn = sessionStorage.getItem('isLoggedIn');
-const userProfilePic = computed(() => store.state.userProfilePic);
-const userName = computed(() => store.state.userName);
+const isLoggedIn = computed(() => store.state.isLoggedIn.value || sessionStorage.getItem('isLoggedIn') === 'true');
+const userName = computed(() => store.state.userName || ''); // Fallback to an empty string if undefined
+const userProfilePic = computed(() => store.state.userProfilePic || ''); // Fallback to empty string if undefined
+
+
+
 
 
  // Log out Function

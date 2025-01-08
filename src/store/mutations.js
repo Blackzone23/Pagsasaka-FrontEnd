@@ -15,9 +15,15 @@ export default {
     
 
     setUserData: (state, userData) => {
+         // Log to check if data is valid
         state.userData.data = userData;
-        state.userProfilePic = userData.profilePic; // Set profile pic if available
-        state.userName = userData.name; // Set user name if available
+        state.userProfilePic = userData.profilePic || '';
+    },
+
+    setName: (state, name) => {
+        state.userName = `${name.first_name} ${name.last_name}`;
+        console.log('Updated user name:', state.userName);
+        sessionStorage.setItem('userName', state.userName);
     },
 
     // LOG OUT

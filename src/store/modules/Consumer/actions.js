@@ -5,30 +5,30 @@ import { toastDuration } from '@/components/composable/GlobalVariables';
 export default {
     
 
-      //API for get item list
-      async getItemList({commit}) {
-        return await axiosClient.post('list')
-        .then((response) => {
-            commit('setViewListData', response.data.products);
-            return response.data.orders.products;
-        })
-        .catch((error) => {
-            commit('toggleLoader', false, { root: true })
-            if(error.response && error.response.data) {
-                const errorMessage = error.response.data.message;
-                setTimeout(() => {
-                    commit('showToast', { showToast: true, toastMessage: errorMessage, toastType: 'error'}, { root: true });
-                }, toastDelay);
-    
-                setTimeout(() => {
-                    commit('showToast', { showToast: false, toastMessage: '', toastType: 'default'}, { root: true });
-                }, toastDuration);
-            }   
-        })
-    },
+//API for get item list
+async getItemList({commit}) {
+    return await axiosClient.post('list')
+    .then((response) => {
+        commit('setViewListData', response.data.products);
+        return response.data.orders.products;
+    })
+    .catch((error) => {
+        commit('toggleLoader', false, { root: true })
+        if(error.response && error.response.data) {
+            const errorMessage = error.response.data.message;
+            setTimeout(() => {
+                commit('showToast', { showToast: true, toastMessage: errorMessage, toastType: 'error'}, { root: true });
+            }, toastDelay);
+
+            setTimeout(() => {
+                commit('showToast', { showToast: false, toastMessage: '', toastType: 'default'}, { root: true });
+            }, toastDuration);
+        }   
+    })
+},
 
     // API for get item list info
- async getItemListInfo({commit}, productId) {
+async getItemListInfo({commit}, productId) {
     commit('toggleLoader', true, { root: true })
     return await axiosClient.get(`by-id/${productId}`, productId)
     .then((response) => {

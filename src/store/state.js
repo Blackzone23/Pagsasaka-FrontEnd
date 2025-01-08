@@ -34,5 +34,10 @@ export default {
     },
 
     searchTerm: '',
+    currentPage: 1,
+
+    totalPages: 1,
+
+    itemsPerPage: 10,
 
 }
