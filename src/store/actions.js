@@ -14,6 +14,7 @@ async login ({commit}, formData ) {
         commit('toggleLoader', false, { root: true })
         commit('setUserData', response.data);
         return response.data;
+        
     })
     .catch((error) => {
         commit('toggleLoader', false, { root: true })
