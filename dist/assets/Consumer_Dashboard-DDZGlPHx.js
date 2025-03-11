@@ -1,0 +1,1 @@
+import{T as r,L as s}from"./Toast-rlfMb8U6.js";import{f as t,c as n,l as c,x as m,a as l,F as u,i as d,o as e}from"./index-Cbn5xpgP.js";const k={__name:"Consumer_Dashboard",setup(p){const a=d();return t(()=>{a.replace("/market")}),(o,_)=>(e(),n(u,null,[o.showLoading?(e(),c(s,{key:0,class:"loading"})):m("",!0),l(r)],64))}};export{k as default};
