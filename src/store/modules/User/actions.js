@@ -62,11 +62,37 @@ export default {
     },
 
     //API for get product list
-    async getProductList({commit}) {
-        return await axiosClient.post('product/account')
+    // async getProductList({commit}) {
+    //     return await axiosClient.post('product/account')
+    //     .then((response) => {
+    //         commit('setProductListData', response.data.products);
+    //         return response.data.products;
+    //     })
+    //     .catch((error) => {
+    //         commit('toggleLoader', false, { root: true })
+    //         if(error.response && error.response.data) {
+    //             const errorMessage = error.response.data.message;
+    //             setTimeout(() => {
+    //                 commit('showToast', { showToast: true, toastMessage: errorMessage, toastType: 'error'}, { root: true });
+    //             }, toastDelay);
+    
+    //             setTimeout(() => {
+    //                 commit('showToast', { showToast: false, toastMessage: '', toastType: 'default'}, { root: true });
+    //             }, toastDuration);
+    //         }   
+    //     })
+    // },
+
+    async getProductList({commit}, { currentPage, search }) {
+        commit('toggleLoader', true, { root: true })
+        return await axiosClient.post('product/account', { search, page:currentPage } )
         .then((response) => {
+            commit('toggleLoader', false, { root: true })
             commit('setProductListData', response.data.products);
-            return response.data.products;
+            commit('setCurrentPage', response.data.pagination.current_page, { root: true });
+            commit('setItemsPerPage', response.data.pagination.per_page, { root: true });
+            commit('setTotalPages', response.data.pagination.last_page, { root: true });
+            return response.data;
         })
         .catch((error) => {
             commit('toggleLoader', false, { root: true })
@@ -214,4 +240,33 @@ export default {
         })
     },
 
+    async updateStatus({commit}, statusData) {
+        commit('toggleLoader', true, { root: true })
+        return await axiosClient.post(`updateOrderStatus/${statusData.id}`, statusData)
+        .then((response) => {
+            commit('toggleLoader', false, { root: true })
+            setTimeout(() => {
+                commit('showToast', { showToast: true, toastMessage: response.data.message, toastType: 'success'}, { root: true });
+            }, toastDelay);
+    
+            setTimeout(() => {
+                commit('showToast', { showToast: false, toastMessage: '', toastType: 'default'}, { root: true });
+            }, toastDuration);
+    
+            return response.data;
+        })
+        .catch((error) => {
+            commit('toggleLoader', false, { root: true })
+            if(error.response && error.response.data) {
+                const errorMessage = error.response.data.message;
+                setTimeout(() => {
+                    commit('showToast', { showToast: true, toastMessage: errorMessage, toastType: 'error'}, { root: true });
+                }, toastDelay);
+    
+                setTimeout(() => {
+                    commit('showToast', { showToast: false, toastMessage: '', toastType: 'default'}, { root: true });
+                }, toastDuration);
+            }   
+        })
+    },
 }

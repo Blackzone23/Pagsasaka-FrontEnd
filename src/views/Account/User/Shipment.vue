@@ -143,26 +143,30 @@
 							<p><strong>Status:</strong> {{ selectedShipment.status }}</p>
 						</div>
 
-						<!-- Approve Button for Processing Status -->
-						<div v-if="selectedShipment.status === 'Processing'" class="mt-4">
-							<button class="px-4 py-2 bg-blue-500 text-sm text-white rounded" @click="approveShipment">Approve the order</button>
-						</div>
-
 						<!-- Tracking process for orders -->
-						<div v-if="selectedShipment.status !== 'Cancelled' && selectedShipment.status !== 'Refund'" class="mt-6">
+						<div>
 							<div class="relative flex items-center justify-center">
 								<div class="absolute w-[480px] h-1 bg-[#608C54] top-1/2 z-0"></div>
 
 								<!-- Tracking Steps (in the front) -->
-								<div class="flex space-x-12 z-10">
-									<div v-for="step in trackingSteps" :key="step.id" :class="['w-24 h-24 rounded-full flex items-center justify-center', getStatusClass(step.id)]">
-									<Icon :icon="step.icon" width="32" height="32" class="text-white" />
+								<div class="flex space-x-20 z-10">
+									<div v-for="status in trackingSteps" :key="status.id" :class="['w-20 h-20 rounded-full flex items-center justify-center',getStatusClass(status.id),]">
+									<Icon :icon="status.icon" width="24" height="24" class="text-white" />
 									</div>
 								</div>
 							</div>
 
 							<div class="flex space-x-[68px] justify-center text-center mt-2">
-							<span v-for="step in trackingSteps" :key="step.id">{{ step.label }}</span>
+								<span v-for="status in trackingSteps" :key="status.id" class="text-sm">
+									{{ status.label }}
+								</span>
+							</div>
+
+							<!-- Approval Button -->
+							<div class="flex justify-center mt-4">
+								<button @click="updateStatus()" class="px-6 py-2 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg shadow-md transition">
+									Approve
+								</button>
 							</div>
 						</div>
 
@@ -213,30 +217,69 @@ const handleOrderClick = (order) => {
   selectedShipment.value = order;
 };
 
-const approveShipment = () => {
-  if (selectedShipment.value) {
-    selectedShipment.value.status = 'To Ship';
-  }
-};
 
 const trackingSteps = [
-  { id: 'processing', label: 'Processing', icon: 'hugeicons:package-process' },
-  { id: 'to_ship', label: 'To Ship', icon: 'ic:outline-local-shipping' },
-  { id: 'shipping', label: 'Shipping', icon: 'la:shipping-fast' },
-  { id: 'to_receive', label: 'To Receive', icon: 'hugeicons:package-receive' },
-  { id: 'completed', label: 'Completed', icon: 'fluent-mdl2:completed' },
+  { id: "Order placed", label: "Order placed", icon: "hugeicons:package-process" },
+  { id: "Waiting for courier", label: "Waiting for courier", icon: "ic:outline-local-shipping" },
+  { id: "In transit", label: "In transit", icon: "la:shipping-fast" },
+  { id: "Order delivered", label: "Order delivered", icon: "hugeicons:package-receive" },
 ];
 
-const getStatusClass = (stepId) => {
-  const statuses = ['processing', 'to_ship', 'shipping', 'to_receive', 'completed'];
-  const currentIndex = statuses.indexOf(selectedShipment.value?.status?.toLowerCase());
-  const stepIndex = statuses.indexOf(stepId);
 
-  if (stepIndex < currentIndex) return 'bg-green-500';
-  if (stepIndex === currentIndex) return 'bg-[#608C54]';
-  return 'bg-gray-300';
+
+const getStatusClass = (id) => {
+  if (!selectedShipment.value) return "bg-gray-300";
+
+  const statusOrder = trackingSteps.map((step) => step.id.toLowerCase());
+  const currentIndex = statusOrder.indexOf(selectedShipment.value.status.toLowerCase());
+  const stepIndex = statusOrder.indexOf(id.toLowerCase());
+
+  if (stepIndex < currentIndex) return "bg-green-500"; // Completed steps
+  if (stepIndex === currentIndex) return "bg-[#608C54]"; // Current step
+  return "bg-gray-300"; // Pending steps
 };
 
+//approval status
+const statusData = reactive({ 
+    id: '', 
+    status: ''
+});
+
+
+async function updateStatus() {
+    if (!selectedShipment.value) return;
+
+    // Define the order of statuses
+    const statusOrder = [
+        "Order placed",
+        "Waiting for courier",
+        "In transit",
+        "Order delivered"
+    ];
+
+    // Find the current status index
+    const currentIndex = statusOrder.indexOf(selectedShipment.value.status);
+    
+    // Ensure the current status exists in the array and isn't the last status
+    if (currentIndex === -1 || currentIndex === statusOrder.length - 1) return;
+
+    // Get the next status
+    const nextStatus = statusOrder[currentIndex + 1];
+
+    // Set statusData with the new status
+    statusData.id = selectedShipment.value.id;
+    statusData.status = nextStatus;
+
+    await store.dispatch('User/updateStatus', statusData)
+    .then((response) => {
+        if(response.isSuccess) {
+            selectedShipment.value.status = nextStatus; // Update frontend status
+        }
+    })
+    .catch((error) => {
+        console.error("Error updating status:", error);
+    });
+}
 
 /******************************************************************
 FUNCTION FOR CANCEL

@@ -296,7 +296,7 @@
 
                 <!-- Table Section -->
                 <div class="w-full">
-                    <div class="overflow-y-auto h-96">
+                    <div class=" h-96">
                         <table class="w-full">
                             <!-- Table Header -->
                             <thead class="bg-gray-200 text-sm">
@@ -340,11 +340,11 @@
                 </div>
             </main>
             <!-- Pagination -->
-            <!-- <div class="mt-10 flex justify-end text-sm">
-                <button type="button" class="py-4 px-8 bg-gray-100 rounded-tl-lg rounded-bl-lg hover:bg-gray-200 text-gray-600" @click="goToPreviousPage" :disabled="currentPage === 1">Prev</button>
-                <span class=" py-4 px-8 bg-gray-100 flex items-center border-l border-r border-gray-300"> {{ currentPage }} of {{ totalPages }}</span>
-                <button type="button" class="py-4 px-8 bg-gray-100 rounded-tr-lg rounded-br-lg hover:bg-gray-200 text-gray-600" @click="goToNextPage" :disabled="currentPage === totalPages">Next</button>
-            </div> -->
+            <div class="mt-10 mr-4 flex justify-end text-xs">
+                <button type="button" class="py-2 px-4 bg-gray-100 rounded-tl-lg rounded-bl-lg hover:bg-gray-200 text-gray-600" @click="goToPreviousPage" :disabled="currentPage === 1">Prev</button>
+                <span class=" py-2 px-4 bg-gray-100 flex text-xs items-center border-l border-r border-gray-300"> {{ currentPage }} of {{ totalPages }}</span>
+                <button type="button" class="py-2 px-4 bg-gray-100 rounded-tr-lg rounded-br-lg hover:bg-gray-200 text-gray-600" @click="goToNextPage" :disabled="currentPage === totalPages">Next</button>
+            </div>
         </div>
     </div>
 </template>
@@ -374,15 +374,36 @@ const router = useRouter();
 const showLoading = computed(() => store.state.showLoading.state);
 const productList= computed(() => store.state.User.product.data);
 const categoryDropdown= computed(() => store.state.User.categoryDropdown.data)
+const currentPage = computed(() => store.state.currentPage);
+const totalPages = computed(() => store.state.totalPages);
 
 const selectedProducts = ref([]);
+// const searchQuery = ref('');
+
+// // Search category
+// const search = debounce(() => {
+//     store.dispatch('User/getProductList', { 
+//         search: searchQuery.value, 
+//     }).then(() => {
+//         if (productList.value.length === 0) {
+//             store.commit('setCurrentPage', 0);
+//             store.commit('setTotalPages', 0);
+//         }
+//     });
+// }, 500) // Adjust the debounce delay as needed (300 milliseconds in this example)
 
 
 /******************************************************************
  FUNCTION FOR GETTING PRODUCT LIST
 ******************************************************************/
-function getProductList() {
-    store.dispatch('User/getProductList');
+// function getProductList() {
+//     store.dispatch('User/getProductList');
+// }
+
+async function getProductList() {
+    await store.dispatch('User/getProductList', {
+        currentPage: currentPage.value, // Pass as part of an object
+    });
 }
 
 /******************************************************************
@@ -413,6 +434,7 @@ const openAddProductModal = () => {
 
 const closeAddProductModal = () => {
   isAddProductModalOpen.value = false;
+  clearValues();
 };
 
 // Validation rules
@@ -675,19 +697,19 @@ const toggleView = () => {
 /******************************************************************
 PAGINATION
 ******************************************************************/
-// function goToPreviousPage() {
-//     if (currentPage.value > 1) {
-//         store.commit('setCurrentPage', currentPage.value - 1);
-//         getDivision();
-//     }
-// }
+function goToPreviousPage() {
+    if (currentPage.value > 1) {
+        store.commit('setCurrentPage', currentPage.value - 1);
+        getProductList();
+    }
+}
 
-// function goToNextPage() {
-//     if (currentPage.value < totalPages.value) {
-//         store.commit('setCurrentPage', currentPage.value + 1);
-//         getDivision();
-//     }
-// }
+function goToNextPage() {
+    if (currentPage.value < totalPages.value) {
+        store.commit('setCurrentPage', currentPage.value + 1);
+        getProductList();
+    }
+}
 
 
 /******************************************************************
@@ -726,6 +748,20 @@ function updateSelectAllState() {
         productList.value.length > 0;
 }
 
+/******************************************************************
+FUNCTION FOR CLEARING INPUT FIELDS AND RESET VALIDATION
+******************************************************************/
+function clearValues(){
+    productData.category_id = '';
+    productData.product_name = '';
+    productData.description = '';
+    productData.price = '';
+    productData.stocks = '';
+    productData.product_img = '';
+    productData.visibility = '';
+  $validateAddCategoryRules.value.$reset();
+
+}
 
 /******************************************************************
  FUNCTION FOR LOGOUT

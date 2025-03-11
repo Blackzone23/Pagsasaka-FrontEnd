@@ -272,17 +272,126 @@
 
                                 <!--Completed-->
                                 <div v-else-if="currentTab === 'Completed'">
-                                <p class="text-sm text-gray-600">You have completed your orders!</p>
+                                    <div class="mt-4 bg-green-100 border border-green-300 rounded-lg p-4">
+                                        <div class="flex items-center">
+                                            <!-- Image -->
+                                            <img src="https://via.placeholder.com/80" alt="Product Image" class="w-20 h-20 rounded object-cover border"/>
+
+                                            <!-- Details -->
+                                            <div class="ml-4 flex-grow">
+                                                <h3 class="text-sm font-semibold">Salad package</h3>
+                                                <p class="text-xs text-gray-600">Variants: 500 Grams</p>
+                                                <div class="mt-2 flex items-center justify-between">
+                                                    <div>
+                                                    <p class="text-sm font-medium text-gray-700">Seller <span class="font-bold">Janromil Dela Cruz</span></p>
+                                                    </div>
+                                                    <div class="flex items-center gap-3">
+                                                        <h1 class="text-sm">Order Total:</h1>
+                                                        <p class="text-sm font-semibold text-green-700">₱820</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Order Status -->
+                                        <div>
+                                            <!-- Order Status Section -->
+                                            <div class="mt-4 flex items-center justify-between">
+                                               <div class="flex items-center gap-3">
+                                                <h1 class="text-sm">Parcel has been delivered:</h1>
+                                                <span class="text-sm font-medium text-gray-500">Completed</span>
+                                               </div>
+                                                <div class="flex space-x-2">
+                                                    <button class="px-3 py-1 text-sm font-semibold text-green-700 border border-green-600 rounded hover:bg-green-50">
+                                                        Rate
+                                                    </button>
+                                                    <button class="px-3 py-1 text-sm font-semibold text-red-600 border border-red-500 rounded hover:bg-red-50" @click="openshowCancelModalModal">
+                                                        Request Return
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
 
                                 <!--Cancelled-->
                                 <div v-else-if="currentTab === 'Cancelled'">
-                                <p class="text-sm text-gray-600">These are the cancelled orders.</p>
+                                    <div class="mt-4 bg-green-100 border border-green-300 rounded-lg p-4">
+                                        <div class="flex items-center">
+                                            <!-- Image -->
+                                            <img src="https://via.placeholder.com/80" alt="Product Image" class="w-20 h-20 rounded object-cover border"/>
+
+                                            <!-- Details -->
+                                            <div class="ml-4 flex-grow">
+                                                <h3 class="text-sm font-semibold">Salad package</h3>
+                                                <p class="text-xs text-gray-600">Variants: 500 Grams</p>
+                                                <div class="mt-2 flex items-center justify-between">
+                                                    <div>
+                                                    <p class="text-sm font-medium text-gray-700">Seller <span class="font-bold">Janromil Dela Cruz</span></p>
+                                                    </div>
+                                                    <div class="flex items-center gap-3">
+                                                        <h1 class="text-sm">Order Total:</h1>
+                                                        <p class="text-sm font-semibold text-green-700">₱820</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Order Status -->
+                                        <div>
+                                            <!-- Order Status Section -->
+                                            <div class="mt-4 flex items-center justify-between">
+                                               <div class="flex items-center gap-3">
+                                                <h1 class="text-sm">Cancelled by You:</h1>
+                                                <span class="text-sm font-medium text-gray-500">Cancelled</span>
+                                               </div>
+                                                <div class="flex space-x-2">
+                                                    <button class="px-3 py-1 text-sm font-semibold text-green-700 border border-green-600 rounded hover:bg-green-50">
+                                                        Buy Again
+                                                    </button>
+                                                    <button class="px-3 py-1 text-sm font-semibold text-red-600 border border-red-500 rounded hover:bg-red-50" @click="openshowCancelModalModal">
+                                                        View Cancellation Details
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
 
                                 <!--Return Refund-->
                                 <div v-else-if="currentTab === 'Return Refund'">
-                                <p class="text-sm text-gray-600">Check your return and refund items here.</p>
+                                    <div class="mt-4 bg-green-100 border border-green-300 rounded-lg p-4 hover:bg-gray-100">
+                                        <div class="flex items-center">
+                                            <!-- Image -->
+                                            <img src="https://via.placeholder.com/80" alt="Product Image" class="w-20 h-20 rounded object-cover border"/>
+
+                                            <!-- Details -->
+                                            <div class="ml-4 flex-grow">
+                                                <h3 class="text-sm font-semibold">Salad package</h3>
+                                                <p class="text-xs text-gray-600">Variants: 500 Grams</p>
+                                                <div class="mt-2 flex items-center justify-between">
+                                                    <div>
+                                                    <p class="text-sm font-medium text-gray-700">Seller <span class="font-bold">Janromil Dela Cruz</span></p>
+                                                    </div>
+                                                    <div class="flex items-center gap-3">
+                                                        <h1 class="text-sm">Order Total:</h1>
+                                                        <p class="text-sm font-semibold text-green-700">₱820</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Order Status -->
+                                        <div>
+                                            <!-- Order Status Section -->
+                                            <div class="mt-4 flex items-center justify-between">
+                                               <div class="flex items-center gap-3">
+                                                    <h1 class="text-sm">Click here for the status</h1>
+                                                    <span class="text-sm font-medium text-gray-500">Return Refund</span>
+                                               </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
@@ -656,7 +765,7 @@ function nextPage() {
 
 // Utility to check if pagination is needed for specific tabs
 function hasPagination(tab) {
-  return ["To Ship", "To Receive", "Cancelled"].includes(tab);
+  return ["To Ship", "To Receive","Completed", "Cancelled","Return Refund"].includes(tab);
 }
 /******************************************************************
  FUNCTION FOR 
