@@ -46,24 +46,32 @@
                                     <h2>Stock:</h2>
                                     <span class="font-semibold">{{ productItemInfo.stocks }}</span>
                                 </div>
+                                <div class="flex space-x-4 text-lg">
+                                    <h2>Unit:</h2>
+                                    <span class="font-semibold">{{ productItemInfo.unit }}</span>
+                                </div>
 
                                 <!-- Quantity Section -->
                                 <div class="flex items-center space-x-4 mt-2">
-                                    <h2 class="font-bold">Quantity:</h2>
+                                    <h2 class="font-bold text-lg">Quantity:</h2>
                                     <div class="flex items-center border border-gray-300 rounded-full p-1">
-                                    <button class="bg-[#608C54] hover:bg-gray-300 text-white font-bold py-1 px-2 rounded-full"  @click="decreaseQuantity(productItemInfo)"> -
-                                    </button>
-                                    <span class="font-bold mx-4">{{ productItemInfo.quantity }}</span>
-                                    <button class="bg-[#608C54] hover:bg-gray-300 text-white font-bold py-1 px-2 rounded-full"  @click="increaseQuantity(productItemInfo)">
-                                        +
-                                    </button>
+                                        <button class="bg-[#608C54] hover:bg-gray-300 text-white font-bold py-1 px-2 rounded-full"
+                                            @click="decreaseQuantity">
+                                            -
+                                        </button>
+                                        <span class="font-bold mx-4">{{ quantity }}</span>
+                                        <button class="bg-[#608C54] hover:bg-gray-300 text-white font-bold py-1 px-2 rounded-full"
+                                            @click="increaseQuantity">
+                                            +
+                                        </button>
                                     </div>
                                 </div>
+
                                 <div class="flex space-x-5 items-center p-8 text-lg">
-                                    <button @click="goToCart" class="bg-white text-black font-bold py-2 px-6 border border-gray-200 rounded shadow hover:shadow-lg transition-shadow duration-300">
-                                    Add to Cart
+                                    <button @click="addToCart(productItemInfo.id)" class="bg-[#608C54] text-white font-bold px-4 py-2 hover:bg-[#4e7343] transition-colors duration-300 rounded flex items-center gap-2"><Icon icon="lineicons:cart-2" width="24" height="24"  style="color: #fff" />
+                                        Add to Cart
                                     </button>
-                                    <button @click="goToCheckout" class="bg-[#608C54] text-white font-bold py-2 px-7 rounded hover:bg-[#4e7343] transition-colors duration-300">
+                                    <button @click="goToCheckout" class="bg-[#608C54] text-white font-bold py-2 px-7 rounded hover:bg-[#4e7343] transition-colors duration-300 flex items-center gap-2"><Icon icon="icon-park-twotone:buy" width="24" height="24"  style="color: #fff" />
                                     Buy Now
                                     </button>
                                 </div>
@@ -131,10 +139,6 @@
         <div class="p-5 ">
             <div class="h-full w-full space-y-10 border-2 p-5 border-gray-300 rounded-md">
                 <h1 class="text-lg font-semibold">Product Specifications</h1>
-                <div class="flex space-x-4">
-                    <h1>Category:</h1>
-                    <span>Pagsasaka>Farming Supply>Pagsasaka Box</span>
-                </div>
                 <div class="flex space-x-4">
                     <h1>Stock:</h1>
                     <span>133</span>
@@ -236,8 +240,9 @@ import { useStore } from "vuex";
 const store = useStore();
 const router = useRouter();
 
+const showLoading = computed(() => store.state.showLoading.state);
 const productItemListinfo = computed(() => store.state.Consumer.productItem.productItemInfo);
-//damwdmawmdkmawkdadw
+
 
 /******************************************************************
   FUNCTION FOR LAYER 1
@@ -246,17 +251,26 @@ function getItemListInfo() {
     store.dispatch('Consumer/getItemListInfo', sessionStorage.getItem('ItemInfo'));
 }
 
-function increaseQuantity(item) {
-    item.quantity++;
-}
 
-function decreaseQuantity(item) {
-    if (item.quantity > 0) item.quantity--;
-}
+const quantity = ref(1);
 
-function goToCart() {
-    router.push('/cart');
-}
+const increaseQuantity = () => {
+  quantity.value++;
+};
+
+const decreaseQuantity = () => {
+  if (quantity.value > 1) {
+    quantity.value--;
+  }
+};
+const addToCart = async (productId) => {
+    try {
+        await store.dispatch('Consumer/getAddToCart', { id: productId, quantity: quantity.value });
+        router.push('/cart'); // Navigate to cart page after adding to cart
+    } catch (error) {
+        console.error('Error adding to cart:', error);
+    }
+};
 
 function goToCheckout() {
     router.push('/checkout');
@@ -265,19 +279,7 @@ function goToCheckout() {
 onMounted(() => {
     getItemListInfo();
 });
-const quantity = ref(1);
 
-// function increaseQuantity() {
-//   if (quantity.value < shippingData.stock) {
-//     quantity.value++;
-//   }
-// }
-
-// function decreaseQuantity() {
-//   if (quantity.value > 1) {
-//     quantity.value--;
-//   }
-// }
 /******************************************************************
   FUNCTION FOR LAYER 2
 ******************************************************************/

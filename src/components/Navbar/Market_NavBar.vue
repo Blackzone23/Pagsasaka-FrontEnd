@@ -114,9 +114,6 @@ const userName = computed(() => store.state.userName || ''); // Fallback to an e
 const userProfilePic = computed(() => store.state.userProfilePic || ''); // Fallback to empty string if undefined
 
 
-
-
-
  // Log out Function
  async function logout() {
         await store.dispatch('logout')

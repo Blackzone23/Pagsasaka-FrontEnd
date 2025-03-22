@@ -25,56 +25,6 @@
             </div>
         </div>
 
-        <!--Mid Cover-->
-        <div class="Gradient">
-            <div class=" flex justify-between p-7">
-                    <!-- Small Box on the Left Side -->
-                    <div class="smallbox">
-                        <h3 class="smallboxh">Monthly Products Sold</h3>
-                    <!-- Table inside the box -->
-                    <table class="tablehome">
-                        <thead>
-                            <tr class="bg-[#608C54] text-white text-sm">
-                                <th class="py-2 2xl:px-4 2xs:px-2 border-b">Item Sold</th>
-                                <th class="py-2 px-4 border-b">Total Sold</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr class="tablerowhome">
-                                <td class=" tabledatahome">Dinorado Rice</td>
-                                <td class=" tabledatahome">875 KG</td> 
-                            </tr>
-                            <tr class="tablerowhome">
-                                <td class=" tablerowhome2">Sugarcane</td>
-                                <td class=" tablerowhome2">564 KG</td>
-                            </tr>
-                            <tr class="tablerowhome">
-                                <td class=" tabledatahome">Banana</td>
-                                <td class=" tabledatahome">432 KG</td>
-                            </tr>
-                            <tr class="tablerowhome">
-                                <td class=" tablerowhome2">Coffee Beans</td>
-                                <td class=" tablerowhome2">345 KG</td>
-                            </tr>
-                            <tr class="tablerowhome">
-                                <td class=" tabledatahome">Garlic</td>
-                                <td class="tabledatahome">333 KG</td>
-                            </tr>
-                            <tr class="tablerowhome">
-                                <td class=" tablerowhome2">Pineapple</td>
-                                <td class=" tablerowhome2">250 KG</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <!-- Philippine Map Image with Matching Size -->
-                <div class="philippine">
-                <img :src="philippine" alt="Philippine Map" class="imageP">
-                </div>
-            </div>
-        </div>
-
         <!--Below Cover-->
         <div class="mt-5">
             <div class="belowCover">
@@ -105,10 +55,12 @@
                     <p class="THFparagraph"> Connect directly with farmers <br> for fresh, high-quality produce <br> at fair prices, cutting out the middleman and <br> supporting local agriculture.</p>
                 </div>
             </div>
-
-            <div class="text-center mt-20">
-                <h1 class="2xl:text-lg 2xs:text-xs font-semibold">Elevate Your Agricultural Business with Pagsasaka Services!</h1>
-            </div>
+            
+            <n-marquee>
+                <div style="margin-right: 64px" class="mt-20">
+                    <h1 class="2xl:text-lg 2xs:text-xs font-semibold">Elevate Your Agricultural Business with Pagsasaka Services!</h1>
+                </div>
+            </n-marquee>
 
             <div class="freshConatainer">
                 <div class="freshConatainer2">

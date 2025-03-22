@@ -15,6 +15,7 @@
                         <Icon icon="uil:setting" width="24" height="24" style="color: white" @click="toggleDropdown" />
                         <!-- Dropdown Menu -->
                         <div v-if="dropdownVisible" class="absolute right-0 mt-2 bg-white shadow-lg rounded p-2 w-48">
+                            <button class="w-full text-left px-4 py-2 text-sm text-black">Account Info</button>
                             <button class="w-full text-left px-4 py-2 text-sm text-black" @click="logout()">Logout</button>
                         </div>
                     </div>
@@ -751,16 +752,19 @@ function updateSelectAllState() {
 /******************************************************************
 FUNCTION FOR CLEARING INPUT FIELDS AND RESET VALIDATION
 ******************************************************************/
-function clearValues(){
+function clearValues() {
     productData.category_id = '';
     productData.product_name = '';
     productData.description = '';
     productData.price = '';
     productData.stocks = '';
-    productData.product_img = '';
+    productData.product_img = []; // Reset to an empty array
     productData.visibility = '';
-  $validateAddCategoryRules.value.$reset();
-
+    
+    mainImagePreview.value = null; // Reset main image preview
+    thumbnailPreviews.value = []; // Reset thumbnail previews
+    
+    $validateAddCategoryRules.value.$reset();
 }
 
 /******************************************************************

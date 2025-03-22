@@ -51,16 +51,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="border border-gray-300 rounded-lg p-4">
-                            <!-- Example Filters -->
-                            <div class="mb-4 text-xs">
-                                <Icon icon="ix:box-open" width="52" height="52"  style="color: #346a3d" />
-                                <BaseLabel class="block text-lg font-medium text-gray-700">Delivery every day </BaseLabel>
-                                <div>
-                                    <p>Check out our<a href="/pagsasaka-box" class="px-4 py-2 text-[#608C54] hover:underline">Pagsasaka Box</a>to view this week's produce.</p>
-                                </div>
-                            </div>
-                        </div>
+                       
                         <div class="border border-gray-300 flex flex-col rounded-lg p-4">
                             <BaseLabel class="font-bold">Product Type</BaseLabel>
                             <!-- Example Filters -->
@@ -98,24 +89,34 @@
                 <div class="p-4 mt-12">
                     <!-- Product Grid -->
                     <div class="grid grid-cols-3 gap-4">
-                        <div v-for="product in filteredProducts.slice(0, 6)" :key="product.id" class="border rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow">
-                        <img :src="product.image" alt="Product Image" class="w-full h-40 object-cover" />
-                        <div class="p-2">
-                            <h3 class="text-sm font-semibold">{{ product.title }}</h3>
-                            <div class="text-red-500 font-bold text-sm">₱{{ product.price }}</div>
-                            <n-rate allow-half readonly :default-value="product.rating" />
-                            <div v-if="product.location" class="text-gray-600 text-xs mt-2">
-                            📍 {{ product.location }}
+                        <div v-for="moreProduct in moreProductList.slice(0, 8)" :key="moreProduct.id"  class="relative border rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow group">
+                            <img :src="moreProduct.product_img[0]"  alt="Product Image"  class="w-full h-40 object-cover" />
+
+                            <!-- Hover Overlay -->
+                            <div class="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity">
+                              <button @click="goToItemInfo(moreProduct.id)" class="px-2 py-1 2xl:px-4 md:px-2 2xl:py-2 text-xs sm:text-sm md:text-xs  text-white bg-green-500 rounded-lg">
+                                    View Product
+                                </button>
                             </div>
-                        </div>
+
+                            <div class="p-2">
+                                <h3 class="text-sm font-semibold">{{ moreProduct.product_name }}</h3>
+                                <p class="text-xs font-semibold">{{ moreProduct.description }}</p>
+                                <div class="text-red-500 font-bold text-sm">₱{{ moreProduct.price }}</div>
+                                <n-rate allow-half readonly :default-value="moreProduct.rating" />
+                                <div v-if="moreProduct.location" class="text-gray-600 text-xs mt-2">
+                                    📍 {{ moreProduct.location }}
+                                </div>
+                            </div>
                         </div>
                     </div>
 
+
                     <!-- Pagination -->
-                    <div class="flex justify-center text-sm mt-10">
-                        <button @click="prevPage" :disabled="currentPage === 1" class="bg-gray-300 p-2 rounded">Previous</button>
-                        <span>Page {{ currentPage }} of {{ totalPages }}</span>
-                        <button @click="nextPage" :disabled="currentPage === totalPages" class="bg-gray-300 p-2 rounded">Next</button>
+                    <div class="mt-10 mr-4 flex justify-center text-sm">
+                        <button type="button" class="py-2 px-4 bg-gray-100 rounded-tl-lg rounded-bl-lg hover:bg-gray-200 text-gray-600" @click="goToPreviousPage" :disabled="currentPage === 1">Previous</button>
+                        <span class=" py-2 px-4 bg-gray-100 flex text-sm items-center border-l border-r border-gray-300"> {{ currentPage }} of {{ totalPages }}</span>
+                        <button type="button" class="py-2 px-4 bg-gray-100 rounded-tr-lg rounded-br-lg hover:bg-gray-200 text-gray-600" @click="goToNextPage" :disabled="currentPage === totalPages">Next</button>
                     </div>
                 </div>
             </div>
@@ -145,6 +146,103 @@
                     </div>
                 </div>
             </div>
+
+            <div class="p-4">
+              <!-- Floating Chat Button -->
+              <button @click="showChatModal = true" class="bg-yellow-100 border-2 border-gray-300 rounded-full p-3 flex items-center justify-center fixed bottom-4 right-4 shadow-md hover:bg-yellow-300">
+              <Icon icon="tabler:message" width="28" height="28" style="color: #608C54" />
+              </button>
+            </div>
+
+            <!-- Expanded Floating Chat Modal -->
+            <div v-if="showChatModal" class="fixed bottom-4 right-4 w-[900px] h-[85vh] bg-white rounded-lg shadow-lg flex flex-col border z-50">
+                <!-- Header -->
+                <div class="p-4 border-b rounded-sm bg-gray-100 flex justify-between items-center">
+                    <span class="text-xl font-bold text-green-600">Chat</span>
+                    <button @click="showChatModal = false" class="text-gray-600 text-lg">
+                        <Icon icon="icon-park-solid:close-one" width="20" height="20" />
+                    </button>
+                </div>
+
+              <div class="flex flex-1 overflow-hidden">
+                <!-- Sidebar (Users List) -->
+                <div class="w-1/3 bg-white border-r border-gray-300 p-4 flex flex-col">
+                  <div class="flex">
+                  <BaseSearchField placeholder="Search..." class="w-[270px]"></BaseSearchField>
+                  </div>
+
+                    <div class="mt-3 flex-1 overflow-auto">
+                        <div v-for="(chat, index) in chats" :key="index" class="flex items-center p-3 border-b cursor-pointer hover:bg-gray-100 transition duration-200" @click="selectChat(chat)">
+                            <img :src="chat.avatar || '/default-avatar.png'" class="w-12 h-12 rounded-full border mr-3" alt="Avatar" />
+                        <div class="flex-1">
+                            <span class="font-semibold">{{ chat.name }}</span>
+                            <p class="text-xs text-gray-500 truncate">{{ chat.message }}</p>
+                        </div>
+                            <span v-if="chat.unread" class="text-xs bg-red-500 text-white px-2 py-1 rounded-full">
+                            {{ chat.unread }}
+                             </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chat Window -->
+                <div class="w-2/3 flex flex-col">
+                  <!-- If No Chat is Selected -->
+                  <div v-if="!selectedChat" class="flex-1 flex items-center justify-center text-gray-400">
+                    <p class="text-xl">Welcome to Pagsasaka Chat</p>
+                  </div>
+
+                  <!-- If a Chat is Selected -->
+                  <div v-else class="flex flex-col flex-1">
+                    <div class="p-4 border-b text-lg font-bold flex justify-between items-center bg-gray-100">
+                      <span>{{ selectedChat.name }}</span>
+                      <button class="text-gray-600">&#8942;</button>
+                    </div>
+
+                    <!-- Messages Area -->
+                    <div class="flex-1 bg-gray-50 p-4 overflow-auto space-y-4 text-sm">
+                      <div v-for="(message, index) in chatMessages" :key="index"  class="flex items-start space-x-3"  :class="{'justify-end': message.sender === 'You', 'justify-start': message.sender !== 'You'}">
+
+                        <!-- Avatar (Only for others' messages) -->
+                        <div v-if="message.sender !== 'You'" class="w-8 h-8 rounded-full bg-gray-300"></div>
+                      
+                        <div class="p-3 rounded-lg shadow-md w-auto max-w-xs" :class="{'bg-green-500 text-white': message.sender === 'You', 'bg-gray-200 text-black': message.sender !== 'You'}">
+                        <p class="text-sm font-bold" :class="{'text-white': message.sender === 'You', 'text-green-600': message.sender !== 'You'}">
+                          {{ message.sender }}
+                        </p>
+                        <p class="text-xs">
+                          {{ message.text }}
+                        </p>
+                        <p class="text-xs mt-1 text-black">
+                          {{ message.time }}
+                        </p>
+                        </div>
+
+                        <!-- Avatar Placeholder for Sent Messages (Align Right) -->
+                        <div v-if="message.sender === 'You'" class="w-8 h-8 rounded-full bg-gray-300"></div>
+                      </div>
+                    </div>
+
+                    <!-- Input Area -->
+                    <div class="p-4 border-t bg-white flex items-center">
+                      <!-- Upload Image Icon on the Left -->
+                      <label class="cursor-pointer flex items-center space-x-2 text-gray-600 hover:text-gray-800 mr-2">
+                      <!-- <Icon icon="ep:picture-filled" width="20" height="20" style="color: #747272" /> -->
+                      <!-- <input type="file" class="hidden" @change="uploadImage" /> -->
+                      </label>
+
+                      <!-- Message Input -->
+                      <input v-model="newMessage" type="text" placeholder="Type a message here" class="flex-1 p-2 border rounded-md text-sm" @keyup.enter="sendMessage" />
+
+                      <!-- Send Button -->
+                      <button class="ml-2 bg-green-600 text-white px-4 py-2 rounded-md transition duration-200 hover:bg-green-700" @click="sendMessage">
+                      Send
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+			</div>
         </div>
         <Footer/>
     </div>
@@ -153,12 +251,9 @@
 <script setup>
 import Footer from '@/components/Input-Fields/Footer.vue';
 import Mfarmer from '@/assets/Mfarmer.png';
-import MVegetable from '@/assets/MVegetable.png';
-import MVegetable2 from '@/assets/MVegetable2.png';
-import MVegetable3 from '@/assets/MVegetable3.png';
-import MVegetable4 from '@/assets/MVegetable4.png';
 import Market_NavBar from '@/components/Navbar/Market_NavBar.vue';
 import BaseLabel from '@/components/Input-Fields/BaseLabel.vue';
+import BaseSearchField from '@/components/Input-Fields/BaseSearchField.vue';
 import { debounce } from 'lodash';
 import { ref, computed, reactive, onMounted } from "vue";
 import { useVuelidate } from "@vuelidate/core";
@@ -172,6 +267,10 @@ const store = useStore();
 const router = useRouter();
 
 const productItemList= computed(() => store.state.Consumer.productItem.data);
+const moreProductList= computed(() => store.state.Consumer.moreProduct.data);
+const currentPage = computed(() => store.state.currentPage);
+const totalPages = computed(() => store.state.totalPages);
+
 
 /******************************************************************
   FUNCTION FOR ADVERTISE PRODUCT
@@ -190,21 +289,16 @@ async function goToItemInfo(productId){
 /******************************************************************
   FUNCTION FOR LIST OF PRODUCTS
 ******************************************************************/
-const products = ref([
-  { id: 1, title: "50pcs Green Purple Seedless Grape Seeds....", price: 40, rating: 2, location: "Manila, Philippines", image: "https://i0.wp.com/www.tulipgardencentre.co.za/wp-content/uploads/2022/05/Catawba.jpg?fit=689%2C520&ssl=1", category: "Seed" },
-  { id: 2, title: "Blue Jasmine Rice 25kg", price: '1,679', rating: 4, location: "Manila, Philippines", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4QqALaS15k-h3RC1ExCa928HA1LD5ju4KLQ&s", category: "grains" },
-  { id: 3, title: "QUALITY LOAM SOIL / ORGANIC SOIL", price: 50, rating: 3, location: "Manila, Philippines", image: "https://down-ph.img.susercontent.com/file/58ab165cdd0a18de2a87b531db5431c6_tn", category: "soil" },
-  { id: 4, title: "Pechay Seeds | Vegetable Seeds | Golden Plant and Seed Store", price: 55, rating: 5, location: "Manila, Philippines", image: "https://down-ph.img.susercontent.com/file/3a2563d65cb3dc5b0356298a07216f6a", category: "Seed" },
-  { id: 5, title: "50pcs Green Purple Seedless Grape Seeds....", price: 46, rating: 3, location: "Manila, Philippines", image: "https://www.mtechgardens.com/cdn/shop/products/pv5AIs.jpg?v=1681897072", category: "fruit" },
-  { id: 6, title: "Blood Worm Pellets", price: 125, rating: 3, location: "Manila, Philippines", image: "https://down-ph.img.susercontent.com/file/ph-11134207-7qul4-ljv0kx1q45n342", category: "pelletes" },
-  { id: 7, title: "Basket of Apple", price: 200, rating: 2, location: "Manila, Philippines", image: "https://s3.envato.com/files/163445038/01(Ikea_Byholma1(brown)apple).jpg", category: "fruits" },
-  { id: 8, title: "1kg of Onion", price: 130, rating: 2, location: "Manila, Philippines", image: "https://www.jiomart.com/images/product/original/590003515/onion-1-kg-product-images-o590003515-p590003515-0-202408070949.jpg?im=Resize=(1000,1000)", category: "vegetable" },
-  { id: 9, title: "1pack of Corn Seeds", price: 500, rating: 1, location: "Manila, Philippines", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSo2vJtt0yKG4igoevwRpcBcOKYnshOgeI2qA&s", category: "Seed" },
-  { id: 10, title: "Feeds for Pigs", price: 1000, rating: 1, location: "Manila, Philippines", image: "https://www.genmil.com.ph/wp-content/uploads/2021/06/KHPSPP.png", category: "pelletes" },
-  { id: 11, title: "Tomato", price: 50, rating: 4, location: "Manila, Philippines", image: "https://lh5.googleusercontent.com/proxy/r7LOPGxHIUWak00os0ZLV_3HtXKKuTSrV_wsWEQMVnFnQmNwhBHDhxFu100NEA3_g_FPm0J8RV9wqiTbzGuosuwv8Ibvzf_ijrsXA-O7E8jFr3NLYuwvH_LrdwyOBeN3zzhG23fLMsVoqf-6FyM9dpSIeFdoH_4", category: "vegetable" },
-  { id: 12, title: "Pics peanut butter", price: 800, rating: 4, location: "Manila, Philippines", image: "https://picspeanutbutter.nz/cdn/shop/files/Pic_sSmooth380g-Straight_1200x1200.jpg?v=1701380041", category: "process" },
-]);
 
+async function getMoreList() {
+    await store.dispatch('Consumer/getMoreList', {
+        currentPage: currentPage.value, // Pass as part of an object
+    });
+}
+
+onMounted(() => {
+  getMoreList();
+})
 
 const filters = reactive({
   all: true,
@@ -231,22 +325,24 @@ const filteredProducts = computed(() => {
   return filtered.slice((currentPage.value - 1) * itemsPerPage, currentPage.value * itemsPerPage);
 });
 
-const currentPage = ref(1);
-const itemsPerPage = 6;
 
-const totalPages = computed(() => Math.ceil(filteredProducts.value.length / itemsPerPage));
+/******************************************************************
+PAGINATION
+******************************************************************/
+function goToPreviousPage() {
+    if (currentPage.value > 1) {
+        store.commit('setCurrentPage', currentPage.value - 1);
+        getMoreList();
+    }
+}
 
-const nextPage = () => {
-  if (currentPage.value < totalPages.value) {
-    currentPage.value++;
-  }
-};
+function goToNextPage() {
+    if (currentPage.value < totalPages.value) {
+        store.commit('setCurrentPage', currentPage.value + 1);
+        getMoreList();
+    }
+}
 
-const prevPage = () => {
-  if (currentPage.value > 1) {
-    currentPage.value--;
-  }
-};
 
 const toggleAll = () => {
   if (filters.all) {
@@ -266,31 +362,6 @@ const selectCategory = (category) => {
 
   // Ensure 'all' is unchecked when a specific filter is selected
   filters.all = false;
-};
-/******************************************************************
-  FUNCTION FOR IMAGE CAROUSEL
-******************************************************************/
-const isModalOpen = ref(false);
-
-
-
-const currentImageIndex = ref(0)
-
-// Compute the visible images (2 at a time)
-const visibleImages = computed(() => {
-  return images.value.slice(currentImageIndex.value, currentImageIndex.value + 2);
-});
-
-const nextImage = () => {
-  if (currentImageIndex.value + 2 < images.value.length) {
-    currentImageIndex.value++;
-  }
-};
-
-const prevImage = () => {
-  if (currentImageIndex.value > 0) {
-    currentImageIndex.value--;
-  }
 };
 
 /******************************************************************
@@ -332,6 +403,53 @@ const postProduct = () => {
     newProduct.value = { name: "", image: null, price: "", rating: "", location: "" }; // Reset form
   }
 };
+/******************************************************************
+  FUNCTION FOR CHAT
+******************************************************************/
+const showChatModal = ref(false);
+const newMessage = ref('');
+const selectedChat = ref(null); // Set to null initially
+
+const chats = ref([
+  { name: 'cpx_mall', message: '[Shop AI Assistant] Hello!', unread: null },
+  { name: 'junseven89', message: 'Unsupported message', unread: 2 },
+  { name: 'trxph', message: 'Hi, thanks for following!', unread: 21 },
+  { name: 'Demasia', message: 'Hello dear friend...', unread: 3 },
+  { name: 'sportsclubph', message: 'Hi, thanks for browsing!', unread: 3 },
+  { name: 'sportsclubph', message: 'Hi, thanks for browsing!', unread: 3 },
+  { name: 'sportsclubph', message: 'Hi, thanks for browsing!', unread: 3 },
+  { name: 'sportsclubph', message: 'Hi, thanks for browsing!', unread: 3 },
+]);
+
+const chatMessages = ref([]);
+
+const selectChat = (chat) => {
+  selectedChat.value = chat;
+  chatMessages.value = [
+    { sender: chat.name, text: 'Hello, how can I assist you?', time: '10:30 AM' },
+    { sender: 'You', text: 'I want to check my order.', time: '10:32 AM' },
+  ];
+};
+
+const sendMessage = () => {
+  if (newMessage.value.trim()) {
+    chatMessages.value.push({
+      sender: 'You',
+      text: newMessage.value,
+      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+    });
+    newMessage.value = '';
+  }
+};
+
+const uploadImage = (event) => {
+  const file = event.target.files[0];
+  if (file) {
+    console.log("Selected file:", file.name);
+    // Handle file upload logic here
+  }
+};
+
 </script>
 
 <style scoped>

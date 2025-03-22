@@ -9,6 +9,7 @@
                     <Icon icon="uil:setting" width="24" height="24" style="color: white" @click="toggleDropdown" />
                     <!-- Dropdown Menu -->
                     <div v-if="dropdownVisible" class="absolute right-0 mt-2 bg-white shadow-lg rounded p-2 w-48">
+                    <button class="w-full text-left px-4 py-2 text-sm text-black">Account Info</button>
                     <button class="w-full text-left px-4 py-2 text-sm text-black" @click="logout()">Logout</button>
                     </div>
                 </div>
@@ -346,4 +347,15 @@ const shipments = [
 ];
 
 const canceledShipmentsCount = shipments.filter(shipment => shipment.unitStatus === 'Cancelled').length;
+
+const logout = async () => {
+  try {
+    const response = await store.dispatch('logout');
+    if (response.isSuccess) {
+      router.push({ name: 'Login' }); // Redirect to the Login page
+    }
+  } catch (error) {
+    console.error('Logout error:', error); // Handle any errors
+  }
+};
 </script>

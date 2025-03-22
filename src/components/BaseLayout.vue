@@ -4,6 +4,7 @@
     
             <UserDashBoard_Navbar v-if="role_name === 'Farmer'"/>
             <Administrator_Navbar v-if="role_name === 'Admin'"/>
+            <Rider_Navbar v-if="role_name === 'Rider'"/>
             
         
 
@@ -17,6 +18,7 @@
 <script setup>
 import UserDashBoard_Navbar from '@/components/Navbar/UserDashBoard_Navbar.vue';
 import Administrator_Navbar from '@/components/Navbar/Administrator_Navbar.vue';
+import Rider_Navbar from './Navbar/Rider_Navbar.vue';
 import { useStore } from 'vuex';
 
 const store = useStore();

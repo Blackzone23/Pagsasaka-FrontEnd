@@ -35,7 +35,7 @@ const routes = [
                 path: '/market',
                 name: 'Market',
                 component: () => import('../views/HomePage/Market.vue'),
-                meta: { requiresAuth: false },
+                meta: { requiresAuth: true },
             },
             
             {
@@ -297,6 +297,34 @@ const routes = [
                     component: () => import('../views/HomePage/MyProfile.vue'),
                 },
             ]
+        },
+
+        /*********************************************************************
+        Rider ROUTES
+        *********************************************************************/
+        {
+            path: '/',
+            name: 'Rider',
+            component: BaseLayout,
+            meta: { requiresAuth: true, roles: 'Rider' },
+            children: [
+            
+                // Dashboard route
+                {
+                    path: '/dashboard',
+                    name: 'Rider_Dashboard',
+                    component: () => import('../views/Account/Rider/Rider_Dashboard.vue')
+                },
+
+                {
+                    path: '/productlist',
+                    name: 'ProductList',
+                    component: () => import('../views/Account/Rider/ProductList.vue')
+                },
+    
+    
+            ]
+    
         },
 
 ]

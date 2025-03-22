@@ -4,7 +4,16 @@ export default {
         data:[],
         productItemInfo:[],
     },
-    // productItemInfo: {
+
+    moreProduct: {
+        data:[],
+    },
+
+    cartItem: {
+        data:[],
+    },
+
+    // addItem: {
     //     data:[],
     // },
 }

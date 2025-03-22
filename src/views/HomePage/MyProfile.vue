@@ -35,26 +35,37 @@
                                     <p class="text-sm">Manage and protect your account</p>
                                 </div>
                                 <div class="text-sm">
+                                    <!-- Name -->
                                     <div class="flex items-center space-x-2">
                                         <BaseLabel class="w-32">Name:</BaseLabel>
-                                        <span class="mt-3">NormanCruz143</span>
+                                        <BaseInputField v-model="tempValue" class="w-96 border border-gray-300 rounded px-2 py-1"/>
+                                        <Icon icon="mdi:pencil" class="text-gray-500 hover:text-blue-500 cursor-pointer" @click="editField()" />
                                     </div>
+
+                                    <!-- Phone -->
                                     <div class="flex items-center space-x-2">
                                         <BaseLabel class="w-32">Phone number:</BaseLabel>
-                                        <span class="mt-3">09123123123</span>
+                                        <BaseInputField v-model="tempValue" class="w-96 border border-gray-300 rounded px-2 py-1"/>
+                                        <Icon icon="mdi:pencil" class="text-gray-500 hover:text-blue-500 cursor-pointer" @click="editField()" />
                                     </div>
+
+                                    <!-- Email -->
                                     <div class="flex items-center space-x-2">
                                         <BaseLabel class="w-32">Email Address:</BaseLabel>
-                                        <span class="mt-3">NormanCruz143@gmail.com</span>
+                                        <BaseInputField v-model="tempValue" class="w-96 border border-gray-300 rounded px-2 py-1"/>
+                                        <Icon icon="mdi:pencil" class="text-gray-500 hover:text-blue-500 cursor-pointer" @click="editField()" />
                                     </div>
+
+                                    <!-- Gender -->
                                     <div class="flex items-center space-x-2">
                                         <BaseLabel class="w-32">Gender:</BaseLabel>
-                                        <div class="flex space-x-4">
-                                            <BaseRadioButton v-for="option in ['Male', 'Female', 'Others']" :key="option" :name="'gender'" :label="option" :value="option" v-model="tinIdSelected" class="text-sm"/>
+                                        <div class="flex space-x-4 mt-3">
+                                            <BaseRadioButton v-for="option in ['Male', 'Female', 'Others']"  :key="option"  :name="'gender'"  :label="option"  :value="option"  v-model="profile.gender" class="text-sm"/>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+
 
                             <!-- Right Side: Box -->
                             <div class="w-1/4 ml-4 p-4 border rounded-lg shadow-md">
@@ -69,6 +80,96 @@
 
                     <!--My Purchase-->
                     <div v-if="activeTab === 'My Purchase'" class="tab-content">
+                        <div class="p-2">
+                            <!-- Floating Chat Button -->
+                            <button @click="openshowChatModal" class="bg-yellow-100 border-2 border-gray-300 rounded-full p-3 flex items-center justify-center fixed bottom-4 right-4 shadow-md hover:bg-yellow-300">
+                            <Icon icon="tabler:message" width="28" height="28" style="color: #608C54" />
+                            </button>
+                        </div>
+
+                        <!-- Expanded Floating Chat Modal -->
+                        <div v-if="isshowChatModal" class="fixed bottom-4 right-4 w-[900px] h-[85vh] bg-white rounded-lg shadow-lg flex flex-col border z-50">
+                            <!-- Header -->
+                            <div class="p-4 border-b rounded-sm bg-gray-100 flex justify-between items-center">
+                                <span class="text-xl font-bold text-green-600">Chat</span>
+                                <button @click="closeshowChatModal" class="text-gray-600 text-lg">
+                                    <Icon icon="icon-park-solid:close-one" width="20" height="20" />
+                                </button>
+                            </div>
+
+                            <div class="flex flex-1 overflow-hidden">
+                                <!-- Sidebar (Users List) -->
+                                <div class="w-1/3 bg-white border-r border-gray-300 p-4 flex flex-col">
+                                <div class="flex">
+                                <BaseSearchField placeholder="Search..." class="w-[270px]"></BaseSearchField>
+                                </div>
+                                    <div class="mt-3 flex-1 overflow-auto">
+                                        <div v-for="(chat, index) in chats" :key="index" class="flex items-center p-3 border-b cursor-pointer hover:bg-gray-100 transition duration-200" @click="selectChat(chat)">
+                                            <img :src="chat.avatar || '/default-avatar.png'" class="w-12 h-12 rounded-full border mr-3" alt="Avatar" />
+                                        <div class="flex-1">
+                                            <span class="font-semibold">{{ chat.name }}</span>
+                                            <p class="text-xs text-gray-500 truncate">{{ chat.message }}</p>
+                                        </div>
+                                            <span v-if="chat.unread" class="text-xs bg-red-500 text-white px-2 py-1 rounded-full">
+                                            {{ chat.unread }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Chat Window -->
+                                <div class="w-2/3 flex flex-col">
+                                    <!-- If No Chat is Selected -->
+                                    <div v-if="!selectedChat" class="flex-1 flex items-center justify-center text-gray-400">
+                                        <p class="text-xl">Welcome to Pagsasaka Chat</p>
+                                    </div>
+
+                                    <!-- If a Chat is Selected -->
+                                    <div v-else class="flex flex-col flex-1">
+                                        <div class="p-4 border-b text-lg font-bold flex justify-between items-center bg-gray-100">
+                                            <span>{{ selectedChat.name }}</span>
+                                            <button class="text-gray-600">&#8942;</button>
+                                        </div>
+
+                                        <!-- Messages Area -->
+                                        <div class="flex-1 bg-gray-50 p-4 overflow-auto space-y-4 text-sm">
+                                            <div v-for="(message, index) in chatMessages" :key="index"  class="flex items-start space-x-3"  :class="{'justify-end': message.sender === 'You', 'justify-start': message.sender !== 'You'}">
+
+                                                <!-- Avatar (Only for others' messages) -->
+                                                <div v-if="message.sender !== 'You'" class="w-8 h-8 rounded-full bg-gray-300"></div>
+                                            
+                                                <div class="p-3 rounded-lg shadow-md w-auto max-w-xs" :class="{'bg-green-500 text-white': message.sender === 'You', 'bg-gray-200 text-black': message.sender !== 'You'}">
+                                                    <p class="text-sm font-bold" :class="{'text-white': message.sender === 'You', 'text-green-600': message.sender !== 'You'}"> {{ message.sender }}</p>
+                                                    <p class="text-xs"> {{ message.text }} </p>
+                                                    <p class="text-xs mt-1 text-black">{{ message.time }}</p>
+                                                </div>
+
+                                                <!-- Avatar Placeholder for Sent Messages (Align Right) -->
+                                                <div v-if="message.sender === 'You'" class="w-8 h-8 rounded-full bg-gray-300"></div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Input Area -->
+                                        <div class="p-4 border-t bg-white flex items-center">
+                                        <!-- Upload Image Icon on the Left -->
+                                        <label class="cursor-pointer flex items-center space-x-2 text-gray-600 hover:text-gray-800 mr-2">
+                                        <!-- <Icon icon="ep:picture-filled" width="20" height="20" style="color: #747272" /> -->
+                                        <!-- <input type="file" class="hidden" @change="uploadImage" /> -->
+                                        </label>
+
+                                        <!-- Message Input -->
+                                        <input v-model="newMessage" type="text" placeholder="Type a message here" class="flex-1 p-2 border rounded-md text-sm" @keyup.enter="sendMessage" />
+
+                                        <!-- Send Button -->
+                                        <button class="ml-2 bg-green-600 text-white px-4 py-2 rounded-md transition duration-200 hover:bg-green-700" @click="sendMessage">
+                                        Send
+                                        </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
                         <div class="p-6">
                             <!-- Tabs -->
                             <div class="flex justify-center space-x-4 border-b border-gray-300 bg-[#608C54] rounded-md">
@@ -104,48 +205,103 @@
 
                                         <!-- Order Status -->
                                         <div>
-                                            <!-- Order Status Section -->
                                             <div class="mt-4 flex items-center justify-between">
-                                                <span class="text-sm font-medium text-gray-500">Pending</span>
+                                                <div class="flex items-center gap-3">
+                                                    <h1 class="text-sm">Seller Preparing your Goods:</h1>
+                                                    <span class="text-sm font-medium text-gray-500">Pending</span>
+                                                </div>
                                                 <div class="flex space-x-2">
-                                                    <button class="px-3 py-1 text-sm font-semibold text-green-700 border border-green-600 rounded hover:bg-green-50">
-                                                    Contact Seller
+                                                    <button class="px-3 py-1 text-sm font-semibold text-green-700 border border-green-600 rounded hover:bg-green-50" @click="openshowChatModal">
+                                                        Contact Seller
                                                     </button>
-                                                    <button class="px-3 py-1 text-sm font-semibold text-red-600 border border-red-500 rounded hover:bg-red-50" @click="openshowCancelModalModal">
-                                                    Cancel Order
+                                                    <button class="px-3 py-1 text-sm font-semibold text-red-600 border border-red-500 rounded hover:bg-red-50"
+                                                        @click="openshowCancelModal">
+                                                        Cancel Order
                                                     </button>
                                                 </div>
                                             </div>
 
                                             <!-- Cancel Order Modal -->
-                                            <div v-if="isshowCancelModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-                                                <div class="bg-white p-7 rounded-lg shadow-lg w-[500px] items-center">
+                                            <div v-if="isshowCancelModal"
+                                                class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+                                                <div class="bg-white p-7 rounded-lg shadow-lg w-[500px]">
                                                     <div class="text-end">
-                                                        <button @click="closeshowCancelModalModal" class="text-gray-400 hover:text-gray-600">
+                                                        <button @click="closeshowCancelModal" class="text-gray-400 hover:text-gray-600">
                                                             <Icon icon="icon-park-solid:close-one" width="20" height="20" />
                                                         </button>
                                                     </div>
-                                                    <div class="flex justify-center items-center mb-4">   
+                                                    <div class="flex justify-center items-center mb-4">
                                                         <h3 class="text-xl font-semibold ml-4">Select Cancellation Reason</h3>
                                                     </div>
 
                                                     <!-- Notification Section -->
                                                     <div class="mt-4 p-4 bg-[#608C54] rounded-md flex flex-col items-center text-center">
-                                                        <!-- Bell Icon -->
                                                         <Icon icon="noto:bell" width="50" height="50" class="mb-4" />
-                                                        <!-- Text -->
-                                                        <p class="text-sm text-white"> Please select a cancellation reason. Once your order is successfully canceled, your refund will be processed immediately and may take 10 to 45 minutes to reflect in your account.</p>
+                                                        <p class="text-sm text-white">
+                                                            Please select a cancellation reason. Once your order is successfully canceled, your refund will be processed immediately and may take 10 to 45 minutes to reflect in your account.
+                                                        </p>
                                                     </div>
                                                     <div class="text-sm mt-3">
-                                                        <BaseRadioButton v-for="option in ['Need to change delivery address', 'Seller is not responsive to my inquries', 'Others /Change of mind']" :key="option" :name="'tinIdOption'" :label="option" :value="option" v-model="tinIdSelected"></BaseRadioButton>
+                                                        <BaseRadioButton v-for="option in ['Need to change delivery address', 'Seller is not responsive to my inquiries', 'Others / Change of mind']"
+                                                            :key="option" :name="'tinIdOption'" :label="option" :value="option" v-model="tinIdSelected">
+                                                        </BaseRadioButton>
                                                     </div>
+
                                                     <!-- Buttons -->
                                                     <div class="mt-4 flex justify-end space-x-2">
-                                                        <button @click="closeshowCancelModalModal" class="px-4 py-2 text-sm font-semibold text-gray-700 border border-gray-300 rounded hover:bg-gray-100">
+                                                        <button @click="closeshowCancelModal"
+                                                            class="px-4 py-2 text-sm font-semibold text-gray-700 border border-gray-300 rounded hover:bg-gray-100">
                                                             Close
                                                         </button>
-                                                        <button @click="Save" class="px-4 py-2 text-sm font-semibold text-red-700 bg-red-100 border border-red-500 rounded hover:bg-red-200" >
+                                                        <button @click="Save"
+                                                            class="px-4 py-2 text-sm font-semibold text-red-700 bg-red-100 border border-red-500 rounded hover:bg-red-200">
                                                             Confirm
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Confirmation Modal -->
+                                            <div v-if="isConfirmationModalVisible"
+                                                class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+                                                <div class="bg-white p-7 rounded-lg shadow-lg w-[400px]">
+                                                    <div class="text-end">
+                                                        <button @click="closeConfirmationModal" class="text-gray-400 hover:text-gray-600">
+                                                            <Icon icon="icon-park-solid:close-one" width="20" height="20" />
+                                                        </button>
+                                                    </div>
+                                                    <div class="border rounded-md p-3 shadow">
+                                                        <h2 class="text-center text-lg font-semibold">Refund Details</h2>
+                                                    </div>
+                                                    <div class="mt-4 border rounded-md p-3 shadow space-y-4">
+                                                        <div class="flex items-center gap-3">
+                                                            <img src="https://via.placeholder.com/50" alt="Product" class="w-12 h-12 rounded-md">
+                                                            <div>
+                                                                <p class="font-semibold">Banana</p>
+                                                                <p class="text-sm text-gray-500">Variant: Kg</p>
+                                                            </div>
+                                                            <p class="ml-auto font-semibold">₱820</p>
+                                                        </div>
+
+                                                        <!-- Refund Details -->
+                                                        <div class="mt-3 text-sm text-gray-600 space-y-2">
+                                                            <p><span class="font-semibold">Refund Amount:</span> ₱820</p>
+                                                            <p><span class="font-semibold">Refund to:</span> GCASH</p>
+                                                            <p><span class="font-semibold">Request by:</span> Buyer</p>
+                                                            <p><span class="font-semibold">Request at:</span> 02-31-2024 13:30</p>
+                                                            <p class="flex items-center">
+                                                                <span class="font-semibold">Request ID:</span>
+                                                                <span class="ml-2">27693649M26485</span>
+                                                                <button @click="copyRequestId" class="ml-2 text-blue-600 font-semibold text-xs">COPY</button>
+                                                            </p>
+                                                            <p><span class="font-semibold">Reason:</span> Others / Change of mind</p>
+                                                        </div>
+                                                    </div>
+                                                    <!-- Button -->
+                                                    <div class="mt-4 flex justify-center">
+                                                        <button @click="closeConfirmationModal"
+                                                            class="px-5 py-2 text-sm font-semibold text-white bg-green-600 rounded hover:bg-green-700">
+                                                            Okay
                                                         </button>
                                                     </div>
                                                 </div>
@@ -179,51 +335,103 @@
 
                                         <!-- Order Status -->
                                         <div>
-                                            <!-- Order Status Section -->
                                             <div class="mt-4 flex items-center justify-between">
-                                               <div class="flex items-center gap-3">
-                                                <h1 class="text-sm">Seller Preparing your Goods:</h1>
-                                                <span class="text-sm font-medium text-gray-500">Pending</span>
-                                               </div>
+                                                <div class="flex items-center gap-3">
+                                                    <h1 class="text-sm">Seller Preparing your Goods:</h1>
+                                                    <span class="text-sm font-medium text-gray-500">Pending</span>
+                                                </div>
                                                 <div class="flex space-x-2">
-                                                    <button class="px-3 py-1 text-sm font-semibold text-green-700 border border-green-600 rounded hover:bg-green-50">
-                                                    Contact Seller
+                                                    <button class="px-3 py-1 text-sm font-semibold text-green-700 border border-green-600 rounded hover:bg-green-50" @click="openshowChatModal">
+                                                        Contact Seller
                                                     </button>
-                                                    <button class="px-3 py-1 text-sm font-semibold text-red-600 border border-red-500 rounded hover:bg-red-50" @click="openshowCancelModalModal">
-                                                    Cancel Order
+                                                    <button class="px-3 py-1 text-sm font-semibold text-red-600 border border-red-500 rounded hover:bg-red-50"
+                                                        @click="openshowCancelModal">
+                                                        Cancel Order
                                                     </button>
                                                 </div>
                                             </div>
 
                                             <!-- Cancel Order Modal -->
-                                            <div v-if="isshowCancelModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-                                                <div class="bg-white p-7 rounded-lg shadow-lg w-[500px] items-center">
+                                            <div v-if="isshowCancelModal"
+                                                class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+                                                <div class="bg-white p-7 rounded-lg shadow-lg w-[500px]">
                                                     <div class="text-end">
-                                                        <button @click="closeshowCancelModalModal" class="text-gray-400 hover:text-gray-600">
+                                                        <button @click="closeshowCancelModal" class="text-gray-400 hover:text-gray-600">
                                                             <Icon icon="icon-park-solid:close-one" width="20" height="20" />
                                                         </button>
                                                     </div>
-                                                    <div class="flex justify-center items-center mb-4">   
+                                                    <div class="flex justify-center items-center mb-4">
                                                         <h3 class="text-xl font-semibold ml-4">Select Cancellation Reason</h3>
                                                     </div>
 
                                                     <!-- Notification Section -->
                                                     <div class="mt-4 p-4 bg-[#608C54] rounded-md flex flex-col items-center text-center">
-                                                        <!-- Bell Icon -->
                                                         <Icon icon="noto:bell" width="50" height="50" class="mb-4" />
-                                                        <!-- Text -->
-                                                        <p class="text-sm text-white"> Please select a cancellation reason. Once your order is successfully canceled, your refund will be processed immediately and may take 10 to 45 minutes to reflect in your account.</p>
+                                                        <p class="text-sm text-white">
+                                                            Please select a cancellation reason. Once your order is successfully canceled, your refund will be processed immediately and may take 10 to 45 minutes to reflect in your account.
+                                                        </p>
                                                     </div>
                                                     <div class="text-sm mt-3">
-                                                        <BaseRadioButton v-for="option in ['Need to change delivery address', 'Seller is not responsive to my inquries', 'Others /Change of mind']" :key="option" :name="'tinIdOption'" :label="option" :value="option" v-model="tinIdSelected"></BaseRadioButton>
+                                                        <BaseRadioButton v-for="option in ['Need to change delivery address', 'Seller is not responsive to my inquiries', 'Others / Change of mind']"
+                                                            :key="option" :name="'tinIdOption'" :label="option" :value="option" v-model="tinIdSelected">
+                                                        </BaseRadioButton>
                                                     </div>
+
                                                     <!-- Buttons -->
                                                     <div class="mt-4 flex justify-end space-x-2">
-                                                        <button @click="closeshowCancelModalModal" class="px-4 py-2 text-sm font-semibold text-gray-700 border border-gray-300 rounded hover:bg-gray-100">
+                                                        <button @click="closeshowCancelModal"
+                                                            class="px-4 py-2 text-sm font-semibold text-gray-700 border border-gray-300 rounded hover:bg-gray-100">
                                                             Close
                                                         </button>
-                                                        <button @click="Save" class="px-4 py-2 text-sm font-semibold text-red-700 bg-red-100 border border-red-500 rounded hover:bg-red-200" >
+                                                        <button @click="Save"
+                                                            class="px-4 py-2 text-sm font-semibold text-red-700 bg-red-100 border border-red-500 rounded hover:bg-red-200">
                                                             Confirm
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Confirmation Modal -->
+                                            <div v-if="isConfirmationModalVisible"
+                                                class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+                                                <div class="bg-white p-7 rounded-lg shadow-lg w-[400px]">
+                                                    <div class="text-end">
+                                                        <button @click="closeConfirmationModal" class="text-gray-400 hover:text-gray-600">
+                                                            <Icon icon="icon-park-solid:close-one" width="20" height="20" />
+                                                        </button>
+                                                    </div>
+                                                    <div class="border-2 rounded-md p-3 shadow">
+                                                        <h2 class="text-center text-lg font-semibold">Refund Details</h2>
+                                                    </div>
+                                                    <div class="mt-4 border-4 rounded-md p-3 shadow space-y-4">
+                                                        <div class="flex items-center gap-3">
+                                                            <img src="https://via.placeholder.com/50" alt="Product" class="w-12 h-12 rounded-md">
+                                                            <div>
+                                                                <p class="font-semibold">Banana</p>
+                                                                <p class="text-sm text-gray-500">Variant: Kg</p>
+                                                            </div>
+                                                            <p class="ml-auto font-semibold">₱820</p>
+                                                        </div>
+
+                                                        <!-- Refund Details -->
+                                                        <div class="mt-3 text-sm text-gray-600 space-y-2">
+                                                            <p><span class="font-semibold">Refund Amount:</span> ₱820</p>
+                                                            <p><span class="font-semibold">Refund to:</span> GCASH</p>
+                                                            <p><span class="font-semibold">Request by:</span> Buyer</p>
+                                                            <p><span class="font-semibold">Request at:</span> 02-31-2024 13:30</p>
+                                                            <p class="flex items-center">
+                                                                <span class="font-semibold">Request ID:</span>
+                                                                <span class="ml-2">27693649M26485</span>
+                                                                <button @click="copyRequestId" class="ml-2 text-blue-600 font-semibold text-xs">COPY</button>
+                                                            </p>
+                                                            <p><span class="font-semibold">Reason:</span> Others / Change of mind</p>
+                                                        </div>
+                                                    </div>
+                                                    <!-- Button -->
+                                                    <div class="mt-4 flex justify-center">
+                                                        <button @click="closeConfirmationModal"
+                                                            class="px-5 py-2 text-sm font-semibold text-white bg-green-600 rounded hover:bg-green-700">
+                                                            Okay
                                                         </button>
                                                     </div>
                                                 </div>
@@ -259,12 +467,65 @@
                                                 <span class="text-sm font-medium text-gray-500">To Receive</span>
                                             </div>
                                             <div class="flex space-x-2">
-                                                <button class="px-3 py-1 text-sm font-semibold text-green-700 border border-green-600 rounded hover:bg-green-50">
+                                                <button class="px-3 py-1 text-sm font-semibold text-green-700 border border-green-600 rounded hover:bg-green-50" @click="openshowChatModal">
                                                     Contact Seller
                                                 </button>
-                                                <button class="px-3 py-1 text-sm font-semibold text-red-600 border border-red-500 rounded hover:bg-red-50">
+                                                <button class="px-3 py-1 text-sm font-semibold text-red-600 border border-red-500 rounded hover:bg-red-50" @click="openTrackModal">
                                                     Track Order
                                                 </button>
+                                            </div>
+                                            <div v-if="isshowTrackModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4">
+                                                <div class="bg-white p-7 rounded-lg shadow-lg w-[90vw] max-h-[90vh] flex flex-row relative">
+                                                <button @click="closeTrackModal" class="absolute top-2 right-2 text-gray-400 hover:text-gray-600">
+                                                    <Icon icon="icon-park-solid:close-one" width="20" height="20" />
+                                                </button>
+                                                
+                                                <div class="flex-1 p-6">
+                                                    <div class="flex justify-center items-center mb-4">   
+                                                    <h3 class="text-xl font-semibold ml-4">Tracking Details</h3>
+                                                    </div>
+
+                                                    <div class="p-6 bg-white shadow-lg rounded-lg text-sm h-80 overflow-y-auto">
+                                                        <div class="flex items-center justify-center mb-6">
+                                                            <div class="flex w-full items-center">
+                                                                <div v-for="(step, index) in steps" :key="index" class="flex items-center w-full">
+                                                                    <!-- Step Circle -->
+                                                                    <div class="flex flex-col items-center">
+                                                                        <div class="w-14 h-14 flex items-center justify-center rounded-full border-2" :class="step.completed ? 'bg-green-300 text-white border-green-500' : 'bg-gray-200 text-gray-500 border-gray-300'">
+                                                                            <Icon :icon="step.icon" class="text-xl" />
+                                                                        </div>
+                                                                    <span class="text-xs text-center mt-2" :class="step.completed ? 'text-green-600' : 'text-gray-400'">
+                                                                        {{ step.label }}
+                                                                    </span>
+                                                                    </div>
+
+                                                                    <!-- Connector Line -->
+                                                                    <div v-if="index < steps.length - 1" class="flex-grow h-1" :class="steps[index + 1].completed ? 'bg-green-500' : 'bg-gray-300'"></div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="grid grid-cols-2 gap-2">
+                                                            <div>
+                                                                <ul class="border-l-2 border-gray-300 pl-2">
+                                                                    <li v-for="(status, index) in trackingDetails" :key="index" class="mb-4 relative">
+                                                                        <span class="absolute -left-3 w-2 h-2 rounded-full" :class="status.completed ? 'bg-green-500' : 'bg-gray-400'"></span>
+                                                                        <p class="text-gray-700">{{ status.text }}</p>
+                                                                        <p class="text-xs text-gray-500">{{ status.time }}</p>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="w-1/3 p-4 bg-green-100 rounded-lg flex flex-col items-center">
+                                                    <img :src="imageUrl" alt="Product Image" class="rounded-lg mb-4 w-full" />
+                                                    <h3 class="text-lg font-semibold">{{ product.name }}</h3>
+                                                    <p class="text-gray-600">Variants: {{ product.variant }}</p>
+                                                    <p class="text-lg font-bold mt-2">Qty {{ product.quantity }}</p>
+                                                </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -302,15 +563,137 @@
                                                 <span class="text-sm font-medium text-gray-500">Completed</span>
                                                </div>
                                                 <div class="flex space-x-2">
-                                                    <button class="px-3 py-1 text-sm font-semibold text-green-700 border border-green-600 rounded hover:bg-green-50">
+                                                    <button class="px-3 py-1 text-sm font-semibold text-green-700 border border-green-600 rounded hover:bg-green-50" @click="openRateModal">
                                                         Rate
                                                     </button>
-                                                    <button class="px-3 py-1 text-sm font-semibold text-red-600 border border-red-500 rounded hover:bg-red-50" @click="openshowCancelModalModal">
+                                                    <button class="px-3 py-1 text-sm font-semibold text-red-600 border border-red-500 rounded hover:bg-red-50" @click="openRefundModal">
                                                         Request Return
                                                     </button>
                                                 </div>
                                             </div>
-                                        </div>
+
+                                            <!-- Rate Modal-->
+                                            <div v-if="isshowRateModal" class="fixed inset-0 z-50 bg-black bg-opacity-50 flex justify-center items-center">
+                                                <div class="bg-white rounded-lg p-6 w-96 relative">
+                                                    <!-- Close Button -->
+                                                    <button @click="closeRateModal" class="absolute top-3 right-3 text-gray-400 hover:text-gray-600">
+                                                        <Icon icon="icon-park-solid:close-one" width="20" height="20" />
+                                                    </button>
+
+                                                    <!-- Title -->
+                                                    <h2 class="text-lg font-semibold">Rate Products</h2>
+
+                                                    <!-- Product Info -->
+                                                    <div class="bg-green-700 text-white p-4 rounded-lg flex items-center gap-3 mt-4">
+                                                        <img :src="product" alt="Product Image" class="w-14 h-14 rounded-md" />
+                                                        <div>
+                                                            <p class="font-bold">{{  }}</p>
+                                                            <p class="text-sm">Variants: {{ }}</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="mt-4 flex items-center space-x-2">
+                                                        <p class="font-semibold">Product Quantity</p>
+                                                        <n-rate clearable allow-half />
+                                                        <!-- <div class="flex items-center mt-1">
+                                                        <span v-for="index in 5" :key="index" @click="rateProduct(index)" class="cursor-pointer text-xl">
+                                                            <span v-if="index <= rating" class="text-yellow-500">★</span>
+                                                            <span v-else class="text-gray-300">★</span>
+                                                        </span>
+                                                        </div> -->
+                                                    </div>
+                                                    <textarea v-model="review" class="w-full p-3 mt-3 border rounded-md text-sm" placeholder="Share your thoughts on the product to help other buyers"></textarea>
+                                                    <button @click="submitReview" class="w-full bg-green-700 hover:bg-green-500 text-white py-2 mt-4 rounded-lg font-semibold">Submit</button>
+                                                </div>
+                                            </div>
+
+
+                                            <!-- Refund modal-->
+                                            <div v-if="isshowRefundModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-">
+                                                <div class="bg-white p-5 rounded-lg w-full max-w-3xl h-auto relative flex flex-col md:flex-row gap-6">
+                                                    <button @click="closeRefundModal" class="absolute top-3 right-2 text-gray-400 hover:text-gray-600">
+                                                        <Icon icon="icon-park-solid:close-one" width="20" height="20" />
+                                                    </button>
+                                                    
+                                                    <!-- Left Column (Product Info & Uploads) -->
+                                                    <div class="w-full md:w-1/2 flex flex-col">
+                                                        <div class="flex items-start gap-4">
+                                                            <img :src="productImage" alt="Product Image" class="w-20 h-20 object-cover rounded" />
+                                                            <div>
+                                                                <p class="font-semibold">{{ productName }}</p>
+                                                                <p class="text-sm text-gray-600">Variants: {{ productVariant }}</p>
+                                                            </div>
+                                                        </div>
+
+                                                        <hr class="my-1 border-t-1 border-gray-500" />
+
+                                                        <div class="mt-1">
+                                                            <BaseLabel class=" font-medium">*Reason:</BaseLabel>
+                                                            <BaseSelectField v-model="reason" class="w-full mt-1 p-2 border rounded">
+                                                                <BaseOptionField value="">Select Reason</BaseOptionField>
+                                                                <BaseOptionField value="damaged">Damaged</BaseOptionField>
+                                                                <BaseOptionField value="wrong-item">Wrong Item</BaseOptionField>
+                                                            </BaseSelectField>
+                                                        </div>
+
+                                                        <div class="mt-3">
+                                                        <BaseLabel class=" font-medium">*Description:</BaseLabel>
+                                                        <textarea v-model="description" class="text-xs w-full mt-1 p-2 border rounded resize-none h-20"
+                                                            placeholder="Leave your comment here (optional)" maxlength="2000"></textarea>
+                                                        </div>
+
+                                                        <hr class="my-2 border-t-1 border-gray-500" />
+
+                                                        <div class="mt-2 text-xs text-gray-600">
+                                                            *Clear photo/video showing the parcel received and product(s) contained would be mandatory for this request
+                                                        </div>
+
+                                                        <div class="flex  mt-4 text-sm">
+                                                            <input type="file" @change="uploadFile($event, 'photo')" accept="image/*" />
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- Right Column (Solution & Refund Details) -->
+                                                    <div class="w-full md:w-1/2 flex flex-col">
+                                                        <div class="mt-3">
+                                                            <BaseLabel class=" font-medium">Solution:</BaseLabel>
+                                                            <BaseSelectField v-model="solution" class="w-full mt-1 p-2 border rounded">
+                                                                <BaseOptionField value="">Type</BaseOptionField>
+                                                                <BaseOptionField value="refund">Refund</BaseOptionField>
+                                                                <BaseOptionField value="replacement">Replacement</BaseOptionField>
+                                                            </BaseSelectField>
+                                                        </div>
+
+                                                        <hr class="my-3 border-t-1 border-gray-500" />
+
+                                                        <div class="mt-2 text-xs">
+                                                            <BaseLabel class=" font-medium">Refund amount:</BaseLabel>
+                                                            <p class="text-gray-700">{{ refundAmount }}</p>
+                                                            <hr class="my-1 border-t-1 border-gray-500" />
+                                                            <BaseLabel class="font-medium">Choose return method</BaseLabel>
+                                                            <BaseRadioButton v-for="option in ['Pick Up', 'Drop - off']" :key="option" :name="'tinIdOption'" :label="option" :value="option" v-model="tinIdSelected"></BaseRadioButton>
+                                                        </div>
+
+                                                        <hr class="my-1 border-t-1 border-gray-500" />
+
+                                                        <div class="mt-2">
+                                                            <BaseLabel class=" font-medium">Payment Method:</BaseLabel>
+                                                            <button class="border px-4 py-2 mt-1 text-sm w-full hover:bg-gray-50">Gcash</button>
+                                                        </div>
+
+                                                        <div class="mt-2">
+                                                            <BaseLabel class=" font-medium">Email address</BaseLabel>
+                                                            <BaseInputField type="text" v-model="emailaddress" class="w-full mt-1 p-2 text-sm border rounded" />
+                                                        </div>
+                                                        
+                                                        <div class="mt-3 flex justify-center text-sm">
+                                                            <button @click="submitRefundRequest" class="bg-green-600 text-white border py-2 px-6 rounded hover:bg-green-500">
+                                                                Confirm
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>   
                                     </div>
                                 </div>
 
@@ -349,7 +732,7 @@
                                                     <button class="px-3 py-1 text-sm font-semibold text-green-700 border border-green-600 rounded hover:bg-green-50">
                                                         Buy Again
                                                     </button>
-                                                    <button class="px-3 py-1 text-sm font-semibold text-red-600 border border-red-500 rounded hover:bg-red-50" @click="openshowCancelModalModal">
+                                                    <button class="px-3 py-1 text-sm font-semibold text-red-600 border border-red-500 rounded hover:bg-red-50">
                                                         View Cancellation Details
                                                     </button>
                                                 </div>
@@ -635,6 +1018,7 @@ import BaseLabel from '@/components/Input-Fields/BaseLabel.vue';
 import BaseInputField from '@/components/Input-Fields/BaseInputField.vue';
 import BaseRadioButton from '@/components/Input-Fields/BaseRadioButton.vue';
 import BaseError from '@/components/Input-Fields/BaseError.vue';
+import BaseSearchField from '@/components/Input-Fields/BaseSearchField.vue';
 import Footer from '@/components/Input-Fields/Footer.vue';
 import Loading from '@/components/Alerts/Loading.vue';
 import Toast from '@/components/Alerts/Toast.vue';
@@ -643,6 +1027,8 @@ import { required, email, helpers } from '@vuelidate/validators';
 import { Icon } from '@iconify/vue';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
+import BaseSelectField from '@/components/Input-Fields/BaseSelectField.vue';
+import BaseOptionField from '@/components/Input-Fields/BaseOptionField.vue';
 
 const store = useStore();
 const router = useRouter();
@@ -650,6 +1036,26 @@ const router = useRouter();
 const activeTab = ref('My Profile'); // Default active tab
 const tabs = ref(['My Profile', 'My Purchase','Addresses','Change Password']); // List of tabs
 
+/******************************************************************
+ FUNCTION FOR UPDATE PROFILE
+******************************************************************/
+const profile = ref({
+  name: '',
+  phone: '',
+  email: '',
+  gender: '',
+});
+
+const editingField = ref(null); // Track which field is being edited
+
+const editField = (field) => {
+  editingField.value = field;
+  tempValue.value = profile.value[field]; // Store the current value
+};
+
+/******************************************************************
+ FUNCTION FOR ADDRESS
+******************************************************************/
 // Reactive states
 const address = reactive({
   fullname: "",
@@ -692,6 +1098,76 @@ const openModal = () => {
 const closeModal = () => {
   isAddAddressModalOpen.value = false;
 };
+
+/******************************************************************
+ FUNCTION FOR TRACK YOUR ORDER
+******************************************************************/
+const steps = ref([
+  { label: 'Order Placed', icon: 'mdi:cart', completed: true },
+  { label: 'Order Shipped Out', icon: 'mdi:truck', completed: true },
+  { label: 'Order Receive', icon: 'mdi:package', completed: true },
+  { label: 'Order Complete', icon: 'mdi:check-circle', completed: false }
+]);
+
+const trackingDetails = ref([
+  { text: 'Order Complete', time: '17 Oct 20:14', completed: true },
+  { text: 'Parcel delivered', time: '17 Oct 20:02', completed: true },
+  { text: 'Parcel is out for delivery', time: '17 Oct 19:50', completed: true },
+  { text: 'Delivery driver has been assigned', time: '17 Oct 19:40', completed: true },
+  { text: 'Parcel has arrived at the delivery hub: Majon Delivery Hub', time: '17 Oct 19:14', completed: true },
+  { text: 'Parcel has departed from the sorting facility', time: '17 Oct 17:58', completed: true },
+  { text: 'Parcel is loaded into truck, to leave sorting center soon', time: '17 Oct 17:36', completed: true },
+  { text: 'Parcel has arrived at sorting facility', time: '17 Oct 17:04', completed: true },
+  { text: 'Parcel has been received at drop off point: Malolos Warehouse', time: '17 Oct 16:45', completed: true },
+  { text: 'Seller is preparing to ship your parcel', time: '17 Oct 16:20', completed: true },
+  { text: 'Order is placed', time: '17 Oct 16:14', completed: true }
+]);
+
+const product = ref({
+  name: 'Salad package',
+  variant: '500 Grams',
+  quantity: 2
+});
+
+const imageUrl = ref('https://via.placeholder.com/300'); // Replace with actual image URL
+const isshowTrackModal = ref(false);
+
+const openTrackModal = () => {
+    isshowTrackModal.value = true;
+};
+
+// Function to handle closing modal
+function closeTrackModal() {
+    isshowTrackModal.value = false;
+}
+
+/******************************************************************
+ FUNCTION FOR RATE
+******************************************************************/
+const isshowRateModal = ref(false);
+
+const openRateModal = () => {
+    isshowRateModal.value = true;
+};
+
+// Function to handle closing modal
+function closeRateModal() {
+    isshowRateModal.value = false;
+}
+/******************************************************************
+ FUNCTION FOR REQUEST REFUND
+******************************************************************/
+
+const isshowRefundModal = ref(false);
+
+const openRefundModal = () => {
+    isshowRefundModal.value = true;
+};
+
+// Function to handle closing modal
+function closeRefundModal() {
+    isshowRefundModal.value = false;
+}
 
 /******************************************************************
  FUNCTION FOR UPDATE PRODUCT
@@ -768,17 +1244,90 @@ function hasPagination(tab) {
   return ["To Ship", "To Receive","Completed", "Cancelled","Return Refund"].includes(tab);
 }
 /******************************************************************
- FUNCTION FOR 
+ FUNCTION FOR CANCEL MODAL
 ******************************************************************/
 const isshowCancelModal = ref(false);
+const isConfirmationModalVisible = ref(false);
 
-const openshowCancelModalModal = () => {
+const openshowCancelModal = () => {
     isshowCancelModal.value = true;
 };
 
-// Function to handle closing modal
-function closeshowCancelModalModal() {
+const closeshowCancelModal = () => {
     isshowCancelModal.value = false;
-}
+};
+
+// Function to handle confirmation
+const Save = () => {
+    isshowCancelModal.value = false;
+    isConfirmationModalVisible.value = true; // Show the second modal
+};
+
+// Function to close the confirmation modal
+const closeConfirmationModal = () => {
+    isConfirmationModalVisible.value = false;
+};
+/******************************************************************
+  FUNCTION FOR CHAT
+******************************************************************/
+const isshowChatModal = ref(false);
+const newMessage = ref('');
+const selectedChat = ref(null); // Set to null initially
+
+const openshowChatModal = () => {
+    isshowChatModal.value = true;
+};
+
+const closeshowChatModal = () => {
+    isshowChatModal.value = false;
+};
+
+const chats = ref([
+  { name: 'cpx_mall', message: '[Shop AI Assistant] Hello!', unread: null },
+  { name: 'junseven89', message: 'Unsupported message', unread: 2 },
+  { name: 'trxph', message: 'Hi, thanks for following!', unread: 21 },
+  { name: 'Demasia', message: 'Hello dear friend...', unread: 3 },
+  { name: 'sportsclubph', message: 'Hi, thanks for browsing!', unread: 3 },
+  { name: 'sportsclubph', message: 'Hi, thanks for browsing!', unread: 3 },
+  { name: 'sportsclubph', message: 'Hi, thanks for browsing!', unread: 3 },
+  { name: 'sportsclubph', message: 'Hi, thanks for browsing!', unread: 3 },
+]);
+
+const chatMessages = ref([]);
+
+const selectChat = (chat) => {
+  selectedChat.value = chat;
+  chatMessages.value = [
+    { sender: chat.name, text: 'Hello, how can I assist you?', time: '10:30 AM' },
+    { sender: 'You', text: 'I want to check my order.', time: '10:32 AM' },
+  ];
+};
+
+const sendMessage = () => {
+  if (newMessage.value.trim()) {
+    chatMessages.value.push({
+      sender: 'You',
+      text: newMessage.value,
+      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+    });
+    newMessage.value = '';
+  }
+};
+
+const uploadImage = (event) => {
+  const file = event.target.files[0];
+  if (file) {
+    console.log("Selected file:", file.name);
+    // Handle file upload logic here
+  }
+};
 
 </script>
+<style scoped>
+.group-hover:scale-110 {
+  transform: scale(1.1);
+}
+
+
+
+</style>

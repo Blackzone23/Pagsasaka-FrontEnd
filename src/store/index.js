@@ -6,6 +6,7 @@ import actions from './actions';
 import Administrator from './modules/Administrator';
 import User from './modules/User';
 import Consumer from './modules/Consumer';
+import Rider from './modules/Rider';
 
 
 import { encryptData } from '@/components/composable/CryptoUtility';
@@ -17,7 +18,8 @@ const store = createStore({
     modules: {
         Administrator,
         User,
-        Consumer
+        Consumer,
+        Rider
        
     }
 })
