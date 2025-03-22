@@ -152,7 +152,7 @@
             </div>
 
             <!-- Expanded Floating Chat Modal -->
-            <div v-if="isshowChatModal" class="fixed bottom-4 right-4 2xl:w-[900px] 2xs:w-[500px] 2xl:h-[85vh] 2xs:h-[70vh] bg-white rounded-lg shadow-lg flex flex-col border z-50">
+            <div v-if="isshowChatModal" class="fixed bottom-4 right-4 2xl:w-[900px] 2xs:w-[470px] 2xl:h-[85vh] 2xs:h-[70vh] bg-white rounded-lg shadow-lg flex flex-col border z-50">
                 <!-- Header -->
                 <div class="p-4 border-b rounded-sm bg-gray-100 flex justify-between items-center">
                     <span class="text-xl font-bold text-green-600">Chat</span>
