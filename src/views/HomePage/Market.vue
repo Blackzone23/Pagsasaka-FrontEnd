@@ -164,19 +164,21 @@
               <div class="flex flex-1 overflow-hidden">
                     <!-- Sidebar (Users List) -->
                     <div class="w-1/3 bg-white border-r border-gray-300 p-4 flex flex-col">
-                    <div class="flex">
-                    <BaseSearchField placeholder="Search..." class="2xl:w-[270px] xs:w-[129px] 2xs:w-[115px]  "></BaseSearchField>
-                    </div>
+                        <div class="flex">
+                        <BaseSearchField placeholder="Search..." class="2xl:w-[270px] xs:w-[129px] 2xs:w-[115px]  "></BaseSearchField>
+                        </div>
 
-                        <div class="mt-3 flex-1 overflow-auto ">
-                            <div v-for="(chat, index) in chats" :key="index" class="flex items-center p-3 border-b cursor-pointer hover:bg-gray-100 transition duration-200" @click="selectChat(chat)">
+                        <div class="mt-3 flex-1 overflow-auto">
+                            <div v-for="(chat, index) in chats"  :key="index"  class="flex items-center p-3 border-b cursor-pointer hover:bg-gray-100 transition duration-200"  @click="selectChat(chat)">
                                 <img :src="chat.avatar || '/default-avatar.png'" class="w-12 h-12 rounded-full border mr-3" alt="Avatar" />
-                            <div class="flex-1">
-                                <span class=" font-semibold">{{ chat.name }}</span>
-                                <p class="text-xs text-gray-500 truncate">{{ chat.message }}</p>
-                            </div>
+                                <div class="flex-1">
+                                    <span class="font-semibold">{{ chat.name }}</span>
+                                    <p class="text-xs text-gray-500 truncate hidden sm:block">
+                                        {{ chat.message }}
+                                    </p>
+                                </div>
                                 <span v-if="chat.unread" class="text-xs bg-red-500 text-white px-2 py-1 rounded-full">
-                                {{ chat.unread }}
+                                    {{ chat.unread }}
                                 </span>
                             </div>
                         </div>
