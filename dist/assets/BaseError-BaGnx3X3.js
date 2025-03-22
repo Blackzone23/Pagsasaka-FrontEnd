@@ -1,1 +1,0 @@
-import{_ as t,o as s,c as r,S as o}from"./index-DHMaflv1.js";const c={},a={class:"text-red-500 text-xs mt-1"};function n(e,_){return s(),r("label",a,[o(e.$slots,"default")])}const d=t(c,[["render",n]]);export{d as B};

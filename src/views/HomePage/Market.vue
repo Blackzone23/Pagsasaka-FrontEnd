@@ -152,7 +152,7 @@
             </div>
 
             <!-- Expanded Floating Chat Modal -->
-            <div v-if="isshowChatModal" class="fixed bottom-4 right-4 2xl:w-[900px] xs:w-[450px] 2xs:w-[375px] 2xl:h-[85vh] 2xs:h-[70vh] bg-white rounded-lg shadow-lg flex flex-col border z-50">
+            <div v-if="isshowChatModal" class="fixed bottom-4 right-4 2xl:w-[900px] xs:w-[450px] 2xs:w-[410px] 2xl:h-[85vh] 2xs:h-[70vh] bg-white rounded-lg shadow-lg flex flex-col border z-50">
                 <!-- Header -->
                 <div class="p-4 border-b rounded-sm bg-gray-100 flex justify-between items-center">
                     <span class="text-xl font-bold text-green-600">Chat</span>
@@ -165,7 +165,7 @@
                     <!-- Sidebar (Users List) -->
                     <div class="w-1/3 bg-white border-r border-gray-300 p-4 flex flex-col">
                     <div class="flex">
-                    <BaseSearchField placeholder="Search..." class="2xl:w-[270px] xs:w-[129px] 2xs:w-[100px]  "></BaseSearchField>
+                    <BaseSearchField placeholder="Search..." class="2xl:w-[270px] xs:w-[129px] 2xs:w-[115px]  "></BaseSearchField>
                     </div>
 
                         <div class="mt-3 flex-1 overflow-auto ">

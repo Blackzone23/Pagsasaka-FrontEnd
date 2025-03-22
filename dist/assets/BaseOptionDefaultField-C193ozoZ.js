@@ -1,1 +1,0 @@
-import{_ as o,o as t,c as s,S as c}from"./index-DHMaflv1.js";const n={},a={selected:"",disabled:"",value:""};function r(e,l){return t(),s("option",a,[c(e.$slots,"default")])}const d=o(n,[["render",r]]);export{d as B};
