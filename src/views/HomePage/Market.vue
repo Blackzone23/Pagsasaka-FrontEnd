@@ -3,13 +3,13 @@
         <Market_NavBar/>
         <div class="relative">
             <!-- Background Image -->
-            <img :src="Mfarmer" alt="" class="object-fill h-[500px] 2xl:w-full 2xs:w-full  ">
+            <img :src="Mfarmer" alt="" class="object-fill 2xl:h-[500px] md:h-[300px] 2xs:h-[320px] 2xl:w-full 2xs:w-full  ">
 
         </div>
         <div class="flex items-center space-x-4 2xl:p-8 2xs:p-4 bg-green-900">
                 <!-- Text Section -->
                 <div class="w-1/3">
-                    <h2 class="2xl:text-2xl 2xs:text-md xl:text-2xl lg:text-2xl font-bold text-white">Grab this now</h2>
+                    <h2 class="2xl:text-2xl 2xs:text-sm xl:text-2xl lg:text-2xl font-bold text-white">Grab this now</h2>
                     <p class="mt-2 2xl:text-lg 2xs:text-xs lg:text-lg xl:text-lg text-gray-300">
                         Explore our curated selection of high-quality goods, featuring fresh produce, artisanal items, and everyday essentials, all while supporting local farmers and communities.
                     </p>
@@ -17,20 +17,17 @@
                 </div>
 
             <!-- Image Section -->
-            <n-carousel :slides-per-view="5"  :space-between="10" :loop="false" draggable show-arrow>
-            
-                <!-- Image display -->
-                    <div v-for="productItem in productItemList" :key="productItem.id"  class="border-2 border-[#608C54] relative group w-20 h-20 sm:w-32 xl:w-48 sm:h-32 md:w-32 md:h-32 xl:h-48 lg:w-56 lg:h-56 rounded-lg overflow-hidden">
-                      
-                            <img :src="productItem.product_img[0]" alt="Carousel Image" class="w-full h-full object-cover transition-transform duration-300 transform group-hover:scale-110"/>
-                       
-                        <!-- "View Product" Button -->
-                        <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                            <button @click="goToItemInfo(productItem.id)" class="px-2 py-1 2xl:px-4 md:px-2 2xl:py-2 text-xs sm:text-sm md:text-xs  text-white bg-green-500 rounded-lg">
-                                View Product
-                            </button>
-                        </div>
+            <n-carousel :slides-per-view="slidesPerView" :space-between="10" :loop="false" draggable show-arrow>
+                <div  v-for="productItem in productItemList"  :key="productItem.id"   class="border-2 border-[#608C54] relative group w-20 h-20 sm:w-32 xl:w-48 sm:h-32 md:w-32 md:h-32 xl:h-48 lg:w-56 lg:h-56 2xs:w-56 2xs:h-56 rounded-lg overflow-hidden">
+
+                    <img :src="productItem.product_img[0]"  alt="Carousel Image"  class="w-full h-full object-cover transition-transform duration-300 transform group-hover:scale-110"/>
+
+                    <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <button @click="goToItemInfo(productItem.id)" class="px-2 py-1 2xl:px-4 md:px-2 2xl:py-2 text-xs sm:text-sm md:text-xs text-white bg-green-500 rounded-lg">
+                        View Product
+                        </button>
                     </div>
+                </div>
             </n-carousel>
         </div>
         <div class="bg-gray-100 min-h-screen p-4">
@@ -103,7 +100,7 @@
                                 <h3 class="text-sm font-semibold">{{ moreProduct.product_name }}</h3>
                                 <p class="text-xs font-semibold">{{ moreProduct.description }}</p>
                                 <div class="text-red-500 font-bold text-sm">₱{{ moreProduct.price }}</div>
-                                <n-rate allow-half readonly :default-value="moreProduct.rating" />
+                                <n-rate allow-half readonly :default-value="moreProduct.rating" size="small" />
                                 <div v-if="moreProduct.location" class="text-gray-600 text-xs mt-2">
                                     📍 {{ moreProduct.location }}
                                 </div>
@@ -129,7 +126,7 @@
                 <!-- Content Section -->
                 <div class="flex items-center mb-6">
                     <!-- Image Section -->
-                    <div class="mr-6">
+                    <div class="mr-6 hidden sm:block">
                         <Icon icon="material-symbols-light:delivery-truck-speed" width="112" height="112"  style="color: #12a246" />
                     </div>
                     <!-- Text Section -->
@@ -149,100 +146,100 @@
 
             <div class="p-4">
               <!-- Floating Chat Button -->
-              <button @click="showChatModal = true" class="bg-yellow-100 border-2 border-gray-300 rounded-full p-3 flex items-center justify-center fixed bottom-4 right-4 shadow-md hover:bg-yellow-300">
+              <button @click="openshowChatModal" class="bg-yellow-100 border-2 border-gray-300 rounded-full p-3 flex items-center justify-center fixed bottom-4 right-4 shadow-md hover:bg-yellow-300">
               <Icon icon="tabler:message" width="28" height="28" style="color: #608C54" />
               </button>
             </div>
 
             <!-- Expanded Floating Chat Modal -->
-            <div v-if="showChatModal" class="fixed bottom-4 right-4 w-[900px] h-[85vh] bg-white rounded-lg shadow-lg flex flex-col border z-50">
+            <div v-if="isshowChatModal" class="fixed bottom-4 right-4 2xl:w-[900px] xs:w-[450px] 2xs:w-[375px] 2xl:h-[85vh] 2xs:h-[70vh] bg-white rounded-lg shadow-lg flex flex-col border z-50">
                 <!-- Header -->
                 <div class="p-4 border-b rounded-sm bg-gray-100 flex justify-between items-center">
                     <span class="text-xl font-bold text-green-600">Chat</span>
-                    <button @click="showChatModal = false" class="text-gray-600 text-lg">
+                    <button @click="closeshowChatModal" class="text-gray-600 text-lg">
                         <Icon icon="icon-park-solid:close-one" width="20" height="20" />
                     </button>
                 </div>
 
               <div class="flex flex-1 overflow-hidden">
-                <!-- Sidebar (Users List) -->
-                <div class="w-1/3 bg-white border-r border-gray-300 p-4 flex flex-col">
-                  <div class="flex">
-                  <BaseSearchField placeholder="Search..." class="w-[270px]"></BaseSearchField>
-                  </div>
+                    <!-- Sidebar (Users List) -->
+                    <div class="w-1/3 bg-white border-r border-gray-300 p-4 flex flex-col">
+                    <div class="flex">
+                    <BaseSearchField placeholder="Search..." class="2xl:w-[270px] xs:w-[129px] 2xs:w-[100px]  "></BaseSearchField>
+                    </div>
 
-                    <div class="mt-3 flex-1 overflow-auto">
-                        <div v-for="(chat, index) in chats" :key="index" class="flex items-center p-3 border-b cursor-pointer hover:bg-gray-100 transition duration-200" @click="selectChat(chat)">
-                            <img :src="chat.avatar || '/default-avatar.png'" class="w-12 h-12 rounded-full border mr-3" alt="Avatar" />
-                        <div class="flex-1">
-                            <span class="font-semibold">{{ chat.name }}</span>
-                            <p class="text-xs text-gray-500 truncate">{{ chat.message }}</p>
+                        <div class="mt-3 flex-1 overflow-auto ">
+                            <div v-for="(chat, index) in chats" :key="index" class="flex items-center p-3 border-b cursor-pointer hover:bg-gray-100 transition duration-200" @click="selectChat(chat)">
+                                <img :src="chat.avatar || '/default-avatar.png'" class="w-12 h-12 rounded-full border mr-3" alt="Avatar" />
+                            <div class="flex-1">
+                                <span class=" font-semibold">{{ chat.name }}</span>
+                                <p class="text-xs text-gray-500 truncate">{{ chat.message }}</p>
+                            </div>
+                                <span v-if="chat.unread" class="text-xs bg-red-500 text-white px-2 py-1 rounded-full">
+                                {{ chat.unread }}
+                                </span>
+                            </div>
                         </div>
-                            <span v-if="chat.unread" class="text-xs bg-red-500 text-white px-2 py-1 rounded-full">
-                            {{ chat.unread }}
-                             </span>
+                    </div>
+
+                    <!-- Chat Window -->
+                    <div class="w-full flex flex-col">
+                        <!-- If No Chat is Selected -->
+                        <div v-if="!selectedChat" class="flex-1 flex items-center justify-center text-gray-400">
+                            <p class="text-xl">Welcome to Pagsasaka Chat</p>
+                        </div>
+
+                        <!-- If a Chat is Selected -->
+                        <div v-else class="flex flex-col flex-1">
+                            <div class="p-4 border-b text-lg font-bold flex justify-between items-center bg-gray-100">
+                            <span>{{ selectedChat.name }}</span>
+                            <button class="text-gray-600">&#8942;</button>
+                            </div>
+
+                            <!-- Messages Area -->
+                            <div class="flex-1 bg-gray-50 p-5 overflow-auto space-y-4 2xl:text-sm 2xs:text-xs">
+                            <div v-for="(message, index) in chatMessages" :key="index"  class="flex items-start space-x-3"  :class="{'justify-end': message.sender === 'You', 'justify-start': message.sender !== 'You'}">
+
+                                <!-- Avatar (Only for others' messages) -->
+                                <div v-if="message.sender !== 'You'" class="w-8 h-8 rounded-full bg-gray-300"></div>
+                            
+                                <div class="p-3 rounded-lg shadow-md w-auto max-w-xs" :class="{'bg-green-500 text-white': message.sender === 'You', 'bg-gray-200 text-black': message.sender !== 'You'}">
+                                <p class="text-sm font-bold" :class="{'text-white': message.sender === 'You', 'text-green-600': message.sender !== 'You'}">
+                                {{ message.sender }}
+                                </p>
+                                <p class="text-xs">
+                                {{ message.text }}
+                                </p>
+                                <p class="text-xs mt-1 text-black">
+                                {{ message.time }}
+                                </p>
+                                </div>
+
+                                <!-- Avatar Placeholder for Sent Messages (Align Right) -->
+                                <div v-if="message.sender === 'You'" class="w-8 h-8 rounded-full bg-gray-300"></div>
+                            </div>
+                            </div>
+
+                            <!-- Input Area -->
+                            <div class="p-4 border-t bg-white flex items-center">
+                            <!-- Upload Image Icon on the Left -->
+                            <label class="cursor-pointer flex items-center space-x-2 text-gray-600 hover:text-gray-800 mr-2">
+                            <!-- <Icon icon="ep:picture-filled" width="20" height="20" style="color: #747272" /> -->
+                            <!-- <input type="file" class="hidden" @change="uploadImage" /> -->
+                            </label>
+
+                            <!-- Message Input -->
+                            <input v-model="newMessage" type="text" placeholder="Type a message here" class="flex-1 p-2 border rounded-md text-sm" @keyup.enter="sendMessage" />
+
+                            <!-- Send Button -->
+                            <button class="ml-2 bg-green-600 text-white px-4 py-2 rounded-md transition duration-200 hover:bg-green-700" @click="sendMessage">
+                            Send
+                            </button>
+                            </div>
                         </div>
                     </div>
                 </div>
-
-                <!-- Chat Window -->
-                <div class="w-2/3 flex flex-col">
-                  <!-- If No Chat is Selected -->
-                  <div v-if="!selectedChat" class="flex-1 flex items-center justify-center text-gray-400">
-                    <p class="text-xl">Welcome to Pagsasaka Chat</p>
-                  </div>
-
-                  <!-- If a Chat is Selected -->
-                  <div v-else class="flex flex-col flex-1">
-                    <div class="p-4 border-b text-lg font-bold flex justify-between items-center bg-gray-100">
-                      <span>{{ selectedChat.name }}</span>
-                      <button class="text-gray-600">&#8942;</button>
-                    </div>
-
-                    <!-- Messages Area -->
-                    <div class="flex-1 bg-gray-50 p-4 overflow-auto space-y-4 text-sm">
-                      <div v-for="(message, index) in chatMessages" :key="index"  class="flex items-start space-x-3"  :class="{'justify-end': message.sender === 'You', 'justify-start': message.sender !== 'You'}">
-
-                        <!-- Avatar (Only for others' messages) -->
-                        <div v-if="message.sender !== 'You'" class="w-8 h-8 rounded-full bg-gray-300"></div>
-                      
-                        <div class="p-3 rounded-lg shadow-md w-auto max-w-xs" :class="{'bg-green-500 text-white': message.sender === 'You', 'bg-gray-200 text-black': message.sender !== 'You'}">
-                        <p class="text-sm font-bold" :class="{'text-white': message.sender === 'You', 'text-green-600': message.sender !== 'You'}">
-                          {{ message.sender }}
-                        </p>
-                        <p class="text-xs">
-                          {{ message.text }}
-                        </p>
-                        <p class="text-xs mt-1 text-black">
-                          {{ message.time }}
-                        </p>
-                        </div>
-
-                        <!-- Avatar Placeholder for Sent Messages (Align Right) -->
-                        <div v-if="message.sender === 'You'" class="w-8 h-8 rounded-full bg-gray-300"></div>
-                      </div>
-                    </div>
-
-                    <!-- Input Area -->
-                    <div class="p-4 border-t bg-white flex items-center">
-                      <!-- Upload Image Icon on the Left -->
-                      <label class="cursor-pointer flex items-center space-x-2 text-gray-600 hover:text-gray-800 mr-2">
-                      <!-- <Icon icon="ep:picture-filled" width="20" height="20" style="color: #747272" /> -->
-                      <!-- <input type="file" class="hidden" @change="uploadImage" /> -->
-                      </label>
-
-                      <!-- Message Input -->
-                      <input v-model="newMessage" type="text" placeholder="Type a message here" class="flex-1 p-2 border rounded-md text-sm" @keyup.enter="sendMessage" />
-
-                      <!-- Send Button -->
-                      <button class="ml-2 bg-green-600 text-white px-4 py-2 rounded-md transition duration-200 hover:bg-green-700" @click="sendMessage">
-                      Send
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-			</div>
+            </div>
         </div>
         <Footer/>
     </div>
@@ -261,6 +258,19 @@ import { required, helpers } from "@vuelidate/validators";
 import { Icon } from "@iconify/vue";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
+import { useWindowSize } from "@vueuse/core";
+
+const { width } = useWindowSize();
+
+const slidesPerView = computed(() => {
+  if (width.value >= 1536) return 5; // 2xl (>= 1536px) → Show 5 images
+  if (width.value >= 1280) return 4; // xl (>= 1280px) → Show 4 images
+  if (width.value >= 1024) return 3; // lg (>= 1024px) → Show 3 images
+  if (width.value >= 768) return 4;  // md (>= 768px) → Show 2 images
+  if (width.value >= 640) return 3;  // sm (>= 640px) → Show 2 images
+  if (width.value >= 480) return 1;  // sm (>= 640px) → Show 2 images
+  return 1; // 2xs (< 640px) → Show 1 image
+});
 
 
 const store = useStore();
@@ -406,9 +416,17 @@ const postProduct = () => {
 /******************************************************************
   FUNCTION FOR CHAT
 ******************************************************************/
-const showChatModal = ref(false);
+const isshowChatModal = ref(false);
 const newMessage = ref('');
 const selectedChat = ref(null); // Set to null initially
+
+const openshowChatModal = () => {
+    isshowChatModal.value = true;
+};
+
+const closeshowChatModal = () => {
+    isshowChatModal.value = false;
+};
 
 const chats = ref([
   { name: 'cpx_mall', message: '[Shop AI Assistant] Hello!', unread: null },

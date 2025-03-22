@@ -1,1 +1,0 @@
-import{_ as o,o as t,c as s,M as c}from"./index-BTxKm87V.js";const n={},a={selected:"",disabled:"",value:""};function r(e,l){return t(),s("option",a,[c(e.$slots,"default")])}const d=o(n,[["render",r]]);export{d as B};

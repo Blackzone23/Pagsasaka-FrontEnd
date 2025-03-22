@@ -8,12 +8,12 @@
             <div class="h-full flex items-center justify-center border-2 border-gray-300 rounded-lg p-6 shadow-lg">
                 <!-- Main Container -->
                 <div class="w-full max-w-5xl flex shadow-lg rounded-lg overflow-hidden">
-                    <div>
+                    <div class="hidden 2xl:block">
                         <img :src="Farmer6" alt="Logo2" class="h-full mb-2">
                     </div>
 
                     <!-- Right Side (Login Form) -->
-                    <div class="2xl:w-1/2 2xs:w-[700px] 2xl:p-8 2xs:p-1 md:p-4 bg-white border-gray-200 border-2">
+                    <div class="2xl:w-1/2 2xs:w-[700px] lg:w-[1000px] 2xl:p-8 2xs:p-6 md:p-4 lg:p-8 bg-white border-gray-200 border-2">
                         <h2 class="2xl:text-2xl 2xs:text-lg font-semibold text-[#608C54] mb-6">Login</h2>
 
                             <!-- Email -->
@@ -28,7 +28,7 @@
                                 <BaseLabel>Password</BaseLabel>
                                 <div class="relative">
                                     <BaseInputField :type="showPassword ? 'text' : 'password'" v-model="formData.password"  class="w-full" placeholder="Password"></BaseInputField>
-                                        <button  type="button" @click="togglePasswordVisibility" class="absolute right-3 top-5 transform -translate-y-1/2 items-center justify-center cursor-pointer">
+                                        <button  type="button" @click="togglePasswordVisibility" class="absolute right-3 2xl:top-5 md:top-6 2xs:top-6 lg:top-5  transform -translate-y-1/2 items-center justify-center cursor-pointer">
                                             <Icon :icon="showPassword ? 'mdi:eye-off' : 'mdi:eye'" class="text-gray-400" />
                                         </button>
                                     <BaseError v-if="$validateLoginRules.password.$error">{{ $validateLoginRules.password.$errors[0].$message }}</BaseError>

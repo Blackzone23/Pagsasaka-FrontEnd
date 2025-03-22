@@ -54,15 +54,38 @@
             </div>
         
             <!-- Dropdown Menu -->
-            <div v-if="isMenuOpen" class="bg-[#608C54] md:hidden flex flex-col space-y-3 px-4 py-2 text-sm">
+            <div v-if="isMenuOpen" class="bg-[#608C54] md:hidden sm:show flex flex-col space-y-3 px-3 py-2 text-sm">
                     <a href="/about" class="hover:underline">About</a>  
                     <span>Follow us on:</span>
                 <div class="flex space-x-3">
                     <a href="#"><Icon icon="ic:twotone-facebook" width="20" height="20" style="color: white" /></a>
                     <a href="#"><Icon icon="mage:instagram-circle" width="20" height="20" style="color: white" /></a>
                 </div>
-                <a href="#" class="hover:underline"><Icon icon="mdi:bell" width="24" height="24"  style="color: #fff"/>  Notifications</a>
-                <a href="#" class="hover:underline"><Icon icon="mingcute:question-line" width="24" height="24"  style="color: #fff" />Help</a>
+                <div class="flex items-center space-x-3">
+                    <a href="#" class="flex items-center space-x-2 hover:underline text-white">
+                        <Icon icon="mdi:bell" width="20" height="20" style="color: #fff"/> 
+                        <span>Notifications</span>
+                    </a>
+                    <a href="#" class="flex items-center space-x-2 hover:underline text-white">
+                        <Icon icon="mingcute:question-line" width="20" height="20" style="color: #fff" />
+                        <span>Help</span>
+                    </a>
+                </div>
+                
+                 <!-- User profile section -->
+                 <div v-if="isLoggedIn" class="flex flex-col space-y-3">
+                        <a href="/profile" class="flex items-center space-x-2">
+                            <img :src="userProfilePic" alt="User Profile" class="w-8 h-8 rounded-full cursor-pointer" />
+                            <span class="cursor-pointer">{{ userName }}</span>
+                        </a>
+                        <a href="#" class="hover:underline text-sm" @click.prevent="logout()">Logout</a>
+                    </div>
+
+                    <!-- Guest links -->
+                    <div v-else class="space-x-4">
+                        <a href="/signup" class="hover:underline">Sign up</a>
+                        <a href="/login" class="hover:underline">Login</a>
+                    </div>
             </div>
         </div>
 

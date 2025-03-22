@@ -1,0 +1,1 @@
+import{_ as t,o,c as s,S as c}from"./index-DHMaflv1.js";const n={},a={class:"fontBodySize text-[#608C54] tracking-wide block mt-6 mb-2 font-sm"};function r(e,l){return o(),s("label",a,[c(e.$slots,"default")])}const f=t(n,[["render",r]]);export{f as B};

@@ -18,7 +18,7 @@
                 <!-- Bottom Section: Image -->
                 <div class="flex items-center justify-center ">
                     <div class="w-full max-w-4xl">
-                        <img :src="Farmer2"  alt="Farmer" class="mx-auto 2xl:w-full 2xs:w-[200px] md:w-[80px] sm:w-full 2xl:h-[350px] 2xs:h-[170px] sm:h-[300px] object-cover rounded-lg shadow-lg">
+                        <img :src="Farmer2"  alt="Farmer" class="mx-auto 2xl:w-full 2xs:w-[350px] lg:w-[650px] md:w-[550px] sm:w-[550px] 2xl:h-[350px] 2xs:h-[200px] sm:h-[300px] object-cover rounded-lg shadow-lg">
                     </div>
                 </div>
             </div>
