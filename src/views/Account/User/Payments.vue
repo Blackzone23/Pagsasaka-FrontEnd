@@ -1,4 +1,8 @@
 <template>
+    <!-- Loading screen and toast message -->
+    <Loading v-if="showLoading" class="loading"></Loading>
+    <Toast></Toast>
+    
     <div class="w-full">
       <!-- Header -->
       <header class="bg-[#608C54] shadow p-4 flex justify-between items-center text-white">
@@ -65,6 +69,8 @@
 </template>
 
 <script setup>
+import Loading from '@/components/Alerts/Loading.vue'
+import Toast from '@/components/Alerts/Toast.vue'
 import BaseSearchField from "@/components/Input-Fields/BaseSearchField.vue";
 import { ref, computed, reactive, onMounted } from "vue";
 import { useVuelidate } from "@vuelidate/core";
@@ -75,6 +81,7 @@ import { useStore } from "vuex";
 
 const store = useStore();
 const router = useRouter();
+const showLoading = computed(() => store.state.showLoading.state);
 
 const transactions = ref([
   { date: '10/19/2024', invoiceId: 'T00000000001', paymentMethod: 'GCash', gcashLastFour: '2212', amount: '₱124.00' },

@@ -45,7 +45,7 @@
 
                 <!-- Add New Product Modal -->
                 <div v-if="isAddProductModalOpen" class="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-40">
-                    <div class="bg-white rounded-lg 2xl:w-[800px] 2xs:w-[600px] md:w-[700px] p-4 border-4 border-gray-300 flex flex-col 2xs:max-h-screen 2xs:overflow-y-auto">
+                    <div class="bg-white rounded-lg 2xl:w-[900px] 2xs:w-[400px] md:w-[700px] p-4 border-4 border-gray-300 flex flex-col 2xl:h-[650px] 2xs:h-[500px] 2xs:overflow-y-auto">
                         <!-- Header -->
                         <div class="flex justify-between items-center">
                             <BaseLabel class="font-bold text-2xl">Add New Product</BaseLabel>
@@ -71,7 +71,7 @@
                                 <BaseError v-if="$validateAddCategoryRules.product_name.$error">{{ $validateAddCategoryRules.product_name.$errors[0].$message }}</BaseError>
 
                                 <BaseLabel class="font-semibold">Description:</BaseLabel>
-                                <BaseInputField v-model="productData.description" class="rounded-lg border-gray-500 shadow-md pb-20" placeholder="Type the description" />
+                                <textarea v-model="productData.description"  class="rounded-lg text-sm border-gray-500 shadow-md p-3 w-full h-28 resize-none" placeholder="Type the description"></textarea>
                                 <BaseError v-if="$validateAddCategoryRules.description.$error">{{ $validateAddCategoryRules.description.$errors[0].$message }}</BaseError>
 
                                 <!-- Price & Stocks -->
@@ -149,7 +149,7 @@
 
                 <!-- Update Product Modal -->
                 <div v-if="isUpdateProductModalOpen" class="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-40">
-                    <div class="bg-white rounded-lg 2xl:w-[800px] 2xs:w-[600px] md:w-[700px] p-4 border-4 border-gray-300 flex flex-col 2xs:max-h-screen 2xs:overflow-y-auto">
+                    <div class="bg-white rounded-lg 2xl:w-[900px] 2xs:w-[400px] md:w-[700px] p-4 border-4 border-gray-300 flex flex-col 2xl:h-[650px] 2xs:h-[500px] 2xs:overflow-y-auto">
                         <!-- Header -->
                         <div class="flex justify-between items-center">
                             <BaseLabel class="font-bold text-2xl">Update Product</BaseLabel>
@@ -179,7 +179,7 @@
                                 </BaseError>
 
                                 <BaseLabel class="font-semibold">Description:</BaseLabel>
-                                <BaseInputField v-model="updatedProduct.description" class="rounded-lg border-gray-500 shadow-md pb-20" placeholder="Type the description" />
+                                <textarea v-model="updatedProduct.description"  class="rounded-lg text-sm border-gray-500 shadow-md p-3 w-full h-28 resize-none" placeholder="Type the description"></textarea>
                                 <BaseError v-if="$validateUpdateProductRules.description.$error">
                                     {{ $validateUpdateProductRules.description.$errors[0].$message }}
                                 </BaseError>
