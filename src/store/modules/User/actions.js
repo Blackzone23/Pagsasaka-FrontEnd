@@ -61,28 +61,7 @@ export default {
         })
     },
 
-    //API for get product list
-    // async getProductList({commit}) {
-    //     return await axiosClient.post('product/account')
-    //     .then((response) => {
-    //         commit('setProductListData', response.data.products);
-    //         return response.data.products;
-    //     })
-    //     .catch((error) => {
-    //         commit('toggleLoader', false, { root: true })
-    //         if(error.response && error.response.data) {
-    //             const errorMessage = error.response.data.message;
-    //             setTimeout(() => {
-    //                 commit('showToast', { showToast: true, toastMessage: errorMessage, toastType: 'error'}, { root: true });
-    //             }, toastDelay);
-    
-    //             setTimeout(() => {
-    //                 commit('showToast', { showToast: false, toastMessage: '', toastType: 'default'}, { root: true });
-    //             }, toastDuration);
-    //         }   
-    //     })
-    // },
-
+    //API Farmer Product list
     async getProductList({commit}, { currentPage, search }) {
         commit('toggleLoader', true, { root: true })
         return await axiosClient.post('product/account', { search, page:currentPage } )
@@ -174,6 +153,7 @@ export default {
 /******************************************************************
  API FOR SHIPMENT
 ******************************************************************/
+
     //API for get order list
     async getOrderList({commit}) {
         return await axiosClient.get('getOrders')
@@ -240,6 +220,7 @@ export default {
         })
     },
 
+    //API Update status
     async updateStatus({commit}, statusData) {
         commit('toggleLoader', true, { root: true })
         return await axiosClient.post(`updateOrderStatus/${statusData.id}`, statusData)

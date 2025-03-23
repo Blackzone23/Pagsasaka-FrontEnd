@@ -13,7 +13,5 @@ export default {
         data:[],
     },
 
-    // addItem: {
-    //     data:[],
-    // },
+
 }

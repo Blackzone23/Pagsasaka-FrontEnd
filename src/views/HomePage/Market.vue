@@ -3,33 +3,38 @@
         <Market_NavBar/>
         <div class="relative">
             <!-- Background Image -->
-            <img :src="Mfarmer" alt="" class="object-fill 2xl:h-[500px] md:h-[300px] 2xs:h-[320px] 2xl:w-full 2xs:w-full  ">
+            <img :src="Mfarmer" alt="" class="object-fill 2xl:h-[500px] w-full  ">
 
         </div>
-        <div class="flex items-center space-x-4 2xl:p-8 2xs:p-4 bg-green-900">
-                <!-- Text Section -->
-                <div class="w-1/3">
-                    <h2 class="2xl:text-2xl 2xs:text-sm xl:text-2xl lg:text-2xl font-bold text-white">Grab this now</h2>
-                    <p class="mt-2 2xl:text-lg 2xs:text-xs lg:text-lg xl:text-lg text-gray-300">
-                        Explore our curated selection of high-quality goods, featuring fresh produce, artisanal items, and everyday essentials, all while supporting local farmers and communities.
-                    </p>
-                    
-                </div>
+        <div class="flex flex-col items-center space-y-4 2xl:p-8 2xs:p-4 bg-green-800">
+            <!-- Text Section -->
+            <div class="text-center w-full">
+                <h2 class="2xl:text-2xl 2xs:text-sm xl:text-2xl lg:text-2xl font-bold text-white">Grab this now</h2>
+                <p class="mt-2 2xl:text-lg 2xs:text-xs lg:text-lg xl:text-lg text-gray-300 max-w-3xl mx-auto">
+                    Explore our curated selection of high-quality goods, featuring fresh produce, artisanal items, and everyday essentials, all while supporting local farmers and communities.
+                </p>
+            </div>
 
             <!-- Image Section -->
-            <n-carousel :slides-per-view="slidesPerView" :space-between="10" :loop="false" draggable show-arrow>
-                <div  v-for="productItem in productItemList"  :key="productItem.id"   class="border-2 border-[#608C54] relative group w-20 h-20 sm:w-32 xl:w-48 sm:h-32 md:w-32 md:h-32 xl:h-48 lg:w-56 lg:h-56 2xs:w-56 2xs:h-56 rounded-lg overflow-hidden">
+            <div class="flex justify-center 2xs:w-full">
+                <n-carousel :slides-per-view="slidesPerView" :space-between="20" :loop="false" draggable show-arrow>
+                    <div v-for="productItem in productItemList" :key="productItem.id" 
+                        class="border-2 border-[#608C54] relative group w-20 h-20 sm:w-32 xl:w-48 sm:h-32 md:w-32 md:h-32 xl:h-48 lg:w-56 lg:h-56 2xs:w-56 2xs:h-56 rounded-lg overflow-hidden mx-auto">
+                        
+                        <img :src="productItem.product_img[0]" alt="Carousel Image" 
+                            class="w-full h-full object-cover transition-transform duration-300 transform group-hover:scale-110" />
 
-                    <img :src="productItem.product_img[0]"  alt="Carousel Image"  class="w-full h-full object-cover transition-transform duration-300 transform group-hover:scale-110"/>
-
-                    <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        <button @click="goToItemInfo(productItem.id)" class="px-2 py-1 2xl:px-4 md:px-2 2xl:py-2 text-xs sm:text-sm md:text-xs text-white bg-green-500 rounded-lg">
-                        View Product
-                        </button>
+                        <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            <button @click="goToItemInfo(productItem.id)" 
+                                class="px-2 py-1 2xl:px-4 md:px-2 2xl:py-2 text-xs sm:text-sm md:text-xs text-white bg-green-500 rounded-lg">
+                                View Product
+                            </button>
+                        </div>
                     </div>
-                </div>
-            </n-carousel>
+                </n-carousel>
+            </div>
         </div>
+
         <div class="bg-gray-100 min-h-screen p-4">
             <!-- Main Layout -->
             <div class="flex flex-col md:flex-row">
@@ -85,13 +90,17 @@
                 <!-- Main Content -->
                 <div class="p-4 mt-12">
                     <!-- Product Grid -->
-                    <div class="grid grid-cols-3 gap-4">
-                        <div v-for="moreProduct in moreProductList.slice(0, 8)" :key="moreProduct.id"  class="relative border rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow group">
-                            <img :src="moreProduct.product_img[0]"  alt="Product Image"  class="w-full h-40 object-cover" />
+                    <div class="grid grid-cols-2 2xs:grid-cols-2 sm:grid-cols-3 gap-4">
+                        <div v-for="moreProduct in moreProductList.slice(0, 8)" :key="moreProduct.id"  
+                            class="relative border rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow group">
+                            
+                            <img :src="moreProduct.product_img[0]"  alt="Product Image"  
+                                class="w-full h-40 object-cover" />
 
                             <!-- Hover Overlay -->
                             <div class="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity">
-                              <button @click="goToItemInfo(moreProduct.id)" class="px-2 py-1 2xl:px-4 md:px-2 2xl:py-2 text-xs sm:text-sm md:text-xs  text-white bg-green-500 rounded-lg">
+                                <button @click="goToItemInfo(moreProduct.id)" 
+                                    class="px-2 py-1 2xl:px-4 md:px-2 2xl:py-2 text-xs sm:text-sm md:text-xs text-white bg-green-500 rounded-lg">
                                     View Product
                                 </button>
                             </div>
@@ -108,12 +117,15 @@
                         </div>
                     </div>
 
-
                     <!-- Pagination -->
                     <div class="mt-10 mr-4 flex justify-center text-sm">
-                        <button type="button" class="py-2 px-4 bg-gray-100 rounded-tl-lg rounded-bl-lg hover:bg-gray-200 text-gray-600" @click="goToPreviousPage" :disabled="currentPage === 1">Previous</button>
-                        <span class=" py-2 px-4 bg-gray-100 flex text-sm items-center border-l border-r border-gray-300"> {{ currentPage }} of {{ totalPages }}</span>
-                        <button type="button" class="py-2 px-4 bg-gray-100 rounded-tr-lg rounded-br-lg hover:bg-gray-200 text-gray-600" @click="goToNextPage" :disabled="currentPage === totalPages">Next</button>
+                        <button type="button" class="py-2 px-4 bg-gray-100 rounded-tl-lg rounded-bl-lg hover:bg-gray-200 text-gray-600" 
+                            @click="goToPreviousPage" :disabled="currentPage === 1">Previous</button>
+                        <span class="py-2 px-4 bg-gray-100 flex text-sm items-center border-l border-r border-gray-300"> 
+                            {{ currentPage }} of {{ totalPages }}
+                        </span>
+                        <button type="button" class="py-2 px-4 bg-gray-100 rounded-tr-lg rounded-br-lg hover:bg-gray-200 text-gray-600" 
+                            @click="goToNextPage" :disabled="currentPage === totalPages">Next</button>
                     </div>
                 </div>
             </div>

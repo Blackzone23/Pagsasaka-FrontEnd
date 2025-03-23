@@ -31,7 +31,7 @@
                             <BaseInputField v-model="signdata.password"  :type="showPassword ? 'text' : 'password'"  placeholder="Enter Your Password" ></BaseInputField>
 
                             <!-- Password visibility toggle icon -->
-                            <button  type="button"  class="absolute right-3 top-12 transform -translate-y-1/2 text-gray-500 items-center justify-center" @click="togglePasswordVisibility">
+                            <button  type="button"  class="absolute right-3 2xl:top-12 2xs:top-14 lg:top-12 md:top-13 transform -translate-y-1/2 text-gray-500 items-center justify-center" @click="togglePasswordVisibility">
                                 <Icon :icon="showPassword ? 'ic:twotone-visibility-off' : 'ic:twotone-visibility'" />
                             </button>
                             <BaseError v-if="$validatesignuprules.password.$error">{{ $validatesignuprules.password.$errors[0].$message }}</BaseError>
@@ -41,7 +41,7 @@
                             <BaseLabel class="font-semibold">Re-enter password</BaseLabel>
                             <BaseInputField v-model="signdata.password_confirmation" :type="reshowPassword ? 'text' : 'password'"  placeholder="Re-enter password"></BaseInputField>
                             <!-- Password visibility toggle icon -->
-                            <button  type="button"  class="absolute right-3 top-12 transform -translate-y-1/2 text-gray-500 items-center justify-center" @click="retogglePasswordVisibility">
+                            <button  type="button"  class="absolute right-3 2xl:top-12 2xs:top-14 lg:top-12 md:top-13 transform -translate-y-1/2 text-gray-500 items-center justify-center" @click="retogglePasswordVisibility">
                                     <Icon :icon="reshowPassword ? 'ic:twotone-visibility-off' : 'ic:twotone-visibility'" />
                                 </button>
                             <BaseError v-if="$validatesignuprules.password_confirmation.$error">{{ $validatesignuprules.password_confirmation.$errors[0].$message }}</BaseError>

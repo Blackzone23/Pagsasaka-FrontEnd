@@ -56,6 +56,7 @@ export default {
         state.searchTerm = searchTerm;
      },
 
+     //PAGINATION
      setCurrentPage(state, currentPage) {
         state.currentPage = currentPage;
     },

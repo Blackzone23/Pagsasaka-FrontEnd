@@ -46,7 +46,7 @@
                             <div class="space-y-4 mb-6">
                             <BaseInputField placeholder="Name" />
                             <BaseInputField placeholder="Email" />
-                            <BaseInputField class="h-24" placeholder="Message" />
+                            <textarea class="h-24 w-full" placeholder="Message"></textarea>
                             </div>
 
                             <!-- Submit Button -->

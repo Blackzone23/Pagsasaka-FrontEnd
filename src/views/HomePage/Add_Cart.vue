@@ -73,7 +73,6 @@
             <a href="/checkout" class="bg-[#608C54] text-white px-6 py-2 rounded-lg block md:inline-block">Check Out</a>
         </div>
     </div>
-
   <Footer />
 </template>
 

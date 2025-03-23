@@ -6,6 +6,7 @@ export default {
 /******************************************************************
  API FOR LOGIN
 ******************************************************************/
+
 // API for login
 async login ({commit}, formData ) {
     commit('toggleLoader', true, { root: true })

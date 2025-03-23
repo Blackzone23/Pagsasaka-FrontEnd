@@ -7,7 +7,7 @@
         <div class="flex-1 flex flex-col">
               <!-- Header -->
             <header class="bg-[#608C54] shadow p-4 flex justify-between items-center text-white">
-                <h1 class="text-xl font-bold">List of Product</h1>
+                <h1 class="text-lg sm:text-xl 2xl:ml-0 md:ml-10 2xs:ml-10 font-bold">List of Products</h1>
                 <div class="flex items-center space-x-4">
                     <div class="flex space-x-2">
                     <!-- Settings Icon with Dropdown -->
@@ -44,15 +44,19 @@
                 </div>
 
                 <!-- Add New Product Modal -->
-                <div v-if="isAddProductModalOpen" class="fixed inset-0 flex items-center justify-center">
-                    <div class="bg-white rounded-lg w-[800px] p-6 border-4 border-gray-300 flex">
-                        <div class="w-1/2 pr-4 mt-3">
-                            <div class="flex items-center justify-between">
-                                <BaseLabel class="font-bold text-2xl">Add New Product</BaseLabel>
-                            </div>
+                <div v-if="isAddProductModalOpen" class="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-40">
+                    <div class="bg-white rounded-lg 2xl:w-[800px] 2xs:w-[600px] md:w-[700px] p-4 border-4 border-gray-300 flex flex-col 2xs:max-h-screen 2xs:overflow-y-auto">
+                        <!-- Header -->
+                        <div class="flex justify-between items-center">
+                            <BaseLabel class="font-bold text-2xl">Add New Product</BaseLabel>
+                            <button class="text-gray-500 hover:text-gray-700" @click="closeAddProductModal">
+                                <Icon icon="fontisto:close" width="1.2rem" height="1.2rem" style="color: #5D5F5D" />
+                            </button>
+                        </div>
 
-                            <!-- Form Fields -->
-                            <div class="flex flex-col mt-2  ">
+                        <div class="flex flex-col md:flex-row mt-4 gap-6">
+                            <!-- Left Section: Form Fields -->
+                            <div class="md:w-1/2 space-y-4">
                                 <BaseLabel class="font-semibold">Product Type:</BaseLabel>
                                 <BaseSelectField v-model="productData.category_id">
                                     <BaseOptionDefaultField>Select Category</BaseOptionDefaultField>
@@ -61,211 +65,204 @@
                                     </BaseOptionField>
                                 </BaseSelectField>
                                 <BaseError v-if="$validateAddCategoryRules.category_id.$error">{{ $validateAddCategoryRules.category_id.$errors[0].$message }}</BaseError>
-                                
 
-                                <BaseLabel class="mt-4 font-semibold">Product Name:</BaseLabel>
+                                <BaseLabel class="font-semibold">Product Name:</BaseLabel>
                                 <BaseInputField v-model="productData.product_name" placeholder="Ex. Sibuyas" />
                                 <BaseError v-if="$validateAddCategoryRules.product_name.$error">{{ $validateAddCategoryRules.product_name.$errors[0].$message }}</BaseError>
 
-                                <BaseLabel class="mt-4 font-semibold">Description</BaseLabel>
-                                <BaseInputField v-model="productData.description" class="rounded-lg border-gray-500 shadow-md pb-20" placeholder="Type the description"> </BaseInputField>
+                                <BaseLabel class="font-semibold">Description:</BaseLabel>
+                                <BaseInputField v-model="productData.description" class="rounded-lg border-gray-500 shadow-md pb-20" placeholder="Type the description" />
                                 <BaseError v-if="$validateAddCategoryRules.description.$error">{{ $validateAddCategoryRules.description.$errors[0].$message }}</BaseError>
-                            </div>
-                            <div class="flex space-x-4 mt-2">
-                                <!-- Amount Field -->
-                                <div class="flex flex-col">
-                                    <BaseLabel class="text-sm font-semibold">Price:</BaseLabel>
-                                    <div class="relative">
-                                        <!-- Input Field with Peso Sign -->
-                                        <div class="flex items-center">
-                                            <span class="absolute left-2 text-gray-500 flex items-center">
-                                            <Icon icon="fa6-solid:peso-sign" width="16" height="16" style="color: #000" />
-                                            </span>
-                                            <BaseInputField v-model="productData.price"  class="pl-8 border border-gray-400 rounded-md w-32 h-10 text-center focus:outline-none focus:ring-1 focus:ring-teal-500"  @input="validateNumber" />
-                                        </div>
 
-                                        <!-- Validation Error Below -->
-                                        <BaseError v-if="$validateAddCategoryRules.price.$error" class="mt-1 text-sm text-red-600"> {{ $validateAddCategoryRules.price.$errors[0].$message }}</BaseError>
+                                <!-- Price & Stocks -->
+                                <div class="flex flex-col 2xs:flex-col md:flex-row md:space-x-4">
+                                    <div class="flex flex-col">
+                                        <BaseLabel class="text-sm font-semibold">Price:</BaseLabel>
+                                        <div class="relative"> 
+                                            <span class="absolute left-1 2xl:top-3 md:top-4 lg:top-2 2xs:top-4 xs:top-4 text-gray-500 flex items-center">
+                                                <Icon icon="fa6-solid:peso-sign" width="16" height="16" style="color: #000" />
+                                            </span>
+                                            <BaseInputField v-model="productData.price" class="pl-8 border border-gray-400 rounded-md w-full text-center focus:outline-none focus:ring-1 focus:ring-teal-500" @input="validateNumber" />
+                                        </div>
+                                        <BaseError v-if="$validateAddCategoryRules.price.$error">{{ $validateAddCategoryRules.price.$errors[0].$message }}</BaseError>
+                                    </div>
+
+                                    <div class="flex flex-col">
+                                        <BaseLabel class="text-sm font-semibold">Stocks:</BaseLabel>
+                                        <BaseInputField v-model="productData.stocks" class="border border-gray-400 rounded-md w-full text-center focus:outline-none focus:ring-1 focus:ring-teal-500" @input="validateNumber" />
+                                        <BaseError v-if="$validateAddCategoryRules.stocks.$error">{{ $validateAddCategoryRules.stocks.$errors[0].$message }}</BaseError>
                                     </div>
                                 </div>
-                                <!-- Stocks Field -->
-                                <div class="flex flex-col">
-                                    <BaseLabel class="text-sm font-semibold">Stocks:</BaseLabel>
-                                    <BaseInputField v-model="productData.stocks"  class="border border-gray-400 rounded-md w-32 h-10 text-center focus:outline-none focus:ring-1 focus:ring-teal-500"  @input="validateNumber"/>
-                                    <BaseError v-if="$validateAddCategoryRules.stocks.$error">{{ $validateAddCategoryRules.stocks.$errors[0].$message }}</BaseError>
+                            </div>
+
+                            <!-- Right Section: Image Upload -->
+                            <div class="md:w-1/2 space-y-4">
+                                <BaseLabel class="text-lg font-semibold">Product Image</BaseLabel>
+
+                                <!-- Main Image Upload -->
+                                <BaseLabel class="font-semibold">Main Image</BaseLabel>
+                                <div class="h-40 border-dashed border-2 border-gray-300 flex items-center justify-center rounded-md relative">
+                                    <span v-if="!mainImagePreview" class="text-gray-400">Upload Main Image</span>
+                                    <img v-else :src="mainImagePreview" class="h-full w-full object-cover rounded-md" />
+                                    <input type="file" accept="image/*" class="absolute inset-0 opacity-0 cursor-pointer" @change="onMainImageUpload" />
                                 </div>
+                                <BaseError v-if="$validateAddCategoryRules.product_img.$error">{{ $validateAddCategoryRules.product_img.$errors[0].$message }}</BaseError>
+
+                                <!-- Thumbnail Upload -->
+                                <BaseLabel class="font-semibold">Thumbnails</BaseLabel>
+                                <div class="grid grid-cols-3 gap-2">
+                                    <div v-for="(thumbnail, index) in thumbnailPreviews" :key="index" class="h-20 border-dashed border-2 border-gray-300 flex items-center justify-center rounded-md relative">
+                                        <img :src="thumbnail" class="h-full w-full object-cover rounded-md" />
+                                    </div>
+                                    <div v-if="productData.product_img.length < 4" class="h-20 border-dashed border-2 border-gray-300 flex items-center justify-center rounded-md relative">
+                                        <span class="text-gray-400">+</span>
+                                        <input type="file" accept="image/*" class="absolute inset-0 opacity-0 cursor-pointer" @change="onThumbnailUpload" />
+                                    </div>
+                                </div>
+                                <BaseError v-if="$validateAddCategoryRules.product_img.$error">{{ $validateAddCategoryRules.product_img.$errors[0].$message }}</BaseError>
+
+                                <div class="items-center flex text-xs text-gray-500 space-x-2">
+                                    <Icon icon="cuida:alert-outline" width="24" height="24" style="color: #ec0404" />
+                                    <p>You need at least 3 images. Pay attention to the quality of the pictures you add.</p>
+                                </div>
+
+                                <!-- Visibility Selection -->
+                                <BaseLabel class="font-bold">Visibility</BaseLabel>
+                                <div class="flex space-x-5">
+                                    <BaseRadioButton v-for="option in ['Published', 'Schedule']" :key="option" :name="'visibility'" :label="option" :value="option" v-model="productData.visibility" class="text-xs"></BaseRadioButton>
+                                </div>
+                                <BaseError v-if="$validateAddCategoryRules.visibility.$error">{{ $validateAddCategoryRules.visibility.$errors[0].$message }}</BaseError>
                             </div>
                         </div>
 
-                        <!-- Image Upload Section -->
-                        <div class="w-1/2 pl-4 border-l border-gray-300">
-                            <div class="text-end">
-                                <!-- Close Button -->
-                                <button class="text-gray-500 hover:text-gray-700" @click="closeAddProductModal">
-                                <Icon icon="fontisto:close" width="1.2rem" height="1.2rem" style="color: #5D5F5D" />
-                                </button>
-                            </div>
-                            <div class="mb-4">
-                                <BaseLabel class="text-lg font-semibold">Product Image</BaseLabel>
-                            </div>
-
-                            <!-- Main Image Upload -->
-                            <BaseLabel class="mt-4 font-semibold">Main Image</BaseLabel>
-                            <div class="h-40 w-full border-dashed border-2 border-gray-300 flex items-center justify-center rounded-md relative">
-                                <span v-if="!mainImagePreview" class="text-gray-400">Upload Main Image</span>
-                                <img v-else :src="mainImagePreview" class="h-full w-full object-cover rounded-md" />
-                                <input 
-                                    type="file" 
-                                    accept="image/*" 
-                                    class="absolute inset-0 opacity-0 cursor-pointer" 
-                                    @change="onMainImageUpload" 
-                                />
-                            </div>
-                            <BaseError v-if="$validateAddCategoryRules.product_img.$error">{{ $validateAddCategoryRules.product_img.$errors[0].$message }}</BaseError>
-
-                            <BaseLabel class="mt-4 font-semibold">Thumbnails</BaseLabel>
-                            <div class="grid grid-cols-3 gap-2">
-                                <div v-for="(thumbnail, index) in thumbnailPreviews"  :key="index"  class="h-20 border-dashed border-2 border-gray-300 flex items-center justify-center rounded-md relative">
-                                    <img :src="thumbnail" class="h-full w-full object-cover rounded-md" />
-                                </div>
-                                <div v-if="productData.product_img.length < 4"  class="h-20 border-dashed border-2 border-gray-300 flex items-center justify-center rounded-md relative">
-                                    <span class="text-gray-400">+</span>
-                                    <input  type="file"  accept="image/*"  class="absolute inset-0 opacity-0 cursor-pointer"  @change="onThumbnailUpload" />
-                                </div>
-                            </div>
-                            <BaseError v-if="$validateAddCategoryRules.product_img.$error">{{ $validateAddCategoryRules.product_img.$errors[0].$message }}</BaseError>
-                            <div class="items-center flex text-xs mt-2 text-gray-500 space-x-2">
-                                <Icon icon="cuida:alert-outline" width="24" height="24"  style="color: #ec0404" />
-                                <p>You need at least 3 images. Pay attention to the quality of the pictures you add</p>
-                            </div>
-
-                            <div>
-                                <BaseLabel class="font-bold">Visibility</BaseLabel>
-                                <div class="flex space-x-5">
-                                <BaseRadioButton v-for="option in ['Published', 'Schedule']" :key="option" :name="'visibility'" :label="option" :value="option" v-model="productData.visibility" class="text-xs"></BaseRadioButton>
-                                <BaseError v-if="$validateAddCategoryRules.visibility.$error">{{ $validateAddCategoryRules.visibility.$errors[0].$message }}</BaseError>
-                                </div>
-                            </div>
-                            <!-- Submit Buttons -->
-                            <div class="mt-6 flex justify-end space-x-2 text-xs">
-                                <button type="submit" class="px-2 py-2 bg-white border-2 rounded-md hover:bg-gray-400">
+                        <!-- Submit Buttons -->
+                        <div class="mt-6 flex justify-end space-x-2 text-xs">
+                            <button type="submit" class="px-2 py-2 bg-white border-2 rounded-md hover:bg-gray-400">
                                 Save as Draft
-                                </button>
-                                <button @click="createProduct" class="px-6 py-2 bg-[#007C80] text-white rounded-md hover:bg-gray-400">
+                            </button>
+                            <button @click="createProduct" class="px-6 py-2 bg-[#007C80] text-white rounded-md hover:bg-gray-400">
                                 Publish
-                                </button>
-                            </div>
+                            </button>
                         </div>
                     </div>
                 </div>
 
                 <!-- Update Product Modal -->
-                <div v-if="isUpdateProductModalOpen" class="fixed inset-0 flex items-center justify-center">
-                    <div class="bg-white rounded-lg w-[800px] p-6 border-4 border-gray-300 flex">
-                        <!-- Form Section -->
-                        <div class="w-1/2 pr-4 mt-3">
-                            <div class="flex items-center justify-between">
-                                <BaseLabel class="font-bold text-2xl">Update Product</BaseLabel>
-                            </div>
+                <div v-if="isUpdateProductModalOpen" class="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-40">
+                    <div class="bg-white rounded-lg 2xl:w-[800px] 2xs:w-[600px] md:w-[700px] p-4 border-4 border-gray-300 flex flex-col 2xs:max-h-screen 2xs:overflow-y-auto">
+                        <!-- Header -->
+                        <div class="flex justify-between items-center">
+                            <BaseLabel class="font-bold text-2xl">Update Product</BaseLabel>
+                            <button class="text-gray-500 hover:text-gray-700" @click="closeUpdateProductPowerModal">
+                                <Icon icon="fontisto:close" width="1.2rem" height="1.2rem" style="color: #5D5F5D" />
+                            </button>
+                        </div>
 
-                            <!-- Form Fields -->
-                            <div class="flex flex-col mt-2">
-
-                                 <!-- Product Type -->
+                        <div class="flex flex-col md:flex-row mt-4 gap-6">
+                            <!-- Left Section: Form Fields -->
+                            <div class="md:w-1/2 space-y-4">
                                 <BaseLabel class="font-semibold">Product Type:</BaseLabel>
                                 <BaseSelectField v-model="updatedProduct.category_id">
-                                    <BaseOptionDefaultField>Category</BaseOptionDefaultField>
-                                    <BaseOptionField v-for="category in categoryDropdown" :key="category.id" :value="category.id"> 
+                                    <BaseOptionDefaultField>Select Category</BaseOptionDefaultField>
+                                    <BaseOptionField v-for="category in categoryDropdown" :key="category.id" :value="category.id">
                                         {{ category.category_name }}
-                                        </BaseOptionField>
+                                    </BaseOptionField>
                                 </BaseSelectField>
-                                <BaseError v-if="$validateUpdateProductRules.category_id.$error">{{ $validateUpdateProductRules.category_id.$errors[0].$message }}</BaseError>
+                                <BaseError v-if="$validateUpdateProductRules.category_id.$error">
+                                    {{ $validateUpdateProductRules.category_id.$errors[0].$message }}
+                                </BaseError>
 
-                                 <!-- Product Name -->
-                                <BaseLabel class="mt-4 font-semibold">Product Name:</BaseLabel>
+                                <BaseLabel class="font-semibold">Product Name:</BaseLabel>
                                 <BaseInputField v-model="updatedProduct.product_name" placeholder="Ex. Sibuyas" />
-                                <BaseError v-if="$validateUpdateProductRules.product_name.$error">{{ $validateUpdateProductRules.product_name.$errors[0].$message }}</BaseError>
+                                <BaseError v-if="$validateUpdateProductRules.product_name.$error">
+                                    {{ $validateUpdateProductRules.product_name.$errors[0].$message }}
+                                </BaseError>
 
-                                 <!-- Description -->
-                                <BaseLabel class="mt-4 font-semibold">Description</BaseLabel>
-                                <BaseInputField class="rounded-lg border-gray-500 shadow-md pb-20" v-model="updatedProduct.description" placeholder="Type the description" />
-                                <BaseError v-if="$validateUpdateProductRules.description.$error">{{ $validateUpdateProductRules.description.$errors[0].$message }}</BaseError>
-                            </div>
+                                <BaseLabel class="font-semibold">Description:</BaseLabel>
+                                <BaseInputField v-model="updatedProduct.description" class="rounded-lg border-gray-500 shadow-md pb-20" placeholder="Type the description" />
+                                <BaseError v-if="$validateUpdateProductRules.description.$error">
+                                    {{ $validateUpdateProductRules.description.$errors[0].$message }}
+                                </BaseError>
 
-                            <div class="flex space-x-4 mt-2">
+                                <!-- Price & Stocks -->
+                                <div class="flex flex-col 2xs:flex-col md:flex-row md:space-x-4">
+                                    <div class="flex flex-col">
+                                        <BaseLabel class="text-sm font-semibold">Price:</BaseLabel>
+                                        <div class="relative"> 
+                                            <span class="absolute left-1 2xl:top-2 lg:top-2 2xs:top-4 text-gray-500 flex items-center">
+                                                <Icon icon="fa6-solid:peso-sign" width="16" height="16" style="color: #000" />
+                                            </span>
+                                            <BaseInputField v-model="updatedProduct.price" class="pl-8 border border-gray-400 rounded-md w-full text-center focus:outline-none focus:ring-1 focus:ring-teal-500" @input="validateNumber" />
+                                        </div>
+                                        <BaseError v-if="$validateUpdateProductRules.price.$error">
+                                            {{ $validateUpdateProductRules.price.$errors[0].$message }}
+                                        </BaseError>
+                                    </div>
 
-                                <!-- Amount Field -->
-                                <div class="flex flex-col">
-                                    <BaseLabel class="text-sm font-semibold">Price:</BaseLabel>
-                                    <div class="relative">
-                                        <!-- Peso Sign -->
-                                        <span class="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-500">₱</span>
-                                        <BaseInputField v-model="updatedProduct.price"  class="pl-6 border border-gray-400 rounded-md w-32 h-10 text-center focus:outline-none focus:ring-1 focus:ring-teal-500"  @input="validateNumber" />
-                                        <BaseError v-if="$validateUpdateProductRules.price.$error">{{ $validateUpdateProductRules.price.$errors[0].$message }}</BaseError>
+                                    <div class="flex flex-col">
+                                        <BaseLabel class="text-sm font-semibold">Stocks:</BaseLabel>
+                                        <BaseInputField v-model="updatedProduct.stocks" class="border border-gray-400 rounded-md w-full text-center focus:outline-none focus:ring-1 focus:ring-teal-500" @input="validateNumber" />
+                                        <BaseError v-if="$validateUpdateProductRules.stocks.$error">
+                                            {{ $validateUpdateProductRules.stocks.$errors[0].$message }}
+                                        </BaseError>
                                     </div>
                                 </div>
+                            </div>
 
-                                <!-- Stocks Field -->
-                                <div class="flex flex-col">
-                                    <BaseLabel for="stocks" class="text-sm font-semibold ">Stocks</BaseLabel>
-                                    <BaseInputField id="stocks" v-model="updatedProduct.stocks"  class="border border-gray-400 rounded-md w-32 h-10 text-center focus:outline-none focus:ring-1 focus:ring-teal-500 "  @input="validateNumber"/>
-                                    <BaseError v-if="$validateUpdateProductRules.stocks.$error">{{ $validateUpdateProductRules.stocks.$errors[0].$message }}</BaseError>
+                            <!-- Right Section: Image Upload -->
+                            <div class="md:w-1/2 space-y-4">
+                                <BaseLabel class="text-lg font-semibold">Product Image</BaseLabel>
+
+                                <!-- Main Image Upload -->
+                                <BaseLabel class="font-semibold">Main Image</BaseLabel>
+                                <div class="h-40 border-dashed border-2 border-gray-300 flex items-center justify-center rounded-md relative">
+                                    <span v-if="!mainImagePreview" class="text-gray-400">Upload Main Image</span>
+                                    <img v-else :src="mainImagePreview" class="h-full w-full object-cover rounded-md" />
+                                    <input type="file" accept="image/*" class="absolute inset-0 opacity-0 cursor-pointer" @change="onupdateMainImageUpload" />
                                 </div>
+                                <BaseError v-if="$validateUpdateProductRules.product_img.$error">
+                                    {{ $validateUpdateProductRules.product_img.$errors[0].$message }}
+                                </BaseError>
+
+                                <!-- Thumbnail Upload -->
+                                <BaseLabel class="font-semibold">Thumbnails</BaseLabel>
+                                <div class="grid grid-cols-3 gap-2">
+                                    <div v-for="(thumbnail, index) in thumbnailPreviews" :key="index" class="h-20 border-dashed border-2 border-gray-300 flex items-center justify-center rounded-md relative">
+                                        <img :src="thumbnail" class="h-full w-full object-cover rounded-md" />
+                                    </div>
+                                    <div v-if="updatedProduct.product_img.length < 4" class="h-20 border-dashed border-2 border-gray-300 flex items-center justify-center rounded-md relative">
+                                        <span class="text-gray-400">+</span>
+                                        <input type="file" accept="image/*" class="absolute inset-0 opacity-0 cursor-pointer" @change="onThumbnailUpload" />
+                                    </div>
+                                </div>
+                                <BaseError v-if="$validateUpdateProductRules.product_img.$error">
+                                    {{ $validateUpdateProductRules.product_img.$errors[0].$message }}
+                                </BaseError>
+
+                                <div class="items-center flex text-xs text-gray-500 space-x-2">
+                                    <Icon icon="cuida:alert-outline" width="24" height="24" style="color: #ec0404" />
+                                    <p>You need at least 3 images. Pay attention to the quality of the pictures you add.</p>
+                                </div>
+
+                                <!-- Visibility Selection -->
+                                <BaseLabel class="font-bold">Visibility</BaseLabel>
+                                <div class="flex space-x-5">
+                                    <BaseRadioButton v-for="option in ['Published', 'Schedule']" :key="option" :name="'visibility'" :label="option" :value="option" v-model="updatedProduct.visibility" class="text-xs"></BaseRadioButton>
+                                </div>
+                                <BaseError v-if="$validateUpdateProductRules.visibility.$error">
+                                    {{ $validateUpdateProductRules.visibility.$errors[0].$message }}
+                                </BaseError>
                             </div>
                         </div>
 
-                        <!-- Image Upload Section -->
-                        <div class="w-1/2 pl-4 border-l border-gray-300">
-                            <div class="text-end">
-                                <!-- Close Button -->
-                                <button class="text-gray-500 hover:text-gray-700" @click="closeUpdateProductPowerModal">
-                                    <Icon icon="fontisto:close" width="1.2rem" height="1.2rem" style="color: #5D5F5D" />
-                                </button>
-                            </div>
-                            <div class="mb-4">
-                                <BaseLabel class="text-lg font-semibold">Product Image</BaseLabel>
-                            </div>
-
-                            <!-- Main Image Upload -->
-                            <BaseLabel class="mt-4 font-semibold">Main Image</BaseLabel>
-                            <div class="h-40 w-full border-dashed border-2 border-gray-300 flex items-center justify-center rounded-md relative">
-                                <span v-if="!mainImagePreview" class="text-gray-400">Upload Main Image</span>
-                                <img v-if="mainImagePreview" :src="mainImagePreview" class="h-full w-full object-cover rounded-md" />
-                                <input type="file"  accept="image/*"  class="absolute inset-0 opacity-0 cursor-pointer"   @change="onupdateMainImageUpload" />
-                            </div>
-                            <BaseError v-if="$validateUpdateProductRules.product_img.$error">{{ $validateUpdateProductRules.product_img.$errors[0].$message }}</BaseError>
-
-                             <!-- Thumbnail -->
-                            <BaseLabel class="mt-4 font-semibold">Thumbnails</BaseLabel>
-                            <div class="grid grid-cols-3 gap-2">
-                                <div v-for="(thumbnail, index) in thumbnailPreviews"  :key="index"  class="h-20 border-dashed border-2 border-gray-300 flex items-center justify-center rounded-md relative">
-                                    <img :src="thumbnail" class="h-full w-full object-cover rounded-md" />
-                                </div>
-                                <div v-if="updatedProduct.product_img.length < 4"  class="h-20 border-dashed border-2 border-gray-300 flex items-center justify-center rounded-md relative">
-                                    <span class="text-gray-400">+</span>
-                                    <input  type="file"  accept="image/*"  class="absolute inset-0 opacity-0 cursor-pointer"  @change="onupdateThumbnailUpload" />
-                                </div>
-                            </div>
-                            <BaseError v-if="$validateUpdateProductRules.product_img.$error">{{ $validateUpdateProductRules.product_img.$errors[0].$message }}</BaseError>
-                            <div class="items-center flex text-xs mt-2 text-gray-500 space-x-2">
-                                <Icon icon="cuida:alert-outline" width="24" height="24"  style="color: #ec0404" />
-                                <p>You need at least 3 images. Pay attention to the quality of the pictures you add</p>
-                            </div>
-
-                             <!-- Visibility -->
-                            <div>
-                                <BaseLabel class="font-bold">Visibility</BaseLabel>
-                                <div class="flex space-x-5">
-                                    <BaseRadioButton v-for="option in ['Published', 'Schedule']" :key="option" :name="'visibilityOption'" :label="option" :value="option" v-model="updatedProduct.visibility" class="text-xs"></BaseRadioButton>
-                                    <BaseError v-if="$validateUpdateProductRules.visibility.$error">{{ $validateUpdateProductRules.visibility.$errors[0].$message }}</BaseError>
-                                </div>
-                            </div>
-
-                            <!-- Submit Buttons -->
-                            <div class="mt-16 flex justify-end space-x-2 text-xs">
-                                <button @click="saveAsDraft" class="px-2 py-2 bg-white border-2 rounded-md hover:bg-gray-400"> Save as Draft</button>
-                                <button @click="updateProduct" class="px-6 py-2 bg-[#007C80] text-white rounded-md hover:bg-gray-400"> Publish</button>
-                            </div>
+                        <!-- Submit Buttons -->
+                        <div class="mt-6 flex justify-end space-x-2 text-xs">
+                            <button type="submit" class="px-2 py-2 bg-white border-2 rounded-md hover:bg-gray-400">
+                                Save as Draft
+                            </button>
+                            <button @click="updateProduct" class="px-6 py-2 bg-[#007C80] text-white rounded-md hover:bg-gray-400">
+                                Update
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -296,42 +293,45 @@
                 </div>
 
                 <!-- Table Section -->
-                <div class="w-full">
-                    <div class=" h-96">
-                        <table class="w-full">
+                <div class="w-full overflow-x-auto">
+                    <div class="min-h-96">
+                        <table class="w-full table-auto">
                             <!-- Table Header -->
-                            <thead class="bg-gray-200 text-sm">
+                            <thead class="bg-gray-200 text-xs sm:text-sm">
                                 <tr>
                                     <th class="p-2">
                                         <BaseCheckBox id="select-all" :value="selectAll" :modelValue="selectAll" @update:modelValue="toggleSelectAll"/>
                                     </th>
-                                    <th class="px-4 py-3 text-left">Product</th>
-                                    <th class="px-4 py-3 text-left">Description</th>
-                                    <th class="px-4 py-3 text-left">Stocks</th>
-                                    <th class="px-4 py-3 text-left">Price</th>
-                                    <th class="px-4 py-3 text-end">Action</th>
+                                    <th class="px-2 sm:px-4 py-2 sm:py-3 text-left">Product</th>
+                                    <th class="px-2 sm:px-4 py-2 sm:py-3 text-left">Description</th>
+                                    <th class="px-2 sm:px-4 py-2 sm:py-3 text-left">Stocks</th>
+                                    <th class="px-2 sm:px-4 py-2 sm:py-3 text-left">Price</th>
+                                    <th class="px-2 sm:px-4 py-2 sm:py-3 text-end">Action</th>
                                 </tr>
                             </thead>
 
                             <!-- Table Body -->
                             <tbody>
-                                <tr v-for="product in productList" :key="product.id" class="border-b hover:bg-gray-100 text-sm">
+                                <tr v-for="product in productList" :key="product.id" class="border-b hover:bg-gray-100 2xl:text-sm  2xs:text-xs">
                                     <td class="p-2"> 
-                                    <BaseCheckBox :id="`product-${product.id}`" :value="product.id" :modelValue="selectedProducts.includes(product.id)" @update:modelValue="(isChecked) => handleSelect(product.id, isChecked)"/>
+                                        <BaseCheckBox :id="`product-${product.id}`" :value="product.id" :modelValue="selectedProducts.includes(product.id)" @update:modelValue="(isChecked) => handleSelect(product.id, isChecked)"/>
                                     </td>
-                                    <td class="p-4 flex items-center space-x-2 gap-2"><img :src="product.product_img[0]" class="w-12 h-12" /> {{ product.product_name }}</td>
-                                    <td class="px-4 py-2">{{ product.description }}</td>
-                                    <td class="px-4 py-2">{{ product.stocks }} kg</td>
-                                    <td class="px-4 py-2">₱ {{ product.price }}</td>
-                                    <td class="px-4 py-2 space-x-2 text-end">
+                                    <td class="p-2 sm:p-4 flex items-center space-x-2 gap-2">
+                                        <img :src="product.product_img[0]" class="w-10 h-10 sm:w-12 sm:h-12" />
+                                        <span class="hidden sm:table-cell">{{ product.product_name }}</span>
+                                    </td>
+                                    <td class="px-2 sm:px-4 py-2 ">{{ product.description }}</td>
+                                    <td class="px-2 sm:px-4 py-2">{{ product.stocks }} kg</td>
+                                    <td class="px-2 sm:px-4 py-2">₱{{ product.price }}</td>
+                                    <td class="px-2 sm:px-4 py-2 flex items-center space-x-2 justify-end">
                                         <!-- Edit Button -->
                                         <button class="text-blue-500 hover:text-blue-700" @click="openUpdateProductModal(product.id)">
-                                            <Icon icon="lucide:pencil-line" width="1.2rem" height="1.2rem" style="color: #578CCB" />
+                                            <Icon icon="lucide:pencil-line" width="1rem" height="1rem" class="sm:w-5 sm:h-5" />
                                         </button>
 
                                         <!-- Delete Button -->
                                         <button class="text-red-500 hover:text-red-700" @click="openDeleteProductModal(product.id)">
-                                            <Icon icon="octicon:trash-24" width="1.2rem" height="1.2rem" style="color: #DA3B64" />
+                                            <Icon icon="octicon:trash-24" width="1rem" height="1rem" class="sm:w-5 sm:h-5" />
                                         </button>
                                     </td>
                                 </tr>

@@ -1,7 +1,7 @@
 <template>
     <div>
         <header class="bg-[#608C54] shadow p-4 flex justify-between items-center text-white">
-            <h1 class="text-xl font-bold">Archive</h1>
+            <h1 class="text-lg sm:text-xl 2xl:ml-0 md:ml-10 2xs:ml-10 font-bold">Archive</h1>
             <div class="flex items-center space-x-4">
                 <div class="flex space-x-2">
                     <!-- Settings Icon with Dropdown -->
