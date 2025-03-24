@@ -94,7 +94,7 @@ export default {
         return await axiosClient.post(`product/edit/${updatedProduct.id}`, updatedProduct)
         .then((response) => {
             commit('toggleLoader', false, { root: true })
-            commit('setCollegeData', response.data.product);
+            commit('setUpdateData', response.data.product);
             setTimeout(() => {
                 commit('showToast', { showToast: true, toastMessage: response.data.message, toastType: 'success'}, { root: true });
             }, toastDelay);

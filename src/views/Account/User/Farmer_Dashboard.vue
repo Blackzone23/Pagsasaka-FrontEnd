@@ -89,7 +89,7 @@
 <script setup>
 import Loading from '@/components/Alerts/Loading.vue';
 import Toast from '@/components/Alerts/Toast.vue';
-import { reactive, computed, ref } from 'vue';
+import { ref, computed, reactive, onMounted } from "vue";
 import { required, email, helpers } from '@vuelidate/validators';
 import { Icon } from '@iconify/vue';
 import { useRouter } from 'vue-router';
@@ -98,7 +98,7 @@ import BaseLabel from '@/components/Input-Fields/BaseLabel.vue';
 import BaseInputField from '@/components/Input-Fields/BaseInputField.vue';
 const store = useStore();
 const router = useRouter();
-
+const showLoading = computed(() => store.state.showLoading.state);
 /******************************************************************
  FUNCTION INSIDE THE DASHBOARD
 ******************************************************************/

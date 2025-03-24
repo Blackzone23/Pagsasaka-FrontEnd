@@ -153,7 +153,7 @@
                         <!-- Header -->
                         <div class="flex justify-between items-center">
                             <BaseLabel class="font-bold text-2xl">Update Product</BaseLabel>
-                            <button class="text-gray-500 hover:text-gray-700" @click="closeUpdateProductPowerModal">
+                            <button class="text-gray-500 hover:text-gray-700" @click="closeUpdateProductModal">
                                 <Icon icon="fontisto:close" width="1.2rem" height="1.2rem" style="color: #5D5F5D" />
                             </button>
                         </div>
@@ -232,7 +232,7 @@
                                     </div>
                                     <div v-if="updatedProduct.product_img.length < 4" class="h-20 border-dashed border-2 border-gray-300 flex items-center justify-center rounded-md relative">
                                         <span class="text-gray-400">+</span>
-                                        <input type="file" accept="image/*" class="absolute inset-0 opacity-0 cursor-pointer" @change="onThumbnailUpload" />
+                                        <input type="file" accept="image/*" class="absolute inset-0 opacity-0 cursor-pointer" @change="onupdateThumbnailUpload" />
                                     </div>
                                 </div>
                                 <BaseError v-if="$validateUpdateProductRules.product_img.$error">
@@ -552,7 +552,7 @@ const openUpdateProductModal = (id) => {
 };
 
 // Function to handle closing modal
-function closeUpdateProductPowerModal() {
+function closeUpdateProductModal() {
     isUpdateProductModalOpen.value = false;
 }
 
@@ -615,7 +615,7 @@ async function updateProduct() {
       await store.dispatch('User/updateProduct', updatedProduct)
       .then((response) => {
           if(response.isSuccess == true) {
-            closeUpdateProductPowerModal();
+            closeUpdateProductModal();
             getProductList();
           }
       })
@@ -760,11 +760,19 @@ function clearValues() {
     productData.stocks = '';
     productData.product_img = []; // Reset to an empty array
     productData.visibility = '';
+    updatedProduct.category_id = '';
+    updatedProduct.product_name = '';
+    updatedProduct.description = '';
+    updatedProduct.price = '';
+    updatedProduct.stocks = '';
+    updatedProduct.product_img = []; // Reset to an empty array
+    updatedProduct.visibility = '';
     
     mainImagePreview.value = null; // Reset main image preview
     thumbnailPreviews.value = []; // Reset thumbnail previews
     
     $validateAddCategoryRules.value.$reset();
+    $validateUpdateProductRules.value.$reset();
 }
 
 /******************************************************************

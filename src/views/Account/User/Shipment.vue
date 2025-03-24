@@ -2,101 +2,103 @@
 
 	<div class="flex h-screen bg-gray-100">
 		<div class="flex-1 flex flex-col">
-			<!-- Header -->
-			<header class="bg-[#608C54] shadow p-4 flex justify-between items-center text-white">
+		<!-- Header -->
+		<header class="bg-[#608C54] shadow p-4 flex justify-between items-center text-white">
 			<h1 class="text-lg sm:text-xl 2xl:ml-0 md:ml-10 2xs:ml-10 font-bold">Shipment</h1>
 			<div class="flex items-center space-x-4">
-				<div class="relative">
-				<Icon icon="uil:setting" width="24" height="24" style="color: white" @click="toggleDropdown" />
-				<!-- Dropdown Menu -->
-				<div v-if="dropdownVisible" class="absolute right-0 mt-2 bg-white shadow-lg rounded p-2 w-40 sm:w-48">
-					<button class="w-full text-left px-4 py-2 text-sm text-black">Account Info</button>
-					<button class="w-full text-left px-4 py-2 text-sm text-black" @click="logout()">Logout</button>
-				</div>
+			<div class="relative">
+				<Icon icon="uil:setting" class="w-6 h-6 cursor-pointer" @click="toggleDropdown" />
+				<div v-if="dropdownVisible" class="absolute right-0 mt-2 bg-white shadow-lg rounded p-2 w-48">
+				<button class="w-full text-left px-4 py-2 text-sm text-black">Account Info</button>
+				<button class="w-full text-left px-4 py-2 text-sm text-black" @click="logout()">Logout</button>
 				</div>
 			</div>
-			</header>
+			</div>
+		</header>
 
-			<div class="p-3 sm:p-5">
-				<div v-if="!selectedShipment">
-					<!-- Tabs Navigation -->
-					<div class="mb-4 text-xs sm:text-sm flex flex-wrap gap-2">
-					<button class="px-3 sm:px-4 py-1 sm:py-2 rounded" :class="{ 'bg-blue-500 text-white': activeTab === 'orders', 'bg-gray-200': activeTab !== 'orders' }" @click="activeTab = 'orders'">My Orders</button>
-					<button class="px-3 sm:px-4 py-1 sm:py-2 rounded" :class="{ 'bg-red-500 text-white': activeTab === 'cancellations', 'bg-gray-200': activeTab !== 'cancellations' }" @click="activeTab = 'cancellations'">Cancellations</button>
-					<button class="px-3 sm:px-4 py-1 sm:py-2 rounded" :class="{ 'bg-yellow-500 text-white': activeTab === 'refunds', 'bg-gray-200': activeTab !== 'refunds' }" @click="activeTab = 'refunds'">Return and Refund</button>
-					</div>
-
-					<!-- Responsive Tables -->
-					<div class="overflow-x-auto">
-						<table v-if="activeTab === 'orders'" class="w-full border-collapse border border-gray-300 text-xs sm:text-sm">
-							<thead>
-							<tr class="bg-gray-300">
-								<th class="px-2 sm:px-4 py-2">Name</th>
-								<th class="px-2 sm:px-4 py-2">Created</th>
-								<th class="px-2 sm:px-4 py-2">Last Updated</th>
-								<th class="px-2 sm:px-4 py-2">Ship To</th>
-								<th class="px-2 sm:px-4 py-2">Status</th>
-							</tr>
-							</thead>
-							<tbody>
-							<tr v-for="order in orderList" :key="order.id" class="even:bg-gray-50 cursor-pointer hover:bg-gray-200 text-center">
-								<td class="px-2 sm:px-4 py-2">{{ order.product_name }}</td>
-								<td class="px-2 sm:px-4 py-2">{{ order.created_at }}</td>
-								<td class="px-2 sm:px-4 py-2">{{ order.updated_at }}</td>
-								<td class="px-2 sm:px-4 py-2">{{ order.ship_to }}</td>
-								<td class="px-2 sm:px-4 py-2">{{ order.status }}</td>
-							</tr>
-							</tbody>
-						</table>
-					</div>
-
-					<!-- Tracking Method Interface -->
-					<div class="p-3 sm:p-5 border-2 border-gray-300 rounded-md mt-2">
-					<h1 class="text-sm sm:text-xl font-bold">Select a Shipment</h1>
-					<p class="text-xs sm:text-sm">Please select a shipment from the table to view tracking details.</p>
-					</div>
+		<div class="p-5">
+			<div v-if="!selectedShipment">
+				<!-- Tabs Navigation -->
+				<div class="mb-4 text-sm flex flex-wrap gap-2">
+					<button class="px-4 py-2 rounded transition" :class="{ 'bg-blue-500 text-white': activeTab === 'orders', 'bg-gray-200': activeTab !== 'orders' }" @click="activeTab = 'orders'"> My Orders</button>
+					<button class="px-4 py-2 rounded transition" :class="{ 'bg-red-500 text-white': activeTab === 'cancellations', 'bg-gray-200': activeTab !== 'cancellations' }" @click="activeTab = 'cancellations'"> Cancellations</button>
+					<button class="px-4 py-2 rounded transition" :class="{ 'bg-yellow-500 text-white': activeTab === 'refunds', 'bg-gray-200': activeTab !== 'refunds' }" @click="activeTab = 'refunds'"> Return and Refund</button>
 				</div>
 
-				<!-- Tracking Details -->
-				<div v-else class="p-3 sm:p-5 border-2 border-[#608C54] rounded-md">
-					<h1 class="text-sm sm:text-xl font-bold">Tracking Details</h1>
-					<div class="text-xs sm:text-sm">
-					<p><strong>Shipment Name:</strong> {{ selectedShipment.product_name }}</p>
-					<p><strong>Created:</strong> {{ selectedShipment.created_at }}</p>
-					<p><strong>Last Updated:</strong> {{ selectedShipment.updated_at }}</p>
-					<p><strong>Ship To:</strong> {{ selectedShipment.ship_to }}</p>
-					<p><strong>Status:</strong> {{ selectedShipment.status }}</p>
-					</div>
+				<!-- Tables -->
+				<div>
+					<table v-if="activeTab === 'orders'" class="table-auto w-full border-collapse border border-gray-300">
+					<thead>
+						<tr class="bg-gray-300">
+						<th class="px-4 py-2">Name</th>
+						<th class="px-4 py-2">Created</th>
+						<th class="px-4 py-2">Last Updated</th>
+						<th class="px-4 py-2">Ship To</th>
+						<th class="px-4 py-2">Status</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr
+						v-for="order in orderList"
+						:key="order.id"
+						class="even:bg-gray-50 hover:bg-gray-200 text-center text-sm cursor-pointer"
+						@click="handleOrderClick(order)"
+						>
+						<td class="px-4 py-2">{{ order.product_name }}</td>
+						<td class="px-4 py-2">{{ order.created_at }}</td>
+						<td class="px-4 py-2">{{ order.updated_at }}</td>
+						<td class="px-4 py-2">{{ order.ship_to }}</td>
+						<td class="px-4 py-2">{{ order.status }}</td>
+						</tr>
+					</tbody>
+					</table>
+				</div>
 
-					<!-- Tracking process -->
-					<div class="relative flex flex-col items-center md:flex-row md:justify-center">
-					<div class="absolute w-full md:w-[480px] h-1 bg-[#608C54] top-1/2 z-0"></div>
+				<!-- Tracking Interface -->
+				<div class="p-5 border-2 border-gray-300 rounded-md mt-2 text-center">
+					<h1 class="text-lg font-bold">Select a Shipment</h1>
+					<p class="text-sm">Please select a shipment from the table to view tracking details.</p>
+				</div>
+			</div>
 
-					<div class="flex flex-wrap justify-center space-x-3 sm:space-x-10 z-10">
-						<div v-for="status in trackingSteps" :key="status.id" class="w-12 h-12 sm:w-16 sm:h-16 rounded-full flex items-center justify-center" :class="getStatusClass(status.id)">
-						<Icon :icon="status.icon" width="24" height="24" class="text-white" />
+			<!-- Order Status -->
+			<div v-else class="p-5 border-2 rounded-md mt-2 text-center" :class="{ 'border-blue-300': selectedShipment.status === 'Order','border-red-300 text-red-600': selectedShipment.status === 'Cancelled','border-yellow-300 text-yellow-600': selectedShipment.status === 'Refund','border-[#608C54]': selectedShipment.status !== 'Order' && selectedShipment.status !== 'Cancelled' && selectedShipment.status !== 'Refund'}">
+				<h1 class="text-lg font-bold">{{ selectedShipment.status }} Shipment</h1>
+				<p class="text-sm">
+					{{selectedShipment.status === 'Order'? 'This shipment is currently being processed.': selectedShipment.status === 'Cancelled'? 'This shipment has been cancelled. Contact customer support for assistance.': selectedShipment.status === 'Refund'? 'You should receive the refund in your account shortly.': 'Tracking Details'}}
+				</p>
+
+				<!-- Tracking Process -->
+				<div v-if="selectedShipment.status !== 'Cancelled' && selectedShipment.status !== 'Refund'">
+					<div class="relative flex items-center justify-center mt-6">
+						<div class="absolute w-3/4 md:w-[480px] h-1 bg-[#608C54] top-1/2 z-0"></div>
+						<div class="flex space-x-10 md:space-x-20 z-10">
+							<div v-for="status in trackingSteps" :key="status.id" :class="['w-12 h-12 md:w-16 md:h-16 rounded-full flex items-center justify-center', getStatusClass(status.id)]">
+							<Icon :icon="status.icon" class="text-white w-6 h-6 md:w-8 md:h-8" />
+							</div>
 						</div>
 					</div>
-					</div>
 
-					<div class="flex flex-wrap justify-center space-x-4 sm:space-x-8 text-xs sm:text-sm mt-2">
-					<span v-for="status in trackingSteps" :key="status.id">{{ status.label }}</span>
+					<div class="flex space-x-4 md:space-x-[68px] justify-center text-center mt-2 text-xs md:text-sm">
+						<span v-for="status in trackingSteps" :key="status.id">{{ status.label }}</span>
 					</div>
 
 					<!-- Approval Button -->
 					<div class="flex justify-center mt-4">
-					<button @click="updateStatus()" class="px-4 sm:px-6 py-2 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg shadow-md transition">
-						Approve
-					</button>
+						<button @click="updateStatus()" class="px-4 py-2 md:px-6 md:py-2 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg shadow-md transition">
+							Approve
+						</button>
 					</div>
-
-					<!-- Back Button -->
-					<button class="mt-10 px-3 sm:px-4 py-2 bg-gray-300 rounded text-xs sm:text-sm" @click="selectedShipment = null">Back to Shipments</button>
 				</div>
+
+				<!-- Back Button -->
+				<button class="mt-8 md:mt-12 px-4 py-2 bg-gray-300 rounded text-sm" @click="selectedShipment = null">
+					Back to Shipments
+				</button>
 			</div>
 		</div>
+		</div>
 	</div>
-
 </template>
   
 

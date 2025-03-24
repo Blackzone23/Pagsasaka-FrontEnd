@@ -6,6 +6,9 @@ export default {
     setProductListData: (state, product) => {
         state.product.data = product;
     },
+    setUpdateData: (state, updateData) => {
+        state.updateData.data = updateData;
+    },
 
     //SHIPMENT
     setShipmentListData: (state, order) => {
@@ -16,5 +19,5 @@ export default {
     },
     setRefundListData: (state, refund) => {
         state.refund.data = refund;
-    },
+    },  
 }

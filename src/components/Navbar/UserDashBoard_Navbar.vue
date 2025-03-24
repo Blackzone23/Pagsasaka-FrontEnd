@@ -1,7 +1,7 @@
 <template>
     <div class="relative">
         <!-- Drawer Toggle Button for Small Screens (2xl and below) -->
-        <button class="absolute top-1  2xl:hidden text-white p-2 rounded-md z-50"  
+        <button class="absolute top-1   text-white p-2 rounded-md z-50"  
             @click="isOpen = !isOpen"> 
             <Icon icon="material-symbols:menu" width="32" height="32" />
         </button>

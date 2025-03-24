@@ -6,6 +6,9 @@ export default {
     product: {
         data:[],
     },
+    updateData: {
+        data:[],
+    },
     //SHIPMENT
     order: {
         data:[],
