@@ -16,50 +16,59 @@
                 </div>
             </div>
         </header>
-        <div>
+        <div class="w-full">
             <!-- Main Page Content -->
             <div v-if="!viewAllClicked" class="flex justify-center items-center h-96">
-                <div class="bg-white p-6 rounded-lg shadow-lg w-96 flex flex-col justify-center items-center border-2 border-gray-300">
-                    <div class="bg-[#608C54] px-[165px] py-6">
-                    <Icon icon="bx:archive-in" width="52" height="52" style="color: #fff" />
-                    </div>
-                    <div class="mt-4 text-sm text-center space-y-5">
-                    <h1 class="text-2xl font-bold">Products</h1>
-                    <p>118 Archive</p>
-                    <button @click="viewAllClicked = true" class="text-blue-500 hover:underline">View all</button>
-                    </div>
+            <div
+                class="bg-white p-6 rounded-lg shadow-lg w-full max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl xl:max-w-3xl flex flex-col justify-center items-center border-2 border-gray-300"
+            >
+                <div class="bg-[#608C54] w-full flex justify-center py-6">
+                <Icon icon="bx:archive-in" width="52" height="52" style="color: #fff" />
                 </div>
+                <div class="mt-4 text-sm text-center space-y-5">
+                <h1 class="text-2xl font-bold">Products</h1>
+                <p>118 Archive</p>
+                <button @click="viewAllClicked = true" class="text-blue-500 hover:underline">View all</button>
+                </div>
+            </div>
             </div>
 
             <!-- Table Page Content -->
-            <div v-if="viewAllClicked" class="mt-10">
-              <div class="p-5">
-                <div class="w-full bg-white shadow-lg rounded-lg border-2 border-gray-300">
-                    <h2 class="text-2xl font-bold text-center mt-4">Archived Products</h2>
-                    <table class="w-full table-auto mt-4">
+            <div v-if="viewAllClicked" class="mt-10 px-2 sm:px-4 lg:px-6">
+                <div class="p-5">
+                    <div class="mb-4">
+                    <button  @click="viewAllClicked = false"  class="flex items-center space-x-2 px-4 py-2 text-sm font-medium text-white bg-green-700 hover:bg-green-500 rounded-lg shadow-md">
+                        <Icon icon="ic:baseline-arrow-back" width="20" height="20" />
+                        <span>Back</span>
+                    </button>
+                    </div>
+
+                    <div class="w-full bg-white shadow-lg rounded-lg border-2 border-gray-300 overflow-x-auto">
+                    <h2 class="text-xl sm:text-2xl font-bold text-center mt-4">Archived Products</h2>
+                    <table class="w-full table-auto mt-4 min-w-[600px]">
                         <thead>
-                            <tr class="bg-gray-200">
-                                <th class="px-4 py-2 border-b">Product Name</th>
-                                <th class="px-4 py-2 border-b">Created at</th>
-                                <th class="px-4 py-2 border-b">Status</th>
-                                <th class="px-4 py-2 border-b">Amount</th>
-                                <th class="px-4 py-2 border-b">Action</th>
-                            </tr>
+                        <tr class="bg-gray-200 text-xs sm:text-sm">
+                            <th class="px-2 sm:px-4 py-2 border-b">Product Name</th>
+                            <th class="px-2 sm:px-4 py-2 border-b">Category</th>
+                            <th class="px-2 sm:px-4 py-2 border-b">Archived Date</th>
+                            <th class="px-2 sm:px-4 py-2 border-b">Amount</th>
+                            <th class="px-2 sm:px-4 py-2 border-b">Action</th>
+                        </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="(item, index) in archivedProducts" :key="index" class="text-center">
-                            <td class="px-4 py-2 border-b">{{ item.name }}</td>
-                            <td class="px-4 py-2 border-b">{{ item.category }}</td>
-                            <td class="px-4 py-2 border-b">{{ item.dateArchived }}</td>
-                            <td class="px-4 py-2 border-b">{{ item.dateArchived }}</td>
-                            <td class="px-4 py-2 border-b">
-
+                        <tr v-for="(item, index) in archivedProducts" :key="index" class="text-center text-xs sm:text-sm">
+                            <td class="px-2 sm:px-4 py-2 border-b">{{ item.name }}</td>
+                            <td class="px-2 sm:px-4 py-2 border-b">{{ item.category }}</td>
+                            <td class="px-2 sm:px-4 py-2 border-b">{{ item.dateArchived }}</td>
+                            <td class="px-2 sm:px-4 py-2 border-b">{{ item.amount }}</td>
+                            <td class="px-2 sm:px-4 py-2 border-b">
+                            <!-- Add action buttons here -->
                             </td>
-                            </tr>
+                        </tr>
                         </tbody>
                     </table>
+                    </div>
                 </div>
-              </div>
             </div>
         </div>
     </div>
