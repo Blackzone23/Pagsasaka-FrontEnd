@@ -88,101 +88,104 @@
                     <!--My Purchase-->
                     <div v-if="activeTab === 'My Purchase'" class="tab-content">
                         <div class="p-4">
-                            <!-- Floating Chat Button -->
-                            <button @click="openshowChatModal" class="bg-yellow-100 border-2 border-gray-300 rounded-full p-3 flex items-center justify-center fixed bottom-4 right-4 shadow-md hover:bg-yellow-300">
-                            <Icon icon="tabler:message" width="28" height="28" style="color: #608C54" />
-                            </button>
+    <!-- Floating Chat Button -->
+    <button @click="openshowChatModal" class="bg-yellow-100 border-2 border-gray-300 rounded-full p-3 flex items-center justify-center fixed bottom-4 right-4 shadow-md hover:bg-yellow-300">
+        <Icon icon="tabler:message" width="28" height="28" style="color: #608C54" />
+    </button>
+</div>
+
+<!-- Expanded Floating Chat Modal -->
+<div v-if="isshowChatModal" class="fixed bottom-4 right-4 w-full max-w-[900px] h-[65vh] md:h-[75vh] lg:h-[80vh] xl:h-[85vh] bg-white rounded-lg shadow-lg flex flex-col border z-50">
+    <!-- Header -->
+    <div class="p-4 border-b rounded-sm bg-gray-100 flex justify-between items-center">
+        <span class="text-xl font-bold text-green-600">Chat</span>
+        <button @click="closeshowChatModal" class="text-gray-600 text-lg">
+            <Icon icon="icon-park-solid:close-one" width="20" height="20" />
+        </button>
+    </div>
+
+    <div class="flex flex-1 overflow-hidden">
+        <!-- Sidebar (Users List) -->
+        <div class="w-1/3 bg-white border-r border-gray-300 p-4 flex flex-col">
+            <div class="flex">
+                <BaseSearchField placeholder="Search..." class="w-full max-w-[270px]" />
+            </div>
+
+            <div class="mt-3 flex-1 overflow-auto">
+                <div v-for="(chat, index) in chats" :key="index" class="flex items-center p-3 border-b cursor-pointer hover:bg-gray-100 transition duration-200" @click="selectChat(chat)">
+                    <img :src="chat.avatar || '/default-avatar.png'" class="w-12 h-12 rounded-full border mr-3" alt="Avatar" />
+                    <div class="flex-1">
+                        <span class="font-semibold">{{ chat.name }}</span>
+                        <p class="text-xs text-gray-500 truncate">{{ chat.message }}</p>
+                    </div>
+                    <span v-if="chat.unread" class="text-xs bg-red-500 text-white px-2 py-1 rounded-full">
+                        {{ chat.unread }}
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chat Window -->
+        <div class="w-full flex flex-col">
+            <!-- If No Chat is Selected -->
+            <div v-if="!selectedChat" class="flex-1 flex items-center justify-center text-gray-400">
+                <p class="text-xl">Welcome to Pagsasaka Chat</p>
+            </div>
+
+            <!-- If a Chat is Selected -->
+            <div v-else class="flex flex-col flex-1">
+                <div class="p-4 border-b text-lg font-bold flex justify-between items-center bg-gray-100">
+                    <span>{{ selectedChat.name }}</span>
+                    <button class="text-gray-600">&#8942;</button>
+                </div>
+
+                <!-- Messages Area -->
+                <div class="flex-1 bg-gray-50 p-4 overflow-auto space-y-4 text-sm">
+                    <div v-for="(message, index) in chatMessages" :key="index" class="flex items-start space-x-3" :class="{'justify-end': message.sender === 'You', 'justify-start': message.sender !== 'You'}">
+                        <!-- Avatar (Only for others' messages) -->
+                        <div v-if="message.sender !== 'You'" class="w-8 h-8 rounded-full bg-gray-300"></div>
+                        
+                        <div class="p-3 rounded-lg shadow-md w-auto max-w-xs" :class="{'bg-green-500 text-white': message.sender === 'You', 'bg-gray-200 text-black': message.sender !== 'You'}">
+                            <p class="text-sm font-bold" :class="{'text-white': message.sender === 'You', 'text-green-600': message.sender !== 'You'}">
+                                {{ message.sender }}
+                            </p>
+                            <p class="text-xs">
+                                {{ message.text }}
+                            </p>
+                            <p class="text-xs mt-1 text-black">
+                                {{ message.time }}
+                            </p>
                         </div>
 
-                        <!-- Expanded Floating Chat Modal -->
-                        <div v-if="isshowChatModal" class="fixed bottom-4 right-4 2xl:w-[900px] 2xs:w-[500px] 2xl:h-[85vh] 2xs:h-[65vh] bg-white rounded-lg shadow-lg flex flex-col border z-50">
-                            <!-- Header -->
-                            <div class="p-4 border-b rounded-sm bg-gray-100 flex justify-between items-center">
-                                <span class="text-xl font-bold text-green-600">Chat</span>
-                                <button @click="closeshowChatModal" class="text-gray-600 text-lg">
-                                    <Icon icon="icon-park-solid:close-one" width="20" height="20" />
-                                </button>
-                            </div>
+                        <!-- Avatar Placeholder for Sent Messages (Align Right) -->
+                        <div v-if="message.sender === 'You'" class="w-8 h-8 rounded-full bg-gray-300"></div>
+                    </div>
+                </div>
 
-                            <div class="flex flex-1 overflow-hidden">
-                                <!-- Sidebar (Users List) -->
-                                <div class="w-1/3 bg-white border-r border-gray-300 p-4 flex flex-col">
-                                <div class="flex">
-                                <BaseSearchField placeholder="Search..." class="2xl:w-[270px] 2xs:w-[137px] "></BaseSearchField>
-                                </div>
+                <!-- Input Area -->
+                <div class="p-4 border-t bg-white flex items-center gap-2">
+                    <!-- Message Input -->
+                    <input 
+                        v-model="newMessage" 
+                        type="text" 
+                        placeholder="Type a message here" 
+                        class="flex-1 p-2 border rounded-md text-sm w-full"
+                        @keyup.enter="sendMessage" 
+                    />
 
-                                    <div class="mt-3 flex-1 overflow-auto ">
-                                        <div v-for="(chat, index) in chats" :key="index" class="flex items-center p-3 border-b cursor-pointer hover:bg-gray-100 transition duration-200" @click="selectChat(chat)">
-                                            <img :src="chat.avatar || '/default-avatar.png'" class="w-12 h-12 rounded-full border mr-3" alt="Avatar" />
-                                        <div class="flex-1">
-                                            <span class=" font-semibold">{{ chat.name }}</span>
-                                            <p class="text-xs text-gray-500 truncate">{{ chat.message }}</p>
-                                        </div>
-                                            <span v-if="chat.unread" class="text-xs bg-red-500 text-white px-2 py-1 rounded-full">
-                                            {{ chat.unread }}
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
+                    <!-- Send Button -->
+                    <button 
+                        class="bg-green-600 text-white px-4 py-2 rounded-md transition duration-200 hover:bg-green-700 shrink-0"
+                        @click="sendMessage"
+                    >
+                        Send
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-                                <!-- Chat Window -->
-                                <div class="w-full flex flex-col">
-                                <!-- If No Chat is Selected -->
-                                <div v-if="!selectedChat" class="flex-1 flex items-center justify-center text-gray-400">
-                                    <p class="text-xl">Welcome to Pagsasaka Chat</p>
-                                </div>
-
-                                <!-- If a Chat is Selected -->
-                                <div v-else class="flex flex-col flex-1">
-                                    <div class="p-4 border-b text-lg font-bold flex justify-between items-center bg-gray-100">
-                                    <span>{{ selectedChat.name }}</span>
-                                    <button class="text-gray-600">&#8942;</button>
-                                    </div>
-
-                                    <!-- Messages Area -->
-                                    <div class="flex-1 bg-gray-50 p-4 overflow-auto space-y-4 2xl:text-sm 2xs:text-sm">
-                                    <div v-for="(message, index) in chatMessages" :key="index"  class="flex items-start space-x-3"  :class="{'justify-end': message.sender === 'You', 'justify-start': message.sender !== 'You'}">
-
-                                        <!-- Avatar (Only for others' messages) -->
-                                        <div v-if="message.sender !== 'You'" class="w-8 h-8 rounded-full bg-gray-300"></div>
-                                    
-                                        <div class="p-3 rounded-lg shadow-md w-auto max-w-xs" :class="{'bg-green-500 text-white': message.sender === 'You', 'bg-gray-200 text-black': message.sender !== 'You'}">
-                                        <p class="text-sm font-bold" :class="{'text-white': message.sender === 'You', 'text-green-600': message.sender !== 'You'}">
-                                        {{ message.sender }}
-                                        </p>
-                                        <p class="text-xs">
-                                        {{ message.text }}
-                                        </p>
-                                        <p class="text-xs mt-1 text-black">
-                                        {{ message.time }}
-                                        </p>
-                                        </div>
-
-                                        <!-- Avatar Placeholder for Sent Messages (Align Right) -->
-                                        <div v-if="message.sender === 'You'" class="w-8 h-8 rounded-full bg-gray-300"></div>
-                                    </div>
-                                    </div>
-
-                                    <!-- Input Area -->
-                                    <div class="p-4 border-t bg-white flex items-center">
-                                    <!-- Upload Image Icon on the Left -->
-                                    <label class="cursor-pointer flex items-center space-x-2 text-gray-600 hover:text-gray-800 mr-2">
-                                    <!-- <Icon icon="ep:picture-filled" width="20" height="20" style="color: #747272" /> -->
-                                    <!-- <input type="file" class="hidden" @change="uploadImage" /> -->
-                                    </label>
-
-                                    <!-- Message Input -->
-                                    <input v-model="newMessage" type="text" placeholder="Type a message here" class="flex-1 p-2 border rounded-md text-sm" @keyup.enter="sendMessage" />
-
-                                    <!-- Send Button -->
-                                    <button class="ml-1 bg-green-600 text-white px-4 py-2 rounded-md transition duration-200 hover:bg-green-700" @click="sendMessage">
-                                    Send
-                                    </button>
-                                    </div>
-                                </div>
-                                </div>
-                            </div>
-                        </div>
                         
                         <div class="p-6">
                            <!-- Scrollable Tabs -->
