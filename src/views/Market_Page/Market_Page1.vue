@@ -36,11 +36,11 @@
                             <div class="flex items-center space-x-4 mt-3">
                                 <h2 class="font-bold text-lg">Quantity:</h2>
                                 <div class="flex items-center border border-gray-300 rounded-full p-1">
-                                    <button class="bg-[#608C54] text-white font-bold py-1 px-2 rounded-full"
-                                        @click="decreaseQuantity"> - </button>
+                                    <button
+                                        @click="decreaseQuantity"> <Icon icon="zondicons:minus-solid" width="20" height="20"  style="color: #608C54" /> </button>
                                     <span class="font-bold mx-4">{{ quantity }}</span>
-                                    <button class="bg-[#608C54] text-white font-bold py-1 px-2 rounded-full"
-                                        @click="increaseQuantity"> + </button>
+                                    <button
+                                        @click="increaseQuantity"> <Icon icon="gridicons:add" width="24" height="24"  style="color: #608C54" /> </button>
                                 </div>
                             </div>
 
@@ -90,34 +90,27 @@
                 <div class="hidden md:block border-l border-gray-300 h-20"></div>
 
                 <!-- Right Section: Metrics -->
-                <div class="w-full md:flex-1 grid grid-cols-2 md:grid-cols-3 gap-4 items-center text-gray-600 text-center">
-                    <div>
+                <div class="w-full md:flex-1 grid grid-cols-2 md:grid-cols-4 gap-4 items-center text-gray-600 text-center">
+                    <div class="flex flex-col items-center">
                         <h1 class="text-md font-semibold">Rating</h1>
                         <span class="text-xs">4.5</span>
                     </div>
-                    <div>
+                    <div class="flex flex-col items-center">
                         <h1 class="text-md font-semibold">Products</h1>
                         <span class="text-xs">2</span>
                     </div>
-                    <div>
-                        <h1 class="text-md font-semibold">Response Rate</h1>
-                        <span class="text-xs">56%</span>
-                    </div>
-                    <div>
-                        <h1 class="text-md font-semibold">Response Time</h1>
-                        <span class="text-xs">Within Hours</span>
-                    </div>
-                    <div>
+                    <div class="flex flex-col items-center">
                         <h1 class="text-md font-semibold">Joined</h1>
                         <span class="text-xs">4 months ago</span>
                     </div>
-                    <div>
+                    <div class="flex flex-col items-center">
                         <h1 class="text-md font-semibold">Followers</h1>
                         <span class="text-xs">123</span>
                     </div>
                 </div>
             </div>
         </div>
+
 
 
         <!-- Product Description -->

@@ -84,7 +84,9 @@ import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 
 const viewAllClicked = ref(false);
-
+const store = useStore();
+const router = useRouter();
+const showLoading = computed(() => store.state.showLoading.state);
 const archivedProducts = ref([
   { name: 'Product 1', category: 'Category A', dateArchived: '2024-11-01' },
   { name: 'Product 2', category: 'Category B', dateArchived: '2024-11-05' },

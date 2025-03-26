@@ -40,9 +40,9 @@
             <!-- Quantity -->
             <div class="md:col-span-1 text-center">
                 <div class="flex items-center justify-center text-sm text-white space-x-2">
-                    <button @click="decreaseQuantity(cartItem.id)" class="px-3 py-1 bg-[#608C54] rounded-full">-</button>
+                    <button @click="decreaseQuantity(cartItem.id)"><Icon icon="zondicons:minus-solid" width="20" height="20"  style="color: #608C54" /></button>
                     <BaseInputField v-model="cartItem.quantity" class="w-14 text-center border rounded" />
-                    <button @click="increaseQuantity(cartItem.id)" class="px-3 py-1 bg-[#608C54] rounded-full">+</button>
+                    <button @click="increaseQuantity(cartItem.id)"> <Icon icon="gridicons:add" width="24" height="24"  style="color: #608C54" /> </button>
                 </div>
             </div>
 
