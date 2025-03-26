@@ -1,7 +1,7 @@
 <template>
      <div>
         <header class="bg-[#608C54] shadow p-4 flex justify-between items-center text-white">
-                <h1 class="text-xl font-bold">Welcome to Rider Dashboard</h1>
+                <h1 class="text-lg sm:text-xl 2xl:ml-0 md:ml-10 2xs:ml-10 font-bold">Welcome to Rider Dashboard</h1>
                 <div class="flex items-center space-x-4">
                     <div class="flex space-x-2">
                     <!-- Settings Icon with Dropdown -->
@@ -17,12 +17,12 @@
                 </div>
         </header>
 
-        <div class="flex h-96 bg-gray-100">
+        <div class="flex h-96 ">
             <main class="flex-1 p-6">
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                     
                     <!-- Earnings Overview -->
-                    <div class="bg-white p-4 shadow rounded-lg">
+                    <div class="bg-gray-100 p-4 shadow rounded-lg">
                         <h3 class="text-lg font-semibold mb-2">Earnings</h3>
                         <p>Today: <span class="font-bold">{{ earnings.today }}</span></p>
                         <p>This Week: <span class="font-bold">{{ earnings.week }}</span></p>
@@ -30,7 +30,7 @@
                     </div>
 
                     <!-- Upcoming Orders -->
-                    <div class="bg-white p-4 shadow rounded-lg">
+                    <div class="bg-gray-100 p-4 shadow rounded-lg">
                     <h3 class="text-lg font-semibold mb-2">Upcoming Orders</h3>
                     <ul>
                         <li v-for="order in upcomingOrders" :key="order.id" class="mb-1">
@@ -41,7 +41,7 @@
                 </div>
 
                 <!-- Recent Deliveries -->
-                <div class="mt-6 bg-white p-4 shadow rounded-lg">
+                <div class="mt-6 bg-gray-100 p-4 shadow rounded-lg">
                     <h3 class="text-lg font-semibold mb-4">Recent Deliveries</h3>
                     <table class="w-full border-collapse border border-gray-300">
                         <thead>

@@ -5,7 +5,7 @@
 
     <div>
         <header class="bg-[#608C54] shadow p-4 flex justify-between items-center text-white">
-                <h1 class="text-xl font-bold">Welcome to List of Orders</h1>
+                <h1 class="text-lg sm:text-xl 2xl:ml-0 md:ml-10 2xs:ml-10 font-bold">Welcome to List of Orders</h1>
                 <div class="flex items-center space-x-4">
                     <div class="flex space-x-2">
                     <!-- Settings Icon with Dropdown -->
@@ -33,7 +33,7 @@
                     <tbody>
                         <tr v-for="productList in deliveryList" :key="productList.id" class="hover:bg-gray-50">
                             <td class="px-4 py-2">{{ productList.product_name }}</td>
-                            <td class="px-4 py-2 text-center">
+                            <td class="px-4 py-2 text-end">
                                 <button @click="claimProduct(productList.id)" class="text-white bg-green-600 hover:bg-green-500 px-5 rounded-lg text-sm">Claim</button>
                             </td>
                         </tr>
