@@ -9,94 +9,110 @@
 			<div class="relative">
 				<Icon icon="uil:setting" class="w-6 h-6 cursor-pointer" @click="toggleDropdown" />
 				<div v-if="dropdownVisible" class="absolute right-0 mt-2 bg-white shadow-lg rounded p-2 w-48">
-				<button class="w-full text-left px-4 py-2 text-sm text-black">Account Info</button>
-				<button class="w-full text-left px-4 py-2 text-sm text-black" @click="logout()">Logout</button>
+					<a href="/seller-profile" class="block w-full text-left px-4 py-2 text-sm text-black hover:bg-gray-100"> Account Info </a>
+					<button class="block w-full text-left px-4 py-2 text-sm text-black hover:bg-gray-100" @click="logout()"> Logout</button>
 				</div>
 			</div>
 			</div>
 		</header>
 
-		<div class="p-5">
-			<div v-if="!selectedShipment">
-				<!-- Tabs Navigation -->
-				<div class="mb-4 text-sm flex flex-wrap gap-2">
-					<button class="px-4 py-2 rounded transition" :class="{ 'bg-blue-500 text-white': activeTab === 'orders', 'bg-gray-200': activeTab !== 'orders' }" @click="activeTab = 'orders'"> My Orders</button>
-					<button class="px-4 py-2 rounded transition" :class="{ 'bg-red-500 text-white': activeTab === 'cancellations', 'bg-gray-200': activeTab !== 'cancellations' }" @click="activeTab = 'cancellations'"> Cancellations</button>
-					<button class="px-4 py-2 rounded transition" :class="{ 'bg-yellow-500 text-white': activeTab === 'refunds', 'bg-gray-200': activeTab !== 'refunds' }" @click="activeTab = 'refunds'"> Return and Refund</button>
+			<div class="p-5">
+				<div v-if="!selectedShipment">
+					<!-- Tabs Navigation -->
+					<div class="mb-4 text-sm flex flex-wrap gap-2">
+						<button class="px-4 py-2 rounded transition" :class="{ 'bg-blue-500 text-white': activeTab === 'orders', 'bg-gray-200': activeTab !== 'orders' }" @click="activeTab = 'orders'"> My Orders</button>
+						<button class="px-4 py-2 rounded transition" :class="{ 'bg-red-500 text-white': activeTab === 'cancellations', 'bg-gray-200': activeTab !== 'cancellations' }" @click="activeTab = 'cancellations'"> Cancellations</button>
+						<button class="px-4 py-2 rounded transition" :class="{ 'bg-yellow-500 text-white': activeTab === 'refunds', 'bg-gray-200': activeTab !== 'refunds' }" @click="activeTab = 'refunds'"> Return and Refund</button>
+					</div>
+
+					<!-- Tables -->
+					<div>
+						<table v-if="activeTab === 'orders'" class="table-auto w-full border-collapse border border-gray-300">
+						<thead>
+							<tr class="bg-gray-300">
+							<th class="px-4 py-2">Name</th>
+							<th class="px-4 py-2">Created</th>
+							<th class="px-4 py-2">Last Updated</th>
+							<th class="px-4 py-2">Ship To</th>
+							<th class="px-4 py-2">Status</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr
+							v-for="order in orderList"
+							:key="order.id"
+							class="even:bg-gray-50 hover:bg-gray-200 text-center text-sm cursor-pointer"
+							@click="handleOrderClick(order)"
+							>
+							<td class="px-4 py-2">{{ order.product_name }}</td>
+							<td class="px-4 py-2">{{ order.created_at }}</td>
+							<td class="px-4 py-2">{{ order.updated_at }}</td>
+							<td class="px-4 py-2">{{ order.ship_to }}</td>
+							<td class="px-4 py-2">{{ order.status }}</td>
+							</tr>
+						</tbody>
+						</table>
+					</div>
+
+					<!-- Tracking Interface -->
+					<div class="p-5 border-2 border-gray-300 rounded-md mt-2 text-center">
+						<h1 class="text-lg font-bold">Select a Shipment</h1>
+						<p class="text-sm">Please select a shipment from the table to view tracking details.</p>
+					</div>
 				</div>
 
-				<!-- Tables -->
-				<div>
-					<table v-if="activeTab === 'orders'" class="table-auto w-full border-collapse border border-gray-300">
-					<thead>
-						<tr class="bg-gray-300">
-						<th class="px-4 py-2">Name</th>
-						<th class="px-4 py-2">Created</th>
-						<th class="px-4 py-2">Last Updated</th>
-						<th class="px-4 py-2">Ship To</th>
-						<th class="px-4 py-2">Status</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr
-						v-for="order in orderList"
-						:key="order.id"
-						class="even:bg-gray-50 hover:bg-gray-200 text-center text-sm cursor-pointer"
-						@click="handleOrderClick(order)"
-						>
-						<td class="px-4 py-2">{{ order.product_name }}</td>
-						<td class="px-4 py-2">{{ order.created_at }}</td>
-						<td class="px-4 py-2">{{ order.updated_at }}</td>
-						<td class="px-4 py-2">{{ order.ship_to }}</td>
-						<td class="px-4 py-2">{{ order.status }}</td>
-						</tr>
-					</tbody>
-					</table>
-				</div>
+				<!-- Order Status -->
+				<div v-else class="p-5 border-2 rounded-md mt-2 text-center flex flex-col md:flex-row items-center md:items-start" :class="{ 'border-blue-300': selectedShipment.status === 'Order', 'border-red-300 text-red-600': selectedShipment.status === 'Cancelled', 'border-yellow-300 text-yellow-600': selectedShipment.status === 'Refund', 'border-[#608C54]': selectedShipment.status !== 'Order' && selectedShipment.status !== 'Cancelled' && selectedShipment.status !== 'Refund',}">
+					<!-- Left Side - Tracking Info -->
+					<div class="flex-1 text-center">
+						<h1 class="text-lg font-bold">{{ selectedShipment.status }} Shipment</h1>
+						<p class="text-sm">
+							{{
+								selectedShipment.status === 'Order'
+								? 'This shipment is currently being processed.'
+								: selectedShipment.status === 'Cancelled'
+								? 'This shipment has been cancelled. Contact customer support for assistance.'
+								: selectedShipment.status === 'Refund'
+								? 'You should receive the refund in your account shortly.'
+								: 'Tracking Details'
+							}}
+						</p>
 
-				<!-- Tracking Interface -->
-				<div class="p-5 border-2 border-gray-300 rounded-md mt-2 text-center">
-					<h1 class="text-lg font-bold">Select a Shipment</h1>
-					<p class="text-sm">Please select a shipment from the table to view tracking details.</p>
-				</div>
-			</div>
+						<!-- Tracking Process -->
+						<div v-if="selectedShipment.status !== 'Cancelled' && selectedShipment.status !== 'Refund'">
+							<div class="relative flex items-center justify-center mt-6">
+								<div class="absolute w-3/4 md:w-[430px] h-1 bg-[#608C54] top-1/2 z-0"></div>
+								<div class="flex space-x-10 md:space-x-[60px] z-10">
+									<div v-for="status in trackingSteps" :key="status.id" :class="['w-12 h-12 md:w-16 md:h-16 rounded-full flex items-center justify-center',getStatusClass(status.id),]">
+										<Icon :icon="status.icon" class="text-white w-6 h-6 md:w-8 md:h-8" />
+									</div>
+								</div>
+							</div>
 
-			<!-- Order Status -->
-			<div v-else class="p-5 border-2 rounded-md mt-2 text-center" :class="{ 'border-blue-300': selectedShipment.status === 'Order','border-red-300 text-red-600': selectedShipment.status === 'Cancelled','border-yellow-300 text-yellow-600': selectedShipment.status === 'Refund','border-[#608C54]': selectedShipment.status !== 'Order' && selectedShipment.status !== 'Cancelled' && selectedShipment.status !== 'Refund'}">
-				<h1 class="text-lg font-bold">{{ selectedShipment.status }} Shipment</h1>
-				<p class="text-sm">
-					{{selectedShipment.status === 'Order'? 'This shipment is currently being processed.': selectedShipment.status === 'Cancelled'? 'This shipment has been cancelled. Contact customer support for assistance.': selectedShipment.status === 'Refund'? 'You should receive the refund in your account shortly.': 'Tracking Details'}}
-				</p>
+							<div class="flex space-x-4 md:space-x-[47px] justify-center items-center text-center mt-2 text-xs md:text-sm">
+								<span v-for="status in trackingSteps" :key="status.id">{{ status.label }}</span>
+							</div>
 
-				<!-- Tracking Process -->
-				<div v-if="selectedShipment.status !== 'Cancelled' && selectedShipment.status !== 'Refund'">
-					<div class="relative flex items-center justify-center mt-6">
-						<div class="absolute w-3/4 md:w-[480px] h-1 bg-[#608C54] top-1/2 z-0"></div>
-						<div class="flex space-x-10 md:space-x-20 z-10">
-							<div v-for="status in trackingSteps" :key="status.id" :class="['w-12 h-12 md:w-16 md:h-16 rounded-full flex items-center justify-center', getStatusClass(status.id)]">
-							<Icon :icon="status.icon" class="text-white w-6 h-6 md:w-8 md:h-8" />
+							<!-- Approval Button -->
+							<div class="flex justify-center mt-4">
+								<button @click="updateStatus()" class="px-4 py-2 md:px-6 md:py-2 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg shadow-md transition">
+									Approve
+								</button>
 							</div>
 						</div>
-					</div>
 
-					<div class="flex space-x-4 md:space-x-[68px] justify-center text-center mt-2 text-xs md:text-sm">
-						<span v-for="status in trackingSteps" :key="status.id">{{ status.label }}</span>
-					</div>
-
-					<!-- Approval Button -->
-					<div class="flex justify-center mt-4">
-						<button @click="updateStatus()" class="px-4 py-2 md:px-6 md:py-2 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg shadow-md transition">
-							Approve
+						<!-- Back Button -->
+						<button class="mt-8 md:mt-12 px-4 py-2 bg-gray-300 rounded text-sm" @click="selectedShipment = null">
+							Back to Shipments
 						</button>
 					</div>
-				</div>
 
-				<!-- Back Button -->
-				<button class="mt-8 md:mt-12 px-4 py-2 bg-gray-300 rounded text-sm" @click="selectedShipment = null">
-					Back to Shipments
-				</button>
+					<!-- Right Side - Image -->
+					<div class="flex-1 flex justify-center items-center mt-6 md:mt-0">
+						<img :src="selectedShipment.imageUrl" alt="Shipment Image" class="w-[280px] h-[300px] md:w-[350px] md:h-[400px] rounded-lg shadow-md object-cover"/>
+					</div>
+				</div>
 			</div>
-		</div>
 		</div>
 	</div>
 </template>

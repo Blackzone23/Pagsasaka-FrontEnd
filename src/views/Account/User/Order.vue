@@ -9,8 +9,8 @@
                     <Icon icon="uil:setting" width="24" height="24" style="color: white" @click="toggleDropdown" />
                     <!-- Dropdown Menu -->
                     <div v-if="dropdownVisible" class="absolute right-0 mt-2 bg-white shadow-lg rounded p-2 w-48">
-                    <button class="w-full text-left px-4 py-2 text-sm text-black">Account Info</button>
-                    <button class="w-full text-left px-4 py-2 text-sm text-black" @click="logout()">Logout</button>
+                        <a href="/seller-profile" class="block w-full text-left px-4 py-2 text-sm text-black hover:bg-gray-100"> Account Info </a>
+                        <button class="block w-full text-left px-4 py-2 text-sm text-black hover:bg-gray-100" @click="logout()"> Logout</button>
                     </div>
                 </div>
             </div>
@@ -20,12 +20,7 @@
         <!-- Tabs -->
         <div class="mt-4">
             <div class="flex justify-center border-b border-gray-200">
-                <button v-for="tab in tabs" :key="tab" 
-                    :class="[
-                        'px-4 py-2 focus:outline-none',
-                        activeTab === tab ? 'border-b-2 border-[#608C54] text-[#608C54]' : 'text-gray-600'
-                    ]" 
-                    @click="activeTab = tab">
+                <button v-for="tab in tabs" :key="tab" :class="[ 'px-4 py-2 focus:outline-none',activeTab === tab ? 'border-b-2 border-[#608C54] text-[#608C54]' : 'text-gray-600']" @click="activeTab = tab">
                     {{ tab }}
                 </button>
             </div>

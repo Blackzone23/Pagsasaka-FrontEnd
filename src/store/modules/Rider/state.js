@@ -4,4 +4,7 @@ export default {
         data:[],
     },
 
+    riderSignup: {
+        data:[],
+    },
 }

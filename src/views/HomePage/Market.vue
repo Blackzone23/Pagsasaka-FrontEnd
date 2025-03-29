@@ -90,7 +90,7 @@
                 <!-- Main Content -->
                 <div class="p-4 mt-12">
                     <!-- Product Grid -->
-                    <div class="grid grid-cols-2 2xs:grid-cols-2 sm:grid-cols-3 gap-4">
+                    <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-4">
                         <div v-for="moreProduct in moreProductList.slice(0, 8)" :key="moreProduct.id"  
                             class="relative border rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow group">
                             
@@ -116,6 +116,7 @@
                             </div>
                         </div>
                     </div>
+
 
                     <!-- Pagination -->
                     <div class="mt-10 mr-4 flex justify-center text-sm">
@@ -158,9 +159,9 @@
 
             <div class="p-4">
               <!-- Floating Chat Button -->
-              <button @click="openshowChatModal" class="bg-yellow-100 border-2 border-gray-300 rounded-full p-3 flex items-center justify-center fixed bottom-4 right-4 shadow-md hover:bg-yellow-300">
-              <Icon icon="tabler:message" width="28" height="28" style="color: #608C54" />
-              </button>
+                <button @click="openshowChatModal"  class="hidden md:flex bg-yellow-100 border-2 border-gray-300 rounded-full p-3  fixed bottom-4 right-4 shadow-md hover:bg-yellow-300 items-center justify-center">
+                    <Icon icon="tabler:message" width="28" height="28" style="color: #608C54" />
+                </button>
             </div>
 
             <!-- Expanded Floating Chat Modal -->

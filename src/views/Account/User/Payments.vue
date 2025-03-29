@@ -12,9 +12,9 @@
                   <Icon icon="uil:setting" width="24" height="24" style="color: white" @click="toggleDropdown" />
                   <!-- Dropdown Menu -->
                   <div v-if="dropdownVisible" class="absolute right-0 mt-2 bg-white shadow-lg rounded p-2 w-48">
-                      <button class="w-full text-left px-4 py-2 text-sm text-black">Account Info</button>
-                      <button class="w-full text-left px-4 py-2 text-sm text-black" @click="logout()">Logout</button>
-                  </div>
+                    <a href="/seller-profile" class="block w-full text-left px-4 py-2 text-sm text-black hover:bg-gray-100"> Account Info </a>
+                    <button class="block w-full text-left px-4 py-2 text-sm text-black hover:bg-gray-100" @click="logout()"> Logout</button>
+                    </div>
               </div>
           </div>
       </header>
@@ -53,10 +53,7 @@
                           <td class="px-3 sm:px-4 py-2">{{ transaction.date }}</td>
                           <td class="px-3 sm:px-4 py-2">{{ transaction.invoiceId }}</td>
                           <td class="px-3 sm:px-4 py-2">
-                              <span v-if="transaction.paymentMethod === 'MasterCard'" class="text-red-500">
-                                  MasterCard ****{{ transaction.cardLastFour }}
-                              </span>
-                              <span v-else class="text-blue-500">GCash ****{{ transaction.gcashLastFour }}</span>
+                              <span class="text-blue-500">GCash ****{{ transaction.gcashLastFour }}</span>
                           </td>
                           <td class="px-3 sm:px-4 py-2">₱{{ transaction.amount }}</td>
                       </tr>
@@ -84,9 +81,9 @@ const router = useRouter();
 const showLoading = computed(() => store.state.showLoading.state);
 
 const transactions = ref([
-  { date: '10/19/2024', invoiceId: 'T00000000001', paymentMethod: 'GCash', gcashLastFour: '2212', amount: '₱124.00' },
-  { date: '10/19/2024', invoiceId: 'T00000000001', paymentMethod: 'GCash', gcashLastFour: '2212', amount: '₱124.00' },
-  { date: '10/19/2024', invoiceId: 'T00000000001', paymentMethod: 'GCash', gcashLastFour: '2212', amount: '₱124.00' },
+  { date: '10/19/2024', invoiceId: 'T00000000001', paymentMethod: 'GCash', gcashLastFour: '2212', amount: '124.00' },
+  { date: '10/19/2024', invoiceId: 'T00000000001', paymentMethod: 'GCash', gcashLastFour: '2212', amount: '124.00' },
+  { date: '10/19/2024', invoiceId: 'T00000000001', paymentMethod: 'GCash', gcashLastFour: '2212', amount: '124.00' },
 ]);
 
 const search = ref('');

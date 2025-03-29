@@ -723,9 +723,64 @@
                                                 <button class="px-3 py-1 text-xs sm:text-sm 2xl:text-base font-semibold text-green-700 border border-green-600 rounded hover:bg-green-50">
                                                     Buy Again
                                                 </button>
-                                                <button class="px-3 py-1 text-xs sm:text-sm 2xl:text-base font-semibold text-red-600 border border-red-500 rounded hover:bg-red-50">
+                                                <button class="px-3 py-1 text-xs sm:text-sm 2xl:text-base font-semibold text-red-600 border border-red-500 rounded hover:bg-red-50" @click="openViewCancellationModal">
                                                     View Cancellation Details
                                                 </button>
+                                            </div>
+                                        </div>
+                                         <!-- Modal Backdrop -->
+                                        <div v-if="isshowViewCancellationModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+                                            <!-- Modal Content -->
+                                            <div class="bg-white max-w-3xl w-full rounded-lg shadow-lg p-6 relative">
+                                                <!-- Close Button -->
+                                                <button @click="closeViewCancellationModal" class="absolute top-2 right-2 text-gray-500 hover:text-red-500">
+                                                    <Icon icon="icon-park-solid:close-one" width="20" height="20" />
+                                                </button>
+
+                                                <!-- Cancellation Header -->
+                                                <div class="text-red-600 font-bold text-lg">Cancellation Completed</div>
+                                                <p class="text-gray-500 text-sm">on {{ cancellationDate }}</p>
+
+                                                <!-- Shop Info -->
+                                                <div class="mt-4 flex items-center justify-between">
+                                                    <div class="flex items-center">
+                                                        <span class="ml-2 text-gray-500">Shop Name:</span>
+                                                    </div>
+                                                    <button class="text-blue-500 underline text-sm">View Shop</button>
+                                                </div>
+
+                                                <!-- Product Info -->
+                                                <div class="mt-4 flex items-center space-x-4 border-t pt-4">
+                                                    <img :src="product.image" alt="Product Image" class="w-20 h-20 object-cover">
+                                                    <div class="flex-1">
+                                                        <p class="font-semibold">{{ product.name }}</p>
+                                                        <p class="text-gray-500 text-sm">x{{ product.quantity }}</p>
+                                                    </div>
+                                                    <div class="text-right">
+                                                        <p class="text-gray-400 line-through">₱{{ product.originalPrice }}</p>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Order Details -->
+                                                <div class="mt-4 border-t pt-4 text-sm">
+                                                    <div class="flex justify-between">
+                                                        <span class="text-gray-500">Requested by</span>
+                                                        <span class="font-medium">Buyer</span>
+                                                    </div>
+                                                    <div class="flex justify-between mt-2">
+                                                        <span class="text-gray-500">Payment method</span>
+                                                        <span class="font-medium">{{ paymentMethod }}</span>
+                                                    </div>
+                                                    <div class="flex justify-between mt-2">
+                                                        <span class="text-gray-500">Order ID</span>
+                                                        <a :href="orderLink" class="text-red-500 font-medium underline">{{ orderId }}</a>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Cancellation Reason -->
+                                                <div class="mt-6 border-t pt-4 text-gray-700 font-semibold">
+                                                    Reason: <span class="font-normal">{{ reason }}</span>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -1120,6 +1175,23 @@ const product = ref({
 });
 
 const imageUrl = ref('https://via.placeholder.com/300'); // Replace with actual image URL
+/******************************************************************
+ FUNCTION FOR TRACK ORDER MODAL
+******************************************************************/
+const isshowViewCancellationModal = ref(false);
+
+const openViewCancellationModal = () => {
+    isshowViewCancellationModal.value = true;
+};
+
+// Function to handle closing modal
+function closeViewCancellationModal() {
+    isshowViewCancellationModal.value = false;
+}
+
+/******************************************************************
+ FUNCTION FOR TRACK ORDER MODAL
+******************************************************************/
 const isshowTrackModal = ref(false);
 
 const openTrackModal = () => {

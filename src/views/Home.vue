@@ -81,9 +81,10 @@
                         <div class="lettuce">
                             <h1 class="joinUs">Join Us!</h1>
                             <hr class="borderL" />
-                            <p class="paragraphL">Start buying and selling with <br> bulk discounts and <br> affordable prices.</p>
+                            <p class="paragraphL">to be part of our logistics</p>
                            <div class="mt-7">
-                                <a href="/signup" class="signupL"> Sign Up</a>
+                                
+                                <a href="/rider" class="signupL"> Apply as Rider</a>
                            </div>
                         </div>
                         
@@ -99,6 +100,7 @@
 </template>
 
 <script setup>
+import { Icon } from '@iconify/vue';
 import HomeCover1 from '@/assets/HomeCover1.png';
 import person from '@/assets/person.png'
 import tractor from '@/assets/tractor.png'

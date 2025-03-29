@@ -14,9 +14,9 @@
                     <div class="relative">
                         <Icon icon="uil:setting" width="24" height="24" style="color: white" @click="toggleDropdown" />
                         <!-- Dropdown Menu -->
-                        <div v-if="dropdownVisible" class="absolute right-0 mt-2 bg-white shadow-lg rounded p-2 w-48">
-                            <button class="w-full text-left px-4 py-2 text-sm text-black">Account Info</button>
-                            <button class="w-full text-left px-4 py-2 text-sm text-black" @click="logout()">Logout</button>
+                        <div v-if="dropdownVisible" class="absolute right-0 mt-2 bg-white shadow-lg rounded p-2 w-48 ">
+                            <a href="/seller-profile" class="block w-full text-left px-4 py-2 text-sm text-black hover:bg-gray-100"> Account Info </a>
+                            <button class="block w-full text-left px-4 py-2 text-sm text-black hover:bg-gray-100" @click="logout()"> Logout</button>
                         </div>
                     </div>
                     </div>
@@ -28,15 +28,6 @@
                 <div class="flex items-center space-x-4 justify-end">
                     <div class="space-x-4 items-center flex">
                         <!-- Button to toggle drafts or all products -->
-                        <button  class="px-4 py-2 bg-[#608C54] text-white rounded-md text-sm flex items-center space-x-2"  @click="toggleView">
-
-                            <!-- Toggle Icons Based on isShowingDrafts -->
-                            <Icon  v-if="isShowingDrafts" icon="oui:return-key" width="20" height="20"  style="color: white" />
-
-                            <Icon  v-else icon="material-symbols:drafts"  width="20"  height="20" style="color: white"  />
-                            <!-- Toggle Text Based on isShowingDrafts -->
-                            <span>{{ isShowingDrafts ? 'Back to Product List' : 'Saved Drafts' }}</span>
-                        </button>
                         <button class="px-4 py-2 bg-[#608C54] text-white rounded-md text-sm" @click="openAddProductModal">
                             + Add New Product
                         </button>
@@ -91,6 +82,18 @@
                                         <BaseLabel class="text-sm font-semibold">Stocks:</BaseLabel>
                                         <BaseInputField v-model="productData.stocks" class="border border-gray-400 rounded-md w-full text-center focus:outline-none focus:ring-1 focus:ring-teal-500" @input="validateNumber" />
                                         <BaseError v-if="$validateAddCategoryRules.stocks.$error">{{ $validateAddCategoryRules.stocks.$errors[0].$message }}</BaseError>
+                                    </div>
+
+                                    <!---Unit-->
+                                    <div class="flex flex-col">
+                                        <BaseLabel class="text-sm font-semibold">Unit:</BaseLabel>
+                                        <BaseSelectField  v-model="productData.unit">
+                                            <BaseOptionDefaultField>Select type</BaseOptionDefaultField>
+                                            <BaseOptionField value="kg">kg</BaseOptionField>
+                                            <BaseOptionField value="net">net</BaseOptionField>
+                                            <BaseOptionField value="box">box</BaseOptionField>
+                                        </BaseSelectField>
+                                        <BaseError v-if="$validateAddCategoryRules.unit.$error">{{ $validateAddCategoryRules.unit.$errors[0].$message }}</BaseError>
                                     </div>
                                 </div>
                             </div>
@@ -206,6 +209,18 @@
                                             {{ $validateUpdateProductRules.stocks.$errors[0].$message }}
                                         </BaseError>
                                     </div>
+
+                                     <!---Unit-->
+                                     <div class="flex flex-col">
+                                        <BaseLabel class="text-sm font-semibold">Unit:</BaseLabel>
+                                        <BaseSelectField  v-model="updatedProduct.unit">
+                                            <BaseOptionDefaultField>Select type</BaseOptionDefaultField>
+                                            <BaseOptionField value="kg">kg</BaseOptionField>
+                                            <BaseOptionField value="net">net</BaseOptionField>
+                                            <BaseOptionField value="box">box</BaseOptionField>
+                                        </BaseSelectField>
+                                        <BaseError v-if="$validateUpdateProductRules.unit.$error">{{ $validateUpdateProductRules.unit.$errors[0].$message }}</BaseError>
+                                    </div>
                                 </div>
                             </div>
 
@@ -299,9 +314,6 @@
                             <!-- Table Header -->
                             <thead class="bg-gray-200 text-xs sm:text-sm">
                                 <tr>
-                                    <th class="p-2">
-                                        <BaseCheckBox id="select-all" :value="selectAll" :modelValue="selectAll" @update:modelValue="toggleSelectAll"/>
-                                    </th>
                                     <th class="px-2 sm:px-4 py-2 sm:py-3 text-left">Product</th>
                                     <th class="px-2 sm:px-4 py-2 sm:py-3 text-left">Description</th>
                                     <th class="px-2 sm:px-4 py-2 sm:py-3 text-left">Stocks</th>
@@ -313,15 +325,12 @@
                             <!-- Table Body -->
                             <tbody>
                                 <tr v-for="product in productList" :key="product.id" class="border-b hover:bg-gray-100 2xl:text-sm  2xs:text-xs">
-                                    <td class="p-2"> 
-                                        <BaseCheckBox :id="`product-${product.id}`" :value="product.id" :modelValue="selectedProducts.includes(product.id)" @update:modelValue="(isChecked) => handleSelect(product.id, isChecked)"/>
-                                    </td>
                                     <td class="p-2 sm:p-4 flex items-center space-x-2 gap-2">
                                         <img :src="product.product_img[0]" class="w-10 h-10 sm:w-12 sm:h-12" />
                                         <span class="hidden sm:table-cell">{{ product.product_name }}</span>
                                     </td>
                                     <td class="px-2 sm:px-4 py-2 ">{{ product.description }}</td>
-                                    <td class="px-2 sm:px-4 py-2">{{ product.stocks }} kg</td>
+                                    <td class="px-2 sm:px-4 py-2">{{ product.stocks }} {{product.unit}}</td>
                                     <td class="px-2 sm:px-4 py-2">₱{{ product.price }}</td>
                                     <td class="px-2 sm:px-4 py-2 flex items-center space-x-2 justify-end">
                                         <!-- Edit Button -->
@@ -360,7 +369,6 @@ import BaseOptionField from "@/components/Input-Fields/BaseOptionField.vue";
 import BaseSelectField from "@/components/Input-Fields/BaseSelectField.vue";
 import BaseRadioButton from "@/components/Input-Fields/BaseRadioButton.vue";
 import BaseError from "@/components/Input-Fields/BaseError.vue";
-import BaseCheckBox from "@/components/Input-Fields/BaseCheckBox.vue";
 import { debounce } from 'lodash';
 import { ref, computed, reactive, onMounted } from "vue";
 import { useVuelidate } from "@vuelidate/core";
@@ -422,6 +430,7 @@ const productData = reactive({
   description: '',
   price: '',
   stocks:'',
+  unit:'',
   product_img: [],
   visibility: '',
 });
@@ -456,6 +465,9 @@ const productDataRules = computed(() => {
       stocks: {
           required: helpers.withMessage('Stocks is required', required)
       },
+      unit: {
+          required: helpers.withMessage('unit is required', required)
+      },
       product_img: {
           required: helpers.withMessage('3 Product Image is required', required)
       },
@@ -476,6 +488,7 @@ async function createProduct() {
         formData.append('description', productData.description);
         formData.append('price', productData.price);
         formData.append('stocks', productData.stocks);
+        formData.append('unit', productData.unit);
         formData.append('visibility', productData.visibility);
 
         // Append images
@@ -524,6 +537,7 @@ const updatedProduct = reactive({
   description: '',
   price: '',
   stocks:'',
+  unit:'',
   product_img: [],
   visibility: '',
 });
@@ -539,6 +553,7 @@ const openUpdateProductModal = (id) => {
     updatedProduct.description = selectedProduct.description
     updatedProduct.price = selectedProduct.price;
     updatedProduct.stocks = selectedProduct.stocks;
+    updatedProduct.unit = selectedProduct.unit;
     updatedProduct.product_img = selectedProduct.product_img;
     updatedProduct.visibility = selectedProduct.visibility;
     console.log(updatedProduct.visibility); // Check if the visibility is correctly set
@@ -596,6 +611,9 @@ const updateProductRules = computed(() => {
       },
       stocks: {
           required: helpers.withMessage('Stocks is required', required)
+      },
+      unit: {
+          required: helpers.withMessage('unit is required', required)
       },
       product_img: {
           required: helpers.withMessage('3 Product Image is required', required)
@@ -758,6 +776,7 @@ function clearValues() {
     productData.description = '';
     productData.price = '';
     productData.stocks = '';
+    productData.unit = '';
     productData.product_img = []; // Reset to an empty array
     productData.visibility = '';
     updatedProduct.category_id = '';
@@ -765,6 +784,7 @@ function clearValues() {
     updatedProduct.description = '';
     updatedProduct.price = '';
     updatedProduct.stocks = '';
+    updatedProduct.unit = '';
     updatedProduct.product_img = []; // Reset to an empty array
     updatedProduct.visibility = '';
     

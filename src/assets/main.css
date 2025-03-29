@@ -298,7 +298,7 @@ Home Page
 
     .signupL {
         @apply
-        px-8 py-3 bg-[#608C54] text-white 2xl:text-xl 2xs:text-xs font-medium rounded-lg hover:bg-[#4e7344] transition duration-200
+        px-4  py-3 bg-[#608C54] text-white 2xl:text-xl 2xs:text-xs font-medium rounded-lg hover:bg-[#4e7344] transition duration-200
     }
 
     .Wave {

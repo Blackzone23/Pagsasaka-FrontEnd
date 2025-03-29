@@ -80,6 +80,13 @@ const routes = [
             },
 
             {
+                path: '/message',
+                name: 'Message',
+                component: () => import('../views/HomePage/Message.vue'),
+                meta: { requiresAuth: false },
+            },
+
+            {
                 path: '/checkout',
                 name: 'Checkout',
                 component: () => import('../views/Market_Page/Checkout.vue'),
@@ -90,6 +97,12 @@ const routes = [
                 path: '/signup',
                 name: 'Sign-up',
                 component: () => import('../views/HomePage/Sign-up/Sign-Up.vue'),
+                meta: { requiresAuth: false },
+            },
+            {
+                path: '/rider',
+                name: 'Rider-Form',
+                component: () => import('../views/HomePage/Rider-Form/Rider_Form.vue'),
                 meta: { requiresAuth: false },
             },
             {
@@ -265,6 +278,12 @@ const routes = [
                 path: '/seller-profile',
                 name: 'Seller_Profile',
                 component: () => import('../views/Account/User/Seller_Profile.vue')
+            },
+
+            {
+                path: '/fmessage',
+                name: 'FMessage',
+                component: () => import('../views/Account/User/FMessage.vue')
             },
 
         ]

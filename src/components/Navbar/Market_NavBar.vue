@@ -98,7 +98,12 @@
             <!-- Search bar with cart -->
             <div class="flex items-center space-x-2">
                 <BaseSearchField placeholder="Search..."></BaseSearchField>
-                <a href="/cart" class="text-white hover:underline"><Icon icon="bx:cart" width="35" height="35" style="color: white" /></a>
+                <a href="/cart" class="text-white hover:underline">
+                    <Icon icon="bx:cart" width="35" height="35" style="color: white" />
+                </a>
+                <a href="/message" class="block md:hidden">
+                    <Icon icon="raphael:chat" width="35" height="35" style="color: #fff" />
+                </a>
             </div>
         </div>
     </div>
