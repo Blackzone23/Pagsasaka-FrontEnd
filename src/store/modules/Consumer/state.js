@@ -1,40 +1,47 @@
 export default {
-    
     productItem: {
-        data:[],
-        productItemInfo:[],
+        data: [],
+        productItemInfo: [],
     },
 
     moreProduct: {
-        data:[],
+        data: [],
     },
 
     cartItem: {
-        data:[],
+        data: [],
     },
 
     checkout: {
-        data:[],
+        data: [],
+        loading: false, // Add loading state for checkout
+        success: null,  // Add success state for checkout response
+        error: null,    // Add error state for checkout errors
     },
 
     conversation: {
-        data:[],
+        data: [],
     },
 
     message: {
-        data:[],
+        data: [],
     },
 
     ratings: {
-        data:[],
+        data: [],
     },
 
     address: {
-        data:[],
+        data: [],
     },
 
     updateAddress: {
-        data:[],
+        data: [],
     },
 
-}
+    toast: { // Add toast state
+        showToast: false,
+        toastMessage: '',
+        toastType: 'default',
+    },
+};

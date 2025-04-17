@@ -272,21 +272,19 @@ API FOR ADD TO CART
         }
     },
     
-    //checkout list
-    async getCheckoutList({ commit },) {
+    // Checkout list
+    async getCheckoutList({ commit }) {
         commit('toggleLoader', true, { root: true });
         return await axiosClient.get(`product/list-cart-status`)
             .then((response) => {
                 commit('toggleLoader', false, { root: true });
                 commit('setCheckout', response.data.cart_statuses);
                 setTimeout(() => {
-                    commit('showToast', { showToast: true, toastMessage: response.data.message, toastType: 'success' }, { root: true });
+                    commit('showToast', { showToast: true, toastMessage: response.data.message, toastType: 'success' });
                 }, toastDelay);
-    
                 setTimeout(() => {
-                    commit('showToast', { showToast: false, toastMessage: '', toastType: 'default' }, { root: true });
+                    commit('showToast', { showToast: false, toastMessage: '', toastType: 'default' });
                 }, toastDuration);
-    
                 return response.data;
             })
             .catch((error) => {
@@ -294,15 +292,67 @@ API FOR ADD TO CART
                 if (error.response && error.response.data) {
                     const errorMessage = error.response.data.message;
                     setTimeout(() => {
-                        commit('showToast', { showToast: true, toastMessage: errorMessage, toastType: 'error' }, { root: true });
+                        commit('showToast', { showToast: true, toastMessage: errorMessage, toastType: 'error' });
                     }, toastDelay);
-    
                     setTimeout(() => {
-                        commit('showToast', { showToast: false, toastMessage: '', toastType: 'default' }, { root: true });
+                        commit('showToast', { showToast: false, toastMessage: '', toastType: 'default' });
                     }, toastDuration);
                 }
             });
     },
+
+    // Place COD order
+    async placeCODOrder({ commit, state }) {
+        commit('SET_CHECKOUT_LOADING', true);
+        commit('toggleLoader', true, { root: true });
+
+        const items = state.checkout.data.map(item => ({
+            product_id: item.product_id,
+            quantity: item.quantity,
+        }));
+        console.log('Items being sent:', items);
+
+        if (items.length === 0) {
+            commit('SET_CHECKOUT_ERROR', 'No items to order');
+            commit('toggleLoader', false, { root: true });
+            setTimeout(() => {
+                commit('showToast', { showToast: true, toastMessage: 'No items to order', toastType: 'error' });
+            }, toastDelay);
+            setTimeout(() => {
+                commit('showToast', { showToast: false, toastMessage: '', toastType: 'default' });
+            }, toastDuration);
+            return;
+        }
+
+        try {
+            const response = await axiosClient.post('orders/cod', {
+                items: items,
+            });
+            commit('SET_CHECKOUT_SUCCESS', response.data);
+            commit('toggleLoader', false, { root: true });
+            setTimeout(() => {
+                commit('showToast', { showToast: true, toastMessage: response.data.message, toastType: 'success' });
+            }, toastDelay);
+            setTimeout(() => {
+                commit('showToast', { showToast: false, toastMessage: '', toastType: 'default' });
+            }, toastDuration);
+            return response.data;
+        } catch (error) {
+            console.error('COD order error:', error.response?.data);
+            commit('SET_CHECKOUT_ERROR', error.response?.data?.message || 'Failed to place COD order');
+            commit('toggleLoader', false, { root: true });
+            if (error.response && error.response.data) {
+                const errorMessage = error.response.data.message || 'Failed to place COD order';
+                setTimeout(() => {
+                    commit('showToast', { showToast: true, toastMessage: errorMessage, toastType: 'error' });
+                }, toastDelay);
+                setTimeout(() => {
+                    commit('showToast', { showToast: false, toastMessage: '', toastType: 'default' });
+                }, toastDuration);
+            }
+        }
+    },
+
 
      //place order button
      async placeOrderSelected({ commit }, checkoutId) {
