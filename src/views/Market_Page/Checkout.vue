@@ -191,17 +191,20 @@ const placeOrderSelected = async () => {
         // Update state with selected items
         store.commit('Consumer/setCheckout', selectedItems);
 
-        // Dispatch placeCODOrder only if COD is selected
         if (selectedPayment.value === 'COD') {
             console.log('Dispatching placeCODOrder with selected items:', selectedItems);
             await store.dispatch('Consumer/placeCODOrder');
             router.push('/market');
         } else if (selectedPayment.value === 'GCash') {
-            // Handle GCash payment (future implementation)
-            store.commit('Consumer/showToast', { showToast: true, toastMessage: 'GCash payment not yet implemented', toastType: 'error' });
-            setTimeout(() => {
-                store.commit('Consumer/showToast', { showToast: false, toastMessage: '', toastType: 'default' });
-            }, toastDuration);
+            console.log('Dispatching placeGCashOrder with selected items:', selectedItems);
+            const response = await store.dispatch('Consumer/placeGCashOrder');
+            if (response.isSuccess) {
+                // Redirect to the PayMongo checkout URL
+                window.location.href = response.checkout_url;
+            } else {
+                // Handle failure (error message is already shown by the action)
+                console.error('Failed to create payment session:', response.message);
+            }
         }
     } catch (error) {
         console.error('Checkout failed:', error);

@@ -384,6 +384,54 @@ API FOR ADD TO CART
         }
     },
 
+    // Place GCash order (updated to return checkout_url)
+    async placeGCashOrder({ commit, state }) {
+        commit('SET_CHECKOUT_LOADING', true);
+        commit('toggleLoader', true, { root: true });
+
+        const items = state.checkout.data.map(item => ({
+            product_id: item.product_id,
+            quantity: item.quantity,
+        }));
+        console.log('Items being sent for GCash:', items);
+
+        if (items.length === 0) {
+            commit('SET_CHECKOUT_ERROR', 'No items to order');
+            commit('toggleLoader', false, { root: true });
+            setTimeout(() => {
+                commit('showToast', { showToast: true, toastMessage: 'No items to order', toastType: 'error' });
+            }, toastDelay);
+            setTimeout(() => {
+                commit('showToast', { showToast: false, toastMessage: '', toastType: 'default' });
+            }, toastDuration);
+            return { isSuccess: false, message: 'No items to order' };
+        }
+
+        try {
+            const response = await axiosClient.post('pay', {
+                items: items,
+            });
+            commit('SET_CHECKOUT_SUCCESS', response.data);
+            commit('toggleLoader', false, { root: true });
+            return response.data; // Return the response containing checkout_url
+        } catch (error) {
+            console.error('GCash order error:', error.response?.data);
+            commit('SET_CHECKOUT_ERROR', error.response?.data?.message || 'Failed to place GCash order');
+            commit('toggleLoader', false, { root: true });
+            if (error.response && error.response.data) {
+                const errorMessage = error.response.data.message || 'Failed to place GCash order';
+                setTimeout(() => {
+                    commit('showToast', { showToast: true, toastMessage: errorMessage, toastType: 'error' });
+                }, toastDelay);
+                setTimeout(() => {
+                    commit('showToast', { showToast: false, toastMessage: '', toastType: 'default' });
+                }, toastDuration);
+            }
+            return { isSuccess: false, message: error.response?.data?.message || 'Failed to place GCash order' };
+        }
+    },
+
+
     /******************************************************************
      API FOR MESSAGE
     ******************************************************************/
