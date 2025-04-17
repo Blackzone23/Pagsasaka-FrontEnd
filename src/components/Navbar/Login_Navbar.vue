@@ -1,5 +1,5 @@
 <template>
-    <nav class="bg-[#608C54] text-white">
+    <nav class="bg-[#285a19] text-white">
        <div class="container mx-auto flex items-center  py-2">
                <!-- Logo with Link -->
                <a href="/" class="flex items-center">

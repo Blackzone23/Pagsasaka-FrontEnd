@@ -17,30 +17,33 @@
                         <h2 class="2xl:text-2xl 2xs:text-lg font-semibold text-[#608C54] mb-6">Login</h2>
 
                             <!-- Email -->
-                            <div class="mb-4">
-                                <BaseLabel>Email</BaseLabel>
-                                <BaseInputField v-model="formData.email" placeholder="Phone number / Username / Email"></BaseInputField>
-                                <BaseError v-if="$validateLoginRules.email.$error">{{ $validateLoginRules.email.$errors[0].$message }}</BaseError>
-                            </div>
-
-                            <!-- Password-->
-                            <div class="mb-6">
-                                <BaseLabel>Password</BaseLabel>
-                                <div class="relative">
-                                    <BaseInputField :type="showPassword ? 'text' : 'password'" v-model="formData.password"  class="w-full" placeholder="Password"></BaseInputField>
-                                        <button  type="button" @click="togglePasswordVisibility" class="absolute right-3 2xl:top-5 md:top-6 2xs:top-6 lg:top-5  transform -translate-y-1/2 items-center justify-center cursor-pointer">
-                                            <Icon :icon="showPassword ? 'mdi:eye-off' : 'mdi:eye'" class="text-gray-400" />
-                                        </button>
-                                    <BaseError v-if="$validateLoginRules.password.$error">{{ $validateLoginRules.password.$errors[0].$message }}</BaseError>
+                            <form @submit.prevent="login">
+                                <!-- Email -->
+                                <div class="mb-4">
+                                    <BaseLabel>Email</BaseLabel>
+                                    <BaseInputField v-model="formData.email" placeholder="Phone number / Username / Email" />
+                                    <BaseError v-if="$validateLoginRules.email.$error"> {{ $validateLoginRules.email.$errors[0].$message }}</BaseError>
                                 </div>
-                            </div>
 
-                            <!-- Login Button -->
-                            <div class="text-center">
-                                    <button @click="login"  class="2xl:w-52 2xs:w-28 md:w-44 text-center items-center justify-center py-2 bg-[#608C54] text-white text-sm font-medium rounded-full hover:bg-[#4e7344] transition duration-200">
-                                        Login
-                                    </button>
-                            </div>
+                                <!-- Password -->
+                                <div class="mb-6">
+                                    <BaseLabel>Password</BaseLabel>
+                                    <div class="relative"> <BaseInputField :type="showPassword ? 'text' : 'password'" v-model="formData.password" class="w-full" placeholder="Password"/>
+                                        <button type="button" @click="togglePasswordVisibility" class="absolute right-3 2xl:top-5 md:top-6 2xs:top-6 lg:top-5 transform -translate-y-1/2 items-center justify-center cursor-pointer">
+                                        <Icon :icon="showPassword ? 'mdi:eye-off' : 'mdi:eye'" class="text-gray-400" />
+                                        </button>
+                                        <BaseError v-if="$validateLoginRules.password.$error"> {{ $validateLoginRules.password.$errors[0].$message }}</BaseError>
+                                    </div>
+                                </div>
+
+                                <!-- Login Button -->
+                                <div class="text-center">
+                                <button type="submit" class="2xl:w-52 2xs:w-28 md:w-44 text-center items-center justify-center py-2 bg-[#285a19]  text-white text-sm font-medium rounded-full hover:bg-[#4e7344] transition duration-200">
+                                    Login
+                                </button>
+                                </div>
+                            </form>
+
 
                             <div class="text-xs mt-4">
                                 <a href="/page3" class="text-[#0000FF] hover:text-blue-500 transition duration-200">Forgot Password</a>

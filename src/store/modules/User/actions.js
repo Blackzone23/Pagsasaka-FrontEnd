@@ -250,4 +250,61 @@ export default {
             }   
         })
     },
+
+    //API for get delivery proof
+    async getImage({commit}, orderId) {
+        commit('toggleLoader', true, { root: true })
+        return await axiosClient.get(`get-delivery-proof/${orderId}`)
+        .then((response) => {
+            commit('toggleLoader', false, { root: true });
+            commit('setImage', response.data);
+            setTimeout(() => {
+                commit('showToast', { showToast: true, toastMessage: response.data.message, toastType: 'success'}, { root: true });
+            }, toastDelay);
+
+            setTimeout(() => {
+                commit('showToast', { showToast: false, toastMessage: '', toastType: 'default'}, { root: true });
+            }, toastDuration);
+
+            return response.data;
+        })
+        .catch((error) => {
+            commit('toggleLoader', false, { root: true })
+            if(error.response && error.response.data) {
+                const errorMessage = error.response.data.message;
+                setTimeout(() => {
+                    commit('showToast', { showToast: true, toastMessage: errorMessage, toastType: 'error'}, { root: true });
+                }, toastDelay);
+
+                setTimeout(() => {
+                    commit('showToast', { showToast: false, toastMessage: '', toastType: 'default'}, { root: true });
+                }, toastDuration);
+            }   
+        })
+    },
+
+/******************************************************************
+ API FOR MESSAGE
+******************************************************************/
+    // async getConversation({commit}) {
+    //     return await axiosClient.get('chat-sessions')
+    //     .then((response) => {
+    //         commit('setConversation', response.data.data);
+    //         return response.data.data;
+    //     })
+    //     .catch((error) => {
+    //         commit('toggleLoader', false, { root: true })
+    //         if(error.response && error.response.data) {
+    //             const errorMessage = error.response.data.message;
+    //             setTimeout(() => {
+    //                 commit('showToast', { showToast: true, toastMessage: errorMessage, toastType: 'error'}, { root: true });
+    //             }, toastDelay);
+
+    //             setTimeout(() => {
+    //                 commit('showToast', { showToast: false, toastMessage: '', toastType: 'default'}, { root: true });
+    //             }, toastDuration);
+    //         }   
+    //     })
+    // },
+
 }

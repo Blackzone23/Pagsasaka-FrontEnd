@@ -37,6 +37,13 @@ const routes = [
                 component: () => import('../views/HomePage/Market.vue'),
                 meta: { requiresAuth: true },
             },
+
+            {
+                path: '/landing',
+                name: 'Landing',
+                component: () => import('../views/HomePage/Landing_Product.vue'),
+                meta: { requiresAuth: true },
+            },
             
             {
                 path: '/services',
@@ -188,37 +195,20 @@ const routes = [
             // Dashboard route
             {
                 path: '/dashboard',
-                name: 'Administrator_Dashboard',
+                name: 'Admin_Dashboard',
                 component: () => import('../views/Account/Administrator/Administrator_Dashboard.vue'),
             },
+
             {
-                path: '/admin-product',
-                name: 'Administrator_Product',
-                component: () => import('../views/Account/Administrator/Administrator_Product.vue'),
+                path: '/admin-list',
+                name: 'Administrator_List',
+                component: () => import('../views/Account/Administrator/Administrator_List.vue'),
             },
 
             {
-                path: '/admin-ship',
-                name: 'Administrator_Shipment',
-                component: () => import('../views/Account/Administrator/Administrator_Shipment.vue'),
-            },
-
-            {
-                path: '/admin-pay',
-                name: 'Administrator_Payment',
-                component: () => import('../views/Account/Administrator/Administrator_Payment.vue'),
-            },
-
-            {
-                path: '/admin-order',
-                name: 'Administrator_Order',
-                component: () => import('../views/Account/Administrator/Administrator_Order.vue'),
-            },
-
-            {
-                path: '/admin-archive',
-                name: 'Administrator_Archive',
-                component: () => import('../views/Account/Administrator/Administrator_Archive.vue'),
+                path: '/admin_profile',
+                name: 'Administrator_Profile',
+                component: () => import('../views/Account/Administrator/Administrator_Profile.vue'),
             },
 
 
@@ -336,11 +326,17 @@ const routes = [
                 },
 
                 {
-                    path: '/productlist',
-                    name: 'ProductList',
-                    component: () => import('../views/Account/Rider/ProductList.vue')
+                    path: '/rider_productlist',
+                    name: 'Rider_ProductList',
+                    component: () => import('../views/Account/Rider/Rider_ProductList.vue')
                 },
-    
+                
+                {
+                    path: '/rider_profile',
+                    name: 'Rider_Profile',
+                    component: () => import('../views/Account/Rider/Rider_Profile.vue')
+                },
+
     
             ]
     

@@ -1,16 +1,25 @@
 <template>
      <div>
-        <header class="bg-[#608C54] shadow p-4 flex justify-between items-center text-white">
+        <header class="bg-[#285a19]  shadow p-4 flex justify-between items-center text-white">
         <h1 class="text-lg sm:text-xl 2xl:ml-0 md:ml-10 2xs:ml-10 font-bold">Order Transaction</h1>
         <div class="flex items-center space-x-4">
             <div class="flex space-x-2">
                 <!-- Settings Icon with Dropdown -->
-                <div class="relative">
-                    <Icon icon="uil:setting" width="24" height="24" style="color: white" @click="toggleDropdown" />
+                <div class="relative inline-block text-left">
+                    <!-- Profile Picture and Settings Icon -->
+                    <div class="flex items-center space-x-2">
+                    <img :src="sellerRaw.avatar" alt="Profile" class="w-10 h-10 rounded-full object-cover  shadow-md"/>
+                    <Icon icon="uil:setting" width="24" height="24" class="cursor-pointer text-white" @click="toggleDropdown"/>
+                    </div>
+
                     <!-- Dropdown Menu -->
-                    <div v-if="dropdownVisible" class="absolute right-0 mt-2 bg-white shadow-lg rounded p-2 w-48">
-                        <a href="/seller-profile" class="block w-full text-left px-4 py-2 text-sm text-black hover:bg-gray-100"> Account Info </a>
-                        <button class="block w-full text-left px-4 py-2 text-sm text-black hover:bg-gray-100" @click="logout()"> Logout</button>
+                    <div v-if="dropdownVisible" class="absolute right-0 z-50 mt-2 w-48 bg-white rounded shadow-lg">
+                    <a href="/seller-profile" class="block px-4 py-2 text-sm text-black hover:bg-gray-100">
+                        Account Info
+                    </a>
+                    <button @click="logout" class="block w-full text-left px-4 py-2 text-sm text-black hover:bg-gray-100">
+                        Logout
+                    </button>
                     </div>
                 </div>
             </div>
@@ -110,9 +119,97 @@
                                     </div>
 
                                     <!-- Print Packing Modal -->
-                                    <button class="py-2 px-4 rounded-md border-2 border-gray-300 w-full">
+                                    <button @click="openPrintModal" class="py-2 px-4 rounded-md border-2 border-gray-300 w-full">
                                         Print Packing Slip
                                     </button>
+                                    <div v-if="isshowPrintModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+                                        <div class="bg-white w-[700px] p-4 rounded-lg relative packing-slip-modal-content">
+                                                <!-- Close Modal Button -->
+                                                <button @click="closePrintModal" class="absolute top-2 right-2 text-gray-600">
+                                                    <Icon icon="fontisto:close" width="1.2rem" height="1.2rem" style="color: #5D5F5D" />
+                                                </button>
+
+                                                <!-- Packing Slip Content -->
+                                                <div class="mt-10 w-full">
+                                                <div  v-for="(order, index) in orders" :key="index" class="bg-white p-4 border border-gray-400 rounded-lg text-sm font-sans">
+                                                    <!-- Header -->
+                                                    <div class="flex justify-between items-center border-b pb-2 mb-2">
+                                                        <div class="flex items-center gap-2">
+                                                            <!-- <img src="/path-to-pagsasaka-logo.png" alt="Pagsasaka Logo" class="h-10" /> -->
+                                                            <div>
+                                                                <h1 class="text-lg font-bold text-green-700">Pagsasaka</h1>
+                                                                <p class="text-xs text-gray-600">Farmers & Consumer</p>
+                                                            </div>
+                                                        </div>
+                                                        <div class="text-right">
+                                                            <p class="font-semibold text-lg">Logistics Logo</p>
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- Order ID -->
+                                                    <div class="text-center mb-2">
+                                                        <p class="font-semibold">Order ID: {{ order.orderId }}</p>
+                                                          <!-- <img src="/path-to-barcode.png" alt="Barcode" class="h-10 mx-auto my-1" /> -->
+                                                        <p class="text-xs">{{ order.orderId }}</p>
+                                                    </div>
+
+                                                    <!-- Buyer & Seller Info -->
+                                                    <div class="grid grid-cols-2 gap-2 border-y py-2 mb-2">
+                                                    <div>
+                                                        <p class="font-semibold border-b pb-1">Buyer</p>
+                                                        <p class="font-bold">{{ order.name }}</p>
+                                                        <p v-html="order.address"></p>
+                                                    </div>
+                                                        <div>
+                                                            <p class="font-semibold border-b pb-1">Seller</p>
+                                                            <p class="font-bold">{{ order.name }}</p>
+                                                            <p v-html="order.address"></p>
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- Product Info -->
+                                                    <div class="grid grid-cols-4 gap-2 items-start border-b pb-2 mb-2">
+                                                        <div class="col-span-1 flex flex-col items-center">
+                                                             <!-- <img src="/path-to-qr.png" alt="QR Code" class="h-20 w-20 mb-1" /> -->
+                                                            <p class="text-xs text-gray-600">{{ order.orderId }}</p>
+                                                        </div>
+                                                        <div class="col-span-3">
+                                                            <table class="w-full text-left text-sm">
+                                                                <thead>
+                                                                    <tr class="border-b">
+                                                                    <th class="py-1">Product (Qty)</th>
+                                                                    <th class="py-1">Price</th>
+                                                                    <th class="py-1">Total</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr v-for="(item, index) in order.items" :key="index">
+                                                                    <td class="py-1">
+                                                                        <strong>{{ item.name }}</strong><br />
+                                                                        <span class="text-xs text-gray-600">Variants: {{ item.variant }}</span>
+                                                                    </td>
+                                                                    <td class="py-1">₱{{ item.price.toFixed(2) }}</td>
+                                                                    <td class="py-1">₱{{ (item.price * item.quantity).toFixed(2) }}</td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- Footer Order ID -->
+                                                    <div class="text-center font-semibold text-sm mt-4">
+                                                        Order ID: {{ order.orderId }}
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Print Button Inside Modal -->
+                                            <div class="mt-4 text-center">
+                                                <button @click="downloadPackingSlipAsPDF" class="py-2 px-4 rounded-md bg-green-700 text-white"> Download Packing Slip as PDF
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
 
                                     <!-- Cancelled modal -->
                                     <button @click="openCancelModal" class="bg-red-500 py-2 px-4 rounded-md w-full">
@@ -174,13 +271,15 @@ import { required, helpers } from "@vuelidate/validators";
 import { Icon } from "@iconify/vue";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
-
+import { jsPDF } from 'jspdf';
+import html2canvas from 'html2canvas';
 const store = useStore();
 const router = useRouter();
 
 // Reactive states
 const tabs = ['Unshipped', 'Cancelled'];
 const activeTab = ref(tabs[0]);
+const sellerRaw  = computed(() => store.state.userData.data?.user || {})
 
 const dropdownVisible = ref(false);
 
@@ -268,5 +367,74 @@ const logout = async () => {
   } catch (error) {
     console.error('Logout error:', error); // Handle any errors
   }
+};
+
+/******************************************************************
+ FUNCTION FOR PRINT SLIP
+******************************************************************/
+const isshowPrintModal = ref(false);
+
+const openPrintModal = () => {
+    isshowPrintModal.value = true;
+};
+
+// Function to handle closing modal
+function closePrintModal() {
+    isshowPrintModal.value = false;
+}
+
+
+// State to control modal visibility
+const showModal = ref(false);
+
+// Order data for the packing slip
+const order = ref({
+  orderId: '123456789',
+  buyer: {
+    name: 'Juan Dela Cruz',
+    address: '123 Farm Rd, Barangay, City',
+  },
+  seller: {
+    name: 'Maria Santos',
+    address: '456 Market St, Barangay, City',
+  },
+  items: [
+    {
+      name: 'Rice',
+      variant: '5kg',
+      price: 250.00,
+      quantity: 2,
+    },
+    {
+      name: 'Cocomelon',
+      variant: '1kg',
+      price: 100.00,
+      quantity: 3,
+    },
+  ],
+});
+
+const downloadPackingSlipAsPDF = () => {
+  const modalContent = document.querySelector('.packing-slip-modal-content');
+  if (!modalContent) {
+    console.error('Modal content not found');
+    return;
+  }
+
+  html2canvas(modalContent).then(canvas => {
+    const imgData = canvas.toDataURL('image/png');
+    const doc = new jsPDF();
+
+    // Set the width and height for the image (resize as needed)
+    const pdfWidth = 210; // A4 paper width in mm
+    const pdfHeight = 297; // A4 paper height in mm
+
+    // Optional: Adjust the width and height of the image to fit within the PDF dimensions
+    const imgWidth = pdfWidth - 40; // Leave some margin
+    const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+    doc.addImage(imgData, 'PNG', 20, 20, imgWidth, imgHeight);
+    doc.save('packing-slip.pdf');
+  });
 };
 </script>

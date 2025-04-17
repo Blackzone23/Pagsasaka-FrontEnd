@@ -1,16 +1,25 @@
 <template>
     <div>
-        <header class="bg-[#608C54] shadow p-4 flex justify-between items-center text-white">
+        <header class="bg-[#285a19] shadow p-4 flex justify-between items-center text-white">
             <h1 class="text-lg sm:text-xl 2xl:ml-0 md:ml-10 2xs:ml-10 font-bold">Archive</h1>
             <div class="flex items-center space-x-4">
                 <div class="flex space-x-2">
                     <!-- Settings Icon with Dropdown -->
-                    <div class="relative">
-                        <Icon icon="uil:setting" width="24" height="24" style="color: white" @click="toggleDropdown" />
+                    <div class="relative inline-block text-left">
+                        <!-- Profile Picture and Settings Icon -->
+                        <div class="flex items-center space-x-2">
+                        <img :src="sellerRaw.avatar" alt="Profile" class="w-10 h-10 rounded-full object-cover  shadow-md"/>
+                        <Icon icon="uil:setting" width="24" height="24" class="cursor-pointer text-white" @click="toggleDropdown"/>
+                        </div>
+
                         <!-- Dropdown Menu -->
-                        <div v-if="dropdownVisible" class="absolute right-0 mt-2 bg-white shadow-lg rounded p-2 w-48">
-                            <button class="w-full text-left px-4 py-2 text-sm text-black">Account Info</button>
-                            <button class="w-full text-left px-4 py-2 text-sm text-black" @click="logout()">Logout</button>
+                        <div v-if="dropdownVisible" class="absolute right-0 z-50 mt-2 w-48 bg-white rounded shadow-lg">
+                        <a href="/seller-profile" class="block px-4 py-2 text-sm text-black hover:bg-gray-100">
+                            Account Info
+                        </a>
+                        <button @click="logout" class="block w-full text-left px-4 py-2 text-sm text-black hover:bg-gray-100">
+                            Logout
+                        </button>
                         </div>
                     </div>
                 </div>
@@ -18,19 +27,17 @@
         </header>
         <div class="w-full">
             <!-- Main Page Content -->
-            <div v-if="!viewAllClicked" class="flex justify-center items-center h-96">
-            <div
-                class="bg-white p-6 rounded-lg shadow-lg w-full max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl xl:max-w-3xl flex flex-col justify-center items-center border-2 border-gray-300"
-            >
-                <div class="bg-[#608C54] w-full flex justify-center py-6">
-                <Icon icon="bx:archive-in" width="52" height="52" style="color: #fff" />
+            <div v-if="!viewAllClicked" class="flex justify-center items-center h-[600px]">
+                <div class="bg-white p-6 rounded-lg shadow-lg w-96 max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl xl:max-w-3xl flex flex-col justify-center items-center border-2 border-gray-300">
+                    <div class="bg-[#608C54] w-full flex justify-center py-6">
+                        <Icon icon="bx:archive-in" width="52" height="52" style="color: #fff" />
+                    </div>
+                    <div class="mt-4 text-sm text-center space-y-5">
+                        <h1 class="text-xl font-bold">Products</h1>
+                        <p>118 Archive</p>
+                        <button @click="viewAllClicked = true" class="text-blue-500 hover:underline">View all</button>
+                    </div>
                 </div>
-                <div class="mt-4 text-sm text-center space-y-5">
-                <h1 class="text-2xl font-bold">Products</h1>
-                <p>118 Archive</p>
-                <button @click="viewAllClicked = true" class="text-blue-500 hover:underline">View all</button>
-                </div>
-            </div>
             </div>
 
             <!-- Table Page Content -->
@@ -87,6 +94,7 @@ const viewAllClicked = ref(false);
 const store = useStore();
 const router = useRouter();
 const showLoading = computed(() => store.state.showLoading.state);
+const sellerRaw  = computed(() => store.state.userData.data?.user || {})
 const archivedProducts = ref([
   { name: 'Product 1', category: 'Category A', dateArchived: '2024-11-01' },
   { name: 'Product 2', category: 'Category B', dateArchived: '2024-11-05' },

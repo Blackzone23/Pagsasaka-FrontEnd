@@ -8,11 +8,11 @@
             <BaseLabel class="text-4xl font-bold">My Profile</BaseLabel>
             <div class="flex items-center space-x-10">
                 <!-- Profile Image -->
-                <img :src="profileImage" alt="Profile" class="w-32 h-32 rounded-full object-cover border-4 border-white shadow-md"/>
+                <img :src="consumerRaw.avatar" alt="Profile" class="w-32 h-32 rounded-full object-cover border-4 border-white shadow-md"/>
 
                 <!-- User Name -->
                 <div>
-                    <BaseLabel class="text-xl font-semibold text-gray-800">Norman Cruz</BaseLabel>
+                    <BaseLabel class="text-xl font-semibold text-gray-800">{{consumerRaw.first_name}} {{consumerRaw.middle_name}} {{consumerRaw.last_name}}</BaseLabel>
                 </div>
             </div>
             <div class="w-full mt-8">
@@ -35,67 +35,122 @@
                 <div class="mt-4">
                     <!--My Profile-->
                     <div v-if="activeTab === 'My Profile'" class="tab-content p-4">
-                        <div class="flex flex-col md:flex-row justify-center space-y-4 md:space-y-0 md:space-x-6">
+                        <div class="flex flex-col md:flex-row justify-start space-y-4 md:space-y-0 md:space-x-6">
                             <!-- Left Side: Profile Info -->
-                            <div class="flex-1">
-                                <div class="mb-2 font-bold">
-                                    <h1 class="text-xs md:text-sm">Manage and protect your account</h1>
-                                </div>
-                                <div class="text-sm">
-                                    <!-- Name -->
-                                    <div class="flex flex-col md:flex-row items-center md:items-start space-y-2 md:space-y-0">
-                                        <BaseLabel class="w-full md:w-32 text-sm md:text-base">Name:</BaseLabel>
-                                        <div class="flex items-center w-full px-2 py-1">
-                                            <BaseInputField v-model="tempValue" class="w-full outline-none"/>
-                                            <Icon icon="mdi:pencil" class="text-gray-500 hover:text-blue-500 cursor-pointer ml-2" @click="editField()" />
-                                        </div>
+                           <div class="flex flex-col">
+                                <BaseLabel class="font-semibold" >Name:</BaseLabel>
+                                <span class="text-black text-sm">{{consumerRaw.first_name}} {{consumerRaw.middle_name}} {{consumerRaw.last_name}}</span>
+                                <BaseLabel class="font-semibold" >Phone Number:</BaseLabel>
+                                <span class="text-black text-sm">{{consumerRaw.phone_number}}</span>
+                                <BaseLabel class="font-semibold">Email Address:</BaseLabel>
+                                <span class="text-black text-sm">{{consumerRaw.email}}</span>
+                                <BaseLabel class="font-semibold">Home Address:</BaseLabel>
+                                <span class="text-black text-sm">{{consumerRaw.delivery_address}}</span>
+                           </div>
+                        </div>
+                        
+                          <!-- Edit Modal -->
+                        <div v-if="ishowProfileModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+                            <div class="bg-white rounded-xl p-6 w-full max-w-md max-h-[80vh] overflow-y-auto shadow-lg">
+                                <h2 class="text-lg font-semibold mb-4">Edit Consumer Info</h2>
+
+                                <div class="space-y-3">
+                                    <div>
+                                    <BaseLabel>First Name</BaseLabel>
+                                    <BaseInputField v-model="consumerData.first_name" type="text" class="w-full" />
                                     </div>
 
-                                    <!-- Phone -->
-                                    <div class="flex flex-col md:flex-row items-center md:items-start space-y-2 md:space-y-0">
-                                        <BaseLabel class="w-full md:w-32 text-sm md:text-base">Phone number:</BaseLabel>
-                                        <div class="flex items-center w-full  px-2 py-1">
-                                            <BaseInputField v-model="tempValue" class="w-full outline-none"/>
-                                            <Icon icon="mdi:pencil" class="text-gray-500 hover:text-blue-500 cursor-pointer ml-2" @click="editField()" />
-                                        </div>
+                                    <div>
+                                    <BaseLabel>Middle Name</BaseLabel>
+                                    <BaseInputField v-model="consumerData.middle_name" type="text" class="w-full" />
                                     </div>
 
-                                    <!-- Email -->
-                                    <div class="flex flex-col md:flex-row items-center md:items-start space-y-2 md:space-y-0">
-                                        <BaseLabel class="w-full md:w-32 text-sm md:text-base">Email Address:</BaseLabel>
-                                        <div class="flex items-center w-full  px-2 py-1">
-                                            <BaseInputField v-model="tempValue" class="w-full outline-none"/>
-                                            <Icon icon="mdi:pencil" class="text-gray-500 hover:text-blue-500 cursor-pointer ml-2" @click="editField()" />
-                                        </div>
+                                    <div>
+                                    <BaseLabel>Last Name</BaseLabel>
+                                    <BaseInputField v-model="consumerData.last_name" type="text" class="w-full" />
                                     </div>
 
-                                    <!-- Gender -->
-                                    <div class="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-2">
-                                        <BaseLabel class="w-full md:w-32 text-sm md:text-base">Gender:</BaseLabel>
-                                        <div class="flex space-x-2 md:space-x-4 mt-1">
-                                            <BaseRadioButton v-for="option in ['Male', 'Female', 'Others']" :key="option" :name="'gender'" :label="option" :value="option" v-model="profile.gender" class="text-xs md:text-sm"/>
-                                        </div>
+                                    <div>
+                                    <BaseLabel>Phone Number</BaseLabel>
+                                    <BaseInputField v-model="consumerData.phone_number" type="text" class="w-full" />
+                                    </div>
+
+                                    <div>
+                                    <BaseLabel>Email</BaseLabel>
+                                    <BaseInputField v-model="consumerData.email" type="email" class="w-full" />
+                                    </div>
+
+                                    <div>
+                                    <BaseLabel>Delivery Address</BaseLabel>
+                                    <BaseInputField v-model="consumerData.delivery_address" type="email" class="w-full" />
+                                    </div>
+
+                                    <div class="flex text-sm justify-end space-x-2 pt-2">
+                                    <button type="button" @click="closeProfileModal" class="rounded-full px-4 py-2 bg-gray-300 hover:bg-gray-400">
+                                        Cancel
+                                    </button>
+                                    <button @click="saveProfileChanges" class="rounded-full bg-[#608C54] py-2 px-6 w-32 md:w-28 hover:bg-gray-200 text-white">
+                                        Save
+                                    </button>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="mt-4 flex justify-center md:justify-start">
-                            <button class="rounded-full bg-[#608C54] py-2 px-6 w-32 md:w-28 hover:bg-gray-200 text-white">Save</button>
+
+                        <!-- Change Password Modal -->
+                        <div v-if="ishowPasswordModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+                            <div class="bg-white rounded-xl p-6 w-full max-w-md max-h-[90vh] overflow-y-auto shadow-lg">
+                                <h2 class="text-lg font-semibold mb-4">Change Password</h2>
+
+                                <div class="space-y-3">
+
+                                    <div class="relative">
+                                    <BaseLabel class="font-semibold">*New Password</BaseLabel>
+                                    <BaseInputField v-model="passwordData.password" :type="showPassword ? 'text' : 'password'" placeholder="Enter Your Password" class="w-full" />
+                                    <button type="button" class="absolute right-3 2xl:top-10 lg:top-10 md:top-11  2xs:top-12 text-gray-500" @click="togglePasswordVisibility">
+                                        <Icon :icon="showPassword ? 'ic:twotone-visibility-off' : 'ic:twotone-visibility'" />
+                                    </button>
+                                    </div>
+
+                                    <div class="relative">
+                                    <BaseLabel class="font-semibold">*Re-enter Password</BaseLabel>
+                                    <BaseInputField v-model="passwordData.password_confirmation" :type="reshowPassword ? 'text' : 'password'" placeholder="Re-enter password" class="w-full" />
+                                    <button type="button" class="absolute right-3 2xl:top-10 lg:top-10 md:top-11 2xs:top-12 text-gray-500" @click="retogglePasswordVisibility">
+                                        <Icon :icon="reshowPassword ? 'ic:twotone-visibility-off' : 'ic:twotone-visibility'" />
+                                    </button>
+                                    </div>
+
+                                    <div class="flex justify-end space-x-2 pt-2">
+                                    <button type="button" @click="closePasswordModal" class="rounded-full px-4 py-2 bg-gray-300 hover:bg-gray-400">
+                                        Cancel
+                                    </button>
+                                    <button @click="savePasswordChanges" class="rounded-full bg-[#608C54] py-2 px-6 w-32 md:w-28 hover:bg-gray-200 text-white">
+                                        Save
+                                    </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-4 flex flex-col md:flex-row justify-end gap-2 md:gap-4">
+                        <button class="bg-green-700 text-white px-8 py-2 rounded-full hover:bg-green-500 transition" @click="openProfileModal"> Edit</button>
+                        <button class="bg-green-700 text-white px-6 py-2 rounded-full hover:bg-green-500 transition" @click="openPasswordModal"> Change Password</button>
                         </div>
                     </div>
 
 
                     <!--My Purchase-->
                     <div v-if="activeTab === 'My Purchase'" class="tab-content">
+                          <!--chat-->
                         <div class="p-4">
                             <!-- Floating Chat Button -->
-                            <button @click="openshowChatModal" class="bg-yellow-100 border-2 border-gray-300 rounded-full p-3 flex items-center justify-center fixed bottom-4 right-4 shadow-md hover:bg-yellow-300">
+                            <button @click="openshowChatModal"  class="hidden md:flex bg-yellow-100 border-2 border-gray-300 rounded-full p-3  fixed bottom-4 right-4 shadow-md hover:bg-yellow-300 items-center justify-center">
                                 <Icon icon="tabler:message" width="28" height="28" style="color: #608C54" />
                             </button>
                         </div>
 
                         <!-- Expanded Floating Chat Modal -->
-                        <div v-if="isshowChatModal" class="fixed bottom-4 right-2 w-full max-w-[900px] h-[65vh] md:h-[75vh] lg:h-[80vh] xl:h-[85vh] bg-white rounded-lg shadow-lg flex flex-col border z-50">
+                        <div v-if="isshowChatModal" class="fixed bottom-4 right-4 2xl:w-[900px] 2xs:w-[470px] 2xl:h-[85vh] 2xs:h-[65vh] bg-white rounded-lg shadow-lg flex flex-col border z-50">
                             <!-- Header -->
                             <div class="p-4 border-b rounded-sm bg-gray-100 flex justify-between items-center">
                                 <span class="text-xl font-bold text-green-600">Chat</span>
@@ -105,95 +160,102 @@
                             </div>
 
                             <div class="flex flex-1 overflow-hidden">
-                                <!-- Sidebar (Users List) -->
-                                <div class="w-1/3 bg-white border-r border-gray-300 p-4 flex flex-col">
-                                    <div class="flex">
-                                        <BaseSearchField placeholder="Search..." class="w-full max-w-[270px]" />
-                                    </div>
-
-                                    <div class="mt-3 flex-1 overflow-auto">
-                                        <div v-for="(chat, index) in chats" :key="index" class="flex items-center p-3 border-b cursor-pointer hover:bg-gray-100 transition duration-200" @click="selectChat(chat)">
-                                            <img :src="chat.avatar || '/default-avatar.png'" class="w-12 h-12 rounded-full border mr-3" alt="Avatar" />
-                                            <div class="flex-1">
-                                                <span class="font-semibold">{{ chat.name }}</span>
-                                                <p class="text-xs text-gray-500 truncate">{{ chat.message }}</p>
-                                            </div>
-                                            <span v-if="chat.unread" class="text-xs bg-red-500 text-white px-2 py-1 rounded-full">
-                                                {{ chat.unread }}
-                                            </span>
-                                        </div>
-                                    </div>
+                            <!-- Sidebar (Users List) -->
+                            <div class="w-1/3 bg-white border-r border-gray-300 p-4 flex flex-col">
+                                <div class="flex">
+                                <BaseSearchField placeholder="Search..." class="2xl:w-[270px] 2xs:w-[137px] "></BaseSearchField>
                                 </div>
 
-                                <!-- Chat Window -->
-                                <div class="w-full flex flex-col">
-                                    <!-- If No Chat is Selected -->
-                                    <div v-if="!selectedChat" class="flex-1 flex items-center justify-center text-gray-400">
-                                        <p class="text-xl">Welcome to Pagsasaka Chat</p>
-                                    </div>
-
-                                    <!-- If a Chat is Selected -->
-                                    <div v-else class="flex flex-col flex-1">
-                                        <div class="p-4 border-b text-lg font-bold flex justify-between items-center bg-gray-100">
-                                            <span>{{ selectedChat.name }}</span>
-                                            <button class="text-gray-600">&#8942;</button>
+                                <div class="mt-3 flex-1 overflow-auto">
+                                    <div v-for="conversation in conversationStart" :key="conversation.id" class="flex items-center p-3 border-b cursor-pointer hover:bg-gray-100 transition duration-200" @click="selectChat(conversation.id)">
+                                        <img :src="conversation.chat_partner_avatar" class="w-12 h-12 rounded-full border mr-3" alt="Avatar" />
+                                        <div class="flex-1">
+                                            <span class="font-semibold">{{ conversation.chat_partner_name }}</span>
+                                            <p class="text-xs text-gray-500 truncate">{{ conversation.message }}</p>
                                         </div>
+                                        <span v-if="conversation.unread_messages_count" class="text-xs bg-red-500 text-white px-2 py-1 rounded-full">
+                                            {{ conversation.unread_messages_count }}
+                                        </span>
 
-                                        <!-- Messages Area -->
-                                        <div class="flex-1 bg-gray-50 p-4 overflow-auto space-y-4 text-sm">
-                                            <div v-for="(message, index) in chatMessages" :key="index" class="flex items-start space-x-3" :class="{'justify-end': message.sender === 'You', 'justify-start': message.sender !== 'You'}">
-                                                <!-- Avatar (Only for others' messages) -->
-                                                <div v-if="message.sender !== 'You'" class="w-8 h-8 rounded-full bg-gray-300"></div>
-                                                
-                                                <div class="p-3 rounded-lg shadow-md w-auto max-w-xs" :class="{'bg-green-500 text-white': message.sender === 'You', 'bg-gray-200 text-black': message.sender !== 'You'}">
-                                                    <p class="text-sm font-bold" :class="{'text-white': message.sender === 'You', 'text-green-600': message.sender !== 'You'}">
-                                                        {{ message.sender }}
-                                                    </p>
-                                                    <p class="text-xs">
-                                                        {{ message.text }}
-                                                    </p>
-                                                    <p class="text-xs mt-1 text-black">
-                                                        {{ message.time }}
-                                                    </p>
-                                                </div>
+                                        <!-- Delete Button -->
+                                        <button class="text-white rounded" @click="openDeleteModal(conversation.id, $event)">
+                                            <Icon icon="mdi-light:delete" width="20" height="20" style="color: #ad1414" />
+                                        </button>
 
-                                                <!-- Avatar Placeholder for Sent Messages (Align Right) -->
-                                                <div v-if="message.sender === 'You'" class="w-8 h-8 rounded-full bg-gray-300"></div>
+                                        <!-- Modal -->
+                                        <div v-if="isModalVisible" class="fixed inset-0 bg-gray-500 bg-opacity-75 flex justify-center items-center z-50">
+                                            <div class="bg-white p-6 rounded shadow-lg w-96">
+                                            <h3 class="text-xl font-semibold text-center">Are you sure you want to delete this conversation?</h3>
+                                            <div class="flex justify-around mt-4">
+                                                <button @click="deleteConversation" class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">Yes, Delete</button>
+                                                <button @click="closeDeleteModal($event)" class="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400">Cancel</button>
                                             </div>
-                                        </div>
-
-                                        <!-- Input Area -->
-                                        <div class="p-4 border-t bg-white flex items-center gap-2">
-                                            <!-- Message Input -->
-                                            <input 
-                                                v-model="newMessage" 
-                                                type="text" 
-                                                placeholder="Type a message here" 
-                                                class="flex-1 p-2 border rounded-md text-sm w-full"
-                                                @keyup.enter="sendMessage" 
-                                            />
-
-                                            <!-- Send Button -->
-                                            <button 
-                                                class="bg-green-600 text-white px-4 py-2 rounded-md transition duration-200 hover:bg-green-700 shrink-0"
-                                                @click="sendMessage"
-                                            >
-                                                Send
-                                            </button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+
+                            <!-- Chat Window -->
+                            <div class="w-full flex flex-col">
+                                <!-- If No Chat is Selected -->
+                                <div v-if="!selectedChat" class="flex-1 flex items-center justify-center text-gray-400">
+                                <p class="text-xl">Welcome to Pagsasaka Chat</p>
+                                </div>
+
+                                <!-- If a Chat is Selected -->
+                                <div v-else class="flex flex-col flex-1">
+                                <div class="p-4 border-b text-lg font-bold flex justify-between items-center bg-gray-100">
+                                    <span>{{ selectedChat.chat_partner_name }}</span>
+                                    <button @click="closeChat" class="text-gray-500">Close</button>
+                                </div>
+
+                                <!-- Messages Area -->
+                                <div  class="flex-1 bg-gray-50 p-4 overflow-auto space-y-4 2xl:text-sm 2xs:text-sm max-h-[400px]">
+                                    <div v-for="message in messageStart" :key="message.id" class="flex items-start space-x-3" 
+                                    :class="{'justify-end': message.sender.id === userName, 'justify-start': message.sender.id !== userName}">
+                                        
+                                        <!-- Avatar (Only for others' messages) -->
+                                        <img v-if="message.sender.id !== userName" :src="message.sender.avatar || defaultAvatar" class="w-8 h-8 rounded-full" />
+                                        
+                                        <div class="p-3 rounded-lg shadow-md w-auto max-w-xs" :class="{'bg-green-500 text-white ': message.sender.id === userName, 'bg-gray-200 text-black': message.sender.id !== userName}">
+                                        <p class="text-sm font-bold" :class="{'text-white': message.sender.id === userName, 'text-green-600': message.sender.id !== userName}">
+                                            {{ message.sender.first_name }} {{ message.sender.last_name }}
+                                        </p>
+                                        <p class="text-xs">
+                                            {{ message.message }}
+                                        </p>
+                                        </div>
+
+                                        <!-- Avatar Placeholder for Sent Messages (Align Right) -->
+                                        <div v-if="message.sender.id === userName" class="w-8 h-8 rounded-full bg-gray-300"></div>
+                                    </div>
+                                </div>
+
+                                <!-- Input Area -->
+                                <div class="p-4 border-t bg-white flex items-center">
+
+                                    <!-- Message Input -->
+                                    <input v-model="messageData.message" type="text" placeholder="Type a message here" class="flex-1 p-2 border rounded-md text-sm"/>
+
+                                    <!-- Send Button -->
+                                    <button class="ml-2 bg-green-600 text-white px-4 py-2 rounded-md transition duration-200 hover:bg-green-700" @click="sendMessage">
+                                    Send
+                                    </button>
+                                </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>         
 
                         <div class="p-6">
                            <!-- Scrollable Tabs -->
-                            <div class="overflow-x-auto whitespace-nowrap border-b border-gray-300 bg-[#608C54] rounded-md p-2">
+                            <div class="overflow-x-auto whitespace-nowrap border-b border-gray-300 bg-[#285a19] rounded-md p-2">
                                 <div class="flex space-x-4 w-max">
                                     <button v-for="tab in purchasetabs" :key="tab"
                                         @click="currentTab = tab"
                                         class="px-4 py-2 text-sm font-semibold"
-                                        :class="[currentTab === tab ? 'border-b-2 border-green-600 text-green-700' : 'text-white']">
+                                        :class="[currentTab === tab ? 'border-b-2 border-green-600 text-green-600' : 'text-white']">
                                         {{ tab }}
                                     </button>
                                 </div>
@@ -838,10 +900,10 @@
                     </div>
 
                     <!--Addresses-->
-                    <div v-if="activeTab === 'Addresses'" class="tab-content">
+                    <div v-if="activeTab === 'Billing Address'" class="tab-content">
                         <div>
                             <!-- Add New Address Button -->
-                            <button type="button" class="flex items-center justify-center text-white rounded-md bg-[#608C54] py-2 w-52 hover:bg-gray-700 gap-2" @click="openModal" >
+                            <button type="button" class="flex items-center justify-center text-white rounded-md bg-[#608C54] py-2 w-52 hover:bg-gray-700 gap-2" @click="openAddressModal" >
                                 <Icon icon="lets-icons:add-duotone" width="24" height="24"  style="color: #fefffe" />Add new address
                             </button>
 
@@ -851,48 +913,52 @@
                                     <!-- Modal Header -->
                                     <div class="flex justify-between items-center mb-4">
                                     <h3 class="text-xl font-semibold">Add Address</h3>
-                                    <button @click="closeModal" class="text-gray-400 hover:text-gray-600">
+                                    <button @click="closeAddressModal" class="text-gray-400 hover:text-gray-600">
                                         <Icon icon="icon-park-solid:close-one" width="20" height="20" />
                                     </button>
                                     </div>
 
                                     <!-- Modal Content -->
-                                    <form>
-                                        <!-- Division -->
-                                        <div class="mb-4">
-                                            <BaseLabel>Full Name:</BaseLabel>
-                                            <BaseInputField v-model="address.fullname" />
-                                            <BaseError></BaseError>
-                                        </div>
+                                            <div class="mb-4">
+                                                <BaseLabel>Address:</BaseLabel>
+                                                <BaseInputField v-model="addressData.address_line1" />
+                                                <BaseError v-if="$validateAddressRules.address_line1.$error">{{ $validateAddressRules.address_line1.$errors[0].$message }}</BaseError>
+                                            </div>
 
-                                        <!-- Note -->
-                                        <div class="mb-4">
-                                            <BaseLabel>Phone Number:</BaseLabel>
-                                            <BaseInputField v-model="address.phone_number" />
-                                            <BaseError></BaseError>
-                                        </div>
+                                            <div class="mb-4">
+                                                <BaseLabel>Additional Address Info(optional):</BaseLabel>
+                                                <BaseInputField v-model="addressData.address_line2" />
+                                            </div>
 
-                                        <div class="mb-4">
-                                            <BaseLabel>Region,Province,City,Barangay:</BaseLabel>
-                                            <BaseInputField v-model="address.fulladdress" />
-                                            <BaseError></BaseError>
-                                        </div>
+                                            <div class="mb-4">
+                                                <BaseLabel>City:</BaseLabel>
+                                                <BaseInputField v-model="addressData.city" />
+                                                <BaseError v-if="$validateAddressRules.city.$error">{{ $validateAddressRules.city.$errors[0].$message }}</BaseError>
+                                            </div>
 
-                                        <div class="mb-4">
-                                            <BaseLabel>Postal code:</BaseLabel>
-                                            <BaseInputField v-model="address.postalcode" />
-                                            <BaseError></BaseError>
-                                        </div>
+                                            <div class="mb-4">
+                                                <BaseLabel>Province:</BaseLabel>
+                                                <BaseInputField v-model="addressData.province" />
+                                                <BaseError v-if="$validateAddressRules.province.$error">{{ $validateAddressRules.province.$errors[0].$message }}</BaseError>
+                                            </div>
 
-                                        <div class="mb-4">
-                                            <BaseRadioButton v-for="option in ['Set as default']" :key="option" :name="'set'" :label="option" :value="option"  v-model="address.isDefault" class="text-sm"/>
-                                        </div>
+                                            <div class="mb-4">
+                                                <BaseLabel>Country:</BaseLabel>
+                                                <BaseInputField v-model="addressData.country" />
+                                                <BaseError v-if="$validateAddressRules.country.$error">{{ $validateAddressRules.country.$errors[0].$message }}</BaseError>
+                                            </div>
+
+                                            <div class="mb-4">
+                                                <BaseLabel>Postal code:</BaseLabel>
+                                                <BaseInputField v-model="addressData.postal_code" />
+                                                <BaseError v-if="$validateAddressRules.postal_code.$error">{{ $validateAddressRules.postal_code.$errors[0].$message }}</BaseError>
+                                            </div>
+
                                         <!-- Save Button -->
                                         <div class="flex justify-end space-x-2">
-                                            <button type="button" class="px-4 py-2 bg-gray-200 rounded-md text-gray-700 hover:bg-gray-300" @click="closeModal" >Cancel </button>
-                                            <button type="submit" class="px-6 py-2 bg-[#608C54] text-white rounded-md hover:bg-[#4e7143]">Save</button>
+                                            <button type="button" class="px-4 py-2 bg-gray-200 rounded-md text-gray-700 hover:bg-gray-300" @click="closeAddressModal" >Cancel </button>
+                                            <button @click="createAddress" class="px-6 py-2 bg-[#608C54] text-white rounded-md hover:bg-[#4e7143] ">Save</button>
                                         </div>
-                                    </form>
                                 </div>
                             </div>
                         </div>
@@ -903,151 +969,114 @@
                                     <!-- Modal Header -->
                                     <div class="flex justify-between items-center mb-4">
                                     <h3 class="text-xl font-semibold">Update Address</h3>
-                                    <button @click="closeUpdateAddressPowerModal" class="text-gray-400 hover:text-gray-600">
+                                    <button @click="closeUpdateAddressModal" class="text-gray-400 hover:text-gray-600">
                                         <Icon icon="icon-park-solid:close-one" width="20" height="20" />
                                     </button>
                                     </div>
 
                                     <!-- Modal Content -->
-                                    <form>
-                                        <!-- Division -->
                                         <div class="mb-4">
-                                            <BaseLabel>Full Name:</BaseLabel>
-                                            <BaseInputField v-model="updateaddress.fullname" />
-                                            <BaseError></BaseError>
-                                        </div>
-
-                                        <!-- Note -->
-                                        <div class="mb-4">
-                                            <BaseLabel>Phone Number:</BaseLabel>
-                                            <BaseInputField v-model="updateaddress.phone_number" />
-                                            <BaseError></BaseError>
+                                            <BaseLabel>Address:</BaseLabel>
+                                            <BaseInputField v-model="updateaddress.address_line1" />
+                                            <BaseError v-if="$validateUpdateAddressRules.address_line1.$error">{{ $validateUpdateAddressRules.address_line1.$errors[0].$message }}</BaseError>
                                         </div>
 
                                         <div class="mb-4">
-                                            <BaseLabel>Region,Province,City,Barangay:</BaseLabel>
-                                            <BaseInputField v-model="updateaddress.fulladdress" />
-                                            <BaseError></BaseError>
+                                            <BaseLabel>Additional Address Info(optional):</BaseLabel>
+                                            <BaseInputField v-model="updateaddress.address_line2" />
+                                        </div>
+
+                                        <div class="mb-4">
+                                            <BaseLabel>City:</BaseLabel>
+                                            <BaseInputField v-model="updateaddress.city" />
+                                            <BaseError v-if="$validateUpdateAddressRules.city.$error">{{ $validateUpdateAddressRules.city.$errors[0].$message }}</BaseError>
+                                        </div>
+
+                                        <div class="mb-4">
+                                            <BaseLabel>Province:</BaseLabel>
+                                            <BaseInputField v-model="updateaddress.province" />
+                                            <BaseError v-if="$validateUpdateAddressRules.province.$error">{{ $validateUpdateAddressRules.province.$errors[0].$message }}</BaseError>
+                                        </div>
+
+                                        <div class="mb-4">
+                                            <BaseLabel>Country:</BaseLabel>
+                                            <BaseInputField v-model="updateaddress.country" />
+                                            <BaseError v-if="$validateUpdateAddressRules.country.$error">{{ $validateUpdateAddressRules.country.$errors[0].$message }}</BaseError>
                                         </div>
 
                                         <div class="mb-4">
                                             <BaseLabel>Postal code:</BaseLabel>
-                                            <BaseInputField v-model="updateaddress.postalcode" />
-                                            <BaseError></BaseError>
+                                            <BaseInputField v-model="updateaddress.postal_code" />
+                                            <BaseError v-if="$validateUpdateAddressRules.postal_code.$error">{{ $validateUpdateAddressRules.postal_code.$errors[0].$message }}</BaseError>
                                         </div>
 
-                                        <div class="mb-4">
-                                            <BaseRadioButton v-for="option in ['Set as default']" :key="option" :name="'set'" :label="option" :value="option"  v-model="address.isDefault" class="text-sm"/>
-                                        </div>
                                         <!-- Save Button -->
                                         <div class="flex justify-end space-x-2">
-                                            <button type="button" class="px-4 py-2 bg-gray-200 rounded-md text-gray-700 hover:bg-gray-300" @click="closeUpdateAddressPowerModal" >Cancel </button>
-                                            <button type="submit" class="px-6 py-2 bg-[#608C54] text-white rounded-md hover:bg-[#4e7143]">Save</button>
+                                            <button type="button" class="px-4 py-2 bg-gray-200 rounded-md text-gray-700 hover:bg-gray-300" @click="closeUpdateAddressModal" >Cancel </button>
+                                            <button type="submit" class="px-6 py-2 bg-[#608C54] text-white rounded-md hover:bg-[#4e7143]" @click="updateAddress">Save</button>
                                         </div>
-                                    </form>
                                 </div>
                             </div>
                         </div>
                         <!-- Save Address-->
                         <div class="mt-6 space-y-4">
-                            <h3 class="text-lg font-semibold">Saved Addresses</h3>
+                            <h3 class="text-lg font-semibold">Saved Address</h3>
                             <ul>
-                                <li v-for="(item, index) in addresses" :key="index" class="border-b py-4">
+                                <li v-for="address in addressList" :key="address.id" class="border-b py-4">
                                 <p>
-                                    <span class="font-semibold text-[#608C54]">Full Name:</span> {{ item.fullname }}
+                                    <span class="font-semibold text-[#608C54]">Name:</span> {{ address.first_name }} {{ address.middle_name }} {{ address.last_name }}
                                 </p>
                                 <p>
-                                    <span class="font-semibold text-[#608C54]">Phone Number:</span> {{ item.phone_number }}
+                                    <span class="font-semibold text-[#608C54]">Phone Number:</span> {{ address.phone_number }}
                                 </p>
                                 <p>
-                                    <span class="font-semibold text-[#608C54]">Address:</span> {{ item.fulladdress }}
+                                    <span class="font-semibold text-[#608C54]">Address:</span> {{ address.address_line1 }}
                                 </p>
                                 <p>
-                                    <span class="font-semibold text-[#608C54]">Postal Code:</span> {{ item.postalcode }}
+                                    <span class="font-semibold text-[#608C54]">Additional Address Info:</span> {{ address.address_line2 }}
                                 </p>
-                                <p v-if="item.isDefault">
-                                    <span class="font-semibold text-[#608C54]">Status:</span> Default
+                                <p>
+                                    <span class="font-semibold text-[#608C54]">City/Province/Country:</span> {{ address.city }} {{ address.province }} {{ address.country }}
+                                </p>
+                                <p>
+                                    <span class="font-semibold text-[#608C54]">Postal code:</span> {{ address.postal_code }}
                                 </p>
                                 <div class="flex space-x-2 mt-2 justify-end">
                                      <!-- Edit Button -->
-                                     <button class="text-blue-500 hover:text-blue-700" @click="openUpdateAddressModal(index.id)">
+                                     <button class="text-blue-500 hover:text-blue-700" @click="openUpdateAddressModal(address.id)">
                                         <Icon icon="bi:pencil-square" width="20" height="20"  style="color: #2543bf" />
                                     </button>
 
                                     <!-- Delete Button -->
-                                    <button class="text-red-500 hover:text-red-700" @click="openDeleteProductModal(index.id)">
+                                    <button class="text-red-500 hover:text-red-700" @click="openDeleteAddressModal(address.id)">
                                         <Icon icon="mi:delete" width="24" height="24"  style="color: #ed0f1c" />
                                     </button>
+
+                                    <div v-if="isDeleteModalVisible" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+                                        <div class="bg-white p-6 rounded-lg shadow-lg w-96 text-center">
+                                            <div class="flex justify-center">
+                                                <Icon  icon="material-symbols:delete-outline"  width="50" height="50"  style="color: #ff0000" />
+                                            </div>
+                                            <!-- Message -->
+                                            <p class="text-sm text-gray-600 mt-4">Are you sure you want to delete this item? This action cannot be undone</p>
+
+                                            <!-- Buttons -->
+                                            <div class="flex gap-2 mt-4">
+                                            <!-- Cancel Button -->
+                                            <button class="bg-[#608C54] text-white px-14 py-2 rounded hover:bg-gray-400" @click="closeDeleteAddressModal">
+                                                Cancel
+                                            </button>
+
+                                            <!-- Confirm Button -->
+                                            <button  class="bg-red-500 text-white px-14 py-2 rounded hover:bg-red-600"  @click="deleteAddress">
+                                                Delete
+                                            </button>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                                 </li>
                             </ul>
-                        </div>
-                    </div>
-
-                     <!--Change Password-->
-                    <div v-if="activeTab === 'Change Password'" class="tab-content">
-                        <div class="flex items-center justify-center">
-                            <div class="w-96 h-80 border rounded-lg shadow-lg flex flex-col justify-center relative">
-                                <!-- Back Button -->
-                                <button v-if="currentStep !== 'verifyIdentity'" @click="goBack" class="absolute top-2 left-2 flex items-center text-sm text-gray-600 hover:text-gray-800">
-                                    <Icon icon="mdi:arrow-left" width="20" height="20" />
-                                    <span class="ml-1">Back</span>
-                                </button>
-
-                                <!-- Step: Verify Identity -->
-                                <div v-if="currentStep === 'verifyIdentity'" class="flex flex-col items-center">
-                                    <div class="justify-center flex">
-                                    <Icon icon="mdi:shield-check-outline" width="100" height="100" style="color: #608C54" />
-                                    </div>
-                                    <p class="text-sm text-center mt-4">To protect your account security, please verify your identity with one of the methods below.</p>
-                                    <div class="justify-center flex mt-3">
-                                    <button class="bg-[#608C54] text-white flex items-center space-x-2 py-2 px-8 rounded-md text-sm hover:bg-gray-300" @click="goToStep('verifyPassword')">
-                                        <Icon icon="si:lock-line" width="24" height="24" style="color: #eae2ed" />
-                                        Verify by Password
-                                    </button>
-                                    </div>
-                                </div>
-
-                                <!-- Step: Verify Password -->
-                                <div v-if="currentStep === 'verifyPassword'" class="flex flex-col items-center">
-                                    <h1 class="text-lg font-semibold mb-4">Enter your Pagsasaka password</h1>
-                                    <div class="relative">
-                                    <BaseInputField :type="isPasswordVisible ? 'text' : 'password'" v-model="password" placeholder="Enter your password" class="pr-10" />
-                                    <button type="button" @click="togglePasswordVisibility" class="absolute inset-y-0 right-0 flex items-center pr-2">
-                                        <Icon :icon="isPasswordVisible ? 'mdi:eye' : 'mdi:eye-off'" class="text-gray-500" />
-                                    </button>
-                                    </div>
-                                    <div class="justify-center flex mt-5">
-                                    <button class="bg-[#608C54] text-white flex items-center space-x-2 py-2 px-8 rounded-md text-sm hover:bg-gray-300" @click="goToStep('changePassword')">
-                                        <Icon icon="si:lock-line" width="24" height="24" style="color: #eae2ed" /> Verify
-                                    </button>
-                                    </div>
-                                </div>
-
-                                <!-- Step: Change Password -->
-                                <div v-if="currentStep === 'changePassword'" class="flex flex-col items-center">
-                                    <h1 class="2xl:text-lg 2xs;text-sm font-semibold">Change your Password</h1>
-                                    <div class="relative">
-                                        <BaseLabel>New Password:</BaseLabel>
-                                        <BaseInputField :type="isPasswordVisible ? 'text' : 'password'" v-model="newPassword" placeholder="Enter new password" class="pr-10" />
-                                        <button type="button" @click="togglePasswordVisibility" class="absolute inset-y-0 right-0 flex items-center pr-2 mt-14">
-                                            <Icon :icon="isPasswordVisible ? 'mdi:eye' : 'mdi:eye-off'" class="text-gray-500" />
-                                        </button>
-                                    </div>
-                                    <div class="relative mt-3">
-                                        <BaseLabel>Confirm your new password</BaseLabel>
-                                        <BaseInputField :type="isPasswordVisible ? 'text' : 'password'" v-model="newPassword" placeholder="Enter new password" class="pr-10" />
-                                        <button type="button" @click="togglePasswordVisibility" class="absolute inset-y-0 right-0 flex items-center pr-2 mt-14">
-                                            <Icon :icon="isPasswordVisible ? 'mdi:eye' : 'mdi:eye-off'" class="text-gray-500" />
-                                        </button>
-                                    </div>
-                                    <div class="justify-center flex mt-4 items-center">
-                                        <button class="bg-[#608C54] text-white flex items-center space-x-2 py-2 px-8 rounded-md text-sm hover:bg-gray-300" @click="submitPasswordChange">
-                                            <Icon icon="si:lock-line" width="24" height="24" style="color: #eae2ed" /> Confirm
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -1067,8 +1096,9 @@ import BaseSearchField from '@/components/Input-Fields/BaseSearchField.vue';
 import Footer from '@/components/Input-Fields/Footer.vue';
 import Loading from '@/components/Alerts/Loading.vue';
 import Toast from '@/components/Alerts/Toast.vue';
-import { reactive, computed, ref } from 'vue';
+import { ref, computed, reactive, onMounted, watch  } from "vue";
 import { required, email, helpers } from '@vuelidate/validators';
+import { useVuelidate } from "@vuelidate/core";
 import { Icon } from '@iconify/vue';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
@@ -1078,71 +1108,320 @@ import BaseOptionField from '@/components/Input-Fields/BaseOptionField.vue';
 const store = useStore();
 const router = useRouter();
 
+const showLoading = computed(() => store.state.showLoading.state);
 const activeTab = ref('My Profile'); // Default active tab
-const tabs = ref(['My Profile', 'My Purchase','Addresses','Change Password']); // List of tabs
-
+const tabs = ref(['My Profile', 'My Purchase','Billing Address']); // List of tabs
+const consumerRaw  = computed(() => store.state.userData.data?.user || {})
+const addressList= computed(() => store.state.Consumer.address.data);
 /******************************************************************
  FUNCTION FOR UPDATE PROFILE
 ******************************************************************/
-const profile = ref({
-  name: '',
-  phone: '',
-  email: '',
-  gender: '',
+const consumerData = reactive({
+  first_name: consumerRaw.value.first_name || '',
+  middle_name: consumerRaw.value.middle_name || '',
+  last_name: consumerRaw.value.last_name || '',
+  email: consumerRaw.value.email || '',
+  phone_number: consumerRaw.value.phone_number || '',
+  delivery_address: consumerRaw.value.delivery_address || '',
+
 });
 
-const editingField = ref(null); // Track which field is being edited
+//edit modal
+const ishowProfileModal = ref(false)
 
-const editField = (field) => {
-  editingField.value = field;
-  tempValue.value = profile.value[field]; // Store the current value
+const openProfileModal = () => {
+    ishowProfileModal.value = true;
+};
+
+// Close the modal
+const closeProfileModal = () => {
+    ishowProfileModal.value = false;
+};
+
+const saveProfileChanges = async () => {
+  try {
+    await store.dispatch('updateProfile', {
+      id: consumerRaw.value.id,
+      first_name: consumerData.first_name,
+      middle_name: consumerData.middle_name,
+      last_name: consumerData.last_name,
+      phone_number: consumerData.phone_number,
+      delivery_address: consumerData.delivery_address,
+      email: consumerData.email,
+    });
+
+    closeProfileModal();
+
+  } catch (error) {
+    if (error.response?.data?.errors) {
+      const errors = error.response.data.errors;
+      // Display the first error message for general feedback
+      const firstField = Object.keys(errors)[0];
+      if (firstField) {
+        alert(errors[firstField][0]);
+      }
+    } else {
+      console.error("Error updating profile:", error);
+      alert("An unexpected error occurred.");
+    }
+  }
+};
+/******************************************************************
+ FUNCTION FOR UPDATE CHANGE PASSWORD
+******************************************************************/
+const passwordData = reactive({
+  password: consumerRaw.value.password || '',
+  password_confirmation: consumerRaw.value.password_confirmation || '',
+
+});
+
+const showPassword = ref(false);
+
+const togglePasswordVisibility = () => {
+  showPassword.value = !showPassword.value;
+};
+//re-password
+const reshowPassword = ref(false);
+
+const retogglePasswordVisibility = () => {
+  reshowPassword.value = !reshowPassword.value;
+};
+
+
+//edit modal
+const ishowPasswordModal = ref(false)
+
+const openPasswordModal = () => {
+    ishowPasswordModal.value = true;
+};
+
+// Close the modal
+const closePasswordModal = () => {
+    ishowPasswordModal.value = false;
+};
+
+const savePasswordChanges = async () => {
+  try {
+    if (passwordData.password !== passwordData.password_confirmation) {
+      alert("Passwords do not match");
+      return;
+    }
+
+    await store.dispatch('updatePassword', {
+      id: consumerRaw.value.id,
+      password: passwordData.password,
+      password_confirmation: passwordData.password_confirmation,
+    });
+
+    closePasswordModal();
+    // Optionally clear the fields after successful update
+    passwordData.password = '';
+    passwordData.password_confirmation = '';
+
+  } catch (error) {
+    if (error.response?.data?.errors) {
+      const errors = error.response.data.errors;
+      const firstField = Object.keys(errors)[0];
+      if (firstField) {
+        alert(errors[firstField][0]);
+      }
+    } else {
+      console.error("Error updating password:", error);
+      alert("An unexpected error occurred.");
+    }
+  }
 };
 
 /******************************************************************
- FUNCTION FOR ADDRESS
+ FUNCTION FOR GETTING ADDRESS
+******************************************************************/
+function getAddressList() {
+    store.dispatch('Consumer/getAddressList')
+}
+
+onMounted(() => {
+    getAddressList();
+})
+
+
+/******************************************************************
+ FUNCTION FOR ADDING ADDRESS
 ******************************************************************/
 // Reactive states
-const address = reactive({
-  fullname: "",
-  phone_number: "",
-  fulladdress:"",
-  postalcode:"",
-  isDefault: false,
+const addressData = reactive({
+ address_line1:'',
+ address_line2:'',
+ city:'',
+ province:'',
+ country:'',
+ postal_code:'',
+
 });
-const addresses = ref([
-{
-    fullname: 'John Doe',
-    phone_number: '123-456-7890',
-    fulladdress: '123 Main St, Springfield, IL, USA',
-    postalcode: '62701',
-    isDefault: true,
-  },
-  {
-    fullname: 'Jane Smith',
-    phone_number: '987-654-3210',
-    fulladdress: '456 Elm St, Springfield, IL, USA',
-    postalcode: '62702',
-    isDefault: false,
-  },
-  {
-    fullname: 'Alice Johnson',
-    phone_number: '555-123-4567',
-    fulladdress: '789 Oak St, Springfield, IL, USA',
-    postalcode: '62703',
-    isDefault: false,
-  },
-]);
+
+const addressDataRules = computed(() => {
+  return {
+      address_line1: {
+          required: helpers.withMessage('Address is required', required)
+      },
+      city: {
+          required: helpers.withMessage('City is required', required)
+      },
+      province: {
+          required: helpers.withMessage('Province is required', required)
+      },
+      country: {
+          required: helpers.withMessage('Country is required', required)
+      },
+      postal_code: {
+          required: helpers.withMessage('Postal is required', required)
+      },
+  };
+});
+
+const $validateAddressRules = useVuelidate(addressDataRules, addressData);
+
+async function createAddress() {
+    const validationResult = await $validateAddressRules.value.$validate();
+    if (validationResult) {
+        const formData = new FormData();
+        formData.append('address_line1', addressData.address_line1);
+        formData.append('address_line2', addressData.address_line2);
+        formData.append('city', addressData.city);
+        formData.append('province', addressData.province);
+        formData.append('country', addressData.country);
+        formData.append('postal_code', addressData.postal_code);
+    
+
+        await store.dispatch("Consumer/createAddress", formData)
+        .then((response) => {
+            if (response.isSuccess == true) {
+                closeAddressModal();
+                getAddressList();
+            }
+        });
+    }
+}
+
 
 // Open the modal
 const isAddAddressModalOpen = ref(false);
-const openModal = () => {
+const openAddressModal = () => {
   isAddAddressModalOpen.value = true;
 };
 
 // Close the modal
-const closeModal = () => {
+const closeAddressModal = () => {
   isAddAddressModalOpen.value = false;
 };
+
+/******************************************************************
+ FUNCTION FOR UPDATE ADDRESS
+******************************************************************/
+const updateaddress = reactive({
+    id:'',
+    address_line1:'',
+    address_line2:'',
+    city:'',
+    province:'',
+    country:'',
+    postal_code:'',
+});
+const isUpdateAddressModalOpen = ref(false);
+
+const openUpdateAddressModal = (id) => {
+    const selectedAddress = addressList.value.find((address) => address.id === id);
+
+  if (selectedAddress) {
+    updateaddress.id = selectedAddress.id;
+    updateaddress.address_line1 = selectedAddress.address_line1
+    updateaddress.address_line2 = selectedAddress.address_line2
+    updateaddress.city = selectedAddress.city
+    updateaddress.province = selectedAddress.province
+    updateaddress.country = selectedAddress.country
+    updateaddress.postal_code = selectedAddress.postal_code
+  
+
+      // Open the modal
+      isUpdateAddressModalOpen.value = true;  
+  }
+};
+
+
+// Validation rules
+const updateAddressRules = computed(() => {
+    return {
+        address_line1: {
+          required: helpers.withMessage('Address is required', required)
+      },
+      city: {
+          required: helpers.withMessage('City is required', required)
+      },
+      province: {
+          required: helpers.withMessage('Province is required', required)
+      },
+      country: {
+          required: helpers.withMessage('Country is required', required)
+      },
+      postal_code: {
+          required: helpers.withMessage('Postal is required', required)
+      },
+  };
+});
+
+const $validateUpdateAddressRules = useVuelidate(updateAddressRules, updateaddress);
+
+// Function for update product
+
+// Function for update product
+async function updateAddress() {
+  const validationResult = await $validateUpdateAddressRules.value.$validate();
+  if (validationResult) {
+      await store.dispatch('Consumer/updateAddress', updateaddress)
+      .then((response) => {
+          if(response.isSuccess == true) {
+            closeUpdateAddressModal();
+            getAddressList();
+          }
+      })
+  }
+}
+
+
+// Function to handle closing modal
+function closeUpdateAddressModal() {
+    isUpdateAddressModalOpen.value = false;
+}
+
+/******************************************************************
+ FUNCTION FOR DELETING ADDRESS
+******************************************************************/
+// State to toggle modal visibility
+const isDeleteModalVisible = ref(false);
+const toDelete = ref(null);
+
+// Open delete modal
+const openDeleteAddressModal = (id) => {
+    toDelete.value = id;
+  isDeleteModalVisible.value = true;
+};
+
+// Close delete modal
+const closeDeleteAddressModal = () => {
+  isDeleteModalVisible.value = false;
+};
+
+// Function for delete division
+async function deleteAddress() {
+    if (toDelete.value != "") {
+        await store.dispatch('Consumer/deleteAddress', toDelete.value)
+        .then((response) => {
+            if (response.isSuccess) {
+                closeDeleteAddressModal();  
+                getAddressList(); 
+            }
+        })    
+    }
+}
 
 /******************************************************************
  FUNCTION FOR TRACK YOUR ORDER
@@ -1176,7 +1455,7 @@ const product = ref({
 
 const imageUrl = ref('https://via.placeholder.com/300'); // Replace with actual image URL
 /******************************************************************
- FUNCTION FOR TRACK ORDER MODAL
+ FUNCTION FOR VIEW CANCELLATION MODAL
 ******************************************************************/
 const isshowViewCancellationModal = ref(false);
 
@@ -1232,57 +1511,6 @@ function closeRefundModal() {
 }
 
 /******************************************************************
- FUNCTION FOR UPDATE PRODUCT
-******************************************************************/
-const updateaddress = ref({
-  fullname: "",
-  phone_number: "",
-  fulladdress:"",
-  postalcode:"",
-  isDefault: false,
-});
-const isUpdateAddressModalOpen = ref(false);
-
-const openUpdateAddressModal = () => {
-    isUpdateAddressModalOpen.value = true;
-};
-
-// Function to handle closing modal
-function closeUpdateAddressPowerModal() {
-    isUpdateAddressModalOpen.value = false;
-}
-
-/******************************************************************
- FUNCTION FOR CHANGE PASSWORD
-******************************************************************/
-
-// States for the steps
-const currentStep = ref('verifyIdentity');
-const isPasswordVisible = ref(false);
-const password = ref('');
-const newPassword = ref('');
-
-// Methods
-const goToStep = (step) => {
-  currentStep.value = step;
-};
-
-const togglePasswordVisibility = () => {
-  isPasswordVisible.value = !isPasswordVisible.value;
-};
-
-const submitPasswordChange = () => {
-  console.log('Password changed to:', newPassword.value);
-};
-
-const goBack = () => {
-  if (currentStep.value === 'changePassword') {
-    currentStep.value = 'verifyPassword';
-  } else {
-    currentStep.value = 'verifyIdentity';
-  }
-};
-/******************************************************************
  FUNCTION FOR MY PURCHASE TAB
 ******************************************************************/
 
@@ -1333,8 +1561,12 @@ const closeConfirmationModal = () => {
   FUNCTION FOR CHAT
 ******************************************************************/
 const isshowChatModal = ref(false);
-const newMessage = ref('');
-const selectedChat = ref(null); // Set to null initially
+const selectedChat = ref(null);
+const messageText = ref('');
+
+const closeChat = () => {
+    selectedChat.value = null;
+  };
 
 const openshowChatModal = () => {
     isshowChatModal.value = true;
@@ -1344,44 +1576,29 @@ const closeshowChatModal = () => {
     isshowChatModal.value = false;
 };
 
-const chats = ref([
-  { name: 'cpx_mall', message: '[Shop AI Assistant] Hello!', unread: null },
-  { name: 'junseven89', message: 'Unsupported message', unread: 2 },
-  { name: 'trxph', message: 'Hi, thanks for following!', unread: 21 },
-  { name: 'Demasia', message: 'Hello dear friend...', unread: 3 },
-  { name: 'sportsclubph', message: 'Hi, thanks for browsing!', unread: 3 },
-  { name: 'sportsclubph', message: 'Hi, thanks for browsing!', unread: 3 },
-  { name: 'sportsclubph', message: 'Hi, thanks for browsing!', unread: 3 },
-  { name: 'sportsclubph', message: 'Hi, thanks for browsing!', unread: 3 },
-]);
 
-const chatMessages = ref([]);
-
-const selectChat = (chat) => {
-  selectedChat.value = chat;
-  chatMessages.value = [
-    { sender: chat.name, text: 'Hello, how can I assist you?', time: '10:30 AM' },
-    { sender: 'You', text: 'I want to check my order.', time: '10:32 AM' },
-  ];
+const selectChat = (id) => {
+    console.log("Selected chat ID: ", id);  // Debugging the id value
+    const selected = conversationStart.value.find(c => c.id === id);
+    selectedChat.value = selected;
+    store.dispatch('Consumer/getMessages', id);
 };
 
-const sendMessage = () => {
-  if (newMessage.value.trim()) {
-    chatMessages.value.push({
-      sender: 'You',
-      text: newMessage.value,
-      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-    });
-    newMessage.value = '';
-  }
-};
+const sendMessage = async () => {
+    if (!messageText.value.trim() || !selectedChat.value) return;
 
-const uploadImage = (event) => {
-  const file = event.target.files[0];
-  if (file) {
-    console.log("Selected file:", file.name);
-    // Handle file upload logic here
-  }
+    const payload = {
+        conversation_id: selectedChat.value.id,
+        message: messageText.value,
+    };
+
+    try {
+        await store.dispatch('Consumer/sendMessage', payload);
+        await store.dispatch('Consumer/getMessages', selectedChat.value.id);
+        messageText.value = '';
+    } catch (error) {
+        console.error('Failed to send message:', error);
+    }
 };
 
 </script>

@@ -13,5 +13,28 @@ export default {
         data:[],
     },
 
+    checkout: {
+        data:[],
+    },
+
+    conversation: {
+        data:[],
+    },
+
+    message: {
+        data:[],
+    },
+
+    ratings: {
+        data:[],
+    },
+
+    address: {
+        data:[],
+    },
+
+    updateAddress: {
+        data:[],
+    },
 
 }

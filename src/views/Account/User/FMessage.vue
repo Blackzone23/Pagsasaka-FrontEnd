@@ -1,12 +1,26 @@
 <template>
-    <header class="bg-[#608C54] shadow p-4 flex justify-between items-center text-white">
+  <!-- Loading screen and toast message -->
+  <Loading v-if="showLoading" class="loading"></Loading>
+    <Toast></Toast>
+
+    <header class="bg-[#285a19] shadow p-4 flex justify-between items-center text-white">
         <h1 class="text-lg sm:text-xl 2xl:ml-0 md:ml-10 2xs:ml-10 font-bold">Message History</h1>
         <div class="flex items-center space-x-4">
-            <div class="relative">
-                <Icon icon="uil:setting" class="w-6 h-6 cursor-pointer" @click="toggleDropdown" />
-                <div v-if="dropdownVisible" class="absolute right-0 mt-2 bg-white shadow-lg rounded p-2 w-48">
-                    <a href="/seller-profile" class="block w-full text-left px-4 py-2 text-sm text-black hover:bg-gray-100"> Account Info </a>
-                    <button class="block w-full text-left px-4 py-2 text-sm text-black hover:bg-gray-100" @click="logout()"> Logout</button>
+            <div class="relative inline-block text-left">
+                <!-- Profile Picture and Settings Icon -->
+                <div class="flex items-center space-x-2">
+                <img :src="sellerRaw.avatar" alt="Profile" class="w-10 h-10 rounded-full object-cover  shadow-md"/>
+                <Icon icon="uil:setting" width="24" height="24" class="cursor-pointer text-white" @click="toggleDropdown"/>
+                </div>
+
+                <!-- Dropdown Menu -->
+                <div v-if="dropdownVisible" class="absolute right-0 z-50 mt-2 w-48 bg-white rounded shadow-lg">
+                <a href="/seller-profile" class="block px-4 py-2 text-sm text-black hover:bg-gray-100">
+                    Account Info
+                </a>
+                <button @click="logout" class="block w-full text-left px-4 py-2 text-sm text-black hover:bg-gray-100">
+                    Logout
+                </button>
                 </div>
             </div>
         </div>
@@ -18,11 +32,11 @@
                 <h2 class="text-lg text-[#1c520d] font-semibold mb-4">Chats</h2>
             </div>
             <ul>
-                <li v-for="chat in conversations" :key="chat.id" @click="selectChat(chat)" class="p-2 cursor-pointer hover:bg-gray-200 rounded-md flex items-center" :class="{ 'bg-blue-200': selectedChat?.id === chat.id }">
-                    <img :src="chat.avatar" alt="Avatar" class="w-10 h-10 rounded-full mr-3" />
+                <li v-for="conversation in conversationStart" :key="conversation.id" @click="selectChat(conversation.id)" class="p-2 cursor-pointer hover:bg-gray-200 rounded-md flex items-center" :class="{ 'bg-blue-200': selectedChat?.id === conversation.id }">
+                    <img :src="conversation.avatar" alt="Avatar" class="w-10 h-10 rounded-full mr-3" />
                     <div class="flex-1">
-                    <span class="font-medium block">{{ chat.name }}</span>
-                    <span class="text-sm text-gray-500">{{ chat.messages.length ? chat.messages[chat.messages.length - 1].text : 'No messages' }}</span>
+                    <span class="font-medium block">{{ conversation.first_name }}{{ conversation.middle_name }}{{ conversation.last_name }}</span>
+                    <span class="text-sm text-gray-500">{{ conversation.message|| 'No messages' }}</span>
                     </div>
                 </li>
             </ul>
@@ -60,73 +74,86 @@
 </template>
   
 <script setup>
-  import { ref, onMounted } from "vue";
-  import { Icon } from "@iconify/vue";
-  
-  const conversations = ref([
-    { id: 1, name: 'Alice', avatar: 'https://via.placeholder.com/40', messages: [
-        { id: 1, text: 'Hey there!', sent: false },
-        { id: 2, text: 'How are you?', sent: false },
-        { id: 3, text: 'I am good, thanks!', sent: true }
-      ] },
-    { id: 2, name: 'Bob', avatar: 'https://via.placeholder.com/40', messages: [
-        { id: 1, text: 'Hello!', sent: false },
-        { id: 2, text: 'How was your day?', sent: true }
-      ] }
-  ]);
-  
-  const selectedChat = ref(null);
-  const newMessage = ref('');
-  const screenSize = ref('');
-  
-  const selectChat = (chat) => {
-    selectedChat.value = chat;
-  };
-  
-  const closeChat = () => {
-    selectedChat.value = null;
-  };
-  
-  const sendMessage = () => {
-    if (newMessage.value.trim() && selectedChat.value) {
-      selectedChat.value.messages.push({
-        id: Date.now(),
-        text: newMessage.value,
-        sent: true
-      });
-      newMessage.value = '';
-    }
-  };
-  
-  const updateScreenSize = () => {
-    const width = window.innerWidth;
-    if (width < 400) {
-      screenSize.value = '2xs';
-    } else if (width < 640) {
-      screenSize.value = 'xs';
-    } else if (width < 768) {
-      screenSize.value = 'sm';
-    } else if (width < 1024) {
-      screenSize.value = 'md';
-    } else if (width < 1280) {
-      screenSize.value = 'lg';
-    } else if (width < 1536) {
-      screenSize.value = 'xl';
-    } else {
-      screenSize.value = '2xl';
-    }
-  };
-  
-  onMounted(() => {
-    updateScreenSize();
-    window.addEventListener('resize', updateScreenSize);
-  });
+    import Loading from '@/components/Alerts/Loading.vue'
+    import Toast from '@/components/Alerts/Toast.vue'
+    import { debounce } from 'lodash';
+    import { ref, computed, reactive, onMounted } from "vue";
+    import { useVuelidate } from "@vuelidate/core";
+    import { required, helpers } from "@vuelidate/validators";
+    import { Icon } from "@iconify/vue";
+    import { useRouter } from "vue-router";
+    import { useStore } from "vuex";
 
-/******************************************************************
- FUNCTION FOR LOGOUT
-******************************************************************/
+    const store = useStore();
+    const router = useRouter();
 
-const dropdownVisible = ref(false);
+    const showLoading = computed(() => store.state.showLoading.state);
+    const sellerRaw  = computed(() => store.state.userData.data?.user || {})
+
+    const conversations = ref([
+        { id: 1, name: 'Alice', avatar: 'https://via.placeholder.com/40', messages: [
+            { id: 1, text: 'Hey there!', sent: false },
+            { id: 2, text: 'How are you?', sent: false },
+            { id: 3, text: 'I am good, thanks!', sent: true }
+        ] },
+        { id: 2, name: 'Bob', avatar: 'https://via.placeholder.com/40', messages: [
+            { id: 1, text: 'Hello!', sent: false },
+            { id: 2, text: 'How was your day?', sent: true }
+        ] }
+    ]);
+    
+    const selectedChat = ref(null);
+    const newMessage = ref('');
+    const screenSize = ref('');
+    
+    const selectChat = (chat) => {
+        selectedChat.value = chat;
+    };
+    
+    const closeChat = () => {
+        selectedChat.value = null;
+    };
+    
+    const sendMessage = () => {
+        if (newMessage.value.trim() && selectedChat.value) {
+        selectedChat.value.messages.push({
+            id: Date.now(),
+            text: newMessage.value,
+            sent: true
+        });
+        newMessage.value = '';
+        }
+    };
+    
+    const updateScreenSize = () => {
+        const width = window.innerWidth;
+        if (width < 400) {
+        screenSize.value = '2xs';
+        } else if (width < 640) {
+        screenSize.value = 'xs';
+        } else if (width < 768) {
+        screenSize.value = 'sm';
+        } else if (width < 1024) {
+        screenSize.value = 'md';
+        } else if (width < 1280) {
+        screenSize.value = 'lg';
+        } else if (width < 1536) {
+        screenSize.value = 'xl';
+        } else {
+        screenSize.value = '2xl';
+        }
+    };
+    
+    onMounted(() => {
+        updateScreenSize();
+        window.addEventListener('resize', updateScreenSize);
+    });
+
+    /******************************************************************
+     FUNCTION FOR LOGOUT
+    ******************************************************************/
+
+    const dropdownVisible = ref(false);
   
   // Toggle the dropdown visibility
   const toggleDropdown = () => {

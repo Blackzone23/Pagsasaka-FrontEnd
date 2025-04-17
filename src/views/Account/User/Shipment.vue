@@ -1,18 +1,28 @@
 <template>
 
-	<div class="flex h-screen bg-gray-100">
+	<div class="flex h-[800px] bg-gray-100">
 		<div class="flex-1 flex flex-col">
 		<!-- Header -->
-		<header class="bg-[#608C54] shadow p-4 flex justify-between items-center text-white">
+		<header class="bg-[#285a19]  shadow p-4 flex justify-between items-center text-white">
 			<h1 class="text-lg sm:text-xl 2xl:ml-0 md:ml-10 2xs:ml-10 font-bold">Shipment</h1>
 			<div class="flex items-center space-x-4">
-			<div class="relative">
-				<Icon icon="uil:setting" class="w-6 h-6 cursor-pointer" @click="toggleDropdown" />
-				<div v-if="dropdownVisible" class="absolute right-0 mt-2 bg-white shadow-lg rounded p-2 w-48">
-					<a href="/seller-profile" class="block w-full text-left px-4 py-2 text-sm text-black hover:bg-gray-100"> Account Info </a>
-					<button class="block w-full text-left px-4 py-2 text-sm text-black hover:bg-gray-100" @click="logout()"> Logout</button>
+				<div class="relative inline-block text-left">
+					<!-- Profile Picture and Settings Icon -->
+					<div class="flex items-center space-x-2">
+						<img :src="sellerRaw.avatar" alt="Profile" class="w-10 h-10 rounded-full object-cover  shadow-md"/>
+						<Icon icon="uil:setting" width="24" height="24" class="cursor-pointer text-white" @click="toggleDropdown"/>
+					</div>
+
+					<!-- Dropdown Menu -->
+					<div v-if="dropdownVisible" class="absolute right-0 z-50 mt-2 w-48 bg-white rounded shadow-lg">
+						<a href="/seller-profile" class="block px-4 py-2 text-sm text-black hover:bg-gray-100">
+							Account Info
+						</a>
+						<button @click="logout" class="block w-full text-left px-4 py-2 text-sm text-black hover:bg-gray-100">
+							Logout
+						</button>
+					</div>
 				</div>
-			</div>
 			</div>
 		</header>
 
@@ -49,6 +59,64 @@
 							<td class="px-4 py-2">{{ order.updated_at }}</td>
 							<td class="px-4 py-2">{{ order.ship_to }}</td>
 							<td class="px-4 py-2">{{ order.status }}</td>
+							</tr>
+						</tbody>
+						</table>
+					</div>
+
+						<!-- Tables -->
+						<div>
+						<table v-if="activeTab === 'cancellations'" class="table-auto w-full border-collapse border border-gray-300">
+						<thead>
+							<tr class="bg-gray-300">
+							<th class="px-4 py-2">Name</th>
+							<th class="px-4 py-2">Created</th>
+							<th class="px-4 py-2">Last Updated</th>
+							<th class="px-4 py-2">Ship To</th>
+							<th class="px-4 py-2">Status</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr
+							v-for="cancel in cancellationList"
+							:key="cancel.id"
+							class="even:bg-gray-50 hover:bg-gray-200 text-center text-sm cursor-pointer"
+							@click="handleOrderClick(cancel)"
+							>
+							<td class="px-4 py-2">{{ cancel.product_name }}</td>
+							<td class="px-4 py-2">{{ cancel.created_at }}</td>
+							<td class="px-4 py-2">{{ cancel.updated_at }}</td>
+							<td class="px-4 py-2">{{ cancel.ship_to }}</td>
+							<td class="px-4 py-2">{{ cancel.status }}</td>
+							</tr>
+						</tbody>
+						</table>
+					</div>
+
+						<!-- Tables -->
+						<div>
+						<table v-if="activeTab === 'refunds'" class="table-auto w-full border-collapse border border-gray-300">
+						<thead>
+							<tr class="bg-gray-300">
+							<th class="px-4 py-2">Name</th>
+							<th class="px-4 py-2">Created</th>
+							<th class="px-4 py-2">Last Updated</th>
+							<th class="px-4 py-2">Ship To</th>
+							<th class="px-4 py-2">Status</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr
+							v-for="refund in refundList"
+							:key="refund.id"
+							class="even:bg-gray-50 hover:bg-gray-200 text-center text-sm cursor-pointer"
+							@click="handleOrderClick(refund)"
+							>
+							<td class="px-4 py-2">{{ refund.product_name }}</td>
+							<td class="px-4 py-2">{{ refund.created_at }}</td>
+							<td class="px-4 py-2">{{ refund.updated_at }}</td>
+							<td class="px-4 py-2">{{ refund.ship_to }}</td>
+							<td class="px-4 py-2">{{ refund.status }}</td>
 							</tr>
 						</tbody>
 						</table>
@@ -108,8 +176,9 @@
 					</div>
 
 					<!-- Right Side - Image -->
-					<div class="flex-1 flex justify-center items-center mt-6 md:mt-0">
-						<img :src="selectedShipment.imageUrl" alt="Shipment Image" class="w-[280px] h-[300px] md:w-[350px] md:h-[400px] rounded-lg shadow-md object-cover"/>
+					<div v-if="image && image.delivery_proof" class="flex justify-center items-center mt-6 md:mt-0">
+						<img :src="image.delivery_proof" alt="Shipment Image"
+							class="border border-gray-500 w-[280px] h-[300px] md:w-[350px] md:h-[400px] rounded-lg shadow-md object-cover"/>
 					</div>
 				</div>
 			</div>
@@ -133,11 +202,10 @@ const router = useRouter();
 const orderList= computed(() => store.state.User.order.data);
 const cancellationList= computed(() => store.state.User.cancel.data);
 const refundList= computed(() => store.state.User.refund.data);
+const image= computed(() => store.state.User.order.image);
 const selectedShipment = ref(null);
 const activeTab = ref('orders');
-
-
-
+const sellerRaw  = computed(() => store.state.userData.data?.user || {})
 
 
 /******************************************************************
@@ -152,10 +220,23 @@ onMounted(() => {
     getOrderList();
 })
 
-const handleOrderClick = (order) => {
-  selectedShipment.value = order;
-};
 
+/******************************************************************
+FUNCTION FOR IMAGE
+******************************************************************/
+function getImage() {
+	store.dispatch('User/getImage');
+}
+
+
+onMounted(() => {
+    getImage();
+})
+
+const handleOrderClick = (order) => {
+    selectedShipment.value = order;
+    store.dispatch('User/getImage', order.id);
+};
 
 const trackingSteps = [
   { id: "Order placed", label: "Order placed", icon: "hugeicons:package-process" },
@@ -299,4 +380,3 @@ const dropdownVisible = ref(false);
 };
   </script>
   
-

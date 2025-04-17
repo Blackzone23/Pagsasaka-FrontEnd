@@ -7,7 +7,7 @@
 
         <!-- Sidebar / Drawer -->
         <div  
-            class="h-full w-64 bg-[#608C54] fixed 2xl:relative z-50 transition-transform duration-300 ease-in-out transform"
+            class="h-full w-64 bg-[#285a19]  fixed 2xl:relative z-50 transition-transform duration-300 ease-in-out transform"
             :class="{
                 '-translate-x-full pointer-events-none': !isOpen && windowWidth < 1536, 
                 'translate-x-0': isOpen, 
@@ -28,7 +28,7 @@
                     </div>
                     <div class="flex items-center space-x-2">
                         <Icon icon="ep:list" width="24" height="24" style="color: white" />
-                        <router-link :to="{ name: 'ProductList' }" active-class="text-gray-400" class="hover:text-gray-400">Order List</router-link>
+                        <router-link :to="{ name: 'Rider_ProductList' }" active-class="text-gray-400" class="hover:text-gray-400">Order List</router-link>
                     </div>
                 </div>
             </nav>

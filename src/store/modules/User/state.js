@@ -12,6 +12,7 @@ export default {
     //SHIPMENT
     order: {
         data:[],
+        image:[],
     },
     cancel: {
         data:[],
@@ -19,4 +20,12 @@ export default {
     refund: {
         data:[],
     },
+
+    // image: {
+    //     data:[],
+    // },
+
+    // conversation: {
+    //     data:[],
+    // },
 }

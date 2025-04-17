@@ -1,45 +1,62 @@
 <template>
   <div class="flex items-center space-x-2">
-    <input :id="id" type="checkbox" :value="value" v-model="localValue" :disabled="disabled"
-      class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" @change="handleChange" />
-    <label :for="id" class="text-xs font-medium text-gray-700 cursor-pointer" v-if="label">
+    <input
+      :id="id"
+      type="checkbox"
+      :value="value"
+      v-model="localValue"
+      :disabled="disabled"
+      class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+      @change="handleChange"
+    />
+    <label
+      v-if="label"
+      :for="id"
+      class="text-xs font-medium text-gray-700 cursor-pointer"
+    >
       {{ label }}
     </label>
   </div>
 </template>
 
 <script setup>
-import { ref, watch } from "vue";
+import { ref, watch, onMounted } from "vue";
 
-// Props
 const props = defineProps({
-  modelValue: Boolean, // Bound value
+  modelValue: Boolean,
   id: {
     type: String,
-    default: () => `checkbox-${Math.random().toString(36).substr(2, 9)}`, // Unique ID
+    required: true,
   },
-  label: String, // Optional label
-  value: [String, Number, Boolean], // Value when checked
-  disabled: Boolean, // Disables checkbox
+  label: String,
+  value: [String, Number, Boolean],
+  disabled: Boolean,
 });
 
-// Emits
 const emit = defineEmits(["update:modelValue", "change"]);
-
-// Local value to enable v-model
 const localValue = ref(props.modelValue);
 
-// Watch for external changes in modelValue
+// Watch for changes to the parent `modelValue` (cartItem.selected)
 watch(
   () => props.modelValue,
-  (newValue) => {
-    localValue.value = newValue;
+  (val) => {
+    localValue.value = val;
   }
 );
 
-// Handle change events
+// Load checkbox state from sessionStorage on mount
+onMounted(() => {
+  const stored = sessionStorage.getItem(`checkbox-${props.id}`);
+  if (stored !== null) {
+    localValue.value = stored === "true";
+    emit("update:modelValue", localValue.value); // Optional: update parent
+  }
+});
+
+// Sync changes to `localValue` to sessionStorage and emit
 function handleChange(event) {
   const isChecked = event.target.checked;
+  sessionStorage.setItem(`checkbox-${props.id}`, isChecked);
   emit("update:modelValue", isChecked);
   emit("change", isChecked);
 }

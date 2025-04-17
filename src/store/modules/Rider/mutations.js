@@ -10,4 +10,8 @@ export default {
         state.riderSignup.data = riderSignup;
     },
 
+    setIntransitList: (state, intransitList) => {
+        state.intransitList.data = intransitList;
+    },
+
 }

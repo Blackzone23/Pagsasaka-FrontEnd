@@ -20,4 +20,12 @@ export default {
     setRefundListData: (state, refund) => {
         state.refund.data = refund;
     },  
+    
+    setImage: (state, image) => {
+        state.order.image = image; // Directly assign the API response to `image`
+    },
+
+    // setConversation: (state, conversation) => {
+    //     state.conversation.data = conversation;
+    // },  
 }

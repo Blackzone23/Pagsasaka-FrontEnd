@@ -21,6 +21,8 @@ export default {
     userProfilePic: JSON.parse(decryptData(sessionStorage.getItem('USER')))?.profilePic || '', // Replace with actual profile picture logic
 
     userName: JSON.parse(decryptData(sessionStorage.getItem('USER')))?.name || '', // Replace with actual user name logic
+    userId: JSON.parse(decryptData(sessionStorage.getItem('USER')))?.id || null,
+    
 
     signup: {
         data:[],
@@ -32,6 +34,8 @@ export default {
     securityDropdown: {
         data:[],
     },
+
+    
 
    
 

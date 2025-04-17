@@ -8,7 +8,7 @@
 
         <!-- Sidebar / Drawer -->
         <div  
-            class="h-full w-64 bg-[#608C54] fixed 2xl:relative z-50 transition-transform duration-300 ease-in-out transform" 
+            class="h-[800px] w-64 bg-[#285a19]  fixed 2xl:relative z-50 transition-transform duration-300 ease-in-out transform" 
             :class="{'-translate-x-full pointer-events-none': !isOpen && screenSize < 1536, 'translate-x-0': isOpen || screenSize >= 1536}" 
         >
             <nav class="p-5">
@@ -18,7 +18,7 @@
                 </div>
 
                 <!-- Navigation Links -->
-                <div class="space-y-10 flex flex-col items-start text-lg font-semibold text-white ml-10 mt-10">
+                <div class="space-y-14 flex flex-col items-start text-lg font-semibold text-white ml-10 mt-10">
                     <div class="flex items-center space-x-2">
                         <Icon icon="material-symbols:dashboard" width="24" height="24" style="color: white" />
                         <router-link :to="{ name: 'Farmer_Dashboard' }" active-class="text-gray-400" class="hover:text-gray-400">Dashboard</router-link>

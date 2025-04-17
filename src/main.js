@@ -5,10 +5,10 @@ import App from './App.vue';
 import router from './router';
 import store from './store'
 import { Icon } from '@iconify/vue';
-import { create, NButton, NCarousel, NConfigProvider, NDataTable, NInputNumber, NMarquee, NPagination, NRate, NSteps, NTimeline } from "naive-ui";
+import { create, NButton, NCarousel, NConfigProvider, NDataTable, NInputNumber, NMarquee, NPagination, NRate, NSkeleton, NSteps, NTimeline } from "naive-ui";
 
 const naive = create({
-    components: [NButton, NCarousel,NRate,NDataTable,NPagination,NMarquee,NConfigProvider,NSteps,NTimeline,NInputNumber] // Register the components you need
+    components: [NButton, NCarousel,NRate,NDataTable,NPagination,NMarquee,NConfigProvider,NSteps,NTimeline,NInputNumber,NSkeleton] // Register the components you need
   });
 
 const app = createApp(App)

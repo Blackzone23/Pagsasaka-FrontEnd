@@ -1,22 +1,31 @@
 <template>
-     <!-- Loading screen and toast message -->
+    <!-- Loading screen and toast message -->
     <Loading v-if="showLoading" class="loading"></Loading>
     <Toast></Toast>
 
-    <div class="flex h-screen bg-gray-100">
+    <div class="flex h-[800px] bg-gray-100">
         <div class="flex-1 flex flex-col">
               <!-- Header -->
-            <header class="bg-[#608C54] shadow p-4 flex justify-between items-center text-white">
+            <header class="bg-[#285a19]  shadow p-4 flex justify-between items-center text-white">
                 <h1 class="text-lg sm:text-xl 2xl:ml-0 md:ml-10 2xs:ml-10 font-bold">List of Products</h1>
                 <div class="flex items-center space-x-4">
                     <div class="flex space-x-2">
                     <!-- Settings Icon with Dropdown -->
-                    <div class="relative">
-                        <Icon icon="uil:setting" width="24" height="24" style="color: white" @click="toggleDropdown" />
+                    <div class="relative inline-block text-left">
+                        <!-- Profile Picture and Settings Icon -->
+                        <div class="flex items-center space-x-2">
+                        <img :src="sellerRaw.avatar" alt="Profile" class="w-10 h-10 rounded-full object-cover  shadow-md"/>
+                        <Icon icon="uil:setting" width="24" height="24" class="cursor-pointer text-white" @click="toggleDropdown"/>
+                        </div>
+
                         <!-- Dropdown Menu -->
-                        <div v-if="dropdownVisible" class="absolute right-0 mt-2 bg-white shadow-lg rounded p-2 w-48 ">
-                            <a href="/seller-profile" class="block w-full text-left px-4 py-2 text-sm text-black hover:bg-gray-100"> Account Info </a>
-                            <button class="block w-full text-left px-4 py-2 text-sm text-black hover:bg-gray-100" @click="logout()"> Logout</button>
+                        <div v-if="dropdownVisible" class="absolute right-0 z-50 mt-2 w-48 bg-white rounded shadow-lg">
+                        <a href="/seller-profile" class="block px-4 py-2 text-sm text-black hover:bg-gray-100">
+                            Account Info
+                        </a>
+                        <button @click="logout" class="block w-full text-left px-4 py-2 text-sm text-black hover:bg-gray-100">
+                            Logout
+                        </button>
                         </div>
                     </div>
                     </div>
@@ -24,7 +33,7 @@
             </header>
 
             <!-- Dashboard Content -->
-            <main class="p-4 flex flex-col gap-4 mt-8">
+            <main class="p-2 flex flex-col gap-2 mt-2">
                 <div class="flex items-center space-x-4 justify-end">
                     <div class="space-x-4 items-center flex">
                         <!-- Button to toggle drafts or all products -->
@@ -309,38 +318,65 @@
 
                 <!-- Table Section -->
                 <div class="w-full overflow-x-auto">
-                    <div class="min-h-96">
+                    <div class="h-full">
                         <table class="w-full table-auto">
                             <!-- Table Header -->
                             <thead class="bg-gray-200 text-xs sm:text-sm">
                                 <tr>
-                                    <th class="px-2 sm:px-4 py-2 sm:py-3 text-left">Product</th>
-                                    <th class="px-2 sm:px-4 py-2 sm:py-3 text-left">Description</th>
-                                    <th class="px-2 sm:px-4 py-2 sm:py-3 text-left">Stocks</th>
-                                    <th class="px-2 sm:px-4 py-2 sm:py-3 text-left">Price</th>
-                                    <th class="px-2 sm:px-4 py-2 sm:py-3 text-end">Action</th>
+                                <th class="px-2 sm:px-4 py-2 sm:py-3 text-left">Product</th>
+                                <th class="px-2 sm:px-4 py-2 sm:py-3 text-left">Description</th>
+                                <th class="px-2 sm:px-4 py-2 sm:py-3 text-left">Stocks</th>
+                                <th class="px-2 sm:px-4 py-2 sm:py-3 text-left">Price</th>
+                                <th class="px-2 sm:px-4 py-2 sm:py-3 text-end">Action</th>
                                 </tr>
                             </thead>
+                        </table>
 
-                            <!-- Table Body -->
+                        <!-- Scrollable Table Body -->
+                        <div class="max-h-[500px] overflow-y-auto" v-if="productList.length >= 6">
+                            <table class="w-full table-auto">
+                                <tbody>
+                                    <tr v-for="product in productList" :key="product.id" class="border-b hover:bg-gray-100 2xl:text-sm 2xs:text-xs">
+                                        <td class="p-1 sm:p-4 flex items-center space-x-2 gap-2">
+                                            <img :src="product.product_img[0]" class="w-8 h-8 sm:w-12 sm:h-12" />
+                                            <span class="hidden sm:table-cell">{{ product.product_name }}</span>
+                                        </td>
+                                        <td class="px-2 sm:px-2 py-2">{{ product.description }}</td>
+                                        <td class="px-2 sm:px-2 py-2">{{ product.stocks }} {{ product.unit }}</td>
+                                        <td class="px-2 sm:px-4 py-2">₱{{ product.price }}</td>
+                                        <td class="px-2 sm:px-4 py-2 flex items-center space-x-2 justify-end">
+                                            <!-- Edit Button -->
+                                            <button class="text-blue-500 hover:text-blue-700" @click="openUpdateProductModal(product.id)">
+                                                <Icon icon="lucide:pencil-line" width="1rem" height="1rem" class="sm:w-5 sm:h-5" />
+                                            </button>
+
+                                            <!-- Delete Button -->
+                                            <button class="text-red-500 hover:text-red-700" @click="openDeleteProductModal(product.id)">
+                                                <Icon icon="octicon:trash-24" width="1rem" height="1rem" class="sm:w-5 sm:h-5" />
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Non-scrollable fallback if less than 6 -->
+                        <table v-else class="w-full table-auto">
                             <tbody>
-                                <tr v-for="product in productList" :key="product.id" class="border-b hover:bg-gray-100 2xl:text-sm  2xs:text-xs">
-                                    <td class="p-2 sm:p-4 flex items-center space-x-2 gap-2">
-                                        <img :src="product.product_img[0]" class="w-10 h-10 sm:w-12 sm:h-12" />
+                                <tr v-for="product in productList" :key="product.id" class="border-b hover:bg-gray-100 2xl:text-sm 2xs:text-xs" >
+                                    <td class="p-1 sm:p-4 flex items-center space-x-2 gap-2">
+                                        <img :src="product.product_img[0]" class="w-8 h-8 sm:w-12 sm:h-12" />
                                         <span class="hidden sm:table-cell">{{ product.product_name }}</span>
                                     </td>
-                                    <td class="px-2 sm:px-4 py-2 ">{{ product.description }}</td>
-                                    <td class="px-2 sm:px-4 py-2">{{ product.stocks }} {{product.unit}}</td>
+                                    <td class="px-2 sm:px-2 py-2">{{ product.description }}</td>
+                                    <td class="px-2 sm:px-2 py-2">{{ product.stocks }} {{ product.unit }}</td>
                                     <td class="px-2 sm:px-4 py-2">₱{{ product.price }}</td>
                                     <td class="px-2 sm:px-4 py-2 flex items-center space-x-2 justify-end">
-                                        <!-- Edit Button -->
                                         <button class="text-blue-500 hover:text-blue-700" @click="openUpdateProductModal(product.id)">
-                                            <Icon icon="lucide:pencil-line" width="1rem" height="1rem" class="sm:w-5 sm:h-5" />
+                                        <Icon icon="lucide:pencil-line" width="1rem" height="1rem" class="sm:w-5 sm:h-5" />
                                         </button>
-
-                                        <!-- Delete Button -->
                                         <button class="text-red-500 hover:text-red-700" @click="openDeleteProductModal(product.id)">
-                                            <Icon icon="octicon:trash-24" width="1rem" height="1rem" class="sm:w-5 sm:h-5" />
+                                        <Icon icon="octicon:trash-24" width="1rem" height="1rem" class="sm:w-5 sm:h-5" />
                                         </button>
                                     </td>
                                 </tr>
@@ -350,10 +386,10 @@
                 </div>
             </main>
             <!-- Pagination -->
-            <div class="mt-10 mr-4 flex justify-end text-xs">
-                <button type="button" class="py-2 px-4 bg-gray-100 rounded-tl-lg rounded-bl-lg hover:bg-gray-200 text-gray-600" @click="goToPreviousPage" :disabled="currentPage === 1">Prev</button>
+            <div class="mt-2 mr-4 flex justify-end text-xs">
+                <button type="button" class="py-2 px-4 bg-gray-200 rounded-tl-lg rounded-bl-lg hover:bg-gray-200 text-gray-600" @click="goToPreviousPage" :disabled="currentPage === 1">Prev</button>
                 <span class=" py-2 px-4 bg-gray-100 flex text-xs items-center border-l border-r border-gray-300"> {{ currentPage }} of {{ totalPages }}</span>
-                <button type="button" class="py-2 px-4 bg-gray-100 rounded-tr-lg rounded-br-lg hover:bg-gray-200 text-gray-600" @click="goToNextPage" :disabled="currentPage === totalPages">Next</button>
+                <button type="button" class="py-2 px-4 bg-gray-200 rounded-tr-lg rounded-br-lg hover:bg-gray-200 text-gray-600" @click="goToNextPage" :disabled="currentPage === totalPages">Next</button>
             </div>
         </div>
     </div>
@@ -385,6 +421,7 @@ const productList= computed(() => store.state.User.product.data);
 const categoryDropdown= computed(() => store.state.User.categoryDropdown.data)
 const currentPage = computed(() => store.state.currentPage);
 const totalPages = computed(() => store.state.totalPages);
+const sellerRaw  = computed(() => store.state.userData.data?.user || {})
 
 const selectedProducts = ref([]);
 // const searchQuery = ref('');

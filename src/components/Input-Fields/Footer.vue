@@ -1,5 +1,5 @@
 <template>
-    <footer class="bg-[#608C54] text-white py-8">
+    <footer class="bg-[#285a19] text-white py-8">
         <div class="container mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left md:flex md:justify-between">
             <!-- Column 1: About Us -->
             <div class="md:w-1/3">

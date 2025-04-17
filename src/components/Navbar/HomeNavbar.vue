@@ -1,5 +1,5 @@
 <template>
-       <nav class="bg-[#608C54] text-white">
+       <nav class="bg-[#285a19]  text-white">
             <div class="container mx-auto flex justify-between items-center px-2 py-1">
                 <!-- Logo -->
                 <div>
@@ -12,6 +12,7 @@
                 <button @click="isMenuOpen = !isMenuOpen" class="md:hidden flex items-center focus:outline-none">
                     <Icon icon="material-symbols:menu-rounded" width="30" height="30" />
                 </button>
+                
 
                 <!-- Menu -->
                 <div :class="['md:flex md:items-center md:space-x-10 font-bold transition-all duration-300', isMenuOpen ? 'block' : 'hidden',]" class="absolute md:static top-16 left-0 w-full md:w-auto bg-[#608C54] md:bg-transparent md:space-y-0 space-y-3 md:px-0 px-4 z-10">
@@ -39,4 +40,6 @@ const store = useStore();
 const router = useRouter();
 
 const isMenuOpen = ref(false);
+
+
 </script>

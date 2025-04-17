@@ -3,8 +3,8 @@
     <Loading v-if="showLoading" class="loading"></Loading>
     <Toast></Toast>
 
-    <div class="bg-[#608C54] text-white p-2">
-        <div class="bg-[#608C54] text-white">
+    <div class="bg-[#285a19] text-white p-2">
+        <div class="bg-[#285a19] text-white">
             <div class="container mx-auto flex justify-between items-center 2xl:text-sm 2xs:text-xs p-4">
                 
                 <!-- Left Section: Logo and Links -->
@@ -39,8 +39,8 @@
                     <!-- User profile section -->
                     <div v-if="isLoggedIn" class="flex items-center space-x-2">
                         <a href="/profile" class="flex items-center space-x-2">
-                            <img :src="userProfilePic" alt="User Profile" class="w-8 h-8 rounded-full cursor-pointer" />
-                            <span class="cursor-pointer">{{ userName }}</span>
+                            <img :src="userRaw.avatar" alt="User Profile" class="w-8 h-8 rounded-full cursor-pointer" />
+                            {{ userRaw.first_name }}  {{ userRaw.last_name }}
                         </a>
                         <a href="#" class="hover:underline text-sm" @click.prevent="logout()">Logout</a>
                     </div>
@@ -54,7 +54,7 @@
             </div>
         
             <!-- Dropdown Menu -->
-            <div v-if="isMenuOpen" class="bg-[#608C54] md:hidden sm:show flex flex-col space-y-3 px-3 py-2 text-sm">
+            <div v-if="isMenuOpen" class="bg-[#285a19] md:hidden sm:show flex flex-col space-y-3 px-3 py-2 text-sm">
                     <a href="/about" class="hover:underline">About</a>  
                     <span>Follow us on:</span>
                 <div class="flex space-x-3">
@@ -75,8 +75,8 @@
                  <!-- User profile section -->
                  <div v-if="isLoggedIn" class="flex flex-col space-y-3">
                         <a href="/profile" class="flex items-center space-x-2">
-                            <img :src="userProfilePic" alt="User Profile" class="w-8 h-8 rounded-full cursor-pointer" />
-                            <span class="cursor-pointer">{{ userName }}</span>
+                            <img :src="userRaw.avatar" alt="User Profile" class="w-8 h-8 rounded-full cursor-pointer" />
+                            {{ userRaw.first_name }} {{ userRaw.last_name }}
                         </a>
                         <a href="#" class="hover:underline text-sm" @click.prevent="logout()">Logout</a>
                     </div>
@@ -123,14 +123,25 @@ import { useStore } from "vuex";
 
 const store = useStore();
 const router = useRouter();
+const userRaw = computed(() => store.state.userData.data?.user);
 
-onMounted(() => {
-    // Retrieve the userName from sessionStorage if it exists
-    const storedUserName = sessionStorage.getItem('userName');
-    if (storedUserName) {
-        store.commit('setName', { first_name: storedUserName.split(' ')[0], last_name: storedUserName.split(' ')[1] });
-    }
-});
+/*********************************************************************
+FUNCTIONS FOR SEARCH
+*********************************************************************/
+// const searchQuery = ref('');
+
+// // Search college
+// const search = debounce(() => {
+//     store.dispatch('Administrator/getCollege', { 
+//         search: searchQuery.value, 
+//     }).then(() => {
+//         if (collegeList.value.length === 0) {
+//             store.commit('setCurrentPage', 0);
+//             store.commit('setTotalPages', 0);
+//         }
+//     });
+// }, 500) // Adjust the debounce delay as needed (300 milliseconds in this example)
+
 
 // State for dropdown menu
 const isMenuOpen = ref(false);
@@ -138,8 +149,6 @@ const isMenuOpen = ref(false);
 // Get login status, profile picture, and user name from Vuex store
 const showLoading = computed(() => store.state.showLoading.state);
 const isLoggedIn = computed(() => store.state.isLoggedIn.value || sessionStorage.getItem('isLoggedIn') === 'true');
-const userName = computed(() => store.state.userName || ''); // Fallback to an empty string if undefined
-const userProfilePic = computed(() => store.state.userProfilePic || ''); // Fallback to empty string if undefined
 
 
  // Log out Function

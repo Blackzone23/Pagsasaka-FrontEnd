@@ -16,9 +16,35 @@ export default {
     },
 
     //LIST OF PRODUCT IN CART
-    setCarListt: (state, cartItem) => {
+    setCartList: (state, cartItem) => {
         state.cartItem.data = cartItem;
     },
 
+     //LIST OF PRODUCT IN CART
+     setCheckout: (state, checkout) => {
+        state.checkout.data = checkout;
+    },
+
+    
+    setConversation: (state, conversation) => {
+        state.conversation.data = conversation;
+    },
+    
+    setMessages: (state, messages) => {
+        state.message.data = messages;  // Update messages list
+    },
    
+    setRatings: (state, ratings) => {
+        state.ratings.data = ratings;
+    },  
+
+    setAddressList: (state, address) => {
+        state.address.data = address;
+    },  
+
+    setUpdateAddress: (state, updateAddress) => {
+        state.updateAddress.data = updateAddress;
+    },
+
+    
 }

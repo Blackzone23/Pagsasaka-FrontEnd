@@ -7,4 +7,8 @@ export default {
     riderSignup: {
         data:[],
     },
+
+    intransitList: {
+        data:[],
+    },
 }

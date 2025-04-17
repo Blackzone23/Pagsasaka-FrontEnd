@@ -20,9 +20,13 @@ export default {
         state.userProfilePic = userData.profilePic || '';
     },
 
+    //fetching the user
+    setUserInfo: (state, userData) => {
+    state.userData.data = userData.user;
+    },
+
     setName: (state, name) => {
         state.userName = `${name.first_name} ${name.last_name}`;
-        console.log('Updated user name:', state.userName);
         sessionStorage.setItem('userName', state.userName);
     },
 

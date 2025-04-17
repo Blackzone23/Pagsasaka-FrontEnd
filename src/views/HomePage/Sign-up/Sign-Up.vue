@@ -1,97 +1,97 @@
 <template>
-    <!-- Loading screen and toast message -->
     <Loading v-if="showLoading" class="loading"></Loading>
     <Toast></Toast>
-
+    
     <div>
         <SignUp_Navbar/>
-        <div class="2xl:p-10 2xs:p-0">
-            <div class="bg-white h-full w-full flex flex-col mt-5 items-center space-y-2 border-2 border-gray-300 p-10 rounded-md">
-                <!-- Logo at the top -->
-                <img :src="Logo2" alt="Logo2" class="h-16 mb-2">
+        <div class="flex justify-center items-center min-h-screen bg-gray-100 p-6">
+            <div class="bg-white w-full max-w-lg p-8 rounded-lg shadow-lg border border-gray-300">
                 
-                <!-- Centered Box -->
-                <div class=" w-96 p-6 rounded-lg shadow-lg text-start space-y-6 overflow-y-auto border-2 border-[#608C54]">
-                    <h2 class=" text-xl font-semibold text-[#608C54]">Create an Account</h2>
-                    <!-- First Name Field -->
-                    <div>
-                        <BaseLabel class="font-semibold">First Name</BaseLabel>
-                        <BaseInputField v-model="signdata.first_name" placeholder="Enter First Name"></BaseInputField>
-                        <BaseError v-if="$validatesignuprules.first_name.$error">{{ $validatesignuprules.first_name.$errors[0].$message }}</BaseError>
-
-                        <BaseLabel class="font-semibold">Last Name</BaseLabel>
-                        <BaseInputField v-model="signdata.last_name" placeholder="Enter Last Name"></BaseInputField>
-                        <BaseError v-if="$validatesignuprules.last_name.$error">{{ $validatesignuprules.last_name.$errors[0].$message }}</BaseError>
-
-                        <BaseLabel class="font-semibold">Middle Name</BaseLabel>
-                        <BaseInputField v-model="signdata.middle_name" placeholder="Enter Middle Name"></BaseInputField>
-
-                        <div class="relative">
-                            <BaseLabel class="font-semibold">Password</BaseLabel>
-                            <BaseInputField v-model="signdata.password"  :type="showPassword ? 'text' : 'password'"  placeholder="Enter Your Password" ></BaseInputField>
-
-                            <!-- Password visibility toggle icon -->
-                            <button  type="button"  class="absolute right-3 2xl:top-12 2xs:top-14 lg:top-12 md:top-13 transform -translate-y-1/2 text-gray-500 items-center justify-center" @click="togglePasswordVisibility">
-                                <Icon :icon="showPassword ? 'ic:twotone-visibility-off' : 'ic:twotone-visibility'" />
-                            </button>
-                            <BaseError v-if="$validatesignuprules.password.$error">{{ $validatesignuprules.password.$errors[0].$message }}</BaseError>
-                        </div>
-
-                        <div class="relative">
-                            <BaseLabel class="font-semibold">Re-enter password</BaseLabel>
-                            <BaseInputField v-model="signdata.password_confirmation" :type="reshowPassword ? 'text' : 'password'"  placeholder="Re-enter password"></BaseInputField>
-                            <!-- Password visibility toggle icon -->
-                            <button  type="button"  class="absolute right-3 2xl:top-12 2xs:top-14 lg:top-12 md:top-13 transform -translate-y-1/2 text-gray-500 items-center justify-center" @click="retogglePasswordVisibility">
-                                    <Icon :icon="reshowPassword ? 'ic:twotone-visibility-off' : 'ic:twotone-visibility'" />
-                                </button>
-                            <BaseError v-if="$validatesignuprules.password_confirmation.$error">{{ $validatesignuprules.password_confirmation.$errors[0].$message }}</BaseError>
-                        </div>
-
-                        <BaseLabel class="font-semibold">Email Address</BaseLabel>
-                        <BaseInputField v-model="signdata.email" placeholder="Enter email"></BaseInputField>
-                        <BaseError v-if="$validatesignuprules.email.$error">{{ $validatesignuprules.email.$errors[0].$message }}</BaseError>
-
-
-                        <BaseLabel class="font-semibold">Select your type</BaseLabel>
-                        <BaseSelectField v-model="signdata.role">
-                            <BaseOptionDefaultField>Select your type</BaseOptionDefaultField>
-                            <BaseOptionField v-for="sign in roleDropdown" :key="sign.id" :value="sign.id">
-                                {{ sign.role }}
-                            </BaseOptionField>
-                        </BaseSelectField>
-                         <BaseError v-if="$validatesignuprules.role.$error">{{ $validatesignuprules.role.$errors[0].$message }}</BaseError>
-
-                         <BaseLabel>Select Question</BaseLabel>
-                         <BaseSelectField v-model="signdata.security_question_id">
-                            <BaseOptionDefaultField>Select your question</BaseOptionDefaultField>
-                            <BaseOptionField v-for="sign in securityDropdown" :key="sign.id" :value="sign.id">
-                                {{ sign.question }}
-                            </BaseOptionField>
-                        </BaseSelectField>
-                        <BaseError v-if="$validatesignuprules.security_question_id.$error">{{ $validatesignuprules.security_question_id.$errors[0].$message }}</BaseError>
-
-                        <BaseLabel>Answer:</BaseLabel>
-                        <BaseInputField class="mt-3" v-model="signdata.security_answer" placeholder="Enter your answer" ></BaseInputField>
-                        <BaseError v-if="$validatesignuprules.security_answer.$error">{{ $validatesignuprules.security_answer.$errors[0].$message }}</BaseError>
-                    </div>
-
-                    <button @click="createUser" class="w-full py-2 bg-[#608C54] text-white text-sm font-medium rounded-full hover:bg-[#4e7344] transition duration-200">Continue</button>
-
-                    <div class="text-xs space-y-2">
-                        <p>By creating an account, you agree to Pagsasaka <span class="text-[#608C54]">Conditions of Use</span> and <span class="text-[#608C54]">Privacy Notice.</span></p>
-                        <hr class="w-full  mx-auto border-t-2 border-[#608C54]" />
-                        <p>Want to be part of Logistics? <br> Email us now and apply <span class="text-[#608C54]">Pagsasaka@gmail.com.</span></p>
-                        <hr class="w-full mx-auto border-t-2 border-[#608C54]" />
-                        <p>Already have an account?<a href="/login" class="text-[#608C54] hover:underline"> Sign in</a></p>
-                    </div>
+                <!-- Logo -->
+                <div class="flex justify-center mb-4">
+                    <img :src="Logo2" alt="Logo" class="h-16">
                 </div>
-                <div class="text-xs">
+                
+                <!-- Title -->
+                <h2 class="text-2xl font-semibold text-center text-[#608C54] mb-6">Create an Account</h2>
+                
+                <!-- Form Fields -->
+                <div class="space-y-4">
+                    <BaseLabel class="font-semibold">*First Name</BaseLabel>
+                    <BaseInputField v-model="signdata.first_name" placeholder="Enter First Name" />
+                    <BaseError v-if="$validatesignuprules.first_name.$error">{{ $validatesignuprules.first_name.$errors[0].$message }}</BaseError>
+                    
+                    <BaseLabel class="font-semibold">*Last Name</BaseLabel>
+                    <BaseInputField v-model="signdata.last_name" placeholder="Enter Last Name" />
+                    <BaseError v-if="$validatesignuprules.last_name.$error">{{ $validatesignuprules.last_name.$errors[0].$message }}</BaseError>
+                    
+                    <BaseLabel class="font-semibold">Middle Name (optional)</BaseLabel>
+                    <BaseInputField v-model="signdata.middle_name" placeholder="Enter Middle Name" />
+                    
+                    <BaseLabel class="font-semibold">*Email Address</BaseLabel>
+                    <BaseInputField v-model="signdata.email" placeholder="Enter email" />
+                    <BaseError v-if="$validatesignuprules.email.$error">{{ $validatesignuprules.email.$errors[0].$message }}</BaseError>
+                    
+                    <!-- Password Fields -->
+                    <div class="relative">
+                        <BaseLabel class="font-semibold">*Password</BaseLabel>
+                        <BaseInputField v-model="signdata.password" :type="showPassword ? 'text' : 'password'" placeholder="Enter Your Password" />
+                        <button type="button" class="absolute right-3 top-10 text-gray-500" @click="togglePasswordVisibility">
+                            <Icon :icon="showPassword ? 'ic:twotone-visibility-off' : 'ic:twotone-visibility'" />
+                        </button>
+                        <BaseError v-if="$validatesignuprules.password.$error">{{ $validatesignuprules.password.$errors[0].$message }}</BaseError>
+                    </div>
+                    
+                    <div class="relative">
+                        <BaseLabel class="font-semibold">*Re-enter Password</BaseLabel>
+                        <BaseInputField v-model="signdata.password_confirmation" :type="reshowPassword ? 'text' : 'password'" placeholder="Re-enter password" />
+                        <button type="button" class="absolute right-3 top-10 text-gray-500" @click="retogglePasswordVisibility">
+                            <Icon :icon="reshowPassword ? 'ic:twotone-visibility-off' : 'ic:twotone-visibility'" />
+                        </button>
+                        <BaseError v-if="$validatesignuprules.password_confirmation.$error">{{ $validatesignuprules.password_confirmation.$errors[0].$message }}</BaseError>
+                    </div>
+                    
+                    <!-- Role Selection -->
+                    <BaseLabel class="font-semibold">*Select Your Type</BaseLabel>
+                    <BaseSelectField v-model="signdata.role">
+                        <BaseOptionDefaultField>Select your type</BaseOptionDefaultField>
+                        <BaseOptionField v-for="sign in roleDropdown" :key="sign.id" :value="sign.id">{{ sign.role }}</BaseOptionField>
+                    </BaseSelectField>
+                    <BaseError v-if="$validatesignuprules.role.$error">{{ $validatesignuprules.role.$errors[0].$message }}</BaseError>
+                    
+                    <!-- Security Question -->
+                    <BaseLabel class="font-semibold">*Select Security Question</BaseLabel>
+                    <BaseSelectField v-model="signdata.security_question_id">
+                        <BaseOptionDefaultField>Select your question</BaseOptionDefaultField>
+                        <BaseOptionField v-for="sign in securityDropdown" :key="sign.id" :value="sign.id">{{ sign.question }}</BaseOptionField>
+                    </BaseSelectField>
+                    <BaseError v-if="$validatesignuprules.security_question_id.$error">{{ $validatesignuprules.security_question_id.$errors[0].$message }}</BaseError>
+                    
+                    <BaseLabel class="font-semibold">*Answer</BaseLabel>
+                    <BaseInputField v-model="signdata.security_answer" placeholder="Enter your answer" />
+                    <BaseError v-if="$validatesignuprules.security_answer.$error">{{ $validatesignuprules.security_answer.$errors[0].$message }}</BaseError>
+                    
+                    <!-- Submit Button -->
+                    <button @click="createUser" class="w-full py-2 bg-[#608C54] text-white text-sm font-medium rounded-full hover:bg-[#4e7344] transition duration-200">Continue</button>
+                </div>
+                
+                <!-- Additional Information -->
+                <div class="text-xs text-center mt-6 space-y-2">
+                    <p>By creating an account, you agree to Pagsasaka <span class="text-[#608C54]">Conditions of Use</span> and <span class="text-[#608C54]">Privacy Notice</span>.</p>
+                    <hr class="border-[#608C54]" />
+                    <p>Want to be part of Logistics? Email us now: <span class="text-[#608C54]">Pagsasaka@gmail.com</span></p>
+                    <hr class="border-[#608C54]" />
+                    <p>Already have an account? <a href="/login" class="text-[#608C54] hover:underline">Sign in</a></p>
+                </div>
+                
+                <div class="text-xs text-center mt-4">
                     <h1>Pagsasaka. All Rights Reserved.</h1>
                 </div>
             </div>
         </div>
     </div>
 </template>
+
 
 <script setup>
 import Logo2 from '@/assets/Logo2.png';
@@ -188,7 +188,6 @@ const signuprules = computed(() => {
 
 // Function for adding division
 async function createUser() {
-    console.log("account", signdata)
   const validationResult = await $validatesignuprules.value.$validate();
   if (validationResult) {
       await store.dispatch('createUser', signdata)
