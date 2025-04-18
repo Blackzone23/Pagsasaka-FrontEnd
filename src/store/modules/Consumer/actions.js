@@ -305,13 +305,13 @@ API FOR ADD TO CART
     async placeCODOrder({ commit, state }) {
         commit('SET_CHECKOUT_LOADING', true);
         commit('toggleLoader', true, { root: true });
-
+    
         const items = state.checkout.data.map(item => ({
             product_id: item.product_id,
             quantity: item.quantity,
         }));
         console.log('Items being sent:', items);
-
+    
         if (items.length === 0) {
             commit('SET_CHECKOUT_ERROR', 'No items to order');
             commit('toggleLoader', false, { root: true });
@@ -323,12 +323,13 @@ API FOR ADD TO CART
             }, toastDuration);
             return;
         }
-
+    
         try {
             const response = await axiosClient.post('orders/cod', {
                 items: items,
             });
             commit('SET_CHECKOUT_SUCCESS', response.data);
+            commit('CLEAR_CHECKOUT_DATA'); // Clear checkout data after success
             commit('toggleLoader', false, { root: true });
             setTimeout(() => {
                 commit('showToast', { showToast: true, toastMessage: response.data.message, toastType: 'success' });
@@ -388,13 +389,13 @@ API FOR ADD TO CART
     async placeGCashOrder({ commit, state }) {
         commit('SET_CHECKOUT_LOADING', true);
         commit('toggleLoader', true, { root: true });
-
+    
         const items = state.checkout.data.map(item => ({
             product_id: item.product_id,
             quantity: item.quantity,
         }));
         console.log('Items being sent for GCash:', items);
-
+    
         if (items.length === 0) {
             commit('SET_CHECKOUT_ERROR', 'No items to order');
             commit('toggleLoader', false, { root: true });
@@ -406,12 +407,13 @@ API FOR ADD TO CART
             }, toastDuration);
             return { isSuccess: false, message: 'No items to order' };
         }
-
+    
         try {
             const response = await axiosClient.post('pay', {
                 items: items,
             });
             commit('SET_CHECKOUT_SUCCESS', response.data);
+            commit('CLEAR_CHECKOUT_DATA'); // Clear checkout data after success
             commit('toggleLoader', false, { root: true });
             return response.data; // Return the response containing checkout_url
         } catch (error) {
