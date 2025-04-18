@@ -72,14 +72,6 @@
                             <p class="text-2xl font-bold">{{ allProducts }}</p>
                         </div>
 
-                        <!-- Newly Added Products -->
-                        <div class="flex flex-col justify-center items-center text-center">
-                            <div class="bg-green-200 p-4 rounded-full">
-                                <Icon icon="mdi:gift" width="36" height="36" style="color: #276d22" />
-                            </div>
-                            <p class="text-lg font-semibold mt-2">Newly Added Products</p>
-                            <p class="text-2xl font-bold">{{ newlyAddedProducts }}</p>
-                        </div>
                     </div>
 
                     <!-- Add Stock Button -->
