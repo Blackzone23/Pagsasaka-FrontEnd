@@ -70,4 +70,12 @@ export default {
         state.toast.toastMessage = toastMessage;
         state.toast.toastType = toastType;
     },
+
+    setProductRatings(state, { productId, ratingsData }) {
+        state.productRatings = {
+            ...state.productRatings,
+            [productId]: ratingsData,
+        };
+    },
+
 };

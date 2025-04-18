@@ -764,5 +764,102 @@ API FOR MY PURCHASE
             }   
         })
     },
+
+/******************************************************************
+API FOR Ratings
+******************************************************************/
+    // In your Vuex store (e.g., actions.js)
+    // ... existing actions
+
+    // ... other actions
+    async getRating({ commit }, productId) {
+        try {
+            const response = await axiosClient.get(`products/${productId}/ratings`);
+            commit('setProductRatings', { productId, ratingsData: response.data });
+            return response.data;
+        } catch (error) {
+            commit('toggleLoader', false, { root: true });
+            if (error.response && error.response.data) {
+                const errorMessage = error.response.data.message || 'Failed to fetch ratings';
+                setTimeout(() => {
+                    commit('showToast', {
+                        showToast: true,
+                        toastMessage: errorMessage,
+                        toastType: 'error',
+                    }, { root: true });
+                }, 500);
+                setTimeout(() => {
+                    commit('showToast', {
+                        showToast: false,
+                        toastMessage: '',
+                        toastType: 'default',
+                    }, { root: true });
+                }, 3000);
+            }
+            throw error;
+        }
+    },
+
+
+    async getProductRatings({ commit }, productId) {
+        try {
+            const response = await axiosClient.get(`products/${productId}/ratings`);
+            commit('setProductRatings', { productId, ratingsData: response.data });
+            return response.data;
+        } catch (error) {
+            commit('toggleLoader', false, { root: true });
+            if (error.response && error.response.data) {
+                const errorMessage = error.response.data.message || 'Failed to fetch ratings';
+                setTimeout(() => {
+                    commit('showToast', {
+                        showToast: true,
+                        toastMessage: errorMessage,
+                        toastType: 'error',
+                    }, { root: true });
+                }, 500);
+                setTimeout(() => {
+                    commit('showToast', {
+                        showToast: false,
+                        toastMessage: '',
+                        toastType: 'default',
+                    }, { root: true });
+                }, 3000);
+            }
+            throw error;
+        }
+    },
+
+    async createComment({ commit }, payload) {
+        try {
+            const response = await axiosClient.post(`products/${payload.product_id}/ratings`, {
+                rating: payload.rating,
+                comment: payload.comment,
+            });
+            commit('toggleLoader', false, { root: true });
+            commit('showToast', {
+                showToast: true,
+                toastMessage: 'Comment added successfully!',
+                toastType: 'success',
+            }, { root: true });
+            setTimeout(() => {
+                commit('showToast', {
+                    showToast: false,
+                    toastMessage: '',
+                    toastType: 'default',
+                }, { root: true });
+            }, 3000);
+            return response.data;
+        } catch (error) {
+            commit('toggleLoader', false, { root: true });
+            const errorMessage = error.response?.data?.message || 'Failed to add comment';
+            commit('showToast', {
+                showToast: true,
+                toastMessage: errorMessage,
+                toastType: 'error',
+            }, { root: true });
+            throw error;
+        }
+    }
     
+
 }

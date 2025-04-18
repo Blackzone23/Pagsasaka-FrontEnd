@@ -1,0 +1,1 @@
+import{_ as o,c as t,o as s,N as c}from"./index-C6ga6Tkl.js";const n={},a={selected:"",disabled:"",value:""};function r(e,l){return s(),t("option",a,[c(e.$slots,"default")])}const d=o(n,[["render",r]]);export{d as B};

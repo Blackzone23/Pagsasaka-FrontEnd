@@ -48,4 +48,20 @@ export default {
         toastMessage: '',
         toastType: 'default',
     },
+
+    namespaced: true,
+    state: {
+        productRatings: {}, // Store ratings by product ID
+        conversation: { data: [] },
+        message: { data: [] },
+        productItem: { data: [] },
+        moreProduct: { data: [] },
+    },
+     
+    conversation: { data: [] },
+    message: { data: [] },
+    productItem: { data: [] },
+    moreProduct: { data: [] },
+    productRatings: {}, // Add this
+    
 };
