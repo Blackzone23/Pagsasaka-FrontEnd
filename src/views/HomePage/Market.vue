@@ -97,9 +97,10 @@
                     <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-5 grid-rows-2 gap-4">
                         <div v-for="moreProduct in moreProductList.slice(0, 10)" 
                             :key="moreProduct.id"  
-                            class="relative border rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow group">
+                            class="relative border rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow group"
+                            @mouseenter="fetchProductRatings(moreProduct.id)">
                             
-                            <img :src="moreProduct.product_img[0]"  alt="Product Image"  
+                            <img :src="moreProduct.product_img[0]" alt="Product Image"  
                                 class="w-full h-40 object-cover" />
 
                             <!-- Hover Overlay -->
@@ -114,14 +115,35 @@
                                 <h3 class="text-sm font-semibold">{{ moreProduct.product_name }}</h3>
                                 <p class="text-xs font-semibold">{{ moreProduct.description }}</p>
                                 <div class="text-red-500 font-bold text-sm">₱{{ moreProduct.price }}</div>
-                                <n-rate allow-half readonly :default-value="moreProduct.rating" size="small" />
+                                <n-rate allow-half readonly :value="getProductRating(moreProduct.id)?.average_rating || 0" size="small" />
+                                <div class="text-gray-600 text-xs mt-1">
+                                    {{ getProductRating(moreProduct.id)?.total_ratings || 0 }} reviews
+                                </div>
                                 <div v-if="moreProduct.location" class="text-gray-600 text-xs mt-2">
                                     📍 {{ moreProduct.location }}
                                 </div>
+                                <!-- Comments Section -->
+                                <div v-if="showComments[moreProduct.id]" class="mt-2">
+                                    <h4 class="text-xs font-semibold">Comments:</h4>
+                                    <div v-for="rating in getProductRating(moreProduct.id)?.ratings?.data || []" 
+                                        :key="rating.id" class="text-xs mt-1">
+                                        <p><strong>{{ rating.account.first_name }} {{ rating.account.last_name }}</strong>: {{ rating.comment }}</p>
+                                        <p v-if="rating.seller_response" class="text-gray-500">Seller: {{ rating.seller_response }}</p>
+                                    </div>
+                                    <button v-if="getProductRating(moreProduct.id)?.ratings?.data?.length" 
+                                        @click="toggleComments(moreProduct.id)" 
+                                        class="text-xs text-green-600 hover:underline">
+                                        Hide Comments
+                                    </button>
+                                </div>
+                                <button v-else-if="getProductRating(moreProduct.id)?.total_ratings > 0" 
+                                    @click="toggleComments(moreProduct.id)" 
+                                    class="text-xs text-green-600 hover:underline">
+                                  
+                                </button>
                             </div>
                         </div>
                     </div>
-
 
                     <!-- Pagination -->
                     <div class="mt-10 mr-4 flex justify-center text-sm">
@@ -255,7 +277,7 @@
                     <!-- Input Area for Sending a Message -->
                     <div class="p-4 border-t bg-white flex items-center">
                         <!-- Message Input -->
-                        <input    v-model="messageText" type="text" placeholder="Type a message here" class="flex-1 p-2 border rounded-md text-sm"/>
+                        <input v-model="messageText" type="text" placeholder="Type a message here" class="flex-1 p-2 border rounded-md text-sm"/>
 
                         <!-- Send Button -->
                         <button class="ml-2 bg-green-600 text-white px-4 py-2 rounded-md transition duration-200 hover:bg-green-700" @click="sendMessage">
@@ -293,73 +315,55 @@ const store = useStore();
 const router = useRouter();
 
 const showLoading = computed(() => store.state.showLoading.state);
-const conversationStart= computed(() => store.state.Consumer.conversation.data);
-const messageStart= computed(() => store.state.Consumer.message.data);
-const productItemList= computed(() => store.state.Consumer.productItem.data);
-const moreProductList= computed(() => store.state.Consumer.moreProduct.data);
+const conversationStart = computed(() => store.state.Consumer.conversation.data);
+const messageStart = computed(() => store.state.Consumer.message.data);
+const productItemList = computed(() => store.state.Consumer.productItem.data);
+const moreProductList = computed(() => store.state.Consumer.moreProduct.data);
 const currentPage = computed(() => store.state.currentPage);
 const totalPages = computed(() => store.state.totalPages);
-
-/*********************************************************************
-FUNCTIONS FOR SEARCH
-*********************************************************************/
-// const searchQuery = ref('');
-
-// // Search college
-// const search = debounce(() => {
-//     store.dispatch('Administrator/getCollege', { 
-//         search: searchQuery.value, 
-//     }).then(() => {
-//         if (collegeList.value.length === 0) {
-//             store.commit('setCurrentPage', 0);
-//             store.commit('setTotalPages', 0);
-//         }
-//     });
-// }, 500) // Adjust the debounce delay as needed (300 milliseconds in this example)
-
+const productRatings = computed(() => store.state.Consumer.productRatings);
+const showComments = ref({});
 
 /******************************************************************
   FUNCTION FOR GETTING CONVERSATION LIST
 ******************************************************************/
 function getConversation() {
-    store.dispatch('Consumer/getConversation')
+    store.dispatch('Consumer/getConversation');
 }
 
 onMounted(() => {
     getConversation();
-})
+});
 
 /******************************************************************
   FUNCTION FOR RESPONSIVE
 ******************************************************************/
-
 const { width } = useWindowSize();
 
 const slidesPerView = computed(() => {
-  if (width.value >= 1536) return 5; // 2xl (>= 1536px) → Show 5 images
-  if (width.value >= 1280) return 4; // xl (>= 1280px) → Show 4 images
-  if (width.value >= 1024) return 3; // lg (>= 1024px) → Show 3 images
-  if (width.value >= 768) return 4;  // md (>= 768px) → Show 2 images
-  if (width.value >= 640) return 3;  // sm (>= 640px) → Show 2 images
-  if (width.value >= 480) return 1;  // sm (>= 640px) → Show 2 images
-  return 1; // 2xs (< 640px) → Show 1 image
+    if (width.value >= 1536) return 5; // 2xl (>= 1536px) → Show 5 images
+    if (width.value >= 1280) return 4; // xl (>= 1280px) → Show 4 images
+    if (width.value >= 1024) return 3; // lg (>= 1024px) → Show 3 images
+    if (width.value >= 768) return 4;  // md (>= 768px) → Show 2 images
+    if (width.value >= 640) return 3;  // sm (>= 640px) → Show 2 images
+    if (width.value >= 480) return 1;  // sm (>= 640px) → Show 2 images
+    return 1; // 2xs (< 640px) → Show 1 image
 });
 
 /******************************************************************
   FUNCTION FOR ADVERTISE PRODUCT
 ******************************************************************/
-
 function getItemList() {
     store.dispatch('Consumer/getItemList');
 }
 
 onMounted(() => {
     getItemList();
-})
+});
 
-async function goToItemInfo(productId){
-    sessionStorage.setItem('ItemInfo', productId)
-    router.push({name: 'Market_Page1'})
+async function goToItemInfo(productId) {
+    sessionStorage.setItem('ItemInfo', productId);
+    router.push({ name: 'Market_Page1' });
 }
 
 /******************************************************************
@@ -367,61 +371,47 @@ async function goToItemInfo(productId){
 ******************************************************************/
 async function getMoreList() {
     await store.dispatch('Consumer/getMoreList', {
-        currentPage: currentPage.value, // Pass as part of an object
+        currentPage: currentPage.value,
     });
 }
 
 onMounted(() => {
-  getMoreList();
-})
-
-const filters = reactive({
-  all: true,
-  vegetable: false,
-  seed: false,
-  grains: false,
-  soil: false,
-  fruits: false,
-  pelletes: false,
-  process: false,
+    getMoreList();
 });
 
-// const filteredProducts = computed(() => {
-//   let moreProductList = products.value;
-
-//   // Apply filters based on selected checkboxes
-//   if (!filters.all) {
-//     const activeFilters = Object.keys(filters).filter(key => filters[key] && key !== 'all');
-//     if (activeFilters.length > 0) {
-//       filtered = filtered.filter(product => activeFilters.includes(product.category));
-//     }
-//   }
-
-//   return filtered.slice((currentPage.value - 1) * itemsPerPage, currentPage.value * itemsPerPage);
-// });
-
-// const toggleAll = () => {
-//   if (filters.all) {
-//     Object.keys(filters).forEach(key => { filters[key] = true; });
-//   } else {
-//     Object.keys(filters).forEach(key => { filters[key] = false; });
-//   }
-// };
-
-// const selectCategory = (category) => {
-//   // Unselect all filters except the selected category
-//   Object.keys(filters).forEach(key => {
-//     if (key !== category && key !== 'all') {
-//       filters[key] = false;
-//     }
-//   });
-
-//   // Ensure 'all' is unchecked when a specific filter is selected
-//   filters.all = false;
-// };
+const filters = reactive({
+    all: true,
+    vegetable: false,
+    seed: false,
+    grains: false,
+    soil: false,
+    fruits: false,
+    pelletes: false,
+    process: false,
+});
 
 /******************************************************************
-PAGINATION
+  FUNCTION FOR PRODUCT RATINGS
+******************************************************************/
+async function fetchProductRatings(productId) {
+    if (!productRatings.value?.[productId]) {
+        await store.dispatch('Consumer/getProductRatings', productId);
+    }
+}
+
+function getProductRating(productId) {
+    return productRatings.value?.[productId] || null;
+}
+
+function toggleComments(productId) {
+    showComments.value[productId] = !showComments.value[productId];
+    if (showComments.value[productId]) {
+        fetchProductRatings(productId);
+    }
+}
+
+/******************************************************************
+  PAGINATION
 ******************************************************************/
 function goToPreviousPage() {
     if (currentPage.value > 1) {
@@ -437,9 +427,6 @@ function goToNextPage() {
     }
 }
 
-
-
-
 /******************************************************************
   FUNCTION FOR CHAT
 ******************************************************************/
@@ -449,7 +436,7 @@ const messageText = ref('');
 
 const closeChat = () => {
     selectedChat.value = null;
-  };
+};
 
 const openshowChatModal = () => {
     isshowChatModal.value = true;
@@ -459,9 +446,8 @@ const closeshowChatModal = () => {
     isshowChatModal.value = false;
 };
 
-
 const selectChat = (id) => {
-    console.log("Selected chat ID: ", id);  // Debugging the id value
+    console.log("Selected chat ID: ", id);
     const selected = conversationStart.value.find(c => c.id === id);
     selectedChat.value = selected;
     store.dispatch('Consumer/getMessages', id);
@@ -484,54 +470,44 @@ const sendMessage = async () => {
     }
 };
 
-
 /******************************************************************
   FUNCTION FOR DELETE MESSAGE
 ******************************************************************/
-
 const isModalVisible = ref(false);
 const conversationIdToDelete = ref(null);
 
 const openDeleteModal = (id, event) => {
-  event.stopPropagation();
-  isModalVisible.value = true;
-  conversationIdToDelete.value = id;
+    event.stopPropagation();
+    isModalVisible.value = true;
+    conversationIdToDelete.value = id;
 };
 
 const closeDeleteModal = (event) => {
-  event.stopPropagation();
-  isModalVisible.value = false;
-  conversationIdToDelete.value = null;
+    event.stopPropagation();
+    isModalVisible.value = false;
+    conversationIdToDelete.value = null;
 };
 
 const deleteConversation = async () => {
-  if (!conversationIdToDelete.value) return;
+    if (!conversationIdToDelete.value) return;
 
-  try {
-    await store.dispatch('Consumer/deleteConversation', conversationIdToDelete.value);
-    isModalVisible.value = false;
-    conversationIdToDelete.value = null;
-
-    // Refresh the conversation list
-    getConversation();
-
-    // If the deleted conversation is currently selected, clear it
-    if (selectedChat.value?.id === conversationIdToDelete.value) {
-      selectedChat.value = null;
-      messageStart.value = [];
+    try {
+        await store.dispatch('Consumer/deleteConversation', conversationIdToDelete.value);
+        isModalVisible.value = false;
+        conversationIdToDelete.value = null;
+        getConversation();
+        if (selectedChat.value?.id === conversationIdToDelete.value) {
+            selectedChat.value = null;
+            messageStart.value = [];
+        }
+    } catch (error) {
+        console.error("Failed to delete conversation:", error);
     }
-
-  } catch (error) {
-    console.error("Failed to delete conversation:", error);
-  }
 };
-
 </script>
-
 
 <style scoped>
 .group-hover:scale-110 {
-  transform: scale(1.1);
+    transform: scale(1.1);
 }
-
 </style>

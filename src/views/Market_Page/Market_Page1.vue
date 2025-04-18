@@ -36,11 +36,13 @@
                             <div class="flex items-center space-x-4 mt-3">
                                 <h2 class="font-bold text-lg">Quantity:</h2>
                                 <div class="flex items-center border border-gray-300 rounded-full p-1">
-                                    <button
-                                        @click="decreaseQuantity"> <Icon icon="zondicons:minus-solid" width="20" height="20"  style="color: #608C54" /> </button>
+                                    <button @click="decreaseQuantity">
+                                        <Icon icon="zondicons:minus-solid" width="20" height="20" style="color: #608C54" />
+                                    </button>
                                     <span class="font-bold mx-4">{{ quantity }}</span>
-                                    <button
-                                        @click="increaseQuantity"> <Icon icon="gridicons:add" width="24" height="24"  style="color: #608C54" /> </button>
+                                    <button @click="increaseQuantity">
+                                        <Icon icon="gridicons:add" width="24" height="24" style="color: #608C54" />
+                                    </button>
                                 </div>
                             </div>
 
@@ -74,12 +76,10 @@
                         <span class="font-semibold">{{ Biodata.name }}</span>
                         <span class="text-xs">{{ activeStatus }}</span>
                         <div class="mt-3 flex flex-wrap gap-2 justify-center md:justify-start">
-                            <button 
-                            @click="startChatWithShop" 
-                            class="flex items-center gap-1 px-4 py-2 bg-[#608C54] text-white text-sm font-medium rounded-lg hover:bg-green-700 transition">
-                            <Icon icon="mdi:chat" width="20" height="20" style="color: white" /> Chat Now
+                            <button @click="startChatWithShop" 
+                                class="flex items-center gap-1 px-4 py-2 bg-[#608C54] text-white text-sm font-medium rounded-lg hover:bg-green-700 transition">
+                                <Icon icon="mdi:chat" width="20" height="20" style="color: white" /> Chat Now
                             </button>
-                            <!-- View Shop Button -->
                             <a href="/shop" class="flex items-center gap-1 px-4 py-2 bg-white text-sm font-medium rounded-lg hover:bg-gray-300 transition border border-gray-300">
                                 <Icon icon="bx:store" width="20" height="20" style="color: black" /> View Shop
                             </a>
@@ -127,67 +127,77 @@
         <!-- Reviews -->
         <div class="p-4">
             <div class="border-2 border-gray-300 p-4 rounded-md">
-                <h2 class="text-lg font-semibold">Total Reviews: {{ total_ratings }}</h2>
-                <div class="text-5xl">{{ average_rating }}</div>
+                <div class="flex items-center gap-4">
+                    <h2 class="text-lg font-semibold">Total Reviews: {{ productRating?.total_ratings || 0 }}</h2>
+                    <n-rate allow-half readonly :value="productRating?.average_rating || 0" size="small" />
+                </div>
 
                 <div :class="isScrollable ? 'max-h-96 overflow-y-auto' : ''" class="mt-4">
-                    <div v-for="ratings in ratingList" :key="ratings.id" class="p-4 border-2 border-gray-300 rounded-md">
+                    <div v-for="rating in productRating?.ratings?.data || []" :key="rating.id" 
+                        class="p-4 border-2 border-gray-300 rounded-md mb-2">
                         <div class="flex items-center gap-4">
-                            <img :src="ratings.image" alt="" class="w-12 h-12 rounded-full object-cover" />
+                            <img :src="rating.account?.avatar || defaultAvatar" alt="Reviewer Avatar" 
+                                class="w-12 h-12 rounded-full object-cover" />
                             <div>
-                                <n-rate allow-half readonly :default-value="ratings.rating" size="small" />
-                                <h3 class="font-bold">{{ ratings.name }}</h3>
-                                <p class="text-sm text-gray-500">{{ rating.date }}</p>
+                                <n-rate allow-half readonly :value="rating.rating" size="small" />
+                                <h3 class="font-bold">{{ rating.account?.first_name }} {{ rating.account?.last_name }}</h3>
+                                <p class="text-sm text-gray-500">{{ formatDate(rating.created_at) }}</p>
                             </div>
                         </div>
-                        <p class="mt-2 text-gray-700">{{ ratings.comment }}</p>
+                        <p class="mt-2 text-gray-700">{{ rating.comment }}</p>
+                        <p v-if="rating.seller_response" class="mt-1 text-gray-500">Seller: {{ rating.seller_response }}</p>
                     </div>
                 </div>
 
-               <div class="space-x-4">
-                    <button @click="isScrollable = !isScrollable" class="bg-[#608C54] text-white py-2 px-4 rounded shadow hover:bg-green-700 transition mt-2">
+                <div class="space-x-4">
+                    <button v-if="productRating?.total_ratings > 0" @click="isScrollable = !isScrollable" 
+                        class="bg-[#608C54] text-white py-2 px-4 rounded shadow hover:bg-green-700 transition mt-2">
                         {{ isScrollable ? 'Collapse Reviews' : 'See More Reviews' }}
                     </button>
-
-                    <!-- Button to open the Add Comment modal -->
-                    <button @click="opeCommentModal" class="bg-gray-700 text-white py-2 px-4 rounded shadow hover:bg-gray-600 transition mt-4">
+                    <button @click="opeCommentModal" 
+                        class="bg-gray-700 text-white py-2 px-4 rounded shadow hover:bg-gray-600 transition mt-4">
                         Add New Comment
                     </button>
-               </div>
+                </div>
             </div>
 
             <!-- Add Comment Modal -->
             <div v-if="isCommentModalOpen" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center">
                 <div class="bg-white p-6 rounded-md w-96">
                     <h2 class="text-lg font-semibold mb-4">Add Your Review</h2>
-
-                    <!-- Rating input -->
-                    <n-rate v-model="ratingData.rating" allow-half size="large" class="mb-4" />
-                    <BaseError v-if="$validateratingrules.rating.$error">{{ $validateratingrules.rating.$errors[0].$message }}</BaseError>
-
-                    <!-- Comment input -->
-                    <textarea v-model="ratingData.comment" placeholder="Write your comment..." rows="4" class="w-full border-2 border-gray-300 p-2 rounded-md"></textarea>
-                    <BaseError v-if="$validateratingrules.comment.$error">{{ $validateratingrules.comment.$errors[0].$message }}</BaseError>
-
+                    <n-rate v-model:value="ratingData.rating" allow-half size="large" class="mb-4" />
+                    <BaseError v-if="$validateratingrules.rating.$error">
+                        {{ $validateratingrules.rating.$errors[0].$message }}
+                    </BaseError>
+                    <textarea v-model="ratingData.comment" placeholder="Write your comment..." rows="4" 
+                        class="w-full border-2 border-gray-300 p-2 rounded-md"></textarea>
+                    <BaseError v-if="$validateratingrules.comment.$error">
+                        {{ $validateratingrules.comment.$errors[0].$message }}
+                    </BaseError>
                     <div class="mt-4 flex gap-2">
-                        <button @click="createComment" class="bg-green-800 text-white py-2 px-4 rounded shadow hover:bg-green-600 transition">Submit</button>
-                        <button @click="closeCommentModal" class="bg-red-800 text-white py-2 px-4 rounded shadow hover:bg-red-600 transition">Cancel</button>
+                        <button @click="createComment" 
+                            class="bg-green-800 text-white py-2 px-4 rounded shadow hover:bg-green-600 transition">
+                            Submit
+                        </button>
+                        <button @click="closeCommentModal" 
+                            class="bg-red-800 text-white py-2 px-4 rounded shadow hover:bg-red-600 transition">
+                            Cancel
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!--chat-->
+        <!-- Chat -->
         <div class="p-4">
-            <!-- Floating Chat Button -->
-            <button @click="openshowChatModal"  class="hidden md:flex bg-yellow-100 border-2 border-gray-300 rounded-full p-3  fixed bottom-4 right-4 shadow-md hover:bg-yellow-300 items-center justify-center">
+            <button @click="openshowChatModal" 
+                class="hidden md:flex bg-yellow-100 border-2 border-gray-300 rounded-full p-3 fixed bottom-4 right-4 shadow-md hover:bg-yellow-300 items-center justify-center">
                 <Icon icon="tabler:message" width="28" height="28" style="color: #608C54" />
             </button>
         </div>
 
         <!-- Expanded Floating Chat Modal -->
         <div v-if="isshowChatModal" class="fixed bottom-4 right-4 2xl:w-[900px] 2xs:w-[470px] 2xl:h-[85vh] 2xs:h-[65vh] bg-white rounded-lg shadow-lg flex flex-col border z-50">
-            <!-- Header -->
             <div class="p-4 border-b rounded-sm bg-gray-100 flex justify-between items-center">
                 <span class="text-xl font-bold text-green-600">Chat</span>
                 <button @click="closeshowChatModal" class="text-gray-600 text-lg">
@@ -196,91 +206,76 @@
             </div>
 
             <div class="flex flex-1 overflow-hidden">
-            <!-- Sidebar (Users List) -->
-            <div class="w-1/3 bg-white border-r border-gray-300 p-4 flex flex-col">
-                <div class="flex">
-                <BaseSearchField placeholder="Search..." class="2xl:w-[270px] 2xs:w-[137px] "></BaseSearchField>
-                </div>
-
-                <div class="mt-3 flex-1 overflow-auto">
-                    <div v-for="conversation in conversationStart" :key="conversation.id" class="flex items-center p-3 border-b cursor-pointer hover:bg-gray-100 transition duration-200" @click="selectChat(conversation.id)">
-                        <img :src="conversation.chat_partner_avatar" class="w-12 h-12 rounded-full border mr-3" alt="Avatar" />
-                        <div class="flex-1">
-                            <span class="font-semibold">{{ conversation.chat_partner_name }}</span>
-                            <p class="text-xs text-gray-500 truncate">{{ conversation.message }}</p>
-                        </div>
-                        <span v-if="conversation.unread_messages_count" class="text-xs bg-red-500 text-white px-2 py-1 rounded-full">
-                            {{ conversation.unread_messages_count }}
-                        </span>
-
-                        <!-- Delete Button -->
-                        <button class="text-white rounded" @click="openDeleteModal(conversation.id, $event)">
-                            <Icon icon="mdi-light:delete" width="20" height="20" style="color: #ad1414" />
-                        </button>
-
-                        <!-- Modal -->
-                        <div v-if="isModalVisible" class="fixed inset-0 bg-gray-500 bg-opacity-75 flex justify-center items-center z-50">
-                            <div class="bg-white p-6 rounded shadow-lg w-96">
-                            <h3 class="text-xl font-semibold text-center">Are you sure you want to delete this conversation?</h3>
-                            <div class="flex justify-around mt-4">
-                                <button @click="deleteConversation" class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">Yes, Delete</button>
-                                <button @click="closeDeleteModal($event)" class="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400">Cancel</button>
+                <div class="w-1/3 bg-white border-r border-gray-300 p-4 flex flex-col">
+                    <div class="flex">
+                        <BaseSearchField placeholder="Search..." class="2xl:w-[270px] 2xs:w-[137px]"></BaseSearchField>
+                    </div>
+                    <div class="mt-3 flex-1 overflow-auto">
+                        <div v-for="conversation in conversationStart" :key="conversation.id" 
+                            class="flex items-center p-3 border-b cursor-pointer hover:bg-gray-100 transition duration-200" 
+                            @click="selectChat(conversation.id)">
+                            <img :src="conversation.chat_partner_avatar" class="w-12 h-12 rounded-full border mr-3" alt="Avatar" />
+                            <div class="flex-1">
+                                <span class="font-semibold">{{ conversation.chat_partner_name }}</span>
+                                <p class="text-xs text-gray-500 truncate">{{ conversation.message }}</p>
                             </div>
+                            <span v-if="conversation.unread_messages_count" 
+                                class="text-xs bg-red-500 text-white px-2 py-1 rounded-full">
+                                {{ conversation.unread_messages_count }}
+                            </span>
+                            <button @click="openDeleteModal(conversation.id, $event)">
+                                <Icon icon="mdi-light:delete" width="20" height="20" style="color: #ad1414" />
+                            </button>
+                            <div v-if="isModalVisible" class="fixed inset-0 bg-gray-500 bg-opacity-75 flex justify-center items-center z-50">
+                                <div class="bg-white p-6 rounded shadow-lg w-96">
+                                    <h3 class="text-xl font-semibold text-center">Are you sure you want to delete this conversation?</h3>
+                                    <div class="flex justify-around mt-4">
+                                        <button @click="deleteConversation" 
+                                            class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">Yes, Delete</button>
+                                        <button @click="closeDeleteModal($event)" 
+                                            class="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400">Cancel</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Chat Window -->
-            <div class="w-full flex flex-col">
-                <!-- If No Chat is Selected -->
-                <div v-if="!selectedChat" class="flex-1 flex items-center justify-center text-gray-400">
-                <p class="text-xl">Welcome to Pagsasaka Chat</p>
-                </div>
-
-                <!-- If a Chat is Selected -->
-                <div v-else class="flex flex-col flex-1">
-                <div class="p-4 border-b text-lg font-bold flex justify-between items-center bg-gray-100">
-                    <span>{{ selectedChat.chat_partner_name }}</span>
-                    <button @click="closeChat" class="text-gray-500">Close</button>
-                </div>
-
-                <!-- Messages Area -->
-                <div  class="flex-1 bg-gray-50 p-4 overflow-auto space-y-4 2xl:text-sm 2xs:text-sm max-h-[400px]">
-                    <div v-for="message in messageStart" :key="message.id" class="flex items-start space-x-3" 
-                    :class="{'justify-end': message.sender.id === userName, 'justify-start': message.sender.id !== userName}">
-                        
-                        <!-- Avatar (Only for others' messages) -->
-                        <img v-if="message.sender.id !== userName" :src="message.sender.avatar || defaultAvatar" class="w-8 h-8 rounded-full" />
-                        
-                        <div class="p-3 rounded-lg shadow-md w-auto max-w-xs" :class="{'bg-green-500 text-white ': message.sender.id === userName, 'bg-gray-200 text-black': message.sender.id !== userName}">
-                        <p class="text-sm font-bold" :class="{'text-white': message.sender.id === userName, 'text-green-600': message.sender.id !== userName}">
-                            {{ message.sender.first_name }} {{ message.sender.last_name }}
-                        </p>
-                        <p class="text-xs">
-                            {{ message.message }}
-                        </p>
+                <div class="w-full flex flex-col">
+                    <div v-if="!selectedChat" class="flex-1 flex items-center justify-center text-gray-400">
+                        <p class="text-xl">Welcome to Pagsasaka Chat</p>
+                    </div>
+                    <div v-else class="flex flex-col flex-1">
+                        <div class="p-4 border-b text-lg font-bold flex justify-between items-center bg-gray-100">
+                            <span>{{ selectedChat.chat_partner_name }}</span>
+                            <button @click="closeChat" class="text-gray-500">Close</button>
                         </div>
-
-                        <!-- Avatar Placeholder for Sent Messages (Align Right) -->
-                        <div v-if="message.sender.id === userName" class="w-8 h-8 rounded-full bg-gray-300"></div>
+                        <div class="flex-1 bg-gray-50 p-4 overflow-auto space-y-4 2xl:text-sm 2xs:text-sm max-h-[400px]">
+                            <div v-for="message in messageStart" :key="message.id" class="flex items-start space-x-3" 
+                                :class="{'justify-end': message.sender.id === userName, 'justify-start': message.sender.id !== userName}">
+                                <img v-if="message.sender.id !== userName" :src="message.sender.avatar || defaultAvatar" 
+                                    class="w-8 h-8 rounded-full" />
+                                <div class="p-3 rounded-lg shadow-md w-auto max-w-xs" 
+                                    :class="{'bg-green-500 text-white': message.sender.id === userName, 'bg-gray-200 text-black': message.sender.id !== userName}">
+                                    <p class="text-sm font-bold" 
+                                        :class="{'text-white': message.sender.id === userName, 'text-green-600': message.sender.id !== userName}">
+                                        {{ message.sender.first_name }} {{ message.sender.last_name }}
+                                    </p>
+                                    <p class="text-xs">{{ message.message }}</p>
+                                </div>
+                                <div v-if="message.sender.id === userName" class="w-8 h-8 rounded-full bg-gray-300"></div>
+                            </div>
+                        </div>
+                        <div class="p-4 border-t bg-white flex items-center">
+                            <input v-model="messageData.message" type="text" placeholder="Type a message here" 
+                                class="flex-1 p-2 border rounded-md text-sm"/>
+                            <button @click="sendMessage" 
+                                class="ml-2 bg-green-600 text-white px-4 py-2 rounded-md transition duration-200 hover:bg-green-700">
+                                Send
+                            </button>
+                        </div>
                     </div>
                 </div>
-
-                <!-- Input Area -->
-                <div class="p-4 border-t bg-white flex items-center">
-
-                    <!-- Message Input -->
-                    <input v-model="messageData.message" type="text" placeholder="Type a message here" class="flex-1 p-2 border rounded-md text-sm"/>
-
-                    <!-- Send Button -->
-                    <button class="ml-2 bg-green-600 text-white px-4 py-2 rounded-md transition duration-200 hover:bg-green-700" @click="sendMessage">
-                    Send
-                    </button>
-                </div>
-                </div>
-            </div>
             </div>
         </div>         
     </div>
@@ -288,8 +283,8 @@
 </template>
 
 <script setup>
-import Loading from '@/components/Alerts/Loading.vue'
-import Toast from '@/components/Alerts/Toast.vue'
+import Loading from '@/components/Alerts/Loading.vue';
+import Toast from '@/components/Alerts/Toast.vue';
 import Market_NavBar from '@/components/Navbar/Market_NavBar.vue';
 import MVegetable from '@/assets/MVegetable.png';
 import BaseLabel from '@/components/Input-Fields/BaseLabel.vue';
@@ -309,20 +304,43 @@ const router = useRouter();
 
 const showLoading = computed(() => store.state.showLoading.state);
 const productItemListinfo = computed(() => store.state.Consumer.productItem.productItemInfo);
-const ratingList= computed(() => store.state.Consumer.ratings.data);
-const conversationStart= computed(() => store.state.Consumer.conversation.data);
-const messageStart= computed(() => store.state.Consumer.message.data);
+const productRatings = computed(() => store.state.Consumer.productRatings);
+const conversationStart = computed(() => store.state.Consumer.conversation.data);
+const messageStart = computed(() => store.state.Consumer.message.data);
 
+const defaultAvatar = ref('path/to/default/avatar.png'); // Replace with actual default avatar path
+const isScrollable = ref(false);
+const productRating = computed(() => {
+    const productId = sessionStorage.getItem('ItemInfo');
+    return productRatings.value?.[productId] || null;
+});
 
 /******************************************************************
   FUNCTION FOR LIST
 ******************************************************************/
 function getItemListInfo() {
-    store.dispatch('Consumer/getItemListInfo', sessionStorage.getItem('ItemInfo'));
+    const productId = sessionStorage.getItem('ItemInfo');
+    store.dispatch('Consumer/getItemListInfo', productId);
+}
+
+/******************************************************************
+  FUNCTION FOR PRODUCT RATINGS
+******************************************************************/
+async function fetchProductRatings() {
+    const productId = sessionStorage.getItem('ItemInfo');
+    if (productId && !productRatings.value?.[productId]) {
+        await store.dispatch('Consumer/getProductRatings', productId);
+    }
+}
+
+function formatDate(dateString) {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
 }
 
 onMounted(() => {
     getItemListInfo();
+    fetchProductRatings();
 });
 
 /******************************************************************
@@ -331,74 +349,59 @@ onMounted(() => {
 const quantity = ref(1);
 
 const increaseQuantity = () => {
-  quantity.value++;
+    quantity.value++;
 };
 
 const decreaseQuantity = () => {
-  if (quantity.value > 1) {
-    quantity.value--;
-  }
+    if (quantity.value > 1) {
+        quantity.value--;
+    }
 };
 
 const addToCart = async (productId) => {
     try {
-        // Dispatch action to add item to the cart without setting 'selected' to true
         await store.dispatch('Consumer/getAddToCart', { id: productId, quantity: quantity.value });
-
-        // Optionally, you can navigate to the cart page
-        // router.push('/cart');  // Uncomment this line if you want to navigate to the cart page
     } catch (error) {
         console.error('Error adding to cart:', error);
     }
 };
+
 /******************************************************************
   FUNCTION FOR CHECKOUT
 ******************************************************************/
 const buynow = async (productId) => {
     try {
-        // Dispatch action to add item to the cart and set 'selected' to true
         await store.dispatch('Consumer/getBuyNow', { id: productId, quantity: quantity.value });
-
-        // After adding, set the 'selected' property to true for the newly added item
         const cartItem = store.state.Consumer.cartItem.data.find(item => item.id === productId);
         if (cartItem) {
-            cartItem.selected = true;  // Automatically select the newly added item
+            cartItem.selected = true;
         }
-
-        // Navigate to the cart or checkout page after buying
-        router.push('/cart');  // Uncomment this line if you want to navigate to the cart page
+        router.push('/cart');
     } catch (error) {
         console.error('Error adding to checkout:', error);
     }
 };
 
-
 /******************************************************************
   FUNCTION FOR LAYER 2
 ******************************************************************/
 const Biodata = reactive({
-  name: "Janromil Dela Cruz",
-  lastActive: new Date(Date.now() - 5 * 60 * 1000), // Last active 5 minutes ago
+    name: "Janromil Dela Cruz",
+    lastActive: new Date(Date.now() - 5 * 60 * 1000),
 });
 
-// Computed property to determine active status
 const activeStatus = computed(() => {
-  const now = new Date();
-  const lastActive = new Date(Biodata.lastActive);
-  const diffMs = now - lastActive; // Difference in milliseconds+
-  const diffMinutes = Math.floor(diffMs / (1000 * 60));
-  const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+    const now = new Date();
+    const lastActive = new Date(Biodata.lastActive);
+    const diffMs = now - lastActive;
+    const diffMinutes = Math.floor(diffMs / (1000 * 60));
+    const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
 
-  if (diffMinutes < 1) {
-    return "Active now";
-  } else if (diffMinutes < 60) {
-    return `${diffMinutes} minutes ago`;
-  } else if (diffHours < 24) {
-    return `${diffHours} hours ago`;
-  } else {
+    if (diffMinutes < 1) return "Active now";
+    if (diffMinutes < 60) return `${diffMinutes} minutes ago`;
+    if (diffHours < 24) return `${diffHours} hours ago`;
     const days = Math.floor(diffHours / 24);
     return `${days} days ago`;
-  }
 });
 
 /******************************************************************
@@ -406,11 +409,12 @@ const activeStatus = computed(() => {
 ******************************************************************/
 const isshowChatModal = ref(false);
 const selectedChat = ref(null);
-const messageText = ref('');
+const messageData = reactive({ message: '' });
+const userName = ref('current_user_id'); // Replace with actual user ID logic
 
 const closeChat = () => {
     selectedChat.value = null;
-  };
+};
 
 const openshowChatModal = () => {
     isshowChatModal.value = true;
@@ -420,133 +424,106 @@ const closeshowChatModal = () => {
     isshowChatModal.value = false;
 };
 
-
 const selectChat = (id) => {
-    console.log("Selected chat ID: ", id);  // Debugging the id value
+    console.log("Selected chat ID:", id);
     const selected = conversationStart.value.find(c => c.id === id);
     selectedChat.value = selected;
     store.dispatch('Consumer/getMessages', id);
 };
 
 const sendMessage = async () => {
-    if (!messageText.value.trim() || !selectedChat.value) return;
+    if (!messageData.message.trim() || !selectedChat.value) return;
 
     const payload = {
         conversation_id: selectedChat.value.id,
-        message: messageText.value,
+        message: messageData.message,
     };
 
     try {
         await store.dispatch('Consumer/sendMessage', payload);
         await store.dispatch('Consumer/getMessages', selectedChat.value.id);
-        messageText.value = '';
+        messageData.message = '';
     } catch (error) {
         console.error('Failed to send message:', error);
     }
 };
 
 const startChatWithShop = async () => {
-  try {
-    isshowChatModal.value = true;
-
-    const shopId = "YOUR_SHOP_ID_HERE";
-
-    // Try creating or getting the conversation
-    const response = await store.dispatch('Consumer/startChatWithShop', shopId);
-
-    const createdConversation = {
-      id: response.data.id,
-      chat_partner_name: response.data.chat_partner_name,
-      chat_partner_avatar: response.data.chat_partner_avatar,
-    };
-
-    selectedChat.value = createdConversation;
-    messageData.conversation_id = createdConversation.id;
-
-    // Optional: Refresh conversations and messages
-    await store.dispatch('Consumer/getConversation');
-    await store.dispatch('Consumer/getMessages', createdConversation.id);
-  } catch (error) {
-    console.error('Failed to start chat:', error);
-  }
+    try {
+        isshowChatModal.value = true;
+        const shopId = "YOUR_SHOP_ID_HERE"; // Replace with actual shop ID
+        const response = await store.dispatch('Consumer/startChatWithShop', shopId);
+        const createdConversation = {
+            id: response.data.id,
+            chat_partner_name: response.data.chat_partner_name,
+            chat_partner_avatar: response.data.chat_partner_avatar,
+        };
+        selectedChat.value = createdConversation;
+        messageData.conversation_id = createdConversation.id;
+        await store.dispatch('Consumer/getConversation');
+        await store.dispatch('Consumer/getMessages', createdConversation.id);
+    } catch (error) {
+        console.error('Failed to start chat:', error);
+    }
 };
 
 /******************************************************************
   FUNCTION FOR GETTING CONVERSATION LIST
 ******************************************************************/
 function getConversation() {
-    store.dispatch('Consumer/getConversation')
+    store.dispatch('Consumer/getConversation');
 }
 
 onMounted(() => {
     getConversation();
-})
+});
 
 /******************************************************************
   FUNCTION FOR ADD COMMENT
 ******************************************************************/
 const isCommentModalOpen = ref(false);
-const isScrollable = ref(false); // Controls scrollable behavior
 
 const opeCommentModal = () => {
+    ratingData.rating = 0; // Reset rating
+    ratingData.comment = ''; // Reset comment
     isCommentModalOpen.value = true;
 };
 
-// Function to close the modal
 const closeCommentModal = () => {
     isCommentModalOpen.value = false;
-    
 };
 
 const ratingData = reactive({
-  rating: 3,
-  comment: '',
- 
+    rating: 0,
+    comment: '',
 });
 
-const ratingRules = computed(() => {
-  return {
+const ratingRules = computed(() => ({
     rating: {
-        required: helpers.withMessage('Rating is required', required),
-        
-      },
-      comment: {
-          required: helpers.withMessage('Comment is required', required),
-      },
-    
-  };
-});
+        required: helpers.withMessage('Please select a rating', required),
+        minValue: helpers.withMessage('Rating must be at least 1 star', (value) => value >= 1),
+    },
+    comment: { required: helpers.withMessage('Comment is required', required) },
+}));
 
 const $validateratingrules = useVuelidate(ratingRules, ratingData);
 
 async function createComment() {
-  const validationResult = await $validateratingrules.value.$validate();
-  console.log("Validation result:", validationResult); 
-  if (validationResult) {
-    await store.dispatch('Consumer/createComment', ratingData)
-      .then((response) => {
-        if (response.isSuccess === true) {
-          closeCommentModal();
-          getRating();
+    const validationResult = await $validateratingrules.value.$validate();
+    if (validationResult) {
+        try {
+            console.log('Submitting rating:', ratingData.rating); // Debug rating
+            await store.dispatch('Consumer/createComment', {
+                ...ratingData,
+                product_id: sessionStorage.getItem('ItemInfo'),
+            });
+            closeCommentModal();
+            fetchProductRatings(); // Refresh ratings
+        } catch (error) {
+            console.error('Failed to create comment:', error);
         }
-      })
-  }
+    }
 }
-/******************************************************************
-  FUNCTION FO RATING LIST
-******************************************************************/
-function getRating() {
-    store.dispatch('Consumer/getRating');
-}
-onMounted(() => {
-    getRating();
-})
-
-onMounted(() => {
-    window.scrollTo(0, 0); // Scroll to the top of the page
-    getItemListInfo();
-});
-
 
 /******************************************************************
   FUNCTION FOR DELETE MESSAGE
@@ -555,37 +532,31 @@ const isModalVisible = ref(false);
 const conversationIdToDelete = ref(null);
 
 const openDeleteModal = (id, event) => {
-  event.stopPropagation();
-  isModalVisible.value = true;
-  conversationIdToDelete.value = id;
+    event.stopPropagation();
+    isModalVisible.value = true;
+    conversationIdToDelete.value = id;
 };
 
 const closeDeleteModal = (event) => {
-  event.stopPropagation();
-  isModalVisible.value = false;
-  conversationIdToDelete.value = null;
+    event.stopPropagation();
+    isModalVisible.value = false;
+    conversationIdToDelete.value = null;
 };
 
 const deleteConversation = async () => {
-  if (!conversationIdToDelete.value) return;
+    if (!conversationIdToDelete.value) return;
 
-  try {
-    await store.dispatch('Consumer/deleteConversation', conversationIdToDelete.value);
-    isModalVisible.value = false;
-    conversationIdToDelete.value = null;
-
-    // Refresh the conversation list
-    getConversation();
-
-    // If the deleted conversation is currently selected, clear it
-    if (selectedChat.value?.id === conversationIdToDelete.value) {
-      selectedChat.value = null;
-      messageStart.value = [];
+    try {
+        await store.dispatch('Consumer/deleteConversation', conversationIdToDelete.value);
+        isModalVisible.value = false;
+        conversationIdToDelete.value = null;
+        getConversation();
+        if (selectedChat.value?.id === conversationIdToDelete.value) {
+            selectedChat.value = null;
+            messageStart.value = [];
+        }
+    } catch (error) {
+        console.error("Failed to delete conversation:", error);
     }
-
-  } catch (error) {
-    console.error("Failed to delete conversation:", error);
-  }
 };
 </script>
-
