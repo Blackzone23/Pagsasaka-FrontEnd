@@ -56,6 +56,9 @@ export default {
     setAddressList: (state, address) => {
         state.address.data = address;
     },
+    setPurchaseList: (state, purchase) => {
+        state.purchase.data = purchase;
+    },
 
     setUpdateAddress: (state, updateAddress) => {
         state.updateAddress.data = updateAddress;

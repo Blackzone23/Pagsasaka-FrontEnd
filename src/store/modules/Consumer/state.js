@@ -35,6 +35,10 @@ export default {
         data: [],
     },
 
+    purchase: {
+        data: [],
+    },
+
     updateAddress: {
         data: [],
     },

@@ -433,6 +433,31 @@ API FOR ADD TO CART
         }
     },
 
+/******************************************************************
+API FOR MY PURCHASE
+******************************************************************/
+   //api for getting list
+    async getPurchase({commit}) {
+        return await axiosClient.get('my-placed-orders')
+        .then((response) => {
+            commit('setPurchaseList', response.data.products_ordered);
+            return response.data.products_ordered;
+        })
+        .catch((error) => {
+            commit('toggleLoader', false, { root: true })
+            if(error.response && error.response.data) {
+                const errorMessage = error.response.data.message;
+                setTimeout(() => {
+                    commit('showToast', { showToast: true, toastMessage: errorMessage, toastType: 'error'}, { root: true });
+                }, toastDelay);
+
+                setTimeout(() => {
+                    commit('showToast', { showToast: false, toastMessage: '', toastType: 'default'}, { root: true });
+                }, toastDuration);
+            }   
+        })
+    },
+
 
     /******************************************************************
      API FOR MESSAGE

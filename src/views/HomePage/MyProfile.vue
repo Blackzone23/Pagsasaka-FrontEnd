@@ -267,23 +267,40 @@
                                 <!--To Pay-->
                                 <div v-if="currentTab === 'To Pay'">
                                     <div class="mt-4 bg-green-100 border border-green-300 rounded-lg p-4">
-                                        <div class="flex flex-wrap md:flex-nowrap items-center">
-                                            <!-- Image -->
-                                            <img src="https://via.placeholder.com/80" alt="Product Image"
-                                                class="w-16 h-16 sm:w-20 sm:h-20 2xl:w-24 2xl:h-24 rounded object-cover border" />
+                                        <div class="max-h-96 overflow-y-auto pr-2">
+                                            <div
+                                                v-for="purchase in purchaseList"
+                                                :key="purchase.id"
+                                                class="flex flex-wrap md:flex-nowrap items-center mb-4"
+                                            >
+                                                <!-- Image -->
+                                                <img
+                                                :src="purchase.product_images[0] || 'https://via.placeholder.com/80'"
+                                                alt="Product Image"
+                                                class="w-16 h-16 sm:w-20 sm:h-20 2xl:w-24 2xl:h-24 rounded object-cover border"
+                                                />
 
-                                            <!-- Details -->
-                                            <div class="ml-3 sm:ml-4 flex-grow">
-                                                <h3 class="text-xs sm:text-sm 2xl:text-lg font-semibold">Salad package</h3>
-                                                <p class="text-[10px] sm:text-xs 2xl:text-sm text-gray-600">Variants: 500 Grams</p>
+                                                <!-- Details -->
+                                                <div class="ml-3 sm:ml-4 flex-grow">
+                                                <h3 class="text-xs sm:text-sm 2xl:text-lg font-semibold">{{ purchase.product_name }}</h3>
+                                                <p class="text-[10px] sm:text-xs 2xl:text-sm text-gray-600">
+                                                    Variants: {{ purchase.variant }}
+                                                </p>
                                                 <div class="mt-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
                                                     <p class="text-xs sm:text-sm 2xl:text-base font-medium text-gray-700">
-                                                        Seller: <span class="font-bold">Janromil Dela Cruz</span>
+                                                    Seller: <span class="font-bold">{{ purchase.farmer_name }}</span>
                                                     </p>
                                                     <div class="flex items-center gap-2 sm:gap-3">
-                                                        <h1 class="text-xs sm:text-sm 2xl:text-base">Order Total:</h1>
-                                                        <p class="text-xs sm:text-sm 2xl:text-lg font-semibold text-green-700">₱820</p>
+                                                        <h1 class="text-xs sm:text-sm 2xl:text-base">Quantity:</h1>
+                                                        <p class="text-xs sm:text-sm 2xl:text-lg font-semibold text-green-700">
+                                                        {{ purchase.quantity }}
+                                                    </p>
+                                                    <h1 class="text-xs sm:text-sm 2xl:text-base">Order Total:</h1>
+                                                    <p class="text-xs sm:text-sm 2xl:text-lg font-semibold text-green-700">
+                                                        ₱{{ purchase.total_price }}
+                                                    </p>
                                                     </div>
+                                                </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -393,26 +410,45 @@
                                 <!--To Ship-->
                                 <div v-else-if="currentTab === 'To Ship'">
                                     <div class="mt-4 bg-green-100 border border-green-300 rounded-lg p-4">
-                                        <div class="flex flex-wrap md:flex-nowrap items-center">
-                                            <!-- Image -->
-                                            <img src="https://via.placeholder.com/80" alt="Product Image"
-                                                class="w-16 h-16 sm:w-20 sm:h-20 2xl:w-24 2xl:h-24 rounded object-cover border" />
+                                    <!-- Scrollable Container -->
+                                        <div class="max-h-96 overflow-y-auto pr-2">
+                                            <div
+                                                v-for="purchase in purchaseList"
+                                                :key="purchase.id"
+                                                class="flex flex-wrap md:flex-nowrap items-center mb-4"
+                                            >
+                                                <!-- Image -->
+                                                <img
+                                                :src="purchase.product_images[0] || 'https://via.placeholder.com/80'"
+                                                alt="Product Image"
+                                                class="w-16 h-16 sm:w-20 sm:h-20 2xl:w-24 2xl:h-24 rounded object-cover border"
+                                                />
 
-                                            <!-- Details -->
-                                            <div class="ml-3 sm:ml-4 flex-grow">
-                                                <h3 class="text-xs sm:text-sm 2xl:text-lg font-semibold">Salad package</h3>
-                                                <p class="text-[10px] sm:text-xs 2xl:text-sm text-gray-600">Variants: 500 Grams</p>
+                                                <!-- Details -->
+                                                <div class="ml-3 sm:ml-4 flex-grow">
+                                                <h3 class="text-xs sm:text-sm 2xl:text-lg font-semibold">{{ purchase.product_name }}</h3>
+                                                <p class="text-[10px] sm:text-xs 2xl:text-sm text-gray-600">
+                                                    Variants: {{ purchase.variant }}
+                                                </p>
                                                 <div class="mt-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
                                                     <p class="text-xs sm:text-sm 2xl:text-base font-medium text-gray-700">
-                                                        Seller: <span class="font-bold">Janromil Dela Cruz</span>
+                                                    Seller: <span class="font-bold">{{ purchase.farmer_name }}</span>
                                                     </p>
                                                     <div class="flex items-center gap-2 sm:gap-3">
-                                                        <h1 class="text-xs sm:text-sm 2xl:text-base">Order Total:</h1>
-                                                        <p class="text-xs sm:text-sm 2xl:text-lg font-semibold text-green-700">₱820</p>
+                                                        <h1 class="text-xs sm:text-sm 2xl:text-base">Quantity:</h1>
+                                                        <p class="text-xs sm:text-sm 2xl:text-lg font-semibold text-green-700">
+                                                        {{ purchase.quantity }}
+                                                    </p>
+                                                    <h1 class="text-xs sm:text-sm 2xl:text-base">Order Total:</h1>
+                                                    <p class="text-xs sm:text-sm 2xl:text-lg font-semibold text-green-700">
+                                                        ₱{{ purchase.total_price }}
+                                                    </p>
                                                     </div>
+                                                </div>
                                                 </div>
                                             </div>
                                         </div>
+
 
                                         <!-- Order Status -->
                                         <div class="mt-4">
@@ -506,23 +542,40 @@
                                 <!--To Receive-->
                                 <div v-else-if="currentTab === 'To Receive'">
                                     <div class="mt-4 bg-green-100 border border-green-300 rounded-lg p-4">
-                                        <div class="flex flex-wrap md:flex-nowrap items-center">
-                                            <!-- Image -->
-                                            <img src="https://via.placeholder.com/80" alt="Product Image"
-                                                class="w-16 h-16 sm:w-20 sm:h-20 2xl:w-24 2xl:h-24 rounded object-cover border" />
+                                        <div class="max-h-96 overflow-y-auto pr-2">
+                                            <div
+                                                v-for="purchase in purchaseList"
+                                                :key="purchase.id"
+                                                class="flex flex-wrap md:flex-nowrap items-center mb-4"
+                                            >
+                                                <!-- Image -->
+                                                <img
+                                                :src="purchase.product_images[0] || 'https://via.placeholder.com/80'"
+                                                alt="Product Image"
+                                                class="w-16 h-16 sm:w-20 sm:h-20 2xl:w-24 2xl:h-24 rounded object-cover border"
+                                                />
 
-                                            <!-- Details -->
-                                            <div class="ml-3 sm:ml-4 flex-grow">
-                                                <h3 class="text-xs sm:text-sm 2xl:text-lg font-semibold">Salad package</h3>
-                                                <p class="text-[10px] sm:text-xs 2xl:text-sm text-gray-600">Variants: 500 Grams</p>
+                                                <!-- Details -->
+                                                <div class="ml-3 sm:ml-4 flex-grow">
+                                                <h3 class="text-xs sm:text-sm 2xl:text-lg font-semibold">{{ purchase.product_name }}</h3>
+                                                <p class="text-[10px] sm:text-xs 2xl:text-sm text-gray-600">
+                                                    Variants: {{ purchase.variant }}
+                                                </p>
                                                 <div class="mt-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
                                                     <p class="text-xs sm:text-sm 2xl:text-base font-medium text-gray-700">
-                                                        Seller: <span class="font-bold">Janromil Dela Cruz</span>
+                                                    Seller: <span class="font-bold">{{ purchase.farmer_name }}</span>
                                                     </p>
                                                     <div class="flex items-center gap-2 sm:gap-3">
-                                                        <h1 class="text-xs sm:text-sm 2xl:text-base">Order Total:</h1>
-                                                        <p class="text-xs sm:text-sm 2xl:text-lg font-semibold text-green-700">₱820</p>
+                                                        <h1 class="text-xs sm:text-sm 2xl:text-base">Quantity:</h1>
+                                                        <p class="text-xs sm:text-sm 2xl:text-lg font-semibold text-green-700">
+                                                        {{ purchase.quantity }}
+                                                    </p>
+                                                    <h1 class="text-xs sm:text-sm 2xl:text-base">Order Total:</h1>
+                                                    <p class="text-xs sm:text-sm 2xl:text-lg font-semibold text-green-700">
+                                                        ₱{{ purchase.total_price }}
+                                                    </p>
                                                     </div>
+                                                </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -602,26 +655,44 @@
                                         </div>
                                     </div>
                                 </div>
+
                                 <!--Completed-->
                                 <div v-else-if="currentTab === 'Completed'">
                                     <div class="mt-4 bg-green-100 border border-green-300 rounded-lg p-4">
-                                        <div class="flex flex-wrap md:flex-nowrap items-center">
-                                            <!-- Image -->
-                                            <img src="https://via.placeholder.com/80" alt="Product Image"
-                                                class="w-16 h-16 sm:w-20 sm:h-20 2xl:w-24 2xl:h-24 rounded object-cover border" />
+                                        <div class="max-h-96 overflow-y-auto pr-2">
+                                            <div
+                                                v-for="purchase in purchaseList"
+                                                :key="purchase.id"
+                                                class="flex flex-wrap md:flex-nowrap items-center mb-4"
+                                            >
+                                                <!-- Image -->
+                                                <img
+                                                :src="purchase.product_images[0] || 'https://via.placeholder.com/80'"
+                                                alt="Product Image"
+                                                class="w-16 h-16 sm:w-20 sm:h-20 2xl:w-24 2xl:h-24 rounded object-cover border"
+                                                />
 
-                                            <!-- Details -->
-                                            <div class="ml-3 sm:ml-4 flex-grow">
-                                                <h3 class="text-xs sm:text-sm 2xl:text-lg font-semibold">Salad package</h3>
-                                                <p class="text-[10px] sm:text-xs 2xl:text-sm text-gray-600">Variants: 500 Grams</p>
+                                                <!-- Details -->
+                                                <div class="ml-3 sm:ml-4 flex-grow">
+                                                <h3 class="text-xs sm:text-sm 2xl:text-lg font-semibold">{{ purchase.product_name }}</h3>
+                                                <p class="text-[10px] sm:text-xs 2xl:text-sm text-gray-600">
+                                                    Variants: {{ purchase.variant }}
+                                                </p>
                                                 <div class="mt-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
                                                     <p class="text-xs sm:text-sm 2xl:text-base font-medium text-gray-700">
-                                                        Seller: <span class="font-bold">Janromil Dela Cruz</span>
+                                                    Seller: <span class="font-bold">{{ purchase.farmer_name }}</span>
                                                     </p>
                                                     <div class="flex items-center gap-2 sm:gap-3">
-                                                        <h1 class="text-xs sm:text-sm 2xl:text-base">Order Total:</h1>
-                                                        <p class="text-xs sm:text-sm 2xl:text-lg font-semibold text-green-700">₱820</p>
+                                                        <h1 class="text-xs sm:text-sm 2xl:text-base">Quantity:</h1>
+                                                        <p class="text-xs sm:text-sm 2xl:text-lg font-semibold text-green-700">
+                                                        {{ purchase.quantity }}
+                                                    </p>
+                                                    <h1 class="text-xs sm:text-sm 2xl:text-base">Order Total:</h1>
+                                                    <p class="text-xs sm:text-sm 2xl:text-lg font-semibold text-green-700">
+                                                        ₱{{ purchase.total_price }}
+                                                    </p>
                                                     </div>
+                                                </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -1113,6 +1184,7 @@ const activeTab = ref('My Profile'); // Default active tab
 const tabs = ref(['My Profile', 'My Purchase','Billing Address']); // List of tabs
 const consumerRaw  = computed(() => store.state.userData.data?.user || {})
 const addressList= computed(() => store.state.Consumer.address.data);
+const purchaseList= computed(() => store.state.Consumer.purchase.data);
 /******************************************************************
  FUNCTION FOR UPDATE PROFILE
 ******************************************************************/
@@ -1234,6 +1306,17 @@ const savePasswordChanges = async () => {
 
 /******************************************************************
  FUNCTION FOR GETTING ADDRESS
+******************************************************************/
+function getPurchase() {
+    store.dispatch('Consumer/getPurchase')
+}
+
+onMounted(() => {
+    getPurchase();
+})
+
+/******************************************************************
+ FUNCTION FOR GETTING PURCHASE
 ******************************************************************/
 function getAddressList() {
     store.dispatch('Consumer/getAddressList')
