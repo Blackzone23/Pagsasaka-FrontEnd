@@ -318,69 +318,66 @@
 
                 <!-- Table Section -->
                 <div class="w-full overflow-x-auto">
-  <div class="h-full">
-    <div class="max-h-[500px] overflow-y-auto border rounded">
-      <table class="w-full table-auto">
-        <!-- Table Header -->
-        <thead class="bg-gray-200 sticky top-0 z-10 text-xs sm:text-sm">
-          <tr>
-            <th class="px-2 sm:px-4 py-2 sm:py-3 text-left bg-gray-200">Product</th>
-            <th class="px-2 sm:px-4 py-2 sm:py-3 text-start bg-gray-200">Description</th>
-            <th class="px-2 sm:px-4 py-2 sm:py-3 text-start bg-gray-200">Stocks</th>
-            <th class="px-2 sm:px-4 py-2 sm:py-3 text-start bg-gray-200">Price</th>
-            <th class="px-2 sm:px-4 py-2 sm:py-3 text-end bg-gray-200">Action</th>
-          </tr>
-        </thead>
+                <div class="h-full">
+                    <div class="max-h-[500px] overflow-y-auto border rounded">
+                        <table class="w-full table-auto">
+                            <!-- Table Header -->
+                            <thead class="bg-gray-200 sticky top-0 z-10 text-xs sm:text-sm">
+                            <tr>
+                                <th class="px-2 sm:px-4 py-2 sm:py-3 text-left bg-gray-200">Product</th>
+                                <th class="px-2 sm:px-4 py-2 sm:py-3 text-start bg-gray-200">Description</th>
+                                <th class="px-2 sm:px-4 py-2 sm:py-3 text-start bg-gray-200">Stocks</th>
+                                <th class="px-2 sm:px-4 py-2 sm:py-3 text-start bg-gray-200">Price</th>
+                                <th class="px-2 sm:px-4 py-2 sm:py-3 text-end bg-gray-200">Action</th>
+                            </tr>
+                            </thead>
 
-        <!-- Table Body -->
-        <tbody>
-          <tr
-            v-for="product in productList"
-            :key="product.id"
-            class="border-b hover:bg-gray-100 2xl:text-sm 2xs:text-xs"
-          >
-            <td class="p-1 sm:p-4 flex items-center space-x-2 gap-2">
-              <img :src="product.product_img[0]" class="w-8 h-8 sm:w-12 sm:h-12" />
-              <span class="hidden sm:table-cell">{{ product.product_name }}</span>
-            </td>
-            <td class="px-2 sm:px-2 py-2 text-start">{{ product.description }}</td>
-            <td class="px-2 sm:px-2 py-2 text-start">
-              {{ product.stocks }} {{ product.unit }}
-            </td>
-            <td class="px-2 sm:px-4 py-2 text-start">₱{{ product.price }}</td>
-            <td class="px-2 sm:px-4 py-2 flex items-center space-x-2 justify-end">
-              <!-- Edit Button -->
-              <button
-                class="text-blue-500 hover:text-blue-700"
-                @click="openUpdateProductModal(product.id)"
-              >
-                <Icon
-                  icon="lucide:pencil-line"
-                  width="1rem"
-                  height="1rem"
-                  class="sm:w-5 sm:h-5"
-                />
-              </button>
+                            <!-- Table Body -->
+                            <tbody>
+                            <tr
+                                v-for="product in productList"
+                                :key="product.id"
+                                class="border-b hover:bg-gray-100 2xl:text-sm 2xs:text-xs"
+                            >
+                                <td class="p-1 sm:p-4 flex items-center space-x-2 gap-2">
+                                <img :src="product.product_img[0]" class="w-8 h-8 sm:w-12 sm:h-12" />
+                                <span class="hidden sm:table-cell">{{ product.product_name }}</span>
+                                </td>
+                                <td class="px-2 sm:px-2 py-2 text-start">{{ product.description }}</td>
+                                <td class="px-2 sm:px-2 py-2 text-start">
+                                {{ product.stocks }} {{ product.unit }}
+                                </td>
+                                <td class="px-2 sm:px-4 py-2 text-start">₱{{ product.price }}</td>
+                                <td class="px-2 sm:px-4 py-2 flex items-center space-x-2 justify-end">
+                                <!-- Edit Button -->
+                                <button
+                                    class="text-blue-500 hover:text-blue-700"
+                                    @click="openUpdateProductModal(product.id)"
+                                >
+                                    <Icon
+                                    icon="lucide:pencil-line"
+                                    width="1rem"
+                                    height="1rem"
+                                    class="sm:w-5 sm:h-5"
+                                    />
+                                </button>
 
-              <!-- Delete Button -->
-              <button
-                class="text-red-500 hover:text-red-700"
-                @click="openDeleteProductModal(product.id)"
-              >
-                <Icon
-                  icon="octicon:trash-24"
-                  width="1rem"
-                  height="1rem"
-                  class="sm:w-5 sm:h-5"
-                />
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-</div>
+                                <!-- Delete Button -->
+                                <button class="text-red-500 hover:text-red-700" @click="openDeleteProductModal(product.id)">
+                                    <Icon
+                                    icon="octicon:trash-24"
+                                    width="1rem"
+                                    height="1rem"
+                                    class="sm:w-5 sm:h-5"
+                                    />
+                                </button>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
 
             </main>
             <!-- Pagination -->
