@@ -40,7 +40,7 @@
                     <div v-if="isLoggedIn" class="flex items-center space-x-2">
                         <a href="/profile" class="flex items-center space-x-2">
                             <img :src="userRaw.avatar" alt="User Profile" class="w-8 h-8 rounded-full cursor-pointer" />
-                            {{ userRaw.first_name }}  {{ userRaw.last_name }}
+                            <span> {{ userRaw.first_name }}  {{ userRaw.last_name }}</span>
                         </a>
                         <a href="#" class="hover:underline text-sm" @click.prevent="logout()">Logout</a>
                     </div>
@@ -76,7 +76,7 @@
                  <div v-if="isLoggedIn" class="flex flex-col space-y-3">
                         <a href="/profile" class="flex items-center space-x-2">
                             <img :src="userRaw.avatar" alt="User Profile" class="w-8 h-8 rounded-full cursor-pointer" />
-                            {{ userRaw.first_name }} {{ userRaw.last_name }}
+                            <span>{{ userRaw.first_name }} {{ userRaw.last_name }}</span>
                         </a>
                         <a href="#" class="hover:underline text-sm" @click.prevent="logout()">Logout</a>
                     </div>

@@ -22,7 +22,7 @@
 
                     <!-- OTP Input Fields (for 6 digits) -->
                     <div class="flex justify-center space-x-2">
-                        <BaseInputField v-model="otpdata.otp[0]" class="w-12 text-center" maxlength="1" />
+                        <BaseInputField v-model="otpdata.otp[0]" class="w-12 text-center" maxlength="1"  @paste="handlePaste"/>
                         <BaseInputField v-model="otpdata.otp[1]" class="w-12 text-center" maxlength="1" />
                         <BaseInputField v-model="otpdata.otp[2]" class="w-12 text-center" maxlength="1" />
                         <BaseInputField v-model="otpdata.otp[3]" class="w-12 text-center" maxlength="1" />
@@ -111,5 +111,15 @@ async function createOTP() {
   }
 }
 
+function handlePaste(event) {
+  const pastedData = (event.clipboardData || window.clipboardData).getData('text');
+  const digits = pastedData.replace(/\D/g, '').slice(0, 6); // Extract only up to 6 digits
+
+  digits.split('').forEach((digit, index) => {
+    otpdata.otp[index] = digit;
+  });
+
+  event.preventDefault(); // Prevent default paste behavior
+}
 
 </script>

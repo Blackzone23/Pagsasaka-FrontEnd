@@ -1,4 +1,27 @@
 export default {
+    // TOAST NOTIFICATIONS
+    showToast: (state, { showToast, toastMessage, toastType }) => {
+        state.toast.showToast = showToast;
+        state.toast.toastMessage = toastMessage;
+        state.toast.toastType = toastType;
+    },
+    
+    
+    // CHECKOUT STATE MANAGEMENT
+    SET_CHECKOUT_LOADING: (state, loading) => {
+        state.checkout.loading = loading;
+    },
+
+    SET_CHECKOUT_SUCCESS: (state, success) => {
+        state.checkout.success = success;
+        state.checkout.error = null;
+    },
+
+    SET_CHECKOUT_ERROR: (state, error) => {
+        state.checkout.error = error;
+        state.checkout.success = null;
+    },
+
     // ADVERTISE PRODUCT LIST
     setViewListData: (state, productItem) => {
         state.productItem.data = productItem;
@@ -24,21 +47,6 @@ export default {
         state.checkout.data = checkout;
     },
 
-    // CHECKOUT STATE MANAGEMENT
-    SET_CHECKOUT_LOADING: (state, loading) => {
-        state.checkout.loading = loading;
-    },
-
-    SET_CHECKOUT_SUCCESS: (state, success) => {
-        state.checkout.success = success;
-        state.checkout.error = null;
-    },
-
-    SET_CHECKOUT_ERROR: (state, error) => {
-        state.checkout.error = error;
-        state.checkout.success = null;
-    },
-
     // CONVERSATION AND MESSAGES
     setConversation: (state, conversation) => {
         state.conversation.data = conversation;
@@ -60,15 +68,16 @@ export default {
         state.purchase.data = purchase;
     },
 
-    setUpdateAddress: (state, updateAddress) => {
-        state.updateAddress.data = updateAddress;
+    setPurchaseShipList: (state, toShip) => {
+        state.toShip.data = toShip;
     },
 
-    // TOAST NOTIFICATIONS
-    showToast: (state, { showToast, toastMessage, toastType }) => {
-        state.toast.showToast = showToast;
-        state.toast.toastMessage = toastMessage;
-        state.toast.toastType = toastType;
+    setPurchaseReceiveList: (state, toReceive) => {
+        state.toReceive.data = toReceive;
+    },
+
+    setUpdateAddress: (state, updateAddress) => {
+        state.updateAddress.data = updateAddress;
     },
 
     setProductRatings(state, { productId, ratingsData }) {
@@ -77,5 +86,10 @@ export default {
             [productId]: ratingsData,
         };
     },
+    
+    setFarmerListInfo: (state, farmerInfo) => {
+        state.farmerInfo.data = farmerInfo;
+    },
+    
 
 };

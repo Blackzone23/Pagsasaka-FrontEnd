@@ -39,7 +39,19 @@ export default {
         data: [],
     },
 
+    toShip: {
+        data: [],
+    },
+
+    toReceive: {
+        data: [],
+    },
+
     updateAddress: {
+        data: [],
+    },
+
+    farmerInfo: {
         data: [],
     },
 

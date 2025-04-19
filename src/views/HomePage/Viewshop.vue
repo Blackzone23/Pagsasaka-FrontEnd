@@ -14,18 +14,13 @@
 
                 <!-- User Info -->
                 <div class="flex-1">
-                    <h2 class="text-lg font-semibold text-gray-800">Janromil Dela Cruz</h2>
-                    <p class="text-sm text-gray-600">Followers: <span class="font-medium">123</span></p>
-                    <p class="text-sm text-gray-600">Rating: <span class="font-medium">4.5 Stars</span></p>
+                    <!-- <h2 class="text-lg font-semibold text-gray-800">{{ farmerInfo.name }}</h2> -->
                 </div>
 
                 <!-- Buttons -->
                 <div class="flex flex-col gap-2">
                     <button class="px-4 py-2 bg-green-500 text-white text-sm font-medium rounded-lg hover:bg-green-600 transition-colors">
                         Chat Now
-                    </button>
-                    <button class="px-4 py-2 bg-white text-sm font-medium rounded-lg hover:bg-gray-300 transition-colors border border-gray-300">
-                        <span class="text-green-500">✔</span> Follow
                     </button>
                 </div>
             </div>
@@ -70,9 +65,9 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="border border-gray-300 flex flex-col rounded-lg p-4">
+                                        <!-- <div class="border border-gray-300 flex flex-col rounded-lg p-4">
                                             <BaseLabel class="font-bold">Product Type</BaseLabel>
-                                            <!-- Example Filters -->
+                                            
                                             <div class="mb-4 text-xs">
                                                 <label class="block mb-2">
                                                     <input type="checkbox" v-model="filters.all" @change="toggleAll" /> All
@@ -99,25 +94,25 @@
                                                     <input type="checkbox" v-model="filters.process" @change="selectCategory('process')" /> Processed
                                                 </label>
                                             </div>
-                                        </div>
+                                        </div> -->
                                     </div>
                                 </div>
                                 <!-- Main Content -->
                                 <div class="p-4 mt-12">
                                     <!-- Product Grid -->
                                     <div class="grid grid-cols-3 gap-4">
-                                        <div v-for="product in filteredProducts.slice(0, 6)" :key="product.id" class="border rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow">
-                                        <img :src="product.image" alt="Product Image" class="w-full h-40 object-cover" />
+                                        <div v-for="farmerInfo in viewList.slice(0, 6)" :key="farmerInfo.id" class="border rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow">
+                                        <img :src="farmerInfo.product_img" alt="Product Image" class="w-full h-40 object-cover" />
                                         <div class="p-2">
-                                            <h3 class="text-sm font-semibold">{{ product.title }}</h3>
-                                            <div class="text-red-500 font-bold text-sm">₱{{ product.price }}</div>
+                                            <h3 class="text-sm font-semibold">{{ farmerInfo.product_name }}</h3>
+                                            <div class="text-red-500 font-bold text-sm">₱{{ farmerInfo.price }}</div>
                                             <div class="flex justify-between items-center mt-2">
                                             <div v-if="product.rating" class="text-yellow-500 text-xs flex items-center">
-                                                <Icon v-for="star in 5" :key="star" :icon="star <= product.rating ? 'mdi:star' : 'mdi:star-outline'" class="mr-1"/>
+                                                <Icon v-for="star in 5" :key="star" :icon="star <= farmerInfo.rating ? 'mdi:star' : 'mdi:star-outline'" class="mr-1"/>
                                             </div>
                                             </div>
-                                            <div v-if="product.location" class="text-gray-600 text-xs mt-2">
-                                            📍 {{ product.location }}
+                                            <div v-if="farmerInfo.location" class="text-gray-600 text-xs mt-2">
+                                            📍 {{ farmerInfo.location }}
                                             </div>
                                         </div>
                                         </div>
@@ -175,90 +170,88 @@ import Market_NavBar from '@/components/Navbar/Market_NavBar.vue';
 import Footer from '@/components/Input-Fields/Footer.vue';
 import BaseLabel from '@/components/Input-Fields/BaseLabel.vue';
 import marketbg from '@/assets/marketbg.png';
-import { reactive, computed, ref } from 'vue';
+import { ref, computed, reactive, onMounted } from "vue";
 import { required, email, helpers } from '@vuelidate/validators';
 import { Icon } from '@iconify/vue';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 
+
+const store = useStore();
+const router = useRouter();
+
+const viewList = computed(() => store.state.Consumer.farmerInfo.data);
 const activeTab = ref('Store'); // Default active tab
 const tabs = ref(['Store', 'Profile']); // List of tabs
 
-const products = ref([
-  { id: 1, title: "50pcs Green Purple Seedless Grape Seeds....", price: 40, rating: 4, location: "Manila, Philippines", image: "https://i0.wp.com/www.tulipgardencentre.co.za/wp-content/uploads/2022/05/Catawba.jpg?fit=689%2C520&ssl=1", category: "Seed" },
-  { id: 2, title: "Blue Jasmine Rice 25kg", price: '1,679', rating: 4, location: "Manila, Philippines", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4QqALaS15k-h3RC1ExCa928HA1LD5ju4KLQ&s", category: "grains" },
-  { id: 3, title: "QUALITY LOAM SOIL / ORGANIC SOIL", price: 50, rating: 4, location: "Manila, Philippines", image: "https://down-ph.img.susercontent.com/file/58ab165cdd0a18de2a87b531db5431c6_tn", category: "soil" },
-  { id: 4, title: "Pechay Seeds | Vegetable Seeds | Golden Plant and Seed Store", price: 55, rating: 4, location: "Manila, Philippines", image: "https://down-ph.img.susercontent.com/file/3a2563d65cb3dc5b0356298a07216f6a", category: "Seed" },
-  { id: 5, title: "50pcs Green Purple Seedless Grape Seeds....", price: 46, rating: 4, location: "Manila, Philippines", image: "https://www.mtechgardens.com/cdn/shop/products/pv5AIs.jpg?v=1681897072", category: "fruit" },
-  { id: 6, title: "Blood Worm Pellets", price: 125, rating: 4, location: "Manila, Philippines", image: "https://down-ph.img.susercontent.com/file/ph-11134207-7qul4-ljv0kx1q45n342", category: "pelletes" },
-  { id: 7, title: "Basket of Apple", price: 200, rating: 4, location: "Manila, Philippines", image: "https://s3.envato.com/files/163445038/01(Ikea_Byholma1(brown)apple).jpg", category: "fruits" },
-  { id: 8, title: "1kg of Onion", price: 130, rating: 4, location: "Manila, Philippines", image: "https://www.jiomart.com/images/product/original/590003515/onion-1-kg-product-images-o590003515-p590003515-0-202408070949.jpg?im=Resize=(1000,1000)", category: "vegetable" },
-  { id: 9, title: "1pack of Corn Seeds", price: 500, rating: 4, location: "Manila, Philippines", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSo2vJtt0yKG4igoevwRpcBcOKYnshOgeI2qA&s", category: "Seed" },
-  { id: 10, title: "Feeds for Pigs", price: 1000, rating: 4, location: "Manila, Philippines", image: "https://www.genmil.com.ph/wp-content/uploads/2021/06/KHPSPP.png", category: "pelletes" },
-  { id: 11, title: "Tomato", price: 50, rating: 4, location: "Manila, Philippines", image: "https://lh5.googleusercontent.com/proxy/r7LOPGxHIUWak00os0ZLV_3HtXKKuTSrV_wsWEQMVnFnQmNwhBHDhxFu100NEA3_g_FPm0J8RV9wqiTbzGuosuwv8Ibvzf_ijrsXA-O7E8jFr3NLYuwvH_LrdwyOBeN3zzhG23fLMsVoqf-6FyM9dpSIeFdoH_4", category: "vegetable" },
-  { id: 12, title: "Pics peanut butter", price: 800, rating: 4, location: "Manila, Philippines", image: "https://picspeanutbutter.nz/cdn/shop/files/Pic_sSmooth380g-Straight_1200x1200.jpg?v=1701380041", category: "process" },
-]);
+function getFarmerInfoList() {
+    store.dispatch('Consumer/getFarmerInfoList');
+}
 
-
-const filters = reactive({
-  all: true,
-  vegetable: false,
-  seed: false,
-  grains: false,
-  soil: false,
-  fruits: false,
-  pelletes: false,
-  process: false,
+onMounted(() => {
+    getFarmerInfoList();
 });
 
-const filteredProducts = computed(() => {
-  let filtered = products.value;
 
-  // Apply filters based on selected checkboxes
-  if (!filters.all) {
-    const activeFilters = Object.keys(filters).filter(key => filters[key] && key !== 'all');
-    if (activeFilters.length > 0) {
-      filtered = filtered.filter(product => activeFilters.includes(product.category));
-    }
-  }
+// const filters = reactive({
+//   all: true,
+//   vegetable: false,
+//   seed: false,
+//   grains: false,
+//   soil: false,
+//   fruits: false,
+//   pelletes: false,
+//   process: false,
+// });
 
-  return filtered.slice((currentPage.value - 1) * itemsPerPage, currentPage.value * itemsPerPage);
-});
+// const filteredProducts = computed(() => {
+//   let filtered = products.value;
 
-const currentPage = ref(1);
-const itemsPerPage = 6;
+//   // Apply filters based on selected checkboxes
+//   if (!filters.all) {
+//     const activeFilters = Object.keys(filters).filter(key => filters[key] && key !== 'all');
+//     if (activeFilters.length > 0) {
+//       filtered = filtered.filter(product => activeFilters.includes(product.category));
+//     }
+//   }
 
-const totalPages = computed(() => Math.ceil(filteredProducts.value.length / itemsPerPage));
+//   return filtered.slice((currentPage.value - 1) * itemsPerPage, currentPage.value * itemsPerPage);
+// });
 
-const nextPage = () => {
-  if (currentPage.value < totalPages.value) {
-    currentPage.value++;
-  }
-};
+// const currentPage = ref(1);
+// const itemsPerPage = 6;
 
-const prevPage = () => {
-  if (currentPage.value > 1) {
-    currentPage.value--;
-  }
-};
+// const totalPages = computed(() => Math.ceil(filteredProducts.value.length / itemsPerPage));
 
-const toggleAll = () => {
-  if (filters.all) {
-    Object.keys(filters).forEach(key => { filters[key] = true; });
-  } else {
-    Object.keys(filters).forEach(key => { filters[key] = false; });
-  }
-};
+// const nextPage = () => {
+//   if (currentPage.value < totalPages.value) {
+//     currentPage.value++;
+//   }
+// };
 
-const selectCategory = (category) => {
-  // Unselect all filters except the selected category
-  Object.keys(filters).forEach(key => {
-    if (key !== category && key !== 'all') {
-      filters[key] = false;
-    }
-  });
+// const prevPage = () => {
+//   if (currentPage.value > 1) {
+//     currentPage.value--;
+//   }
+// };
 
-  // Ensure 'all' is unchecked when a specific filter is selected
-  filters.all = false;
-};
+// const toggleAll = () => {
+//   if (filters.all) {
+//     Object.keys(filters).forEach(key => { filters[key] = true; });
+//   } else {
+//     Object.keys(filters).forEach(key => { filters[key] = false; });
+//   }
+// };
+
+// const selectCategory = (category) => {
+//   // Unselect all filters except the selected category
+//   Object.keys(filters).forEach(key => {
+//     if (key !== category && key !== 'all') {
+//       filters[key] = false;
+//     }
+//   });
+
+//   // Ensure 'all' is unchecked when a specific filter is selected
+//   filters.all = false;
+// };
 </script>

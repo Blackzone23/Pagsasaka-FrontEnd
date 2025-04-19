@@ -458,6 +458,27 @@ API FOR MY PURCHASE
         })
     },
 
+    async getPurchaseShip({commit}) {
+        return await axiosClient.get('toship-orders')
+        .then((response) => {
+            commit('setPurchaseShipList', response.data.waiting_courrier);
+            return response.data.waiting_courrier;
+        })
+        .catch((error) => {
+            commit('toggleLoader', false, { root: true })
+            if(error.response && error.response.data) {
+                const errorMessage = error.response.data.message;
+                setTimeout(() => {
+                    commit('showToast', { showToast: true, toastMessage: errorMessage, toastType: 'error'}, { root: true });
+                }, toastDelay);
+
+                setTimeout(() => {
+                    commit('showToast', { showToast: false, toastMessage: '', toastType: 'default'}, { root: true });
+                }, toastDuration);
+            }   
+        })
+    },
+
 
     /******************************************************************
      API FOR MESSAGE
@@ -768,10 +789,7 @@ API FOR MY PURCHASE
 /******************************************************************
 API FOR Ratings
 ******************************************************************/
-    // In your Vuex store (e.g., actions.js)
-    // ... existing actions
-
-    // ... other actions
+    // get rating list
     async getRating({ commit }, productId) {
         try {
             const response = await axiosClient.get(`products/${productId}/ratings`);
@@ -782,25 +800,17 @@ API FOR Ratings
             if (error.response && error.response.data) {
                 const errorMessage = error.response.data.message || 'Failed to fetch ratings';
                 setTimeout(() => {
-                    commit('showToast', {
-                        showToast: true,
-                        toastMessage: errorMessage,
-                        toastType: 'error',
-                    }, { root: true });
+                    commit('showToast', { showToast: true, toastMessage: errorMessage,  toastType: 'error', }, { root: true });
                 }, 500);
                 setTimeout(() => {
-                    commit('showToast', {
-                        showToast: false,
-                        toastMessage: '',
-                        toastType: 'default',
-                    }, { root: true });
+                    commit('showToast', { showToast: false, toastMessage: '', toastType: 'default', }, { root: true });
                 }, 3000);
             }
             throw error;
         }
     },
 
-
+    //get product ratings
     async getProductRatings({ commit }, productId) {
         try {
             const response = await axiosClient.get(`products/${productId}/ratings`);
@@ -811,24 +821,17 @@ API FOR Ratings
             if (error.response && error.response.data) {
                 const errorMessage = error.response.data.message || 'Failed to fetch ratings';
                 setTimeout(() => {
-                    commit('showToast', {
-                        showToast: true,
-                        toastMessage: errorMessage,
-                        toastType: 'error',
-                    }, { root: true });
+                    commit('showToast', { showToast: true, toastMessage: errorMessage, toastType: 'error', }, { root: true });
                 }, 500);
                 setTimeout(() => {
-                    commit('showToast', {
-                        showToast: false,
-                        toastMessage: '',
-                        toastType: 'default',
-                    }, { root: true });
+                    commit('showToast', {  showToast: false, toastMessage: '', toastType: 'default',}, { root: true });
                 }, 3000);
             }
             throw error;
         }
     },
 
+    //create comment
     async createComment({ commit }, payload) {
         try {
             const response = await axiosClient.post(`products/${payload.product_id}/ratings`, {
@@ -836,30 +839,104 @@ API FOR Ratings
                 comment: payload.comment,
             });
             commit('toggleLoader', false, { root: true });
-            commit('showToast', {
-                showToast: true,
-                toastMessage: 'Comment added successfully!',
-                toastType: 'success',
+            commit('showToast', { showToast: true, toastMessage: 'Comment added successfully!', toastType: 'success',
             }, { root: true });
             setTimeout(() => {
-                commit('showToast', {
-                    showToast: false,
-                    toastMessage: '',
-                    toastType: 'default',
+                commit('showToast', { showToast: false, toastMessage: '', toastType: 'default',
                 }, { root: true });
             }, 3000);
             return response.data;
         } catch (error) {
             commit('toggleLoader', false, { root: true });
             const errorMessage = error.response?.data?.message || 'Failed to add comment';
-            commit('showToast', {
-                showToast: true,
-                toastMessage: errorMessage,
-                toastType: 'error',
-            }, { root: true });
+            commit('showToast', { showToast: true, toastMessage: errorMessage, toastType: 'error', }, { root: true });
             throw error;
         }
-    }
-    
+    },
+/******************************************************************
+API FOR UPLOADING PROFILE
+******************************************************************/
+    async addImage({commit}, imageData) {
+        commit('toggleLoader', true, { root: true })
+        return await axiosClient.post('avatar', imageData)
+        .then((response) => {
+            commit('toggleLoader', false, { root: true })
+            setTimeout(() => {
+                commit('showToast', { showToast: true, toastMessage: response.data.message, toastType: 'success'}, { root: true });
+            }, toastDelay);
+
+            setTimeout(() => {
+                commit('showToast', { showToast: false, toastMessage: '', toastType: 'default'}, { root: true });
+            }, toastDuration);
+
+            return response.data;
+        })
+        .catch((error) => {
+            commit('toggleLoader', false, { root: true })
+            if(error.response && error.response.data) {
+                const errorMessage = error.response.data.message;
+                setTimeout(() => {
+                    commit('showToast', { showToast: true, toastMessage: errorMessage, toastType: 'error'}, { root: true });
+                }, toastDelay);
+
+                setTimeout(() => {
+                    commit('showToast', { showToast: false, toastMessage: '', toastType: 'default'}, { root: true });
+                }, toastDuration);
+            }   
+        })
+    },
+
+    async getFarmerInfoList({commit}, productId) {
+        commit('toggleLoader', true, { root: true })
+        return await axiosClient.post(`product/shop/${productId}`, productId)
+        .then((response) => {
+            commit('toggleLoader', false, { root: true });
+            commit('setFarmerListInfo', response.data.seller.products);
+            setTimeout(() => {
+                commit('showToast', { showToast: true, toastMessage: response.data.message, toastType: 'success'}, { root: true });
+            }, toastDelay);
+
+            setTimeout(() => {
+                commit('showToast', { showToast: false, toastMessage: '', toastType: 'default'}, { root: true });
+            }, toastDuration);
+
+            return response.data;
+        })
+        .catch((error) => {
+            commit('toggleLoader', false, { root: true })
+            if(error.response && error.response.data) {
+                const errorMessage = error.response.data.message;
+                setTimeout(() => {
+                    commit('showToast', { showToast: true, toastMessage: errorMessage, toastType: 'error'}, { root: true });
+                }, toastDelay);
+
+                setTimeout(() => {
+                    commit('showToast', { showToast: false, toastMessage: '', toastType: 'default'}, { root: true });
+                }, toastDuration);
+            }   
+        })
+    },
+
+    // async getFarmerInfoList({commit}) {
+    //     return await axiosClient.post('product/account')
+    //     .then((response) => {
+    //         commit('setFarmerInfo', response.data.products);
+    //         return response.data.products;
+    //     })
+    //     .catch((error) => {
+    //         commit('toggleLoader', false, { root: true })
+    //         if(error.response && error.response.data) {
+    //             const errorMessage = error.response.data.message;
+    //             setTimeout(() => {
+    //                 commit('showToast', { showToast: true, toastMessage: errorMessage, toastType: 'error'}, { root: true });
+    //             }, toastDelay);
+
+    //             setTimeout(() => {
+    //                 commit('showToast', { showToast: false, toastMessage: '', toastType: 'default'}, { root: true });
+    //             }, toastDuration);
+    //         }   
+    //     })
+    // },
+
 
 }

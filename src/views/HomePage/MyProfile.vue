@@ -7,14 +7,24 @@
         <div class="p-10 w-full h-full">
             <BaseLabel class="text-4xl font-bold">My Profile</BaseLabel>
             <div class="flex items-center space-x-10">
-                <!-- Profile Image -->
-                <img :src="consumerRaw.avatar" alt="Profile" class="w-32 h-32 rounded-full object-cover border-4 border-white shadow-md"/>
+                <!-- Profile Image Upload -->
+                <label class="cursor-pointer relative">
+                    <input type="file" accept="image/*" class="hidden" @change="handleImageUpload"/>
+                    <img :src="imageData.avatar" alt="Profile" class="w-32 h-32 rounded-full object-cover border-4 border-white shadow-md hover:opacity-80 transition duration-200"/>
+                    <!-- Optional overlay icon -->
+                    <div class="absolute bottom-0 right-0 bg-white p-1 rounded-full shadow">
+                        <Icon icon="ic:twotone-plus" width="24" height="24"  style="color: #9faba4" />
+                    </div>
+                </label>
 
                 <!-- User Name -->
                 <div>
-                    <BaseLabel class="text-xl font-semibold text-gray-800">{{consumerRaw.first_name}} {{consumerRaw.middle_name}} {{consumerRaw.last_name}}</BaseLabel>
+                    <BaseLabel class="text-xl font-semibold text-gray-800">
+                        {{ consumerRaw.first_name }} {{ consumerRaw.middle_name }} {{ consumerRaw.last_name }}
+                    </BaseLabel>
                 </div>
             </div>
+
             <div class="w-full mt-8">
                 <!-- Tabs Buttons -->
                 <div class="overflow-x-auto whitespace-nowrap border-b border-gray-300">
@@ -33,114 +43,8 @@
 
                 <!-- Tab Content -->
                 <div class="mt-4">
-                    <!--My Profile-->
-                    <div v-if="activeTab === 'My Profile'" class="tab-content p-4">
-                        <div class="flex flex-col md:flex-row justify-start space-y-4 md:space-y-0 md:space-x-6">
-                            <!-- Left Side: Profile Info -->
-                           <div class="flex flex-col">
-                                <BaseLabel class="font-semibold" >Name:</BaseLabel>
-                                <span class="text-black text-sm">{{consumerRaw.first_name}} {{consumerRaw.middle_name}} {{consumerRaw.last_name}}</span>
-                                <BaseLabel class="font-semibold" >Phone Number:</BaseLabel>
-                                <span class="text-black text-sm">{{consumerRaw.phone_number}}</span>
-                                <BaseLabel class="font-semibold">Email Address:</BaseLabel>
-                                <span class="text-black text-sm">{{consumerRaw.email}}</span>
-                                <BaseLabel class="font-semibold">Home Address:</BaseLabel>
-                                <span class="text-black text-sm">{{consumerRaw.delivery_address}}</span>
-                           </div>
-                        </div>
-                        
-                          <!-- Edit Modal -->
-                        <div v-if="ishowProfileModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-                            <div class="bg-white rounded-xl p-6 w-full max-w-md max-h-[80vh] overflow-y-auto shadow-lg">
-                                <h2 class="text-lg font-semibold mb-4">Edit Consumer Info</h2>
-
-                                <div class="space-y-3">
-                                    <div>
-                                    <BaseLabel>First Name</BaseLabel>
-                                    <BaseInputField v-model="consumerData.first_name" type="text" class="w-full" />
-                                    </div>
-
-                                    <div>
-                                    <BaseLabel>Middle Name</BaseLabel>
-                                    <BaseInputField v-model="consumerData.middle_name" type="text" class="w-full" />
-                                    </div>
-
-                                    <div>
-                                    <BaseLabel>Last Name</BaseLabel>
-                                    <BaseInputField v-model="consumerData.last_name" type="text" class="w-full" />
-                                    </div>
-
-                                    <div>
-                                    <BaseLabel>Phone Number</BaseLabel>
-                                    <BaseInputField v-model="consumerData.phone_number" type="text" class="w-full" />
-                                    </div>
-
-                                    <div>
-                                    <BaseLabel>Email</BaseLabel>
-                                    <BaseInputField v-model="consumerData.email" type="email" class="w-full" />
-                                    </div>
-
-                                    <div>
-                                    <BaseLabel>Delivery Address</BaseLabel>
-                                    <BaseInputField v-model="consumerData.delivery_address" type="email" class="w-full" />
-                                    </div>
-
-                                    <div class="flex text-sm justify-end space-x-2 pt-2">
-                                    <button type="button" @click="closeProfileModal" class="rounded-full px-4 py-2 bg-gray-300 hover:bg-gray-400">
-                                        Cancel
-                                    </button>
-                                    <button @click="saveProfileChanges" class="rounded-full bg-[#608C54] py-2 px-6 w-32 md:w-28 hover:bg-gray-200 text-white">
-                                        Save
-                                    </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Change Password Modal -->
-                        <div v-if="ishowPasswordModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-                            <div class="bg-white rounded-xl p-6 w-full max-w-md max-h-[90vh] overflow-y-auto shadow-lg">
-                                <h2 class="text-lg font-semibold mb-4">Change Password</h2>
-
-                                <div class="space-y-3">
-
-                                    <div class="relative">
-                                    <BaseLabel class="font-semibold">*New Password</BaseLabel>
-                                    <BaseInputField v-model="passwordData.password" :type="showPassword ? 'text' : 'password'" placeholder="Enter Your Password" class="w-full" />
-                                    <button type="button" class="absolute right-3 2xl:top-10 lg:top-10 md:top-11  2xs:top-12 text-gray-500" @click="togglePasswordVisibility">
-                                        <Icon :icon="showPassword ? 'ic:twotone-visibility-off' : 'ic:twotone-visibility'" />
-                                    </button>
-                                    </div>
-
-                                    <div class="relative">
-                                    <BaseLabel class="font-semibold">*Re-enter Password</BaseLabel>
-                                    <BaseInputField v-model="passwordData.password_confirmation" :type="reshowPassword ? 'text' : 'password'" placeholder="Re-enter password" class="w-full" />
-                                    <button type="button" class="absolute right-3 2xl:top-10 lg:top-10 md:top-11 2xs:top-12 text-gray-500" @click="retogglePasswordVisibility">
-                                        <Icon :icon="reshowPassword ? 'ic:twotone-visibility-off' : 'ic:twotone-visibility'" />
-                                    </button>
-                                    </div>
-
-                                    <div class="flex justify-end space-x-2 pt-2">
-                                    <button type="button" @click="closePasswordModal" class="rounded-full px-4 py-2 bg-gray-300 hover:bg-gray-400">
-                                        Cancel
-                                    </button>
-                                    <button @click="savePasswordChanges" class="rounded-full bg-[#608C54] py-2 px-6 w-32 md:w-28 hover:bg-gray-200 text-white">
-                                        Save
-                                    </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="mt-4 flex flex-col md:flex-row justify-end gap-2 md:gap-4">
-                        <button class="bg-green-700 text-white px-8 py-2 rounded-full hover:bg-green-500 transition" @click="openProfileModal"> Edit</button>
-                        <button class="bg-green-700 text-white px-6 py-2 rounded-full hover:bg-green-500 transition" @click="openPasswordModal"> Change Password</button>
-                        </div>
-                    </div>
-
-
-                    <!--My Purchase-->
-                    <div v-if="activeTab === 'My Purchase'" class="tab-content">
+                               <!--My Purchase-->
+                               <div v-if="activeTab === 'My Purchase'" class="tab-content">
                           <!--chat-->
                         <div class="p-4">
                             <!-- Floating Chat Button -->
@@ -284,11 +188,11 @@
                                                 <div class="ml-3 sm:ml-4 flex-grow">
                                                 <h3 class="text-xs sm:text-sm 2xl:text-lg font-semibold">{{ purchase.product_name }}</h3>
                                                 <p class="text-[10px] sm:text-xs 2xl:text-sm text-gray-600">
-                                                    Variants: {{ purchase.variant }}
+                                                    Variants: {{ purchase.unit }}
                                                 </p>
                                                 <div class="mt-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
                                                     <p class="text-xs sm:text-sm 2xl:text-base font-medium text-gray-700">
-                                                    Seller: <span class="font-bold">{{ purchase.farmer_name }}</span>
+                                                    Seller: <span class="font-semibold">{{ purchase.farmer_name }}</span>
                                                     </p>
                                                     <div class="flex items-center gap-2 sm:gap-3">
                                                         <h1 class="text-xs sm:text-sm 2xl:text-base">Quantity:</h1>
@@ -297,7 +201,7 @@
                                                     </p>
                                                     <h1 class="text-xs sm:text-sm 2xl:text-base">Order Total:</h1>
                                                     <p class="text-xs sm:text-sm 2xl:text-lg font-semibold text-green-700">
-                                                        ₱{{ purchase.total_price }}
+                                                        ₱{{ purchase.total_amount }}
                                                     </p>
                                                     </div>
                                                 </div>
@@ -413,35 +317,35 @@
                                     <!-- Scrollable Container -->
                                         <div class="max-h-96 overflow-y-auto pr-2">
                                             <div
-                                                v-for="purchase in purchaseList"
-                                                :key="purchase.id"
+                                                v-for="toShip in toShipList"
+                                                :key="toShip.id"
                                                 class="flex flex-wrap md:flex-nowrap items-center mb-4"
                                             >
                                                 <!-- Image -->
                                                 <img
-                                                :src="purchase.product_images[0] || 'https://via.placeholder.com/80'"
+                                                :src="toShip.product_images[0] || 'https://via.placeholder.com/80'"
                                                 alt="Product Image"
                                                 class="w-16 h-16 sm:w-20 sm:h-20 2xl:w-24 2xl:h-24 rounded object-cover border"
                                                 />
 
                                                 <!-- Details -->
                                                 <div class="ml-3 sm:ml-4 flex-grow">
-                                                <h3 class="text-xs sm:text-sm 2xl:text-lg font-semibold">{{ purchase.product_name }}</h3>
+                                                <h3 class="text-xs sm:text-sm 2xl:text-lg font-semibold">{{ toShip.product_name }}</h3>
                                                 <p class="text-[10px] sm:text-xs 2xl:text-sm text-gray-600">
-                                                    Variants: {{ purchase.variant }}
+                                                    Variants: {{ toShip.unit }}
                                                 </p>
                                                 <div class="mt-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
                                                     <p class="text-xs sm:text-sm 2xl:text-base font-medium text-gray-700">
-                                                    Seller: <span class="font-bold">{{ purchase.farmer_name }}</span>
+                                                    Seller: <span class="font-bold">{{ toShip.farmer_name }}</span>
                                                     </p>
                                                     <div class="flex items-center gap-2 sm:gap-3">
                                                         <h1 class="text-xs sm:text-sm 2xl:text-base">Quantity:</h1>
                                                         <p class="text-xs sm:text-sm 2xl:text-lg font-semibold text-green-700">
-                                                        {{ purchase.quantity }}
+                                                        {{ toShip.quantity }}
                                                     </p>
                                                     <h1 class="text-xs sm:text-sm 2xl:text-base">Order Total:</h1>
                                                     <p class="text-xs sm:text-sm 2xl:text-lg font-semibold text-green-700">
-                                                        ₱{{ purchase.total_price }}
+                                                        ₱{{ toShip.total_price }}
                                                     </p>
                                                     </div>
                                                 </div>
@@ -559,7 +463,7 @@
                                                 <div class="ml-3 sm:ml-4 flex-grow">
                                                 <h3 class="text-xs sm:text-sm 2xl:text-lg font-semibold">{{ purchase.product_name }}</h3>
                                                 <p class="text-[10px] sm:text-xs 2xl:text-sm text-gray-600">
-                                                    Variants: {{ purchase.variant }}
+                                                    Variants: {{ purchase.unit }}
                                                 </p>
                                                 <div class="mt-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
                                                     <p class="text-xs sm:text-sm 2xl:text-base font-medium text-gray-700">
@@ -648,7 +552,7 @@
                                                 <div class="w-full md:w-1/3 p-4 bg-green-100 rounded-lg flex flex-col items-center">
                                                     <img :src="imageUrl" alt="Product Image" class="rounded-lg mb-4 w-full" />
                                                     <h3 class="text-lg font-semibold">{{ product.name }}</h3>
-                                                    <p class="text-gray-600">Variants: {{ product.variant }}</p>
+                                                    <p class="text-gray-600">Variants: {{ product.unit }}</p>
                                                     <p class="text-lg font-bold mt-2">Qty {{ product.quantity }}</p>
                                                 </div>
                                             </div>
@@ -676,7 +580,7 @@
                                                 <div class="ml-3 sm:ml-4 flex-grow">
                                                 <h3 class="text-xs sm:text-sm 2xl:text-lg font-semibold">{{ purchase.product_name }}</h3>
                                                 <p class="text-[10px] sm:text-xs 2xl:text-sm text-gray-600">
-                                                    Variants: {{ purchase.variant }}
+                                                    Variants: {{ purchase.unit }}
                                                 </p>
                                                 <div class="mt-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
                                                     <p class="text-xs sm:text-sm 2xl:text-base font-medium text-gray-700">
@@ -970,69 +874,107 @@
                         </div>
                     </div>
 
-                    <!--Addresses-->
-                    <div v-if="activeTab === 'Billing Address'" class="tab-content">
-                        <div>
-                            <!-- Add New Address Button -->
-                            <button type="button" class="flex items-center justify-center text-white rounded-md bg-[#608C54] py-2 w-52 hover:bg-gray-700 gap-2" @click="openAddressModal" >
-                                <Icon icon="lets-icons:add-duotone" width="24" height="24"  style="color: #fefffe" />Add new address
-                            </button>
+                    <!--My Profile-->
+                    <div v-if="activeTab === 'My Profile'" class="tab-content p-4">
+                        <div class="flex flex-col md:flex-row justify-start space-y-4 md:space-y-0 md:space-x-6">
+                            <!-- Left Side: Profile Info -->
+                           <div class="flex flex-col">
+                                <BaseLabel class="font-semibold" >Name:</BaseLabel>
+                                <span class="text-black text-sm">{{consumerRaw.first_name}} {{consumerRaw.middle_name}} {{consumerRaw.last_name}}</span>
+                                <BaseLabel class="font-semibold" >E-Wallet Number:</BaseLabel>
+                                <span class="text-black text-sm">{{consumerRaw.phone_number}}</span>
+                                <BaseLabel class="font-semibold">Email Address:</BaseLabel>
+                                <span class="text-black text-sm">{{consumerRaw.email}}</span>
+                           </div>
+                        </div>
+                        
+                          <!-- Edit Modal -->
+                        <div v-if="ishowProfileModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+                            <div class="bg-white rounded-xl p-6 w-full max-w-md max-h-[80vh] overflow-y-auto shadow-lg">
+                                <h2 class="text-lg font-semibold mb-4">Edit Consumer Info</h2>
 
-                            <!--Add Modal -->
-                            <div v-if="isAddAddressModalOpen" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-                                <div class="bg-white rounded-lg shadow-lg max-w-lg w-full p-6">
-                                    <!-- Modal Header -->
-                                    <div class="flex justify-between items-center mb-4">
-                                    <h3 class="text-xl font-semibold">Add Address</h3>
-                                    <button @click="closeAddressModal" class="text-gray-400 hover:text-gray-600">
-                                        <Icon icon="icon-park-solid:close-one" width="20" height="20" />
-                                    </button>
+                                <div class="space-y-3">
+                                    <div>
+                                    <BaseLabel>First Name</BaseLabel>
+                                    <BaseInputField v-model="consumerData.first_name" type="text" class="w-full" />
                                     </div>
 
-                                    <!-- Modal Content -->
-                                            <div class="mb-4">
-                                                <BaseLabel>Address:</BaseLabel>
-                                                <BaseInputField v-model="addressData.address_line1" />
-                                                <BaseError v-if="$validateAddressRules.address_line1.$error">{{ $validateAddressRules.address_line1.$errors[0].$message }}</BaseError>
-                                            </div>
+                                    <div>
+                                    <BaseLabel>Middle Name</BaseLabel>
+                                    <BaseInputField v-model="consumerData.middle_name" type="text" class="w-full" />
+                                    </div>
 
-                                            <div class="mb-4">
-                                                <BaseLabel>Additional Address Info(optional):</BaseLabel>
-                                                <BaseInputField v-model="addressData.address_line2" />
-                                            </div>
+                                    <div>
+                                    <BaseLabel>Last Name</BaseLabel>
+                                    <BaseInputField v-model="consumerData.last_name" type="text" class="w-full" />
+                                    </div>
 
-                                            <div class="mb-4">
-                                                <BaseLabel>City:</BaseLabel>
-                                                <BaseInputField v-model="addressData.city" />
-                                                <BaseError v-if="$validateAddressRules.city.$error">{{ $validateAddressRules.city.$errors[0].$message }}</BaseError>
-                                            </div>
+                                    <div>
+                                    <BaseLabel>E-Wallet Number</BaseLabel>
+                                    <BaseInputField v-model="consumerData.phone_number" type="text" class="w-full" />
+                                    </div>
 
-                                            <div class="mb-4">
-                                                <BaseLabel>Province:</BaseLabel>
-                                                <BaseInputField v-model="addressData.province" />
-                                                <BaseError v-if="$validateAddressRules.province.$error">{{ $validateAddressRules.province.$errors[0].$message }}</BaseError>
-                                            </div>
+                                    <div>
+                                    <BaseLabel>Email</BaseLabel>
+                                    <BaseInputField v-model="consumerData.email" type="email" class="w-full" />
+                                    </div>
 
-                                            <div class="mb-4">
-                                                <BaseLabel>Country:</BaseLabel>
-                                                <BaseInputField v-model="addressData.country" />
-                                                <BaseError v-if="$validateAddressRules.country.$error">{{ $validateAddressRules.country.$errors[0].$message }}</BaseError>
-                                            </div>
-
-                                            <div class="mb-4">
-                                                <BaseLabel>Postal code:</BaseLabel>
-                                                <BaseInputField v-model="addressData.postal_code" />
-                                                <BaseError v-if="$validateAddressRules.postal_code.$error">{{ $validateAddressRules.postal_code.$errors[0].$message }}</BaseError>
-                                            </div>
-
-                                        <!-- Save Button -->
-                                        <div class="flex justify-end space-x-2">
-                                            <button type="button" class="px-4 py-2 bg-gray-200 rounded-md text-gray-700 hover:bg-gray-300" @click="closeAddressModal" >Cancel </button>
-                                            <button @click="createAddress" class="px-6 py-2 bg-[#608C54] text-white rounded-md hover:bg-[#4e7143] ">Save</button>
-                                        </div>
+                                    <div class="flex text-sm justify-end space-x-2 pt-2">
+                                    <button type="button" @click="closeProfileModal" class="rounded-full px-4 py-2 bg-gray-300 hover:bg-gray-400">
+                                        Cancel
+                                    </button>
+                                    <button @click="saveProfileChanges" class="rounded-full bg-[#608C54] py-2 px-6 w-32 md:w-28 hover:bg-gray-200 text-white">
+                                        Save
+                                    </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
+
+                        <!-- Change Password Modal -->
+                        <div v-if="ishowPasswordModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+                            <div class="bg-white rounded-xl p-6 w-full max-w-md max-h-[90vh] overflow-y-auto shadow-lg">
+                                <h2 class="text-lg font-semibold mb-4">Change Password</h2>
+
+                                <div class="space-y-3">
+
+                                    <div class="relative">
+                                    <BaseLabel class="font-semibold">*New Password</BaseLabel>
+                                    <BaseInputField v-model="passwordData.password" :type="showPassword ? 'text' : 'password'" placeholder="Enter Your Password" class="w-full" />
+                                    <button type="button" class="absolute right-3 2xl:top-10 lg:top-10 md:top-11  2xs:top-12 text-gray-500" @click="togglePasswordVisibility">
+                                        <Icon :icon="showPassword ? 'ic:twotone-visibility-off' : 'ic:twotone-visibility'" />
+                                    </button>
+                                    </div>
+
+                                    <div class="relative">
+                                    <BaseLabel class="font-semibold">*Re-enter Password</BaseLabel>
+                                    <BaseInputField v-model="passwordData.password_confirmation" :type="reshowPassword ? 'text' : 'password'" placeholder="Re-enter password" class="w-full" />
+                                    <button type="button" class="absolute right-3 2xl:top-10 lg:top-10 md:top-11 2xs:top-12 text-gray-500" @click="retogglePasswordVisibility">
+                                        <Icon :icon="reshowPassword ? 'ic:twotone-visibility-off' : 'ic:twotone-visibility'" />
+                                    </button>
+                                    </div>
+
+                                    <div class="flex justify-end space-x-2 pt-2">
+                                    <button type="button" @click="closePasswordModal" class="rounded-full px-4 py-2 bg-gray-300 hover:bg-gray-400">
+                                        Cancel
+                                    </button>
+                                    <button @click="savePasswordChanges" class="rounded-full bg-[#608C54] py-2 px-6 w-32 md:w-28 hover:bg-gray-200 text-white">
+                                        Save
+                                    </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-4 flex flex-col md:flex-row justify-end gap-2 md:gap-4">
+                        <button class="bg-green-700 text-white px-8 py-2 rounded-full hover:bg-green-500 transition" @click="openProfileModal"> Edit</button>
+                        <button class="bg-green-700 text-white px-6 py-2 rounded-full hover:bg-green-500 transition" @click="openPasswordModal"> Change Password</button>
+                        </div>
+                    </div>        
+
+                    <!--Addresses-->
+                    <div v-if="activeTab === 'Billing Address'" class="tab-content">
+                        
                         <div>
                             <!--Update Modal -->
                             <div v-if="isUpdateAddressModalOpen" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
@@ -1048,37 +990,13 @@
                                     <!-- Modal Content -->
                                         <div class="mb-4">
                                             <BaseLabel>Address:</BaseLabel>
-                                            <BaseInputField v-model="updateaddress.address_line1" />
-                                            <BaseError v-if="$validateUpdateAddressRules.address_line1.$error">{{ $validateUpdateAddressRules.address_line1.$errors[0].$message }}</BaseError>
+                                            <BaseInputField v-model="updateaddress.delivery_address" />
+                                            <BaseError v-if="$validateUpdateAddressRules.delivery_address.$error">{{ $validateUpdateAddressRules.delivery_address.$errors[0].$message }}</BaseError>
                                         </div>
 
                                         <div class="mb-4">
                                             <BaseLabel>Additional Address Info(optional):</BaseLabel>
-                                            <BaseInputField v-model="updateaddress.address_line2" />
-                                        </div>
-
-                                        <div class="mb-4">
-                                            <BaseLabel>City:</BaseLabel>
-                                            <BaseInputField v-model="updateaddress.city" />
-                                            <BaseError v-if="$validateUpdateAddressRules.city.$error">{{ $validateUpdateAddressRules.city.$errors[0].$message }}</BaseError>
-                                        </div>
-
-                                        <div class="mb-4">
-                                            <BaseLabel>Province:</BaseLabel>
-                                            <BaseInputField v-model="updateaddress.province" />
-                                            <BaseError v-if="$validateUpdateAddressRules.province.$error">{{ $validateUpdateAddressRules.province.$errors[0].$message }}</BaseError>
-                                        </div>
-
-                                        <div class="mb-4">
-                                            <BaseLabel>Country:</BaseLabel>
-                                            <BaseInputField v-model="updateaddress.country" />
-                                            <BaseError v-if="$validateUpdateAddressRules.country.$error">{{ $validateUpdateAddressRules.country.$errors[0].$message }}</BaseError>
-                                        </div>
-
-                                        <div class="mb-4">
-                                            <BaseLabel>Postal code:</BaseLabel>
-                                            <BaseInputField v-model="updateaddress.postal_code" />
-                                            <BaseError v-if="$validateUpdateAddressRules.postal_code.$error">{{ $validateUpdateAddressRules.postal_code.$errors[0].$message }}</BaseError>
+                                            <BaseInputField v-model="updateaddress.address_info" />
                                         </div>
 
                                         <!-- Save Button -->
@@ -1090,61 +1008,21 @@
                             </div>
                         </div>
                         <!-- Save Address-->
-                        <div class="mt-6 space-y-4">
+                        <div class="mt-3 space-y-4">
                             <h3 class="text-lg font-semibold">Saved Address</h3>
                             <ul>
-                                <li v-for="address in addressList" :key="address.id" class="border-b py-4">
+                                <li v-for="address in addressList" :key="address.id" class="border-b py-2">
                                 <p>
-                                    <span class="font-semibold text-[#608C54]">Name:</span> {{ address.first_name }} {{ address.middle_name }} {{ address.last_name }}
+                                    <span class="font-semibold text-[#608C54]">Address:</span> {{ address.delivery_address }}
                                 </p>
                                 <p>
-                                    <span class="font-semibold text-[#608C54]">Phone Number:</span> {{ address.phone_number }}
-                                </p>
-                                <p>
-                                    <span class="font-semibold text-[#608C54]">Address:</span> {{ address.address_line1 }}
-                                </p>
-                                <p>
-                                    <span class="font-semibold text-[#608C54]">Additional Address Info:</span> {{ address.address_line2 }}
-                                </p>
-                                <p>
-                                    <span class="font-semibold text-[#608C54]">City/Province/Country:</span> {{ address.city }} {{ address.province }} {{ address.country }}
-                                </p>
-                                <p>
-                                    <span class="font-semibold text-[#608C54]">Postal code:</span> {{ address.postal_code }}
+                                    <span class="font-semibold text-[#608C54]">Additional Address Info:</span> {{ address.address_info }}
                                 </p>
                                 <div class="flex space-x-2 mt-2 justify-end">
                                      <!-- Edit Button -->
                                      <button class="text-blue-500 hover:text-blue-700" @click="openUpdateAddressModal(address.id)">
                                         <Icon icon="bi:pencil-square" width="20" height="20"  style="color: #2543bf" />
                                     </button>
-
-                                    <!-- Delete Button -->
-                                    <button class="text-red-500 hover:text-red-700" @click="openDeleteAddressModal(address.id)">
-                                        <Icon icon="mi:delete" width="24" height="24"  style="color: #ed0f1c" />
-                                    </button>
-
-                                    <div v-if="isDeleteModalVisible" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-                                        <div class="bg-white p-6 rounded-lg shadow-lg w-96 text-center">
-                                            <div class="flex justify-center">
-                                                <Icon  icon="material-symbols:delete-outline"  width="50" height="50"  style="color: #ff0000" />
-                                            </div>
-                                            <!-- Message -->
-                                            <p class="text-sm text-gray-600 mt-4">Are you sure you want to delete this item? This action cannot be undone</p>
-
-                                            <!-- Buttons -->
-                                            <div class="flex gap-2 mt-4">
-                                            <!-- Cancel Button -->
-                                            <button class="bg-[#608C54] text-white px-14 py-2 rounded hover:bg-gray-400" @click="closeDeleteAddressModal">
-                                                Cancel
-                                            </button>
-
-                                            <!-- Confirm Button -->
-                                            <button  class="bg-red-500 text-white px-14 py-2 rounded hover:bg-red-600"  @click="deleteAddress">
-                                                Delete
-                                            </button>
-                                            </div>
-                                        </div>
-                                    </div>
                                 </div>
                                 </li>
                             </ul>
@@ -1180,11 +1058,14 @@ const store = useStore();
 const router = useRouter();
 
 const showLoading = computed(() => store.state.showLoading.state);
-const activeTab = ref('My Profile'); // Default active tab
-const tabs = ref(['My Profile', 'My Purchase','Billing Address']); // List of tabs
+const activeTab = ref('My Purchase'); // Default active tab
+const tabs = ref(['My Purchase', 'My Profile','Billing Address']); // List of tabs
 const consumerRaw  = computed(() => store.state.userData.data?.user || {})
 const addressList= computed(() => store.state.Consumer.address.data);
 const purchaseList= computed(() => store.state.Consumer.purchase.data);
+const toShipList= computed(() => store.state.Consumer.toShip.data);
+const toReceiveList= computed(() => store.state.Consumer.toReceive.data);
+
 /******************************************************************
  FUNCTION FOR UPDATE PROFILE
 ******************************************************************/
@@ -1194,7 +1075,6 @@ const consumerData = reactive({
   last_name: consumerRaw.value.last_name || '',
   email: consumerRaw.value.email || '',
   phone_number: consumerRaw.value.phone_number || '',
-  delivery_address: consumerRaw.value.delivery_address || '',
 
 });
 
@@ -1218,16 +1098,21 @@ const saveProfileChanges = async () => {
       middle_name: consumerData.middle_name,
       last_name: consumerData.last_name,
       phone_number: consumerData.phone_number,
-      delivery_address: consumerData.delivery_address,
       email: consumerData.email,
     });
+
+    // ✅ Update the reactive source
+    consumerRaw.value.first_name = consumerData.first_name;
+    consumerRaw.value.middle_name = consumerData.middle_name;
+    consumerRaw.value.last_name = consumerData.last_name;
+    consumerRaw.value.phone_number = consumerData.phone_number;
+    consumerRaw.value.email = consumerData.email;
 
     closeProfileModal();
 
   } catch (error) {
     if (error.response?.data?.errors) {
       const errors = error.response.data.errors;
-      // Display the first error message for general feedback
       const firstField = Object.keys(errors)[0];
       if (firstField) {
         alert(errors[firstField][0]);
@@ -1305,7 +1190,7 @@ const savePasswordChanges = async () => {
 };
 
 /******************************************************************
- FUNCTION FOR GETTING ADDRESS
+ FUNCTION FOR GETTING TO PAY
 ******************************************************************/
 function getPurchase() {
     store.dispatch('Consumer/getPurchase')
@@ -1313,6 +1198,17 @@ function getPurchase() {
 
 onMounted(() => {
     getPurchase();
+})
+
+/******************************************************************
+ FUNCTION FOR GETTING TO SHIP
+******************************************************************/
+function getPurchaseShip() {
+    store.dispatch('Consumer/getPurchaseShip')
+}
+
+onMounted(() => {
+    getPurchaseShip();
 })
 
 /******************************************************************
@@ -1327,87 +1223,15 @@ onMounted(() => {
 })
 
 
-/******************************************************************
- FUNCTION FOR ADDING ADDRESS
-******************************************************************/
-// Reactive states
-const addressData = reactive({
- address_line1:'',
- address_line2:'',
- city:'',
- province:'',
- country:'',
- postal_code:'',
-
-});
-
-const addressDataRules = computed(() => {
-  return {
-      address_line1: {
-          required: helpers.withMessage('Address is required', required)
-      },
-      city: {
-          required: helpers.withMessage('City is required', required)
-      },
-      province: {
-          required: helpers.withMessage('Province is required', required)
-      },
-      country: {
-          required: helpers.withMessage('Country is required', required)
-      },
-      postal_code: {
-          required: helpers.withMessage('Postal is required', required)
-      },
-  };
-});
-
-const $validateAddressRules = useVuelidate(addressDataRules, addressData);
-
-async function createAddress() {
-    const validationResult = await $validateAddressRules.value.$validate();
-    if (validationResult) {
-        const formData = new FormData();
-        formData.append('address_line1', addressData.address_line1);
-        formData.append('address_line2', addressData.address_line2);
-        formData.append('city', addressData.city);
-        formData.append('province', addressData.province);
-        formData.append('country', addressData.country);
-        formData.append('postal_code', addressData.postal_code);
-    
-
-        await store.dispatch("Consumer/createAddress", formData)
-        .then((response) => {
-            if (response.isSuccess == true) {
-                closeAddressModal();
-                getAddressList();
-            }
-        });
-    }
-}
-
-
-// Open the modal
-const isAddAddressModalOpen = ref(false);
-const openAddressModal = () => {
-  isAddAddressModalOpen.value = true;
-};
-
-// Close the modal
-const closeAddressModal = () => {
-  isAddAddressModalOpen.value = false;
-};
 
 /******************************************************************
  FUNCTION FOR UPDATE ADDRESS
 ******************************************************************/
 const updateaddress = reactive({
     id:'',
-    address_line1:'',
-    address_line2:'',
-    city:'',
-    province:'',
-    country:'',
-    postal_code:'',
+    delivery_address:'',
+    address_info:'',
+
 });
 const isUpdateAddressModalOpen = ref(false);
 
@@ -1416,12 +1240,9 @@ const openUpdateAddressModal = (id) => {
 
   if (selectedAddress) {
     updateaddress.id = selectedAddress.id;
-    updateaddress.address_line1 = selectedAddress.address_line1
-    updateaddress.address_line2 = selectedAddress.address_line2
-    updateaddress.city = selectedAddress.city
-    updateaddress.province = selectedAddress.province
-    updateaddress.country = selectedAddress.country
-    updateaddress.postal_code = selectedAddress.postal_code
+    updateaddress.delivery_address = selectedAddress.delivery_address
+    updateaddress.address_info = selectedAddress.address_info
+  
   
 
       // Open the modal
@@ -1433,21 +1254,10 @@ const openUpdateAddressModal = (id) => {
 // Validation rules
 const updateAddressRules = computed(() => {
     return {
-        address_line1: {
-          required: helpers.withMessage('Address is required', required)
+        delivery_address: {
+          required: helpers.withMessage('Delivery Address is required', required)
       },
-      city: {
-          required: helpers.withMessage('City is required', required)
-      },
-      province: {
-          required: helpers.withMessage('Province is required', required)
-      },
-      country: {
-          required: helpers.withMessage('Country is required', required)
-      },
-      postal_code: {
-          required: helpers.withMessage('Postal is required', required)
-      },
+    
   };
 });
 
@@ -1683,6 +1493,42 @@ const sendMessage = async () => {
         console.error('Failed to send message:', error);
     }
 };
+
+/******************************************************************
+ FUNCTION FOR UPLOADING IMAGE PROFILE
+******************************************************************/
+
+const imageData = reactive({
+  avatar: consumerRaw.value.avatar || '', // Initial avatar
+});
+
+const handleImageUpload = async (event) => {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const formData = new FormData();
+  formData.append('avatar', file);
+  formData.append('id', consumerRaw.value.id); // if your backend needs the user ID
+
+  try {
+    const response = await store.dispatch('Consumer/addImage', formData);
+
+    if (response && response.avatar) {
+      // Update the avatar locally
+      const newAvatarUrl = response.avatar;
+      imageData.avatar = newAvatarUrl;
+      consumerRaw.value.avatar =  consumerRaw.value.avatar;
+
+      // Optional: update sessionStorage and Vuex state
+      sessionStorage.setItem('userAvatar', newAvatarUrl);
+      store.commit('setAvatar', newAvatarUrl); // if you’re managing avatar in global state
+    }
+  } catch (error) {
+    console.error("Image upload failed:", error);
+    alert("Image upload failed. Please try again.");
+  }
+};
+
 
 </script>
 <style scoped>

@@ -31,6 +31,14 @@
                     <BaseLabel class="font-semibold">*Email Address</BaseLabel>
                     <BaseInputField v-model="signdata.email" placeholder="Enter email" />
                     <BaseError v-if="$validatesignuprules.email.$error">{{ $validatesignuprules.email.$errors[0].$message }}</BaseError>
+
+                    <BaseLabel class="font-semibold">*E-wallet Number</BaseLabel>
+                    <BaseInputField v-model="signdata.phone_number" placeholder="Enter email" />
+                    <BaseError v-if="$validatesignuprules.phone_number.$error">{{ $validatesignuprules.phone_number.$errors[0].$message }}</BaseError>
+
+                    <BaseLabel class="font-semibold">*Address</BaseLabel>
+                    <BaseInputField v-model="signdata.delivery_address" placeholder="Enter email" />
+                    <BaseError v-if="$validatesignuprules.delivery_address.$error">{{ $validatesignuprules.delivery_address.$errors[0].$message }}</BaseError>
                     
                     <!-- Password Fields -->
                     <div class="relative">
@@ -136,6 +144,8 @@ const signdata = reactive({
   password: '',
   password_confirmation: '',
   email: '',
+  phone_number: '',
+  delivery_address: '',
   role: '',
   security_question_id:'',
   security_answer:''
@@ -171,6 +181,12 @@ const signuprules = computed(() => {
       },
       email: {
           required: helpers.withMessage('Email Address is required', required),
+      },
+      phone_number: {
+          required: helpers.withMessage('E-Wallet Number is required', required),
+      },
+      delivery_address: {
+          required: helpers.withMessage('Delivery Address is required', required),
       },
       role: {
           required: helpers.withMessage('Role is required', required),

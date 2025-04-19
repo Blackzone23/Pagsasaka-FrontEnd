@@ -17,14 +17,22 @@ export default {
     setUserData: (state, userData) => {
          // Log to check if data is valid
         state.userData.data = userData;
-        state.userProfilePic = userData.profilePic || '';
+        state.avatar = userData.avatar || '';
     },
 
-    //fetching the user
     setUserInfo: (state, userData) => {
-    state.userData.data = userData.user;
+        console.log("User Avatar:", userData.user.avatar);  // Log avatar URL
+        state.userData.data = userData.user;
+        state.avatar = userData.user.avatar || '';  // Assign avatar URL
+        sessionStorage.setItem('USER', JSON.stringify(userData.user));
+        sessionStorage.setItem('userAvatar', userData.user.avatar || '');
     },
-
+    
+    setAvatar: (state, avatarUrl) => {
+        state.avatar = avatarUrl;
+        sessionStorage.setItem('userAvatar', avatarUrl);
+    },
+    
     setName: (state, name) => {
         state.userName = `${name.first_name} ${name.last_name}`;
         sessionStorage.setItem('userName', state.userName);
@@ -35,7 +43,7 @@ export default {
         state.userData.data = [];
         sessionStorage.removeItem('USER')
         sessionStorage.removeItem('isLoggedIn');
-        state.userProfilePic = '';
+        state.avatar = '';
         state.userName = '';
     },
 

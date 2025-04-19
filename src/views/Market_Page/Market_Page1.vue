@@ -58,6 +58,7 @@
                                     <Icon icon="icon-park-twotone:buy" width="24" height="24" style="color: #fff" />
                                     Buy Now
                                 </button>
+                                
                             </div>
                         </div>
                     </div>
@@ -70,43 +71,29 @@
             <div class="h-full p-5 flex flex-col md:flex-row items-center border-2 border-gray-300 rounded-md space-y-5 md:space-y-0 md:space-x-5 w-full">
                 
                 <!-- Left Section: Profile Info -->
-                <div class="flex flex-col md:flex-row items-center space-x-3 w-full md:w-auto">
-                    <img :src="MVegetable" alt="Placeholder Image" class="w-16 h-16 rounded-full border border-gray-500">
+                <div v-for="productItemInfo in productItemListinfo" :key="productItemInfo.id" class="flex flex-col md:flex-row items-center space-x-3 w-full md:w-auto">
+                    <img :src="productItemInfo.seller_avatar" alt="Placeholder Image" class="w-16 h-16 rounded-full border border-gray-500">
                     <div class="flex flex-col text-md text-gray-600 text-center md:text-left">
-                        <span class="font-semibold">{{ Biodata.name }}</span>
-                        <span class="text-xs">{{ activeStatus }}</span>
+                        <span class="font-semibold">{{ productItemInfo.seller_name }}</span>
                         <div class="mt-3 flex flex-wrap gap-2 justify-center md:justify-start">
                             <button @click="startChatWithShop" 
                                 class="flex items-center gap-1 px-4 py-2 bg-[#608C54] text-white text-sm font-medium rounded-lg hover:bg-green-700 transition">
                                 <Icon icon="mdi:chat" width="20" height="20" style="color: white" /> Chat Now
                             </button>
-                            <a href="/shop" class="flex items-center gap-1 px-4 py-2 bg-white text-sm font-medium rounded-lg hover:bg-gray-300 transition border border-gray-300">
+                            <button @click="goToItemInfo(productItemInfo.id)" class="flex items-center gap-1 px-4 py-2 bg-white text-sm font-medium rounded-lg hover:bg-gray-300 transition border border-gray-300">
                                 <Icon icon="bx:store" width="20" height="20" style="color: black" /> View Shop
-                            </a>
+                            </button>
                         </div>
                     </div>
-                </div>
+                    <!-- Divider for Desktop -->
+                    <div class="hidden md:block border-l border-gray-300 h-20"></div>
 
-                <!-- Divider for Desktop -->
-                <div class="hidden md:block border-l border-gray-300 h-20"></div>
-
-                <!-- Right Section: Metrics -->
-                <div class="w-full md:flex-1 grid grid-cols-2 md:grid-cols-4 gap-4 items-center text-gray-600 text-center">
-                    <div class="flex flex-col items-center">
-                        <h1 class="text-md font-semibold">Rating</h1>
-                        <span class="text-xs">4.5</span>
-                    </div>
-                    <div class="flex flex-col items-center">
-                        <h1 class="text-md font-semibold">Products</h1>
-                        <span class="text-xs">2</span>
-                    </div>
-                    <div class="flex flex-col items-center">
-                        <h1 class="text-md font-semibold">Joined</h1>
-                        <span class="text-xs">4 months ago</span>
-                    </div>
-                    <div class="flex flex-col items-center">
-                        <h1 class="text-md font-semibold">Followers</h1>
-                        <span class="text-xs">123</span>
+                    <!-- Right Section: Metrics -->
+                    <div class="w-full md:flex-1 grid grid-cols-2 md:grid-cols-4 gap-4 items-center text-gray-600 text-center">
+                        <div class="flex flex-col items-center">
+                            <h1 class="text-md font-semibold">Total Products</h1>
+                            <span class="text-xs">{{ productItemInfo.total_products }}</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -305,8 +292,10 @@ const router = useRouter();
 const showLoading = computed(() => store.state.showLoading.state);
 const productItemListinfo = computed(() => store.state.Consumer.productItem.productItemInfo);
 const productRatings = computed(() => store.state.Consumer.productRatings);
+const viewList = computed(() => store.state.Consumer.farmerInfo);
 const conversationStart = computed(() => store.state.Consumer.conversation.data);
 const messageStart = computed(() => store.state.Consumer.message.data);
+const bioData = computed(() => store.state.Consumer.farmerInfo.data);
 
 const defaultAvatar = ref('path/to/default/avatar.png'); // Replace with actual default avatar path
 const isScrollable = ref(false);
@@ -314,6 +303,20 @@ const productRating = computed(() => {
     const productId = sessionStorage.getItem('ItemInfo');
     return productRatings.value?.[productId] || null;
 });
+
+
+function getFarmerInfoList() {
+    store.dispatch('Consumer/getFarmerInfoList');
+}
+
+onMounted(() => {
+    getFarmerInfoList();
+});
+
+async function goToItemInfo(productId) {
+    sessionStorage.setItem('ItemInfo', productId);
+    router.push({ name: 'Viewshop' });
+}
 
 /******************************************************************
   FUNCTION FOR LIST
@@ -326,13 +329,12 @@ function getItemListInfo() {
 /******************************************************************
   FUNCTION FOR PRODUCT RATINGS
 ******************************************************************/
-async function fetchProductRatings() {
+async function fetchProductRatings(force = false) {
     const productId = sessionStorage.getItem('ItemInfo');
-    if (productId && !productRatings.value?.[productId]) {
+    if (productId && (force || !productRatings.value?.[productId])) {
         await store.dispatch('Consumer/getProductRatings', productId);
     }
 }
-
 function formatDate(dateString) {
     const date = new Date(dateString);
     return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
@@ -518,7 +520,7 @@ async function createComment() {
                 product_id: sessionStorage.getItem('ItemInfo'),
             });
             closeCommentModal();
-            fetchProductRatings(); // Refresh ratings
+            await fetchProductRatings(true); 
         } catch (error) {
             console.error('Failed to create comment:', error);
         }

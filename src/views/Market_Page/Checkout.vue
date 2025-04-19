@@ -194,7 +194,7 @@ const placeOrderSelected = async () => {
         if (selectedPayment.value === 'COD') {
             console.log('Dispatching placeCODOrder with selected items:', selectedItems);
             await store.dispatch('Consumer/placeCODOrder');
-            router.push('/market');
+            router.push('/profile');
         } else if (selectedPayment.value === 'GCash') {
             console.log('Dispatching placeGCashOrder with selected items:', selectedItems);
             const response = await store.dispatch('Consumer/placeGCashOrder');
