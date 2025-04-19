@@ -362,9 +362,14 @@ const decreaseQuantity = () => {
 
 const addToCart = async (productId) => {
     try {
-        await store.dispatch('Consumer/getAddToCart', { id: productId, quantity: quantity.value });
+        await store.dispatch('Consumer/getBuyNow', { id: productId, quantity: quantity.value });
+        const cartItem = store.state.Consumer.cartItem.data.find(item => item.id === productId);
+        if (cartItem) {
+            cartItem.selected = true;
+        }
+        
     } catch (error) {
-        console.error('Error adding to cart:', error);
+        console.error('Error adding to checkout:', error);
     }
 };
 
