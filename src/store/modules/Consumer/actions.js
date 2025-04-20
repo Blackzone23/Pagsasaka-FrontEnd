@@ -8,7 +8,7 @@ export default {
 API FOR Market Page 1
 ******************************************************************/
 
-    //API for get item list 1
+    // API for get item list 1
     async getItemList({commit}) {
         return await axiosClient.post('list')
         .then((response) => {
@@ -93,7 +93,7 @@ API FOR Market Page 1
 API FOR ADD TO CART
 ******************************************************************/
 
-    //api for getting list
+    // API for getting list
     async getCartList({commit}) {
         return await axiosClient.post('product/cart-list')
         .then((response) => {
@@ -115,7 +115,7 @@ API FOR ADD TO CART
         })
     },
 
-    //api for add to cart button
+    // API for add to cart button
     async getAddToCart({ commit }, productId) {
         commit('toggleLoader', true, { root: true });
         try {
@@ -180,7 +180,7 @@ API FOR ADD TO CART
         }
     },
 
-    //API for delete cartlist
+    // API for delete cartlist
     async deleteCart({commit}, deleteCartData) {
         return await axiosClient.post(`product/cart-remove/${deleteCartData}`)
         .then((response) => {
@@ -210,13 +210,12 @@ API FOR ADD TO CART
         })
     },
 
-    //api for add to buy now button
+    // API for add to buy now button
     async getBuyNow({ commit }, productId) {
         commit('toggleLoader', true, { root: true });
         try {
             const response = await axiosClient.post(`product/buynow/${productId.id}`, productId);
             commit('toggleLoader', false, { root: true });
-            
             
             setTimeout(() => {
                 commit('showToast', { showToast: true, toastMessage: response.data.message, toastType: 'success'}, { root: true });}, toastDelay);
@@ -242,7 +241,7 @@ API FOR ADD TO CART
         }
     },
 
-    //checkout button
+    // Checkout button
     async Checkout({ commit }, productId) {
         commit('toggleLoader', true, { root: true });
         try {
@@ -354,9 +353,8 @@ API FOR ADD TO CART
         }
     },
 
-
-     //place order button
-     async placeOrderSelected({ commit }, checkoutId) {
+    // Place order button
+    async placeOrderSelected({ commit }, checkoutId) {
         commit('toggleLoader', true, { root: true });
         try {
             const response = await axiosClient.post(`pay/${checkoutId.id}`, checkoutId);
@@ -436,7 +434,8 @@ API FOR ADD TO CART
 /******************************************************************
 API FOR MY PURCHASE
 ******************************************************************/
-   //api for getting list
+
+    // API for getting list
     async getPurchase({commit}) {
         return await axiosClient.get('my-placed-orders')
         .then((response) => {
@@ -479,11 +478,44 @@ API FOR MY PURCHASE
         })
     },
 
+/******************************************************************
+API FOR MESSAGE
+******************************************************************/
 
-    /******************************************************************
-     API FOR MESSAGE
-    ******************************************************************/
-    //conversation list
+    async startChatWithShop({ commit, dispatch }, payload) {
+        commit('toggleLoader', true, { root: true });
+        return await axiosClient.post('/chatnow', { user2_id: payload.user2_id })
+            .then((response) => {
+                commit('toggleLoader', false, { root: true });
+                if (response.data.success) {
+                    commit('SET_CURRENT_CHAT_SESSION', response.data.data);
+                    dispatch('getConversation');
+                    setTimeout(() => {
+                        commit('showToast', { showToast: true, toastMessage: response.data.message || 'Chat started successfully', toastType: 'success' }, { root: true });
+                    }, toastDelay);
+                    setTimeout(() => {
+                        commit('showToast', { showToast: false, toastMessage: '', toastType: 'default' }, { root: true });
+                    }, toastDuration);
+                    return response.data.data;
+                } else {
+                    throw new Error(response.data.message || 'Failed to start chat session');
+                }
+            })
+            .catch((error) => {
+                commit('toggleLoader', false, { root: true });
+                const errorMessage = error.response?.data?.message || 'Failed to start chat session';
+                console.error('Error starting chat session:', error);
+                setTimeout(() => {
+                    commit('showToast', { showToast: true, toastMessage: errorMessage, toastType: 'error' }, { root: true });
+                }, toastDelay);
+                setTimeout(() => {
+                    commit('showToast', { showToast: false, toastMessage: '', toastType: 'default' }, { root: true });
+                }, toastDuration);
+                throw error;
+            });
+    },
+
+    // Conversation list
     async getConversation({commit}) {
         return await axiosClient.get('chat-sessions-lists')
         .then((response) => {
@@ -505,7 +537,7 @@ API FOR MY PURCHASE
         })
     },
 
-    //message window
+    // Message window
     async getMessages({commit}, id) {
         return await axiosClient.get(`chat-view/${id}`)
         .then((response) => {
@@ -527,10 +559,10 @@ API FOR MY PURCHASE
         })
     },
 
-    //send message
+    // Send message
     async sendMessage({ commit }, { id, message }) {
         commit('toggleLoader', true, { root: true });
-        return await axiosClient.post(`send/{conversation_id}/messages`,{ message }) // Use `formData`
+        return await axiosClient.post(`send/${id}/messages`, { message }) // Fixed the endpoint to include the ID
         .then((response) => {
             commit('toggleLoader', false, { root: true });
             setTimeout(() => {
@@ -558,8 +590,7 @@ API FOR MY PURCHASE
         });
     },
 
-
-    //delete conversation
+    // Delete conversation
     async deleteConversation({commit}, id) {
         return await axiosClient.delete(`chat-delete/${id}`)
         .then((response) => {
@@ -589,7 +620,7 @@ API FOR MY PURCHASE
         })
     },
 
-    //get rating
+    // Get rating
     async getRating({commit}) {
         return await axiosClient.get('ratings')
         .then((response) => {
@@ -640,38 +671,12 @@ API FOR MY PURCHASE
             }   
         })
     },
-     
-    //start convo
-    async startChatWithShop ({ commit }, id) {
-        commit('toggleLoader', true, { root: true });
-        try {
-            const response = await axiosClient.post(`chat-sessions/${id}`, { id });
-            commit('toggleLoader', false, { root: true });
-            // ✅ Set initial messages (if returned)
-            commit('setMessages', response.data.data.messages);
-            // ✅ Show toast
-            setTimeout(() => { commit('showToast', { showToast: true, toastMessage: response.data.message,  toastType: 'success'}, { root: true });}, toastDelay);
-            setTimeout(() => {commit('showToast', { showToast: false, toastMessage: '', toastType: 'default'}, { root: true });}, toastDuration);
-        
-            return response.data; // This allows your component to act on success
 
-            } catch (error) {
-                commit('toggleLoader', false, { root: true });
-            
-                if (error.response && error.response.data) {
-                const errorMessage = error.response.data.message;
-            
-                setTimeout(() => { commit('showToast', { showToast: true, toastMessage: errorMessage, toastType: 'error' }, { root: true });}, toastDelay);
-                setTimeout(() => { commit('showToast', { showToast: false, toastMessage: '', toastType: 'default' }, { root: true });}, toastDuration);}
-            }
-    },
-
-    
 /******************************************************************
- API FOR ADDRESS
+API FOR ADDRESS
 ******************************************************************/
 
-    //get address list
+    // Get address list
     async getAddressList({commit}) {
         return await axiosClient.get('billing-address/get')
         .then((response) => {
@@ -693,7 +698,7 @@ API FOR MY PURCHASE
         })
     },
 
-    //Add address
+    // Add address
     async createAddress({commit}, addressData) {
         commit('toggleLoader', true, { root: true })
         return await axiosClient.post('billing-address/add', addressData)
@@ -724,7 +729,7 @@ API FOR MY PURCHASE
         })
     },
       
-    //Update address   
+    // Update address   
     async updateAddress({commit}, updateAddress) {
         commit('toggleLoader', true, { root: true })
         return await axiosClient.post(`billing-address/edit/${updateAddress.id}`, updateAddress)
@@ -756,7 +761,7 @@ API FOR MY PURCHASE
         })
     },
 
-    //Delete address
+    // Delete address
     async deleteAddress({commit}, deleteAddressData) {
         return await axiosClient.post(`billing-address/remove/${deleteAddressData}`)
         .then((response) => {
@@ -787,9 +792,10 @@ API FOR MY PURCHASE
     },
 
 /******************************************************************
-API FOR Ratings
+API FOR RATINGS
 ******************************************************************/
-    // get rating list
+
+    // Get rating list
     async getRating({ commit }, productId) {
         try {
             const response = await axiosClient.get(`products/${productId}/ratings`);
@@ -800,7 +806,7 @@ API FOR Ratings
             if (error.response && error.response.data) {
                 const errorMessage = error.response.data.message || 'Failed to fetch ratings';
                 setTimeout(() => {
-                    commit('showToast', { showToast: true, toastMessage: errorMessage,  toastType: 'error', }, { root: true });
+                    commit('showToast', { showToast: true, toastMessage: errorMessage, toastType: 'error', }, { root: true });
                 }, 500);
                 setTimeout(() => {
                     commit('showToast', { showToast: false, toastMessage: '', toastType: 'default', }, { root: true });
@@ -810,7 +816,7 @@ API FOR Ratings
         }
     },
 
-    //get product ratings
+    // Get product ratings
     async getProductRatings({ commit }, productId) {
         try {
             const response = await axiosClient.get(`products/${productId}/ratings`);
@@ -824,14 +830,14 @@ API FOR Ratings
                     commit('showToast', { showToast: true, toastMessage: errorMessage, toastType: 'error', }, { root: true });
                 }, 500);
                 setTimeout(() => {
-                    commit('showToast', {  showToast: false, toastMessage: '', toastType: 'default',}, { root: true });
+                    commit('showToast', { showToast: false, toastMessage: '', toastType: 'default',}, { root: true });
                 }, 3000);
             }
             throw error;
         }
     },
 
-    //create comment
+    // Create comment
     async createComment({ commit }, payload) {
         try {
             const response = await axiosClient.post(`products/${payload.product_id}/ratings`, {
@@ -853,9 +859,11 @@ API FOR Ratings
             throw error;
         }
     },
+
 /******************************************************************
 API FOR UPLOADING PROFILE
 ******************************************************************/
+
     async addImage({commit}, imageData) {
         commit('toggleLoader', true, { root: true })
         return await axiosClient.post('avatar', imageData)
@@ -916,27 +924,4 @@ API FOR UPLOADING PROFILE
             }   
         })
     },
-
-    // async getFarmerInfoList({commit}) {
-    //     return await axiosClient.post('product/account')
-    //     .then((response) => {
-    //         commit('setFarmerInfo', response.data.products);
-    //         return response.data.products;
-    //     })
-    //     .catch((error) => {
-    //         commit('toggleLoader', false, { root: true })
-    //         if(error.response && error.response.data) {
-    //             const errorMessage = error.response.data.message;
-    //             setTimeout(() => {
-    //                 commit('showToast', { showToast: true, toastMessage: errorMessage, toastType: 'error'}, { root: true });
-    //             }, toastDelay);
-
-    //             setTimeout(() => {
-    //                 commit('showToast', { showToast: false, toastMessage: '', toastType: 'default'}, { root: true });
-    //             }, toastDuration);
-    //         }   
-    //     })
-    // },
-
-
 }

@@ -80,5 +80,13 @@ export default {
     productItem: { data: [] },
     moreProduct: { data: [] },
     productRatings: {}, // Add this
+
+    conversations: [],
+        selectedConversation: null,
+        messages: [],
+        isLoading: false,
+        error: null,
+        isShopChatModalOpen: false,
+        currentChatSession: null,
     
 };
