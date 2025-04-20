@@ -58,7 +58,6 @@
                                     <Icon icon="icon-park-twotone:buy" width="24" height="24" style="color: #fff" />
                                     Buy Now
                                 </button>
-                                
                             </div>
                         </div>
                     </div>
@@ -76,8 +75,11 @@
                     <div class="flex flex-col text-md text-gray-600 text-center md:text-left">
                         <span class="font-semibold">{{ productItemInfo.seller_name }}</span>
                         <div class="mt-3 flex flex-wrap gap-2 justify-center md:justify-start">
-                            <button @click="startChatWithShop" 
-                                class="flex items-center gap-1 px-4 py-2 bg-[#608C54] text-white text-sm font-medium rounded-lg hover:bg-green-700 transition">
+                            <button 
+                                @click="startChatWithShop"
+                                class="flex items-center gap-1 px-4 py-2 bg-[#608C54] text-white text-sm font-medium rounded-lg hover:bg-green-700 transition"
+                                aria-label="Start chat with seller"
+                            >
                                 <Icon icon="mdi:chat" width="20" height="20" style="color: white" /> Chat Now
                             </button>
                             <button @click="goToItemInfo(productItemInfo.id)" class="flex items-center gap-1 px-4 py-2 bg-white text-sm font-medium rounded-lg hover:bg-gray-300 transition border border-gray-300">
@@ -201,10 +203,10 @@
                         <div v-for="conversation in conversationStart" :key="conversation.id" 
                             class="flex items-center p-3 border-b cursor-pointer hover:bg-gray-100 transition duration-200" 
                             @click="selectChat(conversation.id)">
-                            <img :src="conversation.chat_partner_avatar" class="w-12 h-12 rounded-full border mr-3" alt="Avatar" />
+                            <img :src="conversation.chat_partner_avatar || defaultAvatar" class="w-12 h-12 rounded-full border mr-3" alt="Avatar" />
                             <div class="flex-1">
                                 <span class="font-semibold">{{ conversation.chat_partner_name }}</span>
-                                <p class="text-xs text-gray-500 truncate">{{ conversation.message }}</p>
+                                <p class="text-xs text-gray-500 truncate">{{ conversation.message || 'No messages' }}</p>
                             </div>
                             <span v-if="conversation.unread_messages_count" 
                                 class="text-xs bg-red-500 text-white px-2 py-1 rounded-full">
@@ -232,32 +234,32 @@
                     <div v-if="!selectedChat" class="flex-1 flex items-center justify-center text-gray-400">
                         <p class="text-xl">Welcome to Pagsasaka Chat</p>
                     </div>
-                    <div v-else class="flex flex-col flex-1">
-                        <div class="p-4 border-b text-lg font-bold flex justify-between items-center bg-gray-100">
-                            <span>{{ selectedChat.chat_partner_name }}</span>
+                    <div v-else class="flex flex-col h-full">
+                        <div class="p-4 border-b flex justify-between items-center bg-gray-100">
+                            <h2 class="text-lg font-semibold">{{ selectedChat.chat_partner_name }}</h2>
                             <button @click="closeChat" class="text-gray-500">Close</button>
                         </div>
                         <div class="flex-1 bg-gray-50 p-4 overflow-auto space-y-4 2xl:text-sm 2xs:text-sm max-h-[400px]">
                             <div v-for="message in messageStart" :key="message.id" class="flex items-start space-x-3" 
-                                :class="{'justify-end': message.sender.id === userName, 'justify-start': message.sender.id !== userName}">
-                                <img v-if="message.sender.id !== userName" :src="message.sender.avatar || defaultAvatar" 
+                                :class="{'justify-end': message.sender.id === userId, 'justify-start': message.sender.id !== userId}">
+                                <img v-if="message.sender.id !== userId" :src="message.sender.avatar || defaultAvatar" 
                                     class="w-8 h-8 rounded-full" />
                                 <div class="p-3 rounded-lg shadow-md w-auto max-w-xs" 
-                                    :class="{'bg-green-500 text-white': message.sender.id === userName, 'bg-gray-200 text-black': message.sender.id !== userName}">
+                                    :class="{'bg-green-500 text-white': message.sender.id === userId, 'bg-gray-200 text-black': message.sender.id !== userId}">
                                     <p class="text-sm font-bold" 
-                                        :class="{'text-white': message.sender.id === userName, 'text-green-600': message.sender.id !== userName}">
-                                        {{ message.sender.first_name }} {{ message.sender.last_name }}
+                                        :class="{'text-white': message.sender.id === userId, 'text-green-600': message.sender.id !== userId}">
+                                        {{ message.sender.id === userId ? 'You' : message.sender.first_name + ' ' + message.sender.last_name }}
                                     </p>
                                     <p class="text-xs">{{ message.message }}</p>
                                 </div>
-                                <div v-if="message.sender.id === userName" class="w-8 h-8 rounded-full bg-gray-300"></div>
+                                <img v-if="message.sender.id === userId" :src="userAvatar || defaultAvatar" class="w-8 h-8 rounded-full" />
                             </div>
                         </div>
-                        <div class="p-4 border-t bg-white flex items-center">
-                            <input v-model="messageData.message" type="text" placeholder="Type a message here" 
+                        <div class="p-4 border-t bg-gray-50 flex items-center">
+                            <input v-model="messageData.message" type="text" placeholder="Type a message..." 
                                 class="flex-1 p-2 border rounded-md text-sm"/>
                             <button @click="sendMessage" 
-                                class="ml-2 bg-green-600 text-white px-4 py-2 rounded-md transition duration-200 hover:bg-green-700">
+                                class="ml-2 bg-green-500 text-white px-4 py-2 rounded-md transition duration-200 hover:bg-green-700">
                                 Send
                             </button>
                         </div>
@@ -273,7 +275,6 @@
 import Loading from '@/components/Alerts/Loading.vue';
 import Toast from '@/components/Alerts/Toast.vue';
 import Market_NavBar from '@/components/Navbar/Market_NavBar.vue';
-import MVegetable from '@/assets/MVegetable.png';
 import BaseLabel from '@/components/Input-Fields/BaseLabel.vue';
 import BaseSearchField from '@/components/Input-Fields/BaseSearchField.vue';
 import Footer from '@/components/Input-Fields/Footer.vue';
@@ -285,6 +286,7 @@ import { required, helpers } from "@vuelidate/validators";
 import { Icon } from "@iconify/vue";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
+import { toastDelay, toastDuration } from '@/components/composable/GlobalVariables';
 
 const store = useStore();
 const router = useRouter();
@@ -292,21 +294,22 @@ const router = useRouter();
 const showLoading = computed(() => store.state.showLoading.state);
 const productItemListinfo = computed(() => store.state.Consumer.productItem.productItemInfo);
 const productRatings = computed(() => store.state.Consumer.productRatings);
-const viewList = computed(() => store.state.Consumer.farmerInfo);
 const conversationStart = computed(() => store.state.Consumer.conversation.data);
 const messageStart = computed(() => store.state.Consumer.message.data);
 const bioData = computed(() => store.state.Consumer.farmerInfo.data);
+const userId = computed(() => store.state.userData.data?.user?.id || null); // Assuming user ID is stored in userData
+const userAvatar = computed(() => store.state.userData.data?.user?.avatar || defaultAvatar.value); // Assuming user avatar is stored in userData
 
-const defaultAvatar = ref('path/to/default/avatar.png'); // Replace with actual default avatar path
+const defaultAvatar = ref('path/to/default/avatar.png');
 const isScrollable = ref(false);
 const productRating = computed(() => {
     const productId = sessionStorage.getItem('ItemInfo');
     return productRatings.value?.[productId] || null;
 });
 
-
 function getFarmerInfoList() {
-    store.dispatch('Consumer/getFarmerInfoList');
+    const productId = sessionStorage.getItem('ItemInfo');
+    store.dispatch('Consumer/getFarmerInfoList', productId);
 }
 
 onMounted(() => {
@@ -367,7 +370,6 @@ const addToCart = async (productId) => {
         if (cartItem) {
             cartItem.selected = true;
         }
-        
     } catch (error) {
         console.error('Error adding to checkout:', error);
     }
@@ -417,7 +419,6 @@ const activeStatus = computed(() => {
 const isshowChatModal = ref(false);
 const selectedChat = ref(null);
 const messageData = reactive({ message: '' });
-const userName = ref('current_user_id'); // Replace with actual user ID logic
 
 const closeChat = () => {
     selectedChat.value = null;
@@ -442,7 +443,7 @@ const sendMessage = async () => {
     if (!messageData.message.trim() || !selectedChat.value) return;
 
     const payload = {
-        conversation_id: selectedChat.value.id,
+        id: selectedChat.value.id,
         message: messageData.message,
     };
 
@@ -455,23 +456,52 @@ const sendMessage = async () => {
     }
 };
 
-const startChatWithShop = async () => {
-    try {
-        isshowChatModal.value = true;
-        const shopId = "YOUR_SHOP_ID_HERE"; // Replace with actual shop ID
-        const response = await store.dispatch('Consumer/startChatWithShop', shopId);
-        const createdConversation = {
-            id: response.data.id,
-            chat_partner_name: response.data.chat_partner_name,
-            chat_partner_avatar: response.data.chat_partner_avatar,
-        };
-        selectedChat.value = createdConversation;
-        messageData.conversation_id = createdConversation.id;
-        await store.dispatch('Consumer/getConversation');
-        await store.dispatch('Consumer/getMessages', createdConversation.id);
-    } catch (error) {
-        console.error('Failed to start chat:', error);
+const startChatWithShop = () => {
+    isshowChatModal.value = true;
+    console.log('productItemListinfo:', productItemListinfo.value);
+    if (!productItemListinfo.value || productItemListinfo.value.length === 0) {
+        console.error('productItemListinfo is empty or undefined');
+        setTimeout(() => {
+            store.commit('showToast', { showToast: true, toastMessage: 'Product data not loaded', toastType: 'error' }, { root: true });
+        }, toastDelay);
+        setTimeout(() => {
+            store.commit('showToast', { showToast: false, toastMessage: '', toastType: 'default' }, { root: true });
+        }, toastDuration);
+        return;
     }
+    const user2Id = productItemListinfo.value[0]?.account_id;
+    if (!user2Id) {
+        console.error('Seller ID not found in productItemListinfo[0].account_id');
+        setTimeout(() => {
+            store.commit('showToast', { showToast: true, toastMessage: 'Seller ID not found', toastType: 'error' }, { root: true });
+        }, toastDelay);
+        setTimeout(() => {
+            store.commit('showToast', { showToast: false, toastMessage: '', toastType: 'default' }, { root: true });
+        }, toastDuration);
+        return;
+    }
+    console.log('Starting chat with user2_id:', user2Id);
+    store.dispatch('Consumer/startChatWithShop', { user2_id: user2Id })
+        .then((response) => {
+            if (!response) {
+                console.error('No response received from startChatWithShop');
+                return;
+            }
+            console.log('startChatWithShop response:', response);
+            const createdConversation = {
+                id: response.id,
+                chat_partner_name: response.chat_partner_name,
+                chat_partner_avatar: response.chat_partner_avatar,
+                message: response.message || '',
+                unread_messages_count: response.unread_messages_count || 0,
+            };
+            selectedChat.value = createdConversation;
+            messageData.conversation_id = createdConversation.id;
+            store.dispatch('Consumer/getMessages', createdConversation.id);
+        })
+        .catch((error) => {
+            console.error('Failed to start chat:', error);
+        });
 };
 
 /******************************************************************
@@ -491,8 +521,8 @@ onMounted(() => {
 const isCommentModalOpen = ref(false);
 
 const opeCommentModal = () => {
-    ratingData.rating = 0; // Reset rating
-    ratingData.comment = ''; // Reset comment
+    ratingData.rating = 0;
+    ratingData.comment = '';
     isCommentModalOpen.value = true;
 };
 
@@ -519,13 +549,12 @@ async function createComment() {
     const validationResult = await $validateratingrules.value.$validate();
     if (validationResult) {
         try {
-            console.log('Submitting rating:', ratingData.rating); // Debug rating
             await store.dispatch('Consumer/createComment', {
                 ...ratingData,
                 product_id: sessionStorage.getItem('ItemInfo'),
             });
             closeCommentModal();
-            await fetchProductRatings(true); 
+            await fetchProductRatings(true);
         } catch (error) {
             console.error('Failed to create comment:', error);
         }

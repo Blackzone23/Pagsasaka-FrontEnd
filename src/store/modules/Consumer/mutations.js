@@ -90,6 +90,31 @@ export default {
     setFarmerListInfo: (state, farmerInfo) => {
         state.farmerInfo.data = farmerInfo;
     },
+
+
+    SET_CURRENT_CHAT_SESSION(state, chatSession) {
+        state.currentChatSession = chatSession;
+      },
+      SET_ERROR(state, errorMessage) {
+        state.error = errorMessage;
+      },
+
+
+
+      
+      SET_PRODUCT_ITEM_INFO(state, productItemInfo) {
+        state.productItem.productItemInfo = productItemInfo;
+    },
+    SET_TOAST(state, { message, type = 'error' }) {
+        state.toast.message = message;
+        state.toast.type = type;
+        state.toast.visible = true;
+    },
+    CLEAR_TOAST(state) {
+        state.toast.visible = false;
+        state.toast.message = '';
+    },
+    
     
 
 };
