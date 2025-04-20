@@ -886,9 +886,9 @@ API FOR UPLOADING PROFILE
         })
     },
 
-    async getFarmerInfoList({commit}, productId) {
+    async getFarmerInfoList({commit}, sellerId) {
         commit('toggleLoader', true, { root: true })
-        return await axiosClient.post(`product/shop/${productId}`, productId)
+        return await axiosClient.post(`product/shop/${sellerId}`, sellerId)
         .then((response) => {
             commit('toggleLoader', false, { root: true });
             commit('setFarmerListInfo', response.data.seller.products);

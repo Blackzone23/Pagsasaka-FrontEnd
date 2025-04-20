@@ -18,7 +18,7 @@ export default {
         value:false
     }, // Determine login status from sessionStorage
 
-    userProfilePic: JSON.parse(decryptData(sessionStorage.getItem('USER')))?.profilePic || '', // Replace with actual profile picture logic
+    avatar: JSON.parse(decryptData(sessionStorage.getItem('USER')))?.avatar || '', // Replace with actual profile picture logic
 
     userName: JSON.parse(decryptData(sessionStorage.getItem('USER')))?.name || '', // Replace with actual user name logic
     userId: JSON.parse(decryptData(sessionStorage.getItem('USER')))?.id || null,

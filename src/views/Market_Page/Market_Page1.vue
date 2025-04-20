@@ -297,7 +297,6 @@ const conversationStart = computed(() => store.state.Consumer.conversation.data)
 const messageStart = computed(() => store.state.Consumer.message.data);
 const bioData = computed(() => store.state.Consumer.farmerInfo.data);
 
-const defaultAvatar = ref('path/to/default/avatar.png'); // Replace with actual default avatar path
 const isScrollable = ref(false);
 const productRating = computed(() => {
     const productId = sessionStorage.getItem('ItemInfo');

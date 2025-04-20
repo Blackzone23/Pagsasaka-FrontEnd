@@ -170,140 +170,139 @@
                             <div class="mt-6">
                                 <!--To Pay-->
                                 <div v-if="currentTab === 'To Pay'">
-                                    <div class="mt-4 bg-green-100 border border-green-300 rounded-lg p-4">
-                                        <div class="max-h-96 overflow-y-auto pr-2">
-                                            <div
-                                                v-for="purchase in purchaseList"
-                                                :key="purchase.id"
-                                                class="flex flex-wrap md:flex-nowrap items-center mb-4"
-                                            >
+                                    <div class="mt-4 space-y-4 max-h-[500px] overflow-y-auto">
+                                        <div v-for="purchase in purchaseList" :key="purchase.id" class="bg-green-100 border border-green-300 rounded-lg p-4">
+                                            <div class="flex flex-wrap md:flex-nowrap items-center mb-4">
                                                 <!-- Image -->
-                                                <img
-                                                :src="purchase.product_images[0] || 'https://via.placeholder.com/80'"
-                                                alt="Product Image"
-                                                class="w-16 h-16 sm:w-20 sm:h-20 2xl:w-24 2xl:h-24 rounded object-cover border"
-                                                />
+                                                <img :src="purchase.product_images[0] || 'https://via.placeholder.com/80'" alt="Product Image" class="w-16 h-16 sm:w-20 sm:h-20 2xl:w-24 2xl:h-24 rounded object-cover border"/>
 
                                                 <!-- Details -->
                                                 <div class="ml-3 sm:ml-4 flex-grow">
-                                                <h3 class="text-xs sm:text-sm 2xl:text-lg font-semibold">{{ purchase.product_name }}</h3>
-                                                <p class="text-[10px] sm:text-xs 2xl:text-sm text-gray-600">
+                                                    <h3 class="text-xs sm:text-sm 2xl:text-lg font-semibold">
+                                                    {{ purchase.product_name }}
+                                                    </h3>
+                                                    <p class="text-[10px] sm:text-xs 2xl:text-sm text-gray-600">
                                                     Variants: {{ purchase.unit }}
-                                                </p>
-                                                <div class="mt-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-                                                    <p class="text-xs sm:text-sm 2xl:text-base font-medium text-gray-700">
-                                                    Seller: <span class="font-semibold">{{ purchase.farmer_name }}</span>
                                                     </p>
-                                                    <div class="flex items-center gap-2 sm:gap-3">
-                                                        <h1 class="text-xs sm:text-sm 2xl:text-base">Quantity:</h1>
-                                                        <p class="text-xs sm:text-sm 2xl:text-lg font-semibold text-green-700">
-                                                        {{ purchase.quantity }}
-                                                    </p>
-                                                    <h1 class="text-xs sm:text-sm 2xl:text-base">Order Total:</h1>
-                                                    <p class="text-xs sm:text-sm 2xl:text-lg font-semibold text-green-700">
-                                                        ₱{{ purchase.total_amount }}
-                                                    </p>
+                                                    <div class="mt-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                                                        <p class="text-xs sm:text-sm 2xl:text-base font-medium text-gray-700">
+                                                            Seller: <span class="font-semibold">{{ purchase.farmer_name }}</span>
+                                                        </p>
+                                                        <div class="flex items-center gap-2 sm:gap-3">
+                                                            <h1 class="text-xs sm:text-sm 2xl:text-base">Quantity:</h1>
+                                                            <p
+                                                            class="text-xs sm:text-sm 2xl:text-lg font-semibold text-green-700"
+                                                            >
+                                                            {{ purchase.quantity }}
+                                                            </p>
+                                                            <h1 class="text-xs sm:text-sm 2xl:text-base">Order Total:</h1>
+                                                            <p
+                                                            class="text-xs sm:text-sm 2xl:text-lg font-semibold text-green-700"
+                                                            >
+                                                            ₱{{ purchase.total_amount }}
+                                                            </p>
+                                                        </div>
                                                     </div>
                                                 </div>
+                                            </div>
+
+                                            <!-- Order Status -->
+                                            <div>
+                                                <div class="mt-4 flex flex-col sm:flex-row sm:justify-between gap-2 sm:gap-4">
+                                                    <div class="flex items-center gap-2 sm:gap-3">
+                                                        <span class="text-xs sm:text-sm 2xl:text-base font-medium text-gray-500">Pending</span>
+                                                    </div>
+                                                    <div class="flex space-x-2">
+                                                        <button class="px-3 py-1 text-xs sm:text-sm 2xl:text-base font-semibold text-green-700 border border-green-600 rounded hover:bg-green-50" @click="openshowChatModal">
+                                                            Contact Seller
+                                                        </button>
+                                                        <button class="px-3 py-1 text-xs sm:text-sm 2xl:text-base font-semibold text-red-600 border border-red-500 rounded hover:bg-red-50"  @click="openshowCancelModal">
+                                                            Cancel Order
+                                                        </button>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
 
-                                        <!-- Order Status -->
-                                        <div>
-                                            <div class="mt-4 flex flex-col sm:flex-row sm:justify-between gap-2 sm:gap-4">
-                                                <div class="flex items-center gap-2 sm:gap-3">
-                                                    <span class="text-xs sm:text-sm 2xl:text-base font-medium text-gray-500">Pending</span>
+                                        <!-- Cancel Order Modal -->
+                                        <div v-if="isshowCancelModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+                                            <div class="bg-white p-5 md:p-7 rounded-lg shadow-lg w-full max-w-[90%] md:max-w-[500px]" >
+                                                <div class="text-end">
+                                                    <button  @click="closeshowCancelModal" class="text-gray-400 hover:text-gray-600" >
+                                                    <Icon icon="icon-park-solid:close-one" width="20" height="20" />
+                                                    </button>
                                                 </div>
-                                                <div class="flex space-x-2">
-                                                    <button class="px-3 py-1 text-xs sm:text-sm 2xl:text-base font-semibold text-green-700 border border-green-600 rounded hover:bg-green-50" @click="openshowChatModal">
-                                                        Contact Seller
-                                                    </button>
-                                                    <button class="px-3 py-1 text-xs sm:text-sm 2xl:text-base font-semibold text-red-600 border border-red-500 rounded hover:bg-red-50" @click="openshowCancelModal">
-                                                        Cancel Order
-                                                    </button>
+                                                <h3 class="text-lg md:text-xl font-semibold text-center mb-4">
+                                                    Select Cancellation Reason
+                                                </h3>
+
+                                                <!-- Notification Section -->
+                                                <div class="mt-4 p-4 bg-[#608C54] rounded-md flex flex-col items-center text-center">
+                                                    <Icon icon="noto:bell" width="50" height="50" class="mb-4" />
+                                                    <p class="text-sm md:text-base text-white">
+                                                    Please select a cancellation reason. Once your order is successfully
+                                                    canceled, your refund will be processed immediately and may take 10 to
+                                                    45 minutes to reflect in your account.
+                                                    </p>
+                                                </div>
+
+                                                <div class="text-sm mt-3">
+                                                    <BaseRadioButton v-for="option in ['Need to change delivery address', 'Seller is not responsive to my inquiries', 'Others / Change of mind']" :key="option" :name="'tinIdOption'" :label="option" :value="option" v-model="tinIdSelected"/>
+                                                </div>
+
+                                                <!-- Buttons -->
+                                                <div class="mt-4 flex justify-end space-x-2">
+                                                    <button @click="closeshowCancelModal" class="px-4 py-2 text-sm font-semibold text-gray-700 border border-gray-300 rounded hover:bg-gray-100" > Close</button>
+                                                    <button @click="Save" class="px-4 py-2 text-sm font-semibold text-red-700 bg-red-100 border border-red-500 rounded hover:bg-red-200"> Confirm </button>
                                                 </div>
                                             </div>
-                                            <!-- Cancel Order Modal -->
-                                            <div v-if="isshowCancelModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-                                                <div class="bg-white p-5 md:p-7 rounded-lg shadow-lg w-full max-w-[90%] md:max-w-[500px]">
-                                                    <div class="text-end">
-                                                        <button @click="closeshowCancelModal" class="text-gray-400 hover:text-gray-600">
-                                                            <Icon icon="icon-park-solid:close-one" width="20" height="20" />
-                                                        </button>
-                                                    </div>
-                                                    <h3 class="text-lg md:text-xl font-semibold text-center mb-4">Select Cancellation Reason</h3>
+                                        </div>
 
-                                                    <!-- Notification Section -->
-                                                    <div class="mt-4 p-4 bg-[#608C54] rounded-md flex flex-col items-center text-center">
-                                                        <Icon icon="noto:bell" width="50" height="50" class="mb-4" />
-                                                        <p class="text-sm md:text-base text-white">
-                                                            Please select a cancellation reason. Once your order is successfully canceled, your refund will be processed immediately and may take 10 to 45 minutes to reflect in your account.
+                                        <!-- Confirmation Modal -->
+                                        <div v-if="isConfirmationModalVisible"  class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+                                            <div class="bg-white p-5 md:p-7 rounded-lg shadow-lg w-full max-w-[90%] md:max-w-[400px]" >
+                                                <div class="text-end">
+                                                    <button
+                                                    @click="closeConfirmationModal"
+                                                    class="text-gray-400 hover:text-gray-600"
+                                                    >
+                                                    <Icon icon="icon-park-solid:close-one" width="20" height="20" />
+                                                    </button>
+                                                </div>
+                                                <div class="border rounded-md p-3 shadow">
+                                                    <h2 class="text-center text-lg font-semibold">Refund Details</h2>
+                                                </div>
+                                                <div class="mt-4 border rounded-md p-3 shadow space-y-4 text-xs md:text-sm">
+                                                    <div class="flex items-center gap-3">
+                                                    <img
+                                                        src="https://via.placeholder.com/50"
+                                                        alt="Product"
+                                                        class="w-12 h-12 rounded-md"
+                                                    />
+                                                    <div>
+                                                        <p class="font-semibold">Banana</p>
+                                                        <p class="text-gray-500">Variant: Kg</p>
+                                                    </div>
+                                                    <p class="ml-auto font-semibold">₱820</p>
+                                                    </div>
+
+                                                    <!-- Refund Details -->
+                                                    <div class="mt-3 space-y-2">
+                                                        <p><span class="font-semibold">Refund Amount:</span> ₱820</p>
+                                                        <p><span class="font-semibold">Refund to:</span> GCASH</p>
+                                                        <p><span class="font-semibold">Request by:</span> Buyer</p>
+                                                        <p><span class="font-semibold">Request at:</span> 02-31-2024 13:30</p>
+                                                        <p class="flex items-center">
+                                                            <span class="font-semibold">Request ID:</span>
+                                                            <span class="ml-2">27693649M26485</span>
+                                                            <button  @click="copyRequestId"  class="ml-2 text-blue-600 font-semibold text-xs">COPY </button>
                                                         </p>
-                                                    </div>
-
-                                                    <div class="text-sm mt-3">
-                                                        <BaseRadioButton v-for="option in ['Need to change delivery address', 'Seller is not responsive to my inquiries', 'Others / Change of mind']"
-                                                            :key="option" :name="'tinIdOption'" :label="option" :value="option" v-model="tinIdSelected">
-                                                        </BaseRadioButton>
-                                                    </div>
-
-                                                    <!-- Buttons -->
-                                                    <div class="mt-4 flex justify-end space-x-2">
-                                                        <button @click="closeshowCancelModal"
-                                                            class="px-4 py-2 text-sm font-semibold text-gray-700 border border-gray-300 rounded hover:bg-gray-100">
-                                                            Close
-                                                        </button>
-                                                        <button @click="Save"
-                                                            class="px-4 py-2 text-sm font-semibold text-red-700 bg-red-100 border border-red-500 rounded hover:bg-red-200">
-                                                            Confirm
-                                                        </button>
+                                                        <p><span class="font-semibold">Reason:</span> Others / Change of mind</p>
                                                     </div>
                                                 </div>
-                                            </div>
-
-                                            <!-- Confirmation Modal -->
-                                            <div v-if="isConfirmationModalVisible" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-                                                <div class="bg-white p-5 md:p-7 rounded-lg shadow-lg w-full max-w-[90%] md:max-w-[400px]">
-                                                    <div class="text-end">
-                                                        <button @click="closeConfirmationModal" class="text-gray-400 hover:text-gray-600">
-                                                            <Icon icon="icon-park-solid:close-one" width="20" height="20" />
-                                                        </button>
-                                                    </div>
-                                                    <div class="border rounded-md p-3 shadow">
-                                                        <h2 class="text-center text-lg font-semibold">Refund Details</h2>
-                                                    </div>
-                                                    <div class="mt-4 border rounded-md p-3 shadow space-y-4 text-xs md:text-sm">
-                                                        <div class="flex items-center gap-3">
-                                                            <img src="https://via.placeholder.com/50" alt="Product" class="w-12 h-12 rounded-md">
-                                                            <div>
-                                                                <p class="font-semibold">Banana</p>
-                                                                <p class="text-gray-500">Variant: Kg</p>
-                                                            </div>
-                                                            <p class="ml-auto font-semibold">₱820</p>
-                                                        </div>
-
-                                                        <!-- Refund Details -->
-                                                        <div class="mt-3 space-y-2">
-                                                            <p><span class="font-semibold">Refund Amount:</span> ₱820</p>
-                                                            <p><span class="font-semibold">Refund to:</span> GCASH</p>
-                                                            <p><span class="font-semibold">Request by:</span> Buyer</p>
-                                                            <p><span class="font-semibold">Request at:</span> 02-31-2024 13:30</p>
-                                                            <p class="flex items-center">
-                                                                <span class="font-semibold">Request ID:</span>
-                                                                <span class="ml-2">27693649M26485</span>
-                                                                <button @click="copyRequestId" class="ml-2 text-blue-600 font-semibold text-xs">COPY</button>
-                                                            </p>
-                                                            <p><span class="font-semibold">Reason:</span> Others / Change of mind</p>
-                                                        </div>
-                                                    </div>
-                                                    <!-- Button -->
-                                                    <div class="mt-4 flex justify-center">
-                                                        <button @click="closeConfirmationModal"
-                                                            class="px-5 py-2 text-sm font-semibold text-white bg-green-600 rounded hover:bg-green-700">
-                                                            Okay
-                                                        </button>
-                                                    </div>
+                                                <!-- Button -->
+                                                <div class="mt-4 flex justify-center">
+                                                    <button @click="closeConfirmationModal" class="px-5 py-2 text-sm font-semibold text-white bg-green-600 rounded hover:bg-green-700" > Okay </button>
                                                 </div>
                                             </div>
                                         </div>
@@ -313,129 +312,140 @@
 
                                 <!--To Ship-->
                                 <div v-else-if="currentTab === 'To Ship'">
-                                    <div class="mt-4 bg-green-100 border border-green-300 rounded-lg p-4">
-                                    <!-- Scrollable Container -->
-                                        <div class="max-h-96 overflow-y-auto pr-2">
-                                            <div
-                                                v-for="toShip in toShipList"
-                                                :key="toShip.id"
-                                                class="flex flex-wrap md:flex-nowrap items-center mb-4"
-                                            >
+                                    <div class="mt-4 space-y-4 max-h-[500px] overflow-y-auto">
+                                        <div v-for="toShip in toShipList" :key="toShip.id" class="bg-green-100 border border-green-300 rounded-lg p-4">
+                                            <div class="flex flex-wrap md:flex-nowrap items-center mb-4">
                                                 <!-- Image -->
-                                                <img
-                                                :src="toShip.product_images[0] || 'https://via.placeholder.com/80'"
-                                                alt="Product Image"
-                                                class="w-16 h-16 sm:w-20 sm:h-20 2xl:w-24 2xl:h-24 rounded object-cover border"
-                                                />
+                                                <img :src="toShip.product_images[0] || 'https://via.placeholder.com/80'" alt="Product Image" class="w-16 h-16 sm:w-20 sm:h-20 2xl:w-24 2xl:h-24 rounded object-cover border"/>
 
                                                 <!-- Details -->
                                                 <div class="ml-3 sm:ml-4 flex-grow">
-                                                <h3 class="text-xs sm:text-sm 2xl:text-lg font-semibold">{{ toShip.product_name }}</h3>
-                                                <p class="text-[10px] sm:text-xs 2xl:text-sm text-gray-600">
+                                                    <h3 class="text-xs sm:text-sm 2xl:text-lg font-semibold">
+                                                    {{ toShip.product_name }}
+                                                    </h3>
+                                                    <p class="text-[10px] sm:text-xs 2xl:text-sm text-gray-600">
                                                     Variants: {{ toShip.unit }}
-                                                </p>
-                                                <div class="mt-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-                                                    <p class="text-xs sm:text-sm 2xl:text-base font-medium text-gray-700">
-                                                    Seller: <span class="font-bold">{{ toShip.farmer_name }}</span>
                                                     </p>
-                                                    <div class="flex items-center gap-2 sm:gap-3">
-                                                        <h1 class="text-xs sm:text-sm 2xl:text-base">Quantity:</h1>
-                                                        <p class="text-xs sm:text-sm 2xl:text-lg font-semibold text-green-700">
-                                                        {{ toShip.quantity }}
-                                                    </p>
-                                                    <h1 class="text-xs sm:text-sm 2xl:text-base">Order Total:</h1>
-                                                    <p class="text-xs sm:text-sm 2xl:text-lg font-semibold text-green-700">
-                                                        ₱{{ toShip.total_price }}
-                                                    </p>
+                                                    <div class="mt-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                                                        <p class="text-xs sm:text-sm 2xl:text-base font-medium text-gray-700">
+                                                            Seller: <span class="font-semibold">{{ toShip.farmer_name }}</span>
+                                                        </p>
+                                                        <div class="flex items-center gap-2 sm:gap-3">
+                                                            <h1 class="text-xs sm:text-sm 2xl:text-base">Quantity:</h1>
+                                                            <p
+                                                            class="text-xs sm:text-sm 2xl:text-lg font-semibold text-green-700"
+                                                            >
+                                                            {{ toShip.quantity }}
+                                                            </p>
+                                                            <h1 class="text-xs sm:text-sm 2xl:text-base">Order Total:</h1>
+                                                            <p
+                                                            class="text-xs sm:text-sm 2xl:text-lg font-semibold text-green-700"
+                                                            >
+                                                            ₱{{ toShip.total_amount }}
+                                                            </p>
+                                                        </div>
                                                     </div>
                                                 </div>
+                                            </div>
+
+                                            <!-- Order Status -->
+                                            <div>
+                                                <div class="mt-4 flex flex-col sm:flex-row sm:justify-between gap-2 sm:gap-4">
+                                                    <div class="flex items-center gap-2 sm:gap-3">
+                                                        <h1 class="text-xs sm:text-sm 2xl:text-base">Seller Preparing your Goods:</h1>
+                                                        <span class="text-xs sm:text-sm 2xl:text-base font-medium text-gray-500">Waiting for Courier</span>
+                                                    </div>
+                                                    <div class="flex space-x-2">
+                                                        <button class="px-3 py-1 text-xs sm:text-sm 2xl:text-base font-semibold text-green-700 border border-green-600 rounded hover:bg-green-50" @click="openshowChatModal">
+                                                            Contact Seller
+                                                        </button>
+                                                        <button class="px-3 py-1 text-xs sm:text-sm 2xl:text-base font-semibold text-red-600 border border-red-500 rounded hover:bg-red-50"  @click="openshowCancelModal">
+                                                            Cancel Order
+                                                        </button>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
 
-
-                                        <!-- Order Status -->
-                                        <div class="mt-4">
-                                            <div class="mt-4 flex flex-col sm:flex-row sm:justify-between gap-2 sm:gap-4">
-                                                <div class="flex items-center gap-2 sm:gap-3">
-                                                    <h1 class="text-xs sm:text-sm 2xl:text-base">Seller Preparing your Goods:</h1>
-                                                    <span class="text-xs sm:text-sm 2xl:text-base font-medium text-gray-500">To Ship</span>
-                                                </div>
-                                                <div class="flex space-x-2">
-                                                    <button class="px-3 py-1 text-xs sm:text-sm 2xl:text-base font-semibold text-green-700 border border-green-600 rounded hover:bg-green-50" @click="openshowChatModal">
-                                                        Contact Seller
-                                                    </button>
-                                                    <button class="px-3 py-1 text-xs sm:text-sm 2xl:text-base font-semibold text-red-600 border border-red-500 rounded hover:bg-red-50" @click="openshowCancelModal">
-                                                        Cancel Order
+                                        <!-- Cancel Order Modal -->
+                                        <div v-if="isshowCancelModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+                                            <div class="bg-white p-5 md:p-7 rounded-lg shadow-lg w-full max-w-[90%] md:max-w-[500px]" >
+                                                <div class="text-end">
+                                                    <button  @click="closeshowCancelModal" class="text-gray-400 hover:text-gray-600" >
+                                                    <Icon icon="icon-park-solid:close-one" width="20" height="20" />
                                                     </button>
                                                 </div>
-                                            </div>
+                                                <h3 class="text-lg md:text-xl font-semibold text-center mb-4">
+                                                    Select Cancellation Reason
+                                                </h3>
 
-                                            <!-- Cancel Order Modal -->
-                                            <div v-if="isshowCancelModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4">
-                                                <div class="bg-white p-5 rounded-lg shadow-lg w-full max-w-md md:max-w-lg lg:max-w-xl">
-                                                    <div class="text-end">
-                                                        <button @click="closeshowCancelModal" class="text-gray-400 hover:text-gray-600">
-                                                            <Icon icon="icon-park-solid:close-one" width="20" height="20" />
-                                                        </button>
-                                                    </div>
-                                                    <h3 class="text-lg font-semibold text-center">Select Cancellation Reason</h3>
+                                                <!-- Notification Section -->
+                                                <div class="mt-4 p-4 bg-[#608C54] rounded-md flex flex-col items-center text-center">
+                                                    <Icon icon="noto:bell" width="50" height="50" class="mb-4" />
+                                                    <p class="text-sm md:text-base text-white">
+                                                    Please select a cancellation reason. Once your order is successfully
+                                                    canceled, your refund will be processed immediately and may take 10 to
+                                                    45 minutes to reflect in your account.
+                                                    </p>
+                                                </div>
 
-                                                    <!-- Notification Section -->
-                                                    <div class="mt-4 p-4 bg-[#608C54] rounded-md text-center text-white">
-                                                        <Icon icon="noto:bell" width="50" height="50" class="mb-4" />
-                                                        <p class="text-sm">Please select a cancellation reason. Once canceled, your refund will be processed immediately and may take 10 to 45 minutes to reflect in your account.</p>
-                                                    </div>
+                                                <div class="text-sm mt-3">
+                                                    <BaseRadioButton v-for="option in ['Need to change delivery address', 'Seller is not responsive to my inquiries', 'Others / Change of mind']" :key="option" :name="'tinIdOption'" :label="option" :value="option" v-model="tinIdSelected"/>
+                                                </div>
 
-                                                    <div class="text-sm mt-3">
-                                                        <BaseRadioButton v-for="option in ['Need to change delivery address', 'Seller is not responsive to my inquiries', 'Others / Change of mind']"
-                                                            :key="option" :name="'tinIdOption'" :label="option" :value="option" v-model="tinIdSelected">
-                                                        </BaseRadioButton>
-                                                    </div>
-
-                                                    <!-- Buttons -->
-                                                    <div class="mt-4 flex justify-end space-x-2">
-                                                        <button @click="closeshowCancelModal" class="px-4 py-2 text-sm font-semibold text-gray-700 border border-gray-300 rounded hover:bg-gray-100">Close</button>
-                                                        <button @click="Save" class="px-4 py-2 text-sm font-semibold text-red-700 bg-red-100 border border-red-500 rounded hover:bg-red-200">Confirm</button>
-                                                    </div>
+                                                <!-- Buttons -->
+                                                <div class="mt-4 flex justify-end space-x-2">
+                                                    <button @click="closeshowCancelModal" class="px-4 py-2 text-sm font-semibold text-gray-700 border border-gray-300 rounded hover:bg-gray-100" > Close</button>
+                                                    <button @click="Save" class="px-4 py-2 text-sm font-semibold text-red-700 bg-red-100 border border-red-500 rounded hover:bg-red-200"> Confirm </button>
                                                 </div>
                                             </div>
+                                        </div>
 
-                                            <!-- Confirmation Modal -->
-                                            <div v-if="isConfirmationModalVisible" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4">
-                                                <div class="bg-white p-5 rounded-lg shadow-lg w-full max-w-sm md:max-w-md">
-                                                    <div class="text-end">
-                                                        <button @click="closeConfirmationModal" class="text-gray-400 hover:text-gray-600">
-                                                            <Icon icon="icon-park-solid:close-one" width="20" height="20" />
-                                                        </button>
-                                                    </div>
+                                        <!-- Confirmation Modal -->
+                                        <div v-if="isConfirmationModalVisible"  class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+                                            <div class="bg-white p-5 md:p-7 rounded-lg shadow-lg w-full max-w-[90%] md:max-w-[400px]" >
+                                                <div class="text-end">
+                                                    <button
+                                                    @click="closeConfirmationModal"
+                                                    class="text-gray-400 hover:text-gray-600"
+                                                    >
+                                                    <Icon icon="icon-park-solid:close-one" width="20" height="20" />
+                                                    </button>
+                                                </div>
+                                                <div class="border rounded-md p-3 shadow">
                                                     <h2 class="text-center text-lg font-semibold">Refund Details</h2>
+                                                </div>
+                                                <div class="mt-4 border rounded-md p-3 shadow space-y-4 text-xs md:text-sm">
+                                                    <div class="flex items-center gap-3">
+                                                    <img
+                                                        src="https://via.placeholder.com/50"
+                                                        alt="Product"
+                                                        class="w-12 h-12 rounded-md"
+                                                    />
+                                                    <div>
+                                                        <p class="font-semibold">Banana</p>
+                                                        <p class="text-gray-500">Variant: Kg</p>
+                                                    </div>
+                                                    <p class="ml-auto font-semibold">₱820</p>
+                                                    </div>
 
-                                                    <div class="mt-4 border-2 rounded-md p-3 shadow space-y-4">
-                                                        <div class="flex items-center gap-3">
-                                                            <img src="https://via.placeholder.com/50" alt="Product" class="w-12 h-12 rounded-md">
-                                                            <div>
-                                                                <p class="font-semibold">Banana</p>
-                                                                <p class="text-sm text-gray-500">Variant: Kg</p>
-                                                            </div>
-                                                            <p class="ml-auto font-semibold">₱820</p>
-                                                        </div>
-                                                        <div class="text-sm text-gray-600 space-y-2">
-                                                            <p><span class="font-semibold">Refund Amount:</span> ₱820</p>
-                                                            <p><span class="font-semibold">Refund to:</span> GCASH</p>
-                                                            <p><span class="font-semibold">Request by:</span> Buyer</p>
-                                                            <p><span class="font-semibold">Request at:</span> 02-31-2024 13:30</p>
-                                                            <p class="flex items-center">
-                                                                <span class="font-semibold">Request ID:</span>
-                                                                <span class="ml-2">27693649M26485</span>
-                                                                <button @click="copyRequestId" class="ml-2 text-blue-600 font-semibold text-xs">COPY</button>
-                                                            </p>
-                                                            <p><span class="font-semibold">Reason:</span> Others / Change of mind</p>
-                                                        </div>
+                                                    <!-- Refund Details -->
+                                                    <div class="mt-3 space-y-2">
+                                                        <p><span class="font-semibold">Refund Amount:</span> ₱820</p>
+                                                        <p><span class="font-semibold">Refund to:</span> GCASH</p>
+                                                        <p><span class="font-semibold">Request by:</span> Buyer</p>
+                                                        <p><span class="font-semibold">Request at:</span> 02-31-2024 13:30</p>
+                                                        <p class="flex items-center">
+                                                            <span class="font-semibold">Request ID:</span>
+                                                            <span class="ml-2">27693649M26485</span>
+                                                            <button  @click="copyRequestId"  class="ml-2 text-blue-600 font-semibold text-xs">COPY </button>
+                                                        </p>
+                                                        <p><span class="font-semibold">Reason:</span> Others / Change of mind</p>
                                                     </div>
-                                                    <div class="mt-4 flex justify-center">
-                                                        <button @click="closeConfirmationModal" class="px-5 py-2 text-sm font-semibold text-white bg-green-600 rounded hover:bg-green-700">Okay</button>
-                                                    </div>
+                                                </div>
+                                                <!-- Button -->
+                                                <div class="mt-4 flex justify-center">
+                                                    <button @click="closeConfirmationModal" class="px-5 py-2 text-sm font-semibold text-white bg-green-600 rounded hover:bg-green-700" > Okay </button>
                                                 </div>
                                             </div>
                                         </div>
@@ -445,61 +455,62 @@
 
                                 <!--To Receive-->
                                 <div v-else-if="currentTab === 'To Receive'">
-                                    <div class="mt-4 bg-green-100 border border-green-300 rounded-lg p-4">
-                                        <div class="max-h-96 overflow-y-auto pr-2">
-                                            <div
-                                                v-for="purchase in purchaseList"
-                                                :key="purchase.id"
-                                                class="flex flex-wrap md:flex-nowrap items-center mb-4"
-                                            >
+                                    <div class="mt-4 space-y-4 max-h-[500px] overflow-y-auto">
+                                        <div v-for="toShip in toShipList" :key="toShip.id" class="bg-green-100 border border-green-300 rounded-lg p-4">
+                                            <div class="flex flex-wrap md:flex-nowrap items-center mb-4">
                                                 <!-- Image -->
-                                                <img
-                                                :src="purchase.product_images[0] || 'https://via.placeholder.com/80'"
-                                                alt="Product Image"
-                                                class="w-16 h-16 sm:w-20 sm:h-20 2xl:w-24 2xl:h-24 rounded object-cover border"
-                                                />
+                                                <img :src="toShip.product_images[0] || 'https://via.placeholder.com/80'" alt="Product Image" class="w-16 h-16 sm:w-20 sm:h-20 2xl:w-24 2xl:h-24 rounded object-cover border"/>
 
                                                 <!-- Details -->
                                                 <div class="ml-3 sm:ml-4 flex-grow">
-                                                <h3 class="text-xs sm:text-sm 2xl:text-lg font-semibold">{{ purchase.product_name }}</h3>
-                                                <p class="text-[10px] sm:text-xs 2xl:text-sm text-gray-600">
-                                                    Variants: {{ purchase.unit }}
-                                                </p>
-                                                <div class="mt-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-                                                    <p class="text-xs sm:text-sm 2xl:text-base font-medium text-gray-700">
-                                                    Seller: <span class="font-bold">{{ purchase.farmer_name }}</span>
+                                                    <h3 class="text-xs sm:text-sm 2xl:text-lg font-semibold">
+                                                    {{ toShip.product_name }}
+                                                    </h3>
+                                                    <p class="text-[10px] sm:text-xs 2xl:text-sm text-gray-600">
+                                                    Variants: {{ toShip.unit }}
                                                     </p>
-                                                    <div class="flex items-center gap-2 sm:gap-3">
-                                                        <h1 class="text-xs sm:text-sm 2xl:text-base">Quantity:</h1>
-                                                        <p class="text-xs sm:text-sm 2xl:text-lg font-semibold text-green-700">
-                                                        {{ purchase.quantity }}
-                                                    </p>
-                                                    <h1 class="text-xs sm:text-sm 2xl:text-base">Order Total:</h1>
-                                                    <p class="text-xs sm:text-sm 2xl:text-lg font-semibold text-green-700">
-                                                        ₱{{ purchase.total_price }}
-                                                    </p>
+                                                    <div class="mt-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                                                        <p class="text-xs sm:text-sm 2xl:text-base font-medium text-gray-700">
+                                                            Seller: <span class="font-semibold">{{ toShip.farmer_name }}</span>
+                                                        </p>
+                                                        <div class="flex items-center gap-2 sm:gap-3">
+                                                            <h1 class="text-xs sm:text-sm 2xl:text-base">Quantity:</h1>
+                                                            <p
+                                                            class="text-xs sm:text-sm 2xl:text-lg font-semibold text-green-700"
+                                                            >
+                                                            {{ toShip.quantity }}
+                                                            </p>
+                                                            <h1 class="text-xs sm:text-sm 2xl:text-base">Order Total:</h1>
+                                                            <p
+                                                            class="text-xs sm:text-sm 2xl:text-lg font-semibold text-green-700"
+                                                            >
+                                                            ₱{{ toShip.total_amount }}
+                                                            </p>
+                                                        </div>
                                                     </div>
                                                 </div>
+                                            </div>
+
+                                            <!-- Order Status -->
+                                            <div>
+                                                <div class="mt-4 flex flex-col sm:flex-row sm:justify-between gap-2 sm:gap-4">
+                                                    <div class="flex items-center gap-2 sm:gap-3">
+                                                        <h1 class="text-xs sm:text-sm 2xl:text-base">Seller Has shipped your goods:</h1>
+                                                        <span class="text-xs sm:text-sm 2xl:text-base font-medium text-gray-500">To Receive</span>
+                                                    </div>
+                                                    <div class="flex space-x-2">
+                                                        <button class="px-3 py-1 text-xs sm:text-sm 2xl:text-base font-semibold text-green-700 border border-green-600 rounded hover:bg-green-50" @click="openshowChatModal">
+                                                            Contact Seller
+                                                        </button>
+                                                        <button class="px-3 py-1 text-xs sm:text-sm 2xl:text-base font-semibold text-red-600 border border-red-500 rounded hover:bg-red-50" @click="openTrackModal">
+                                                        Track Order
+                                                        </button>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
 
-                                        <!-- Order Status Section -->
-                                        <div class="mt-4 flex flex-col sm:flex-row sm:justify-between gap-2 sm:gap-4">
-                                            <div class="flex items-center gap-2 sm:gap-3">
-                                                <h1 class="text-xs sm:text-sm 2xl:text-base">Seller Has shipped your goods:</h1>
-                                                <span class="text-xs sm:text-sm 2xl:text-base font-medium text-gray-500">To Receive</span>
-                                            </div>
-                                            <div class="flex space-x-2">
-                                                <button class="px-3 py-1 text-xs sm:text-sm 2xl:text-base font-semibold text-green-700 border border-green-600 rounded hover:bg-green-50" @click="openshowChatModal">
-                                                    Contact Seller
-                                                </button>
-                                                <button class="px-3 py-1 text-xs sm:text-sm 2xl:text-base font-semibold text-red-600 border border-red-500 rounded hover:bg-red-50" @click="openTrackModal">
-                                                  Track Order
-                                                </button>
-                                            </div>
-                                        </div>
-
+                                        <!-- Cancel Order Modal -->
                                         <div v-if="isshowTrackModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4">
                                             <div class="bg-white p-7 rounded-lg shadow-lg w-full max-w-4xl flex flex-col md:flex-row relative">
                                                 <button @click="closeTrackModal" class="absolute top-2 right-2 text-gray-400 hover:text-gray-600">
@@ -560,63 +571,63 @@
                                     </div>
                                 </div>
 
+
                                 <!--Completed-->
                                 <div v-else-if="currentTab === 'Completed'">
-                                    <div class="mt-4 bg-green-100 border border-green-300 rounded-lg p-4">
-                                        <div class="max-h-96 overflow-y-auto pr-2">
-                                            <div
-                                                v-for="purchase in purchaseList"
-                                                :key="purchase.id"
-                                                class="flex flex-wrap md:flex-nowrap items-center mb-4"
-                                            >
+                                    <div class="mt-4 space-y-4 max-h-[500px] overflow-y-auto">
+                                        <div v-for="toShip in toShipList" :key="toShip.id" class="bg-green-100 border border-green-300 rounded-lg p-4">
+                                            <div class="flex flex-wrap md:flex-nowrap items-center mb-4">
                                                 <!-- Image -->
-                                                <img
-                                                :src="purchase.product_images[0] || 'https://via.placeholder.com/80'"
-                                                alt="Product Image"
-                                                class="w-16 h-16 sm:w-20 sm:h-20 2xl:w-24 2xl:h-24 rounded object-cover border"
-                                                />
+                                                <img :src="toShip.product_images[0] || 'https://via.placeholder.com/80'" alt="Product Image" class="w-16 h-16 sm:w-20 sm:h-20 2xl:w-24 2xl:h-24 rounded object-cover border"/>
 
                                                 <!-- Details -->
                                                 <div class="ml-3 sm:ml-4 flex-grow">
-                                                <h3 class="text-xs sm:text-sm 2xl:text-lg font-semibold">{{ purchase.product_name }}</h3>
-                                                <p class="text-[10px] sm:text-xs 2xl:text-sm text-gray-600">
-                                                    Variants: {{ purchase.unit }}
-                                                </p>
-                                                <div class="mt-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-                                                    <p class="text-xs sm:text-sm 2xl:text-base font-medium text-gray-700">
-                                                    Seller: <span class="font-bold">{{ purchase.farmer_name }}</span>
+                                                    <h3 class="text-xs sm:text-sm 2xl:text-lg font-semibold">
+                                                    {{ toShip.product_name }}
+                                                    </h3>
+                                                    <p class="text-[10px] sm:text-xs 2xl:text-sm text-gray-600">
+                                                    Variants: {{ toShip.unit }}
                                                     </p>
-                                                    <div class="flex items-center gap-2 sm:gap-3">
-                                                        <h1 class="text-xs sm:text-sm 2xl:text-base">Quantity:</h1>
-                                                        <p class="text-xs sm:text-sm 2xl:text-lg font-semibold text-green-700">
-                                                        {{ purchase.quantity }}
-                                                    </p>
-                                                    <h1 class="text-xs sm:text-sm 2xl:text-base">Order Total:</h1>
-                                                    <p class="text-xs sm:text-sm 2xl:text-lg font-semibold text-green-700">
-                                                        ₱{{ purchase.total_price }}
-                                                    </p>
+                                                    <div class="mt-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                                                        <p class="text-xs sm:text-sm 2xl:text-base font-medium text-gray-700">
+                                                            Seller: <span class="font-semibold">{{ toShip.farmer_name }}</span>
+                                                        </p>
+                                                        <div class="flex items-center gap-2 sm:gap-3">
+                                                            <h1 class="text-xs sm:text-sm 2xl:text-base">Quantity:</h1>
+                                                            <p
+                                                            class="text-xs sm:text-sm 2xl:text-lg font-semibold text-green-700"
+                                                            >
+                                                            {{ toShip.quantity }}
+                                                            </p>
+                                                            <h1 class="text-xs sm:text-sm 2xl:text-base">Order Total:</h1>
+                                                            <p
+                                                            class="text-xs sm:text-sm 2xl:text-lg font-semibold text-green-700"
+                                                            >
+                                                            ₱{{ toShip.total_amount }}
+                                                            </p>
+                                                        </div>
                                                     </div>
                                                 </div>
+                                            </div>
+
+                                            <!-- Order Status -->
+                                            <div>
+                                                <div class="mt-4 flex flex-col sm:flex-row sm:justify-between gap-2 sm:gap-4">
+                                                    <div class="flex items-center gap-2 sm:gap-3">
+                                                        <h1 class="text-xs sm:text-sm 2xl:text-base">Parcel has been delivered:</h1>
+                                                        <span class="text-xs sm:text-sm 2xl:text-base font-medium text-gray-500">Completed</span>
+                                                    </div>
+                                                    <div class="flex space-x-2">
+                                                        <button class="px-8 py-1 text-xs sm:text-sm 2xl:text-base font-semibold text-green-700 border border-green-600 rounded hover:bg-green-50" @click="openRateModal">
+                                                            Rate
+                                                        </button>
+                                                        <button class="px-3 py-1 text-xs sm:text-sm 2xl:text-base font-semibold text-red-600 border border-red-500 rounded hover:bg-red-50" @click="openRefundModal">
+                                                            Request/Refund
+                                                        </button>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-
-                                        <!-- Order Status Section -->
-                                        <div class="mt-4 flex flex-col sm:flex-row sm:justify-between gap-2 sm:gap-4">
-                                            <div class="flex items-center gap-2 sm:gap-3">
-                                                <h1 class="text-xs sm:text-sm 2xl:text-base">Parcel has been delivered:</h1>
-                                                <span class="text-xs sm:text-sm 2xl:text-base font-medium text-gray-500">Completed</span>
-                                            </div>
-                                            <div class="flex space-x-2">
-                                                <button class="px-8 py-1 text-xs sm:text-sm 2xl:text-base font-semibold text-green-700 border border-green-600 rounded hover:bg-green-50" @click="openRateModal">
-                                                    Rate
-                                                </button>
-                                                <button class="px-3 py-1 text-xs sm:text-sm 2xl:text-base font-semibold text-red-600 border border-red-500 rounded hover:bg-red-50" @click="openRefundModal">
-                                                    Request/Refund
-                                                </button>
-                                            </div>
-                                        </div>
-
 
                                         <!-- Rate Modal -->
                                         <div v-if="isshowRateModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4">
@@ -728,46 +739,63 @@
 
                                 <!--Cancelled-->
                                 <div v-else-if="currentTab === 'Cancelled'">
-                                    <div class="mt-4 bg-green-100 border border-green-300 rounded-lg p-4">
-                                        <div class="flex flex-wrap md:flex-nowrap items-center">
-                                            <!-- Image -->
-                                            <img src="https://via.placeholder.com/80" alt="Product Image"
-                                                class="w-16 h-16 sm:w-20 sm:h-20 2xl:w-24 2xl:h-24 rounded object-cover border" />
+                                    <div class="mt-4 space-y-4 max-h-[500px] overflow-y-auto">
+                                        <div v-for="toShip in toShipList" :key="toShip.id" class="bg-green-100 border border-green-300 rounded-lg p-4">
+                                            <div class="flex flex-wrap md:flex-nowrap items-center mb-4">
+                                                <!-- Image -->
+                                                <img :src="toShip.product_images[0] || 'https://via.placeholder.com/80'" alt="Product Image" class="w-16 h-16 sm:w-20 sm:h-20 2xl:w-24 2xl:h-24 rounded object-cover border"/>
 
-                                            <!-- Details -->
-                                            <div class="ml-3 sm:ml-4 flex-grow">
-                                                <h3 class="text-xs sm:text-sm 2xl:text-lg font-semibold">Salad package</h3>
-                                                <p class="text-[10px] sm:text-xs 2xl:text-sm text-gray-600">Variants: 500 Grams</p>
-                                                <div class="mt-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-                                                    <p class="text-xs sm:text-sm 2xl:text-base font-medium text-gray-700">
-                                                        Seller: <span class="font-bold">Janromil Dela Cruz</span>
+                                                <!-- Details -->
+                                                <div class="ml-3 sm:ml-4 flex-grow">
+                                                    <h3 class="text-xs sm:text-sm 2xl:text-lg font-semibold">
+                                                    {{ toShip.product_name }}
+                                                    </h3>
+                                                    <p class="text-[10px] sm:text-xs 2xl:text-sm text-gray-600">
+                                                    Variants: {{ toShip.unit }}
                                                     </p>
+                                                    <div class="mt-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                                                        <p class="text-xs sm:text-sm 2xl:text-base font-medium text-gray-700">
+                                                            Seller: <span class="font-semibold">{{ toShip.farmer_name }}</span>
+                                                        </p>
+                                                        <div class="flex items-center gap-2 sm:gap-3">
+                                                            <h1 class="text-xs sm:text-sm 2xl:text-base">Quantity:</h1>
+                                                            <p
+                                                            class="text-xs sm:text-sm 2xl:text-lg font-semibold text-green-700"
+                                                            >
+                                                            {{ toShip.quantity }}
+                                                            </p>
+                                                            <h1 class="text-xs sm:text-sm 2xl:text-base">Order Total:</h1>
+                                                            <p
+                                                            class="text-xs sm:text-sm 2xl:text-lg font-semibold text-green-700"
+                                                            >
+                                                            ₱{{ toShip.total_amount }}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Order Status -->
+                                            <div>
+                                                <div class="mt-4 flex flex-col sm:flex-row sm:justify-between gap-2 sm:gap-4">
                                                     <div class="flex items-center gap-2 sm:gap-3">
-                                                        <h1 class="text-xs sm:text-sm 2xl:text-base">Order Total:</h1>
-                                                        <p class="text-xs sm:text-sm 2xl:text-lg font-semibold text-green-700">₱820</p>
+                                                        <h1 class="text-xs sm:text-sm 2xl:text-base">Cancelled by You:</h1>
+                                                        <span class="text-xs sm:text-sm 2xl:text-base font-medium text-gray-500">Cancelled</span>
+                                                    </div>
+                                                    <div class="flex space-x-2">
+                                                        <button class="px-3 py-1 text-xs sm:text-sm 2xl:text-base font-semibold text-green-700 border border-green-600 rounded hover:bg-green-50">
+                                                            Buy Again
+                                                        </button>
+                                                        <button class="px-3 py-1 text-xs sm:text-sm 2xl:text-base font-semibold text-red-600 border border-red-500 rounded hover:bg-red-50" @click="openViewCancellationModal">
+                                                            View Cancellation Details
+                                                        </button>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
 
-                                        <!-- Order Status Section -->
-                                        <div class="mt-4 flex flex-col sm:flex-row sm:justify-between gap-2 sm:gap-4">
-                                            <div class="flex items-center gap-2 sm:gap-3">
-                                                <h1 class="text-xs sm:text-sm 2xl:text-base">Cancelled by You:</h1>
-                                                <span class="text-xs sm:text-sm 2xl:text-base font-medium text-gray-500">Cancelled</span>
-                                            </div>
-                                            <div class="flex space-x-2">
-                                                <button class="px-3 py-1 text-xs sm:text-sm 2xl:text-base font-semibold text-green-700 border border-green-600 rounded hover:bg-green-50">
-                                                    Buy Again
-                                                </button>
-                                                <button class="px-3 py-1 text-xs sm:text-sm 2xl:text-base font-semibold text-red-600 border border-red-500 rounded hover:bg-red-50" @click="openViewCancellationModal">
-                                                    View Cancellation Details
-                                                </button>
-                                            </div>
-                                        </div>
-                                         <!-- Modal Backdrop -->
+                                        <!-- Cancel Order Modal -->
                                         <div v-if="isshowViewCancellationModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-                                            <!-- Modal Content -->
                                             <div class="bg-white max-w-3xl w-full rounded-lg shadow-lg p-6 relative">
                                                 <!-- Close Button -->
                                                 <button @click="closeViewCancellationModal" class="absolute top-2 right-2 text-gray-500 hover:text-red-500">
@@ -826,50 +854,60 @@
 
                                 <!--Return Refund-->
                                 <div v-else-if="currentTab === 'Return Refund'">
-                                    <div class="mt-4 bg-green-100 border border-green-300 rounded-lg p-4 hover:bg-gray-100">
-                                        <div class="flex flex-wrap md:flex-nowrap items-center">
+                                    <div v-for="toShip in toShipList" :key="toShip.id" class="bg-green-100 border border-green-300 rounded-lg p-4">
+                                        <div class="flex flex-wrap md:flex-nowrap items-center mb-4">
                                             <!-- Image -->
-                                            <img src="https://via.placeholder.com/80" alt="Product Image"
-                                                class="w-16 h-16 sm:w-20 sm:h-20 2xl:w-24 2xl:h-24 rounded object-cover border" />
+                                            <img :src="toShip.product_images[0] || 'https://via.placeholder.com/80'" alt="Product Image" class="w-16 h-16 sm:w-20 sm:h-20 2xl:w-24 2xl:h-24 rounded object-cover border"/>
 
                                             <!-- Details -->
                                             <div class="ml-3 sm:ml-4 flex-grow">
-                                                <h3 class="text-xs sm:text-sm 2xl:text-lg font-semibold">Salad package</h3>
-                                                <p class="text-[10px] sm:text-xs 2xl:text-sm text-gray-600">Variants: 500 Grams</p>
+                                                <h3 class="text-xs sm:text-sm 2xl:text-lg font-semibold">
+                                                {{ toShip.product_name }}
+                                                </h3>
+                                                <p class="text-[10px] sm:text-xs 2xl:text-sm text-gray-600">
+                                                Variants: {{ toShip.unit }}
+                                                </p>
                                                 <div class="mt-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
                                                     <p class="text-xs sm:text-sm 2xl:text-base font-medium text-gray-700">
-                                                        Seller: <span class="font-bold">Janromil Dela Cruz</span>
+                                                        Seller: <span class="font-semibold">{{ toShip.farmer_name }}</span>
                                                     </p>
                                                     <div class="flex items-center gap-2 sm:gap-3">
+                                                        <h1 class="text-xs sm:text-sm 2xl:text-base">Quantity:</h1>
+                                                        <p
+                                                        class="text-xs sm:text-sm 2xl:text-lg font-semibold text-green-700"
+                                                        >
+                                                        {{ toShip.quantity }}
+                                                        </p>
                                                         <h1 class="text-xs sm:text-sm 2xl:text-base">Order Total:</h1>
-                                                        <p class="text-xs sm:text-sm 2xl:text-lg font-semibold text-green-700">₱820</p>
+                                                        <p
+                                                        class="text-xs sm:text-sm 2xl:text-lg font-semibold text-green-700"
+                                                        >
+                                                        ₱{{ toShip.total_amount }}
+                                                        </p>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
 
-                                        <!-- Order Status Section -->
-                                        <div class="mt-4 flex flex-col sm:flex-row sm:justify-between gap-2 sm:gap-4">
-                                            <div class="flex items-center gap-2 sm:gap-3">
-                                                <h1 class="text-xs sm:text-sm 2xl:text-base">Click here for the status:</h1>
-                                                <span class="text-xs sm:text-sm 2xl:text-base font-medium text-gray-500">Return Refund</span>
+                                        <!-- Order Status -->
+                                        <div>
+                                            <div class="mt-4 flex flex-col sm:flex-row sm:justify-between gap-2 sm:gap-4">
+                                                <div class="flex items-center gap-2 sm:gap-3">
+                                                    <h1 class="text-xs sm:text-sm 2xl:text-base">Seller Has shipped your goods:</h1>
+                                                    <span class="text-xs sm:text-sm 2xl:text-base font-medium text-gray-500">To Receive</span>
+                                                </div>
+                                                <div class="flex space-x-2">
+                                                    <button class="px-3 py-1 text-xs sm:text-sm 2xl:text-base font-semibold text-green-700 border border-green-600 rounded hover:bg-green-50" @click="openshowChatModal">
+                                                        Contact Seller
+                                                    </button>
+                                                    <button class="px-3 py-1 text-xs sm:text-sm 2xl:text-base font-semibold text-red-600 border border-red-500 rounded hover:bg-red-50" @click="openTrackModal">
+                                                    Track Order
+                                                    </button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-
-                            <!-- Pagination (Optional, if applicable to all tabs) -->
-                            <div v-if="hasPagination(currentTab)" class="mt-6 flex justify-center items-center space-x-2">
-                                <button class="px-3 py-1 text-sm font-medium text-gray-500 border border-gray-300 rounded hover:bg-gray-100" :disabled="currentPage === 1" @click="prevPage">
-                                     Previous
-                                </button>
-                                <button v-for="page in totalPages" :key="page" @click="currentPage = page" :class="[  'px-3 py-1 text-sm font-medium rounded', currentPage === page ? 'bg-green-600 text-white' : 'text-gray-600 border border-gray-300 hover:bg-gray-100']" >
-                                     {{ page }}
-                                </button>
-                                <button class="px-3 py-1 text-sm font-medium text-gray-500 border border-gray-300 rounded hover:bg-gray-100" :disabled="currentPage === totalPages" @click="nextPage">
-                                     Next
-                                </button>
                             </div>
                         </div>
                     </div>
@@ -1053,6 +1091,7 @@ import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 import BaseSelectField from '@/components/Input-Fields/BaseSelectField.vue';
 import BaseOptionField from '@/components/Input-Fields/BaseOptionField.vue';
+import BaseCheckBox from '@/components/Input-Fields/BaseCheckBox.vue';
 
 const store = useStore();
 const router = useRouter();

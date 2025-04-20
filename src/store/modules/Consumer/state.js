@@ -55,6 +55,11 @@ export default {
         data: [],
     },
 
+    // productItemInfo: {
+    //     data: [],
+    //     farmerInfo: [],
+    // },
+
     toast: { // Add toast state
         showToast: false,
         toastMessage: '',

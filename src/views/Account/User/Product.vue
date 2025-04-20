@@ -334,45 +334,28 @@
 
                             <!-- Table Body -->
                             <tbody>
-                            <tr
-                                v-for="product in productList"
-                                :key="product.id"
-                                class="border-b hover:bg-gray-100 2xl:text-sm 2xs:text-xs"
-                            >
-                                <td class="p-1 sm:p-4 flex items-center space-x-2 gap-2">
-                                <img :src="product.product_img[0]" class="w-8 h-8 sm:w-12 sm:h-12" />
-                                <span class="hidden sm:table-cell">{{ product.product_name }}</span>
-                                </td>
-                                <td class="px-2 sm:px-2 py-2 text-start">{{ product.description }}</td>
-                                <td class="px-2 sm:px-2 py-2 text-start">
-                                {{ product.stocks }} {{ product.unit }}
-                                </td>
-                                <td class="px-2 sm:px-4 py-2 text-start">₱{{ product.price }}</td>
-                                <td class="px-2 sm:px-4 py-2 flex items-center space-x-2 justify-end">
-                                <!-- Edit Button -->
-                                <button
-                                    class="text-blue-500 hover:text-blue-700"
-                                    @click="openUpdateProductModal(product.id)"
-                                >
-                                    <Icon
-                                    icon="lucide:pencil-line"
-                                    width="1rem"
-                                    height="1rem"
-                                    class="sm:w-5 sm:h-5"
-                                    />
-                                </button>
+                                <tr v-for="product in productList" :key="product.id" class="border-b hover:bg-gray-100 2xl:text-sm 2xs:text-xs">
+                                    <td class="p-1 sm:p-4 flex items-center space-x-2 gap-2">
+                                    <img :src="product.product_img[0]" class="w-8 h-8 sm:w-12 sm:h-12" />
+                                    <span class="hidden sm:table-cell">{{ product.product_name }}</span>
+                                    </td>
+                                    <td class="px-2 sm:px-2 py-2 text-start">{{ product.description }}</td>
+                                    <td class="px-2 sm:px-2 py-2 text-start">
+                                    {{ product.stocks }} {{ product.unit }}
+                                    </td>
+                                    <td class="px-2 sm:px-4 py-2 text-start">₱{{ product.price }}</td>
+                                    <td class="px-2 sm:px-4 py-2 flex items-center space-x-2 justify-end">
+                                    <!-- Edit Button -->
+                                    <button class="text-blue-500 hover:text-blue-700" @click="openUpdateProductModal(product.id)">
+                                        <Icon icon="lucide:pencil-line" width="1rem" height="1rem" class="sm:w-5 sm:h-5"/>
+                                    </button>
 
-                                <!-- Delete Button -->
-                                <button class="text-red-500 hover:text-red-700" @click="openDeleteProductModal(product.id)">
-                                    <Icon
-                                    icon="octicon:trash-24"
-                                    width="1rem"
-                                    height="1rem"
-                                    class="sm:w-5 sm:h-5"
-                                    />
-                                </button>
-                                </td>
-                            </tr>
+                                    <!-- Delete Button -->
+                                    <button class="text-red-500 hover:text-red-700" @click="openDeleteProductModal(product.id)">
+                                        <Icon icon="octicon:trash-24"  width="1rem"  height="1rem"  class="sm:w-5 sm:h-5" />
+                                    </button>
+                                    </td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>

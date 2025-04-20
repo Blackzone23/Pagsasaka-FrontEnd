@@ -107,7 +107,7 @@
                                             <h3 class="text-sm font-semibold">{{ farmerInfo.product_name }}</h3>
                                             <div class="text-red-500 font-bold text-sm">₱{{ farmerInfo.price }}</div>
                                             <div class="flex justify-between items-center mt-2">
-                                            <div v-if="product.rating" class="text-yellow-500 text-xs flex items-center">
+                                            <div v-if="farmerInfo.rating" class="text-yellow-500 text-xs flex items-center">
                                                 <Icon v-for="star in 5" :key="star" :icon="star <= farmerInfo.rating ? 'mdi:star' : 'mdi:star-outline'" class="mr-1"/>
                                             </div>
                                             </div>
@@ -119,11 +119,11 @@
                                     </div>
 
                                     <!-- Pagination -->
-                                    <div class="flex justify-center text-sm mt-10">
+                                    <!-- <div class="flex justify-center text-sm mt-10">
                                         <button @click="prevPage" :disabled="currentPage === 1" class="bg-gray-300 p-2 rounded">Previous</button>
                                         <span>Page {{ currentPage }} of {{ totalPages }}</span>
                                         <button @click="nextPage" :disabled="currentPage === totalPages" class="bg-gray-300 p-2 rounded">Next</button>
-                                    </div>
+                                    </div> -->
                                 </div>
                             </div>
                         </div>
