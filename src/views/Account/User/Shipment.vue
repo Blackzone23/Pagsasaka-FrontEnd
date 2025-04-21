@@ -81,7 +81,7 @@
 							v-for="cancel in cancellationList"
 							:key="cancel.id"
 							class="even:bg-gray-50 hover:bg-gray-200 text-center text-sm cursor-pointer"
-							@click="handleOrderClick(cancel)"
+							@click="handleCancellationClick(cancel)"
 							>
 							<td class="px-4 py-2">{{ cancel.product_name }}</td>
 							<td class="px-4 py-2">{{ cancel.created_at }}</td>
@@ -110,7 +110,7 @@
 							v-for="refund in refundList"
 							:key="refund.id"
 							class="even:bg-gray-50 hover:bg-gray-200 text-center text-sm cursor-pointer"
-							@click="handleOrderClick(refund)"
+							@click="handleRefundClick(refund)"
 							>
 							<td class="px-4 py-2">{{ refund.product_name }}</td>
 							<td class="px-4 py-2">{{ refund.created_at }}</td>
@@ -342,7 +342,7 @@ function deleteCancellation(id) {
 }
 
 /******************************************************************
-FUNCTION FOR REFUN/RETURN
+FUNCTION FOR REFUND/RETURN
 ******************************************************************/
 function getRefundList() {
     store.dispatch('User/getRefundList');

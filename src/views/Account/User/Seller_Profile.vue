@@ -1,4 +1,9 @@
 <template>
+
+    <!-- Loading screen and toast message -->
+    <Loading v-if="showLoading" class="loading"></Loading>
+    <Toast></Toast>
+
     <header class="bg-[#285a19]  shadow p-4 flex justify-between items-center text-white">
         <h1 class="text-lg sm:text-xl 2xl:ml-0 md:ml-10 2xs:ml-10 font-bold">My Profile</h1>
         <div class="flex items-center space-x-4">
@@ -43,8 +48,15 @@
         <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-md relative">
             <BaseLabel class="text-xl font-semibold mb-4">Edit Profile</BaseLabel>
 
-            <BaseLabel class="block mb-2">Name</BaseLabel>
+            <BaseLabel class="block mb-2">First Name</BaseLabel>
             <BaseInputField v-model="sellerData.first_name" class="w-full p-2 border rounded mb-4" type="text"/>
+
+            <BaseLabel class="block mb-2">Middle Name</BaseLabel>
+            <BaseInputField v-model="sellerData.middle_name" class="w-full p-2 border rounded mb-4" type="text"/>
+
+            <BaseLabel class="block mb-2">Last Name</BaseLabel>
+            <BaseInputField v-model="sellerData.last_name" class="w-full p-2 border rounded mb-4" type="text"/>
+
 
             <BaseLabel class="block mb-2">Email</BaseLabel>
             <BaseInputField v-model="sellerData.email" class="w-full p-2 border rounded mb-4" type="email"/>
@@ -100,8 +112,8 @@
   <script setup>
     import BaseLabel from '@/components/Input-Fields/BaseLabel.vue';
     import BaseInputField from '@/components/Input-Fields/BaseInputField.vue';
+    import Loading from '@/components/Alerts/Loading.vue';
     import Toast from "@/components/Alerts/Toast.vue";
-    import Loading from "@/components/Alerts/Loading.vue";
     import { debounce } from 'lodash';
     import { ref, computed, reactive, onMounted, watch  } from "vue";
     import { useVuelidate } from "@vuelidate/core";
@@ -109,7 +121,7 @@
     import { Icon } from "@iconify/vue";
     import { useRouter } from "vue-router";
     import { useStore } from "vuex";
-
+  
     const store = useStore();
     const router = useRouter();
 
@@ -128,20 +140,26 @@
     const saveProfileChanges = async () => {
   try {
     await store.dispatch('updateProfile', {
-      id: consumerRaw.value.id,
+      id: sellerRaw.value.id,
       first_name: sellerData.first_name,
       middle_name: sellerData.middle_name,
       last_name: sellerData.last_name,
       phone_number: sellerData.phone_number,
       email: sellerData.email,
     });
+    
+    // ✅ Update the reactive source
+    sellerRaw.value.first_name = sellerData.first_name;
+    sellerRaw.value.middle_name = sellerData.middle_name;
+    sellerRaw.value.last_name = sellerData.last_name;
+    sellerRaw.value.phone_number = sellerData.phone_number;
+    sellerRaw.value.email = sellerData.email;
 
     closeEditProfileModal();
 
   } catch (error) {
     if (error.response?.data?.errors) {
       const errors = error.response.data.errors;
-      // Display the first error message for general feedback
       const firstField = Object.keys(errors)[0];
       if (firstField) {
         alert(errors[firstField][0]);
@@ -229,5 +247,28 @@ const savePasswordChanges = async () => {
     }
   }
 };
+
+/******************************************************************
+ FUNCTION FOR LOGOUT
+******************************************************************/
+
+const dropdownVisible = ref(false);
+  
+  // Toggle the dropdown visibility
+  const toggleDropdown = () => {
+    dropdownVisible.value = !dropdownVisible.value;
+  };
+  
+  const logout = async () => {
+  try {
+    const response = await store.dispatch('logout');
+    if (response.isSuccess) {
+      router.push({ name: 'Login' }); // Redirect to the Login page
+    }
+  } catch (error) {
+    console.error('Logout error:', error); // Handle any errors
+  }
+};
+
 </script>
   

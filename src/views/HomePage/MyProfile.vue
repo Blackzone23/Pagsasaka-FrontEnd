@@ -43,19 +43,17 @@
 
                 <!-- Tab Content -->
                 <div class="mt-4">
-                               <!--My Purchase-->
-                               <div v-if="activeTab === 'My Purchase'" class="tab-content">
-                          <!--chat-->
+                        <!--My Purchase-->
+                        <div v-if="activeTab === 'My Purchase'" class="tab-content">
                         <div class="p-4">
-                            <!-- Floating Chat Button -->
-                            <button @click="openshowChatModal"  class="hidden md:flex bg-yellow-100 border-2 border-gray-300 rounded-full p-3  fixed bottom-4 right-4 shadow-md hover:bg-yellow-300 items-center justify-center">
+                            <button @click="openshowChatModal" 
+                                class="hidden md:flex bg-yellow-100 border-2 border-gray-300 rounded-full p-3 fixed bottom-4 right-4 shadow-md hover:bg-yellow-300 items-center justify-center">
                                 <Icon icon="tabler:message" width="28" height="28" style="color: #608C54" />
                             </button>
                         </div>
 
                         <!-- Expanded Floating Chat Modal -->
                         <div v-if="isshowChatModal" class="fixed bottom-4 right-4 2xl:w-[900px] 2xs:w-[470px] 2xl:h-[85vh] 2xs:h-[65vh] bg-white rounded-lg shadow-lg flex flex-col border z-50">
-                            <!-- Header -->
                             <div class="p-4 border-b rounded-sm bg-gray-100 flex justify-between items-center">
                                 <span class="text-xl font-bold text-green-600">Chat</span>
                                 <button @click="closeshowChatModal" class="text-gray-600 text-lg">
@@ -64,93 +62,78 @@
                             </div>
 
                             <div class="flex flex-1 overflow-hidden">
-                            <!-- Sidebar (Users List) -->
-                            <div class="w-1/3 bg-white border-r border-gray-300 p-4 flex flex-col">
-                                <div class="flex">
-                                <BaseSearchField placeholder="Search..." class="2xl:w-[270px] 2xs:w-[137px] "></BaseSearchField>
-                                </div>
-
-                                <div class="mt-3 flex-1 overflow-auto">
-                                    <div v-for="conversation in conversationStart" :key="conversation.id" class="flex items-center p-3 border-b cursor-pointer hover:bg-gray-100 transition duration-200" @click="selectChat(conversation.id)">
-                                        <img :src="conversation.chat_partner_avatar" class="w-12 h-12 rounded-full border mr-3" alt="Avatar" />
-                                        <div class="flex-1">
-                                            <span class="font-semibold">{{ conversation.chat_partner_name }}</span>
-                                            <p class="text-xs text-gray-500 truncate">{{ conversation.message }}</p>
-                                        </div>
-                                        <span v-if="conversation.unread_messages_count" class="text-xs bg-red-500 text-white px-2 py-1 rounded-full">
-                                            {{ conversation.unread_messages_count }}
-                                        </span>
-
-                                        <!-- Delete Button -->
-                                        <button class="text-white rounded" @click="openDeleteModal(conversation.id, $event)">
-                                            <Icon icon="mdi-light:delete" width="20" height="20" style="color: #ad1414" />
-                                        </button>
-
-                                        <!-- Modal -->
-                                        <div v-if="isModalVisible" class="fixed inset-0 bg-gray-500 bg-opacity-75 flex justify-center items-center z-50">
-                                            <div class="bg-white p-6 rounded shadow-lg w-96">
-                                            <h3 class="text-xl font-semibold text-center">Are you sure you want to delete this conversation?</h3>
-                                            <div class="flex justify-around mt-4">
-                                                <button @click="deleteConversation" class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">Yes, Delete</button>
-                                                <button @click="closeDeleteModal($event)" class="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400">Cancel</button>
+                                <div class="w-1/3 bg-white border-r border-gray-300 p-4 flex flex-col">
+                                    <div class="flex">
+                                        <BaseSearchField placeholder="Search..." class="2xl:w-[270px] 2xs:w-[137px]"></BaseSearchField>
+                                    </div>
+                                    <div class="mt-3 flex-1 overflow-auto">
+                                        <div v-for="conversation in conversationStart" :key="conversation.id" 
+                                            class="flex items-center p-3 border-b cursor-pointer hover:bg-gray-100 transition duration-200" 
+                                            @click="selectChat(conversation.id)">
+                                            <img :src="conversation.chat_partner_avatar || defaultAvatar" class="w-12 h-12 rounded-full border mr-3" alt="Avatar" />
+                                            <div class="flex-1">
+                                                <span class="font-semibold">{{ conversation.chat_partner_name }}</span>
+                                                <p class="text-xs text-gray-500 truncate">{{ conversation.message || 'No messages' }}</p>
                                             </div>
+                                            <span v-if="conversation.unread_messages_count" 
+                                                class="text-xs bg-red-500 text-white px-2 py-1 rounded-full">
+                                                {{ conversation.unread_messages_count }}
+                                            </span>
+                                            <button @click="openDeleteModal(conversation.id, $event)">
+                                                <Icon icon="mdi-light:delete" width="20" height="20" style="color: #ad1414" />
+                                            </button>
+                                            <div v-if="isModalVisible" class="fixed inset-0 bg-gray-500 bg-opacity-75 flex justify-center items-center z-50">
+                                                <div class="bg-white p-6 rounded shadow-lg w-96">
+                                                    <h3 class="text-xl font-semibold text-center">Are you sure you want to delete this conversation?</h3>
+                                                    <div class="flex justify-around mt-4">
+                                                        <button @click="deleteConversation" 
+                                                            class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">Yes, Delete</button>
+                                                        <button @click="closeDeleteModal($event)" 
+                                                            class="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400">Cancel</button>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
 
-                            <!-- Chat Window -->
-                            <div class="w-full flex flex-col">
-                                <!-- If No Chat is Selected -->
-                                <div v-if="!selectedChat" class="flex-1 flex items-center justify-center text-gray-400">
-                                <p class="text-xl">Welcome to Pagsasaka Chat</p>
-                                </div>
-
-                                <!-- If a Chat is Selected -->
-                                <div v-else class="flex flex-col flex-1">
-                                <div class="p-4 border-b text-lg font-bold flex justify-between items-center bg-gray-100">
-                                    <span>{{ selectedChat.chat_partner_name }}</span>
-                                    <button @click="closeChat" class="text-gray-500">Close</button>
-                                </div>
-
-                                <!-- Messages Area -->
-                                <div  class="flex-1 bg-gray-50 p-4 overflow-auto space-y-4 2xl:text-sm 2xs:text-sm max-h-[400px]">
-                                    <div v-for="message in messageStart" :key="message.id" class="flex items-start space-x-3" 
-                                    :class="{'justify-end': message.sender.id === userName, 'justify-start': message.sender.id !== userName}">
-                                        
-                                        <!-- Avatar (Only for others' messages) -->
-                                        <img v-if="message.sender.id !== userName" :src="message.sender.avatar || defaultAvatar" class="w-8 h-8 rounded-full" />
-                                        
-                                        <div class="p-3 rounded-lg shadow-md w-auto max-w-xs" :class="{'bg-green-500 text-white ': message.sender.id === userName, 'bg-gray-200 text-black': message.sender.id !== userName}">
-                                        <p class="text-sm font-bold" :class="{'text-white': message.sender.id === userName, 'text-green-600': message.sender.id !== userName}">
-                                            {{ message.sender.first_name }} {{ message.sender.last_name }}
-                                        </p>
-                                        <p class="text-xs">
-                                            {{ message.message }}
-                                        </p>
+                                <div class="w-full flex flex-col">
+                                    <div v-if="!selectedChat" class="flex-1 flex items-center justify-center text-gray-400">
+                                        <p class="text-xl">Welcome to Pagsasaka Chat</p>
+                                    </div>
+                                    <div v-else class="flex flex-col h-full">
+                                        <div class="p-4 border-b flex justify-between items-center bg-gray-100">
+                                            <h2 class="text-lg font-semibold">{{ selectedChat.chat_partner_name }}</h2>
+                                            <button @click="closeChat" class="text-gray-500">Close</button>
                                         </div>
-
-                                        <!-- Avatar Placeholder for Sent Messages (Align Right) -->
-                                        <div v-if="message.sender.id === userName" class="w-8 h-8 rounded-full bg-gray-300"></div>
+                                        <div class="flex-1 bg-gray-50 p-4 overflow-auto space-y-4 2xl:text-sm 2xs:text-sm max-h-[400px]">
+                                            <div v-for="message in messageStart" :key="message.id" class="flex items-start space-x-3" 
+                                                :class="{'justify-end': message.sender.id === userId, 'justify-start': message.sender.id !== userId}">
+                                                <img v-if="message.sender.id !== userId" :src="message.sender.avatar || defaultAvatar" 
+                                                    class="w-8 h-8 rounded-full" />
+                                                <div class="p-3 rounded-lg shadow-md w-auto max-w-xs" 
+                                                    :class="{'bg-green-500 text-white': message.sender.id === userId, 'bg-gray-200 text-black': message.sender.id !== userId}">
+                                                    <p class="text-sm font-bold" 
+                                                        :class="{'text-white': message.sender.id === userId, 'text-green-600': message.sender.id !== userId}">
+                                                        {{ message.sender.id === userId ? 'You' : message.sender.first_name + ' ' + message.sender.last_name }}
+                                                    </p>
+                                                    <p class="text-xs">{{ message.message }}</p>
+                                                </div>
+                                                <img v-if="message.sender.id === userId" :src="userAvatar || defaultAvatar" class="w-8 h-8 rounded-full" />
+                                            </div>
+                                        </div>
+                                        <div class="p-4 border-t bg-gray-50 flex items-center">
+                                            <input v-model="messageData.message" type="text" placeholder="Type a message..." 
+                                                class="flex-1 p-2 border rounded-md text-sm"/>
+                                            <button @click="sendMessage" 
+                                                class="ml-2 bg-green-500 text-white px-4 py-2 rounded-md transition duration-200 hover:bg-green-700">
+                                                Send
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
-
-                                <!-- Input Area -->
-                                <div class="p-4 border-t bg-white flex items-center">
-
-                                    <!-- Message Input -->
-                                    <input v-model="messageData.message" type="text" placeholder="Type a message here" class="flex-1 p-2 border rounded-md text-sm"/>
-
-                                    <!-- Send Button -->
-                                    <button class="ml-2 bg-green-600 text-white px-4 py-2 rounded-md transition duration-200 hover:bg-green-700" @click="sendMessage">
-                                    Send
-                                    </button>
-                                </div>
-                                </div>
                             </div>
-                            </div>
-                        </div>         
+                        </div>  
 
                         <div class="p-6">
                            <!-- Scrollable Tabs -->
@@ -213,7 +196,7 @@
                                                         <span class="text-xs sm:text-sm 2xl:text-base font-medium text-gray-500">Pending</span>
                                                     </div>
                                                     <div class="flex space-x-2">
-                                                        <button class="px-3 py-1 text-xs sm:text-sm 2xl:text-base font-semibold text-green-700 border border-green-600 rounded hover:bg-green-50" @click="openshowChatModal">
+                                                        <button class="px-3 py-1 text-xs sm:text-sm 2xl:text-base font-semibold text-green-700 border border-green-600 rounded hover:bg-green-50" @click="startChatWithShop">
                                                             Contact Seller
                                                         </button>
                                                         <button class="px-3 py-1 text-xs sm:text-sm 2xl:text-base font-semibold text-red-600 border border-red-500 rounded hover:bg-red-50"  @click="openshowCancelModal">
@@ -356,7 +339,7 @@
                                                         <span class="text-xs sm:text-sm 2xl:text-base font-medium text-gray-500">Waiting for Courier</span>
                                                     </div>
                                                     <div class="flex space-x-2">
-                                                        <button class="px-3 py-1 text-xs sm:text-sm 2xl:text-base font-semibold text-green-700 border border-green-600 rounded hover:bg-green-50" @click="openshowChatModal">
+                                                        <button class="px-3 py-1 text-xs sm:text-sm 2xl:text-base font-semibold text-green-700 border border-green-600 rounded hover:bg-green-50" @click="startChatWithShop">
                                                             Contact Seller
                                                         </button>
                                                         <button class="px-3 py-1 text-xs sm:text-sm 2xl:text-base font-semibold text-red-600 border border-red-500 rounded hover:bg-red-50"  @click="openshowCancelModal">
@@ -456,35 +439,35 @@
                                 <!--To Receive-->
                                 <div v-else-if="currentTab === 'To Receive'">
                                     <div class="mt-4 space-y-4 max-h-[500px] overflow-y-auto">
-                                        <div v-for="toShip in toShipList" :key="toShip.id" class="bg-green-100 border border-green-300 rounded-lg p-4">
+                                        <div v-for="toReceive in toReceiveList" :key="toReceive.id" class="bg-green-100 border border-green-300 rounded-lg p-4">
                                             <div class="flex flex-wrap md:flex-nowrap items-center mb-4">
                                                 <!-- Image -->
-                                                <img :src="toShip.product_images[0] || 'https://via.placeholder.com/80'" alt="Product Image" class="w-16 h-16 sm:w-20 sm:h-20 2xl:w-24 2xl:h-24 rounded object-cover border"/>
+                                                <img :src="toReceive.product_images[0] || 'https://via.placeholder.com/80'" alt="Product Image" class="w-16 h-16 sm:w-20 sm:h-20 2xl:w-24 2xl:h-24 rounded object-cover border"/>
 
                                                 <!-- Details -->
                                                 <div class="ml-3 sm:ml-4 flex-grow">
                                                     <h3 class="text-xs sm:text-sm 2xl:text-lg font-semibold">
-                                                    {{ toShip.product_name }}
+                                                    {{ toReceive.product_name }}
                                                     </h3>
                                                     <p class="text-[10px] sm:text-xs 2xl:text-sm text-gray-600">
-                                                    Variants: {{ toShip.unit }}
+                                                    Variants: {{ toReceive.unit }}
                                                     </p>
                                                     <div class="mt-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
                                                         <p class="text-xs sm:text-sm 2xl:text-base font-medium text-gray-700">
-                                                            Seller: <span class="font-semibold">{{ toShip.farmer_name }}</span>
+                                                            Seller: <span class="font-semibold">{{ toReceive.farmer_name }}</span>
                                                         </p>
                                                         <div class="flex items-center gap-2 sm:gap-3">
                                                             <h1 class="text-xs sm:text-sm 2xl:text-base">Quantity:</h1>
                                                             <p
                                                             class="text-xs sm:text-sm 2xl:text-lg font-semibold text-green-700"
                                                             >
-                                                            {{ toShip.quantity }}
+                                                            {{ toReceive.quantity }}
                                                             </p>
                                                             <h1 class="text-xs sm:text-sm 2xl:text-base">Order Total:</h1>
                                                             <p
                                                             class="text-xs sm:text-sm 2xl:text-lg font-semibold text-green-700"
                                                             >
-                                                            ₱{{ toShip.total_amount }}
+                                                            ₱{{ toReceive.total_amount }}
                                                             </p>
                                                         </div>
                                                     </div>
@@ -575,35 +558,35 @@
                                 <!--Completed-->
                                 <div v-else-if="currentTab === 'Completed'">
                                     <div class="mt-4 space-y-4 max-h-[500px] overflow-y-auto">
-                                        <div v-for="toShip in toShipList" :key="toShip.id" class="bg-green-100 border border-green-300 rounded-lg p-4">
+                                        <div v-for="toComplete in toCompleteList" :key="toComplete.id" class="bg-green-100 border border-green-300 rounded-lg p-4">
                                             <div class="flex flex-wrap md:flex-nowrap items-center mb-4">
                                                 <!-- Image -->
-                                                <img :src="toShip.product_images[0] || 'https://via.placeholder.com/80'" alt="Product Image" class="w-16 h-16 sm:w-20 sm:h-20 2xl:w-24 2xl:h-24 rounded object-cover border"/>
+                                                <img :src="toComplete.product_images[0] || 'https://via.placeholder.com/80'" alt="Product Image" class="w-16 h-16 sm:w-20 sm:h-20 2xl:w-24 2xl:h-24 rounded object-cover border"/>
 
                                                 <!-- Details -->
                                                 <div class="ml-3 sm:ml-4 flex-grow">
                                                     <h3 class="text-xs sm:text-sm 2xl:text-lg font-semibold">
-                                                    {{ toShip.product_name }}
+                                                    {{ toComplete.product_name }}
                                                     </h3>
                                                     <p class="text-[10px] sm:text-xs 2xl:text-sm text-gray-600">
-                                                    Variants: {{ toShip.unit }}
+                                                    Variants: {{ toComplete.unit }}
                                                     </p>
                                                     <div class="mt-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
                                                         <p class="text-xs sm:text-sm 2xl:text-base font-medium text-gray-700">
-                                                            Seller: <span class="font-semibold">{{ toShip.farmer_name }}</span>
+                                                            Seller: <span class="font-semibold">{{ toComplete.farmer_name }}</span>
                                                         </p>
                                                         <div class="flex items-center gap-2 sm:gap-3">
                                                             <h1 class="text-xs sm:text-sm 2xl:text-base">Quantity:</h1>
                                                             <p
                                                             class="text-xs sm:text-sm 2xl:text-lg font-semibold text-green-700"
                                                             >
-                                                            {{ toShip.quantity }}
+                                                            {{ toComplete.quantity }}
                                                             </p>
                                                             <h1 class="text-xs sm:text-sm 2xl:text-base">Order Total:</h1>
                                                             <p
                                                             class="text-xs sm:text-sm 2xl:text-lg font-semibold text-green-700"
                                                             >
-                                                            ₱{{ toShip.total_amount }}
+                                                            ₱{{ toComplete.total_amount }}
                                                             </p>
                                                         </div>
                                                     </div>
@@ -740,35 +723,35 @@
                                 <!--Cancelled-->
                                 <div v-else-if="currentTab === 'Cancelled'">
                                     <div class="mt-4 space-y-4 max-h-[500px] overflow-y-auto">
-                                        <div v-for="toShip in toShipList" :key="toShip.id" class="bg-green-100 border border-green-300 rounded-lg p-4">
+                                        <div v-for="toCancel in toCancelList" :key="toCancel.id" class="bg-green-100 border border-green-300 rounded-lg p-4">
                                             <div class="flex flex-wrap md:flex-nowrap items-center mb-4">
                                                 <!-- Image -->
-                                                <img :src="toShip.product_images[0] || 'https://via.placeholder.com/80'" alt="Product Image" class="w-16 h-16 sm:w-20 sm:h-20 2xl:w-24 2xl:h-24 rounded object-cover border"/>
+                                                <img :src="toCancel.product_images[0] || 'https://via.placeholder.com/80'" alt="Product Image" class="w-16 h-16 sm:w-20 sm:h-20 2xl:w-24 2xl:h-24 rounded object-cover border"/>
 
                                                 <!-- Details -->
                                                 <div class="ml-3 sm:ml-4 flex-grow">
                                                     <h3 class="text-xs sm:text-sm 2xl:text-lg font-semibold">
-                                                    {{ toShip.product_name }}
+                                                    {{ toCancel.product_name }}
                                                     </h3>
                                                     <p class="text-[10px] sm:text-xs 2xl:text-sm text-gray-600">
-                                                    Variants: {{ toShip.unit }}
+                                                    Variants: {{ toCancel.unit }}
                                                     </p>
                                                     <div class="mt-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
                                                         <p class="text-xs sm:text-sm 2xl:text-base font-medium text-gray-700">
-                                                            Seller: <span class="font-semibold">{{ toShip.farmer_name }}</span>
+                                                            Seller: <span class="font-semibold">{{ toCancel.farmer_name }}</span>
                                                         </p>
                                                         <div class="flex items-center gap-2 sm:gap-3">
                                                             <h1 class="text-xs sm:text-sm 2xl:text-base">Quantity:</h1>
                                                             <p
                                                             class="text-xs sm:text-sm 2xl:text-lg font-semibold text-green-700"
                                                             >
-                                                            {{ toShip.quantity }}
+                                                            {{ toCancel.quantity }}
                                                             </p>
                                                             <h1 class="text-xs sm:text-sm 2xl:text-base">Order Total:</h1>
                                                             <p
                                                             class="text-xs sm:text-sm 2xl:text-lg font-semibold text-green-700"
                                                             >
-                                                            ₱{{ toShip.total_amount }}
+                                                            ₱{{ toCancel.total_amount }}
                                                             </p>
                                                         </div>
                                                     </div>
@@ -854,35 +837,35 @@
 
                                 <!--Return Refund-->
                                 <div v-else-if="currentTab === 'Return Refund'">
-                                    <div v-for="toShip in toShipList" :key="toShip.id" class="bg-green-100 border border-green-300 rounded-lg p-4">
+                                    <div v-for="toRefund in toRefundList" :key="toRefund.id" class="bg-green-100 border border-green-300 rounded-lg p-4">
                                         <div class="flex flex-wrap md:flex-nowrap items-center mb-4">
                                             <!-- Image -->
-                                            <img :src="toShip.product_images[0] || 'https://via.placeholder.com/80'" alt="Product Image" class="w-16 h-16 sm:w-20 sm:h-20 2xl:w-24 2xl:h-24 rounded object-cover border"/>
+                                            <img :src="toRefund.product_images[0] || 'https://via.placeholder.com/80'" alt="Product Image" class="w-16 h-16 sm:w-20 sm:h-20 2xl:w-24 2xl:h-24 rounded object-cover border"/>
 
                                             <!-- Details -->
                                             <div class="ml-3 sm:ml-4 flex-grow">
                                                 <h3 class="text-xs sm:text-sm 2xl:text-lg font-semibold">
-                                                {{ toShip.product_name }}
+                                                {{ toRefund.product_name }}
                                                 </h3>
                                                 <p class="text-[10px] sm:text-xs 2xl:text-sm text-gray-600">
-                                                Variants: {{ toShip.unit }}
+                                                Variants: {{ toRefund.unit }}
                                                 </p>
                                                 <div class="mt-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
                                                     <p class="text-xs sm:text-sm 2xl:text-base font-medium text-gray-700">
-                                                        Seller: <span class="font-semibold">{{ toShip.farmer_name }}</span>
+                                                        Seller: <span class="font-semibold">{{ toRefund.farmer_name }}</span>
                                                     </p>
                                                     <div class="flex items-center gap-2 sm:gap-3">
                                                         <h1 class="text-xs sm:text-sm 2xl:text-base">Quantity:</h1>
                                                         <p
                                                         class="text-xs sm:text-sm 2xl:text-lg font-semibold text-green-700"
                                                         >
-                                                        {{ toShip.quantity }}
+                                                        {{ toRefund.quantity }}
                                                         </p>
                                                         <h1 class="text-xs sm:text-sm 2xl:text-base">Order Total:</h1>
                                                         <p
                                                         class="text-xs sm:text-sm 2xl:text-lg font-semibold text-green-700"
                                                         >
-                                                        ₱{{ toShip.total_amount }}
+                                                        ₱{{ toRefund.total_amount }}
                                                         </p>
                                                     </div>
                                                 </div>
@@ -1100,10 +1083,18 @@ const showLoading = computed(() => store.state.showLoading.state);
 const activeTab = ref('My Purchase'); // Default active tab
 const tabs = ref(['My Purchase', 'My Profile','Billing Address']); // List of tabs
 const consumerRaw  = computed(() => store.state.userData.data?.user || {})
+const conversationStart = computed(() => store.state.Consumer.conversation.data);
+const messageStart = computed(() => store.state.Consumer.message.data);
+const userId = computed(() => store.state.userData.data?.user?.id || null); // Assuming user ID is stored in userData
+const userAvatar = computed(() => store.state.userData.data?.user?.avatar || defaultAvatar.value); // Assuming user avatar is stored in userData
 const addressList= computed(() => store.state.Consumer.address.data);
 const purchaseList= computed(() => store.state.Consumer.purchase.data);
 const toShipList= computed(() => store.state.Consumer.toShip.data);
 const toReceiveList= computed(() => store.state.Consumer.toReceive.data);
+const toCompleteList= computed(() => store.state.Consumer.toComplete.data);
+const toCancelList= computed(() => store.state.Consumer.toCancel.data);
+const toRefundList= computed(() => store.state.Consumer.toRefund.data);
+
 
 /******************************************************************
  FUNCTION FOR UPDATE PROFILE
@@ -1250,6 +1241,49 @@ onMounted(() => {
     getPurchaseShip();
 })
 
+/******************************************************************
+ FUNCTION FOR GETTING TO SHIP
+******************************************************************/
+function getPurchaseReceive() {
+    store.dispatch('Consumer/getPurchaseReceive')
+}
+
+onMounted(() => {
+    getPurchaseReceive();
+})
+
+/******************************************************************
+ FUNCTION FOR GETTING TO SHIP
+******************************************************************/
+function getPurchaseCompleted() {
+    store.dispatch('Consumer/getPurchaseCompleted')
+}
+
+onMounted(() => {
+    getPurchaseCompleted();
+})
+
+/******************************************************************
+ FUNCTION FOR GETTING TO SHIP
+******************************************************************/
+function getPurchaseCancel() {
+    store.dispatch('Consumer/getPurchaseCancel')
+}
+
+onMounted(() => {
+    getPurchaseCancel();
+})
+
+/******************************************************************
+ FUNCTION FOR GETTING TO SHIP
+******************************************************************/
+function getPurchaseRefund() {
+    store.dispatch('Consumer/getPurchaseRefund')
+}
+
+onMounted(() => {
+    getPurchaseRefund();
+})
 /******************************************************************
  FUNCTION FOR GETTING PURCHASE
 ******************************************************************/
@@ -1494,11 +1528,11 @@ const closeConfirmationModal = () => {
 ******************************************************************/
 const isshowChatModal = ref(false);
 const selectedChat = ref(null);
-const messageText = ref('');
+const messageData = reactive({ message: '' });
 
 const closeChat = () => {
     selectedChat.value = null;
-  };
+};
 
 const openshowChatModal = () => {
     isshowChatModal.value = true;
@@ -1508,28 +1542,121 @@ const closeshowChatModal = () => {
     isshowChatModal.value = false;
 };
 
-
 const selectChat = (id) => {
-    console.log("Selected chat ID: ", id);  // Debugging the id value
+    console.log("Selected chat ID:", id);
     const selected = conversationStart.value.find(c => c.id === id);
     selectedChat.value = selected;
     store.dispatch('Consumer/getMessages', id);
 };
 
 const sendMessage = async () => {
-    if (!messageText.value.trim() || !selectedChat.value) return;
+    if (!messageData.message.trim() || !selectedChat.value) return;
 
     const payload = {
-        conversation_id: selectedChat.value.id,
-        message: messageText.value,
+        id: selectedChat.value.id,
+        message: messageData.message,
     };
 
     try {
         await store.dispatch('Consumer/sendMessage', payload);
         await store.dispatch('Consumer/getMessages', selectedChat.value.id);
-        messageText.value = '';
+        messageData.message = '';
     } catch (error) {
         console.error('Failed to send message:', error);
+    }
+};
+
+// const startChatWithShop = () => {
+//     isshowChatModal.value = true;
+//     console.log('productItemListinfo:', productItemListinfo.value);
+//     if (!productItemListinfo.value || productItemListinfo.value.length === 0) {
+//         console.error('productItemListinfo is empty or undefined');
+//         setTimeout(() => {
+//             store.commit('showToast', { showToast: true, toastMessage: 'Product data not loaded', toastType: 'error' }, { root: true });
+//         }, toastDelay);
+//         setTimeout(() => {
+//             store.commit('showToast', { showToast: false, toastMessage: '', toastType: 'default' }, { root: true });
+//         }, toastDuration);
+//         return;
+//     }
+//     const user2Id = productItemListinfo.value[0]?.account_id;
+//     if (!user2Id) {
+//         console.error('Seller ID not found in productItemListinfo[0].account_id');
+//         setTimeout(() => {
+//             store.commit('showToast', { showToast: true, toastMessage: 'Seller ID not found', toastType: 'error' }, { root: true });
+//         }, toastDelay);
+//         setTimeout(() => {
+//             store.commit('showToast', { showToast: false, toastMessage: '', toastType: 'default' }, { root: true });
+//         }, toastDuration);
+//         return;
+//     }
+//     console.log('Starting chat with user2_id:', user2Id);
+//     store.dispatch('Consumer/startChatWithShop', { user2_id: user2Id })
+//         .then((response) => {
+//             if (!response) {
+//                 console.error('No response received from startChatWithShop');
+//                 return;
+//             }
+//             console.log('startChatWithShop response:', response);
+//             const createdConversation = {
+//                 id: response.id,
+//                 chat_partner_name: response.chat_partner_name,
+//                 chat_partner_avatar: response.chat_partner_avatar,
+//                 message: response.message || '',
+//                 unread_messages_count: response.unread_messages_count || 0,
+//             };
+//             selectedChat.value = createdConversation;
+//             messageData.conversation_id = createdConversation.id;
+//             store.dispatch('Consumer/getMessages', createdConversation.id);
+//         })
+//         .catch((error) => {
+//             console.error('Failed to start chat:', error);
+//         });
+// };
+
+/******************************************************************
+  FUNCTION FOR GETTING CONVERSATION LIST
+******************************************************************/
+function getConversation() {
+    store.dispatch('Consumer/getConversation');
+}
+
+onMounted(() => {
+    getConversation();
+});
+
+/******************************************************************
+  FUNCTION FOR DELETE MESSAGE
+******************************************************************/
+const isModalVisible = ref(false);
+const conversationIdToDelete = ref(null);
+
+const openDeleteModal = (id, event) => {
+    event.stopPropagation();
+    isModalVisible.value = true;
+    conversationIdToDelete.value = id;
+};
+
+const closeDeleteModal = (event) => {
+    event.stopPropagation();
+    isModalVisible.value = false;
+    conversationIdToDelete.value = null;
+};
+
+const deleteConversation = async () => {
+    if (!conversationIdToDelete.value) return;
+
+    try {
+        await store.dispatch('Consumer/deleteConversation', conversationIdToDelete.value);
+        isModalVisible.value = false;
+        conversationIdToDelete.value = null;
+        getConversation();
+        if (selectedChat.value?.id === conversationIdToDelete.value) {
+            selectedChat.value = null;
+            messageStart.value = [];
+        }
+    } catch (error) {
+        console.error("Failed to delete conversation:", error);
     }
 };
 

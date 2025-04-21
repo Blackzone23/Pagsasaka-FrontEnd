@@ -17,15 +17,21 @@ export default {
     cancel: {
         data:[],
     },
+
     refund: {
         data:[],
     },
 
-    // image: {
-    //     data:[],
-    // },
+    payment: {
+        data:[],
+    },
 
-    // conversation: {
-    //     data:[],
-    // },
+    slot: {
+        data:[],
+    },
+
+    history: {
+        data:[],
+    },
+
 }

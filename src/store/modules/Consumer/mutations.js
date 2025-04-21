@@ -64,6 +64,7 @@ export default {
     setAddressList: (state, address) => {
         state.address.data = address;
     },
+
     setPurchaseList: (state, purchase) => {
         state.purchase.data = purchase;
     },
@@ -75,6 +76,20 @@ export default {
     setPurchaseReceiveList: (state, toReceive) => {
         state.toReceive.data = toReceive;
     },
+
+    setPurchaseCompleteList: (state, toComplete) => {
+        state.toComplete.data = toComplete;
+    },
+    
+    setPurchaseCancelList: (state, toCancel) => {
+        state.toCancel.data = toCancel;
+    },
+
+    setPurchaseRefundList: (state, toRefund) => {
+        state.toRefund.data = toRefund;
+    },
+
+
 
     setUpdateAddress: (state, updateAddress) => {
         state.updateAddress.data = updateAddress;

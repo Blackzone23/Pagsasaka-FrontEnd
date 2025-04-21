@@ -296,7 +296,6 @@ const productItemListinfo = computed(() => store.state.Consumer.productItem.prod
 const productRatings = computed(() => store.state.Consumer.productRatings);
 const conversationStart = computed(() => store.state.Consumer.conversation.data);
 const messageStart = computed(() => store.state.Consumer.message.data);
-const bioData = computed(() => store.state.Consumer.farmerInfo.data);
 const userId = computed(() => store.state.userData.data?.user?.id || null); // Assuming user ID is stored in userData
 const userAvatar = computed(() => store.state.userData.data?.user?.avatar || defaultAvatar.value); // Assuming user avatar is stored in userData
 

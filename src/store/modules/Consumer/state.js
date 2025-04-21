@@ -47,6 +47,18 @@ export default {
         data: [],
     },
 
+    toComplete: {
+        data: [],
+    },
+
+    toCancel: {
+        data: [],
+    },
+
+    toRefund: {
+        data: [],
+    },
+
     updateAddress: {
         data: [],
     },

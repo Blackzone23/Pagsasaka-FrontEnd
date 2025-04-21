@@ -25,6 +25,18 @@ export default {
         state.order.image = image; // Directly assign the API response to `image`
     },
 
+    setPaymentListData: (state, payment) => {
+        state.payment.data = payment;
+    },  
+
+    setSlotListData: (state, slot) => {
+        state.slot.data = slot;
+    },  
+
+    setExportListData: (state, history) => {
+        state.history.data = history;
+    },  
+
     // setConversation: (state, conversation) => {
     //     state.conversation.data = conversation;
     // },  

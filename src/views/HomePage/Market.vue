@@ -201,92 +201,75 @@
                     </button>
                 </div>
 
-              <div class="flex flex-1 overflow-hidden">
-                <!-- Sidebar (Users List) -->
+                <div class="flex flex-1 overflow-hidden">
                 <div class="w-1/3 bg-white border-r border-gray-300 p-4 flex flex-col">
-                  <div class="flex">
-                  <BaseSearchField placeholder="Search..." class="2xl:w-[270px] 2xs:w-[137px] "></BaseSearchField>
-                  </div>
-
-                  <!--Conversation List-->
-                  <div class="mt-3 flex-1 overflow-auto">
-                        <div v-for="conversation in conversationStart" :key="conversation.id" class="flex items-center p-3 border-b cursor-pointer hover:bg-gray-100 transition duration-200" @click="selectChat(conversation.id)">
-                            <img :src="conversation.chat_partner_avatar" class="w-12 h-12 rounded-full border mr-3" alt="Avatar" />
+                    <div class="mt-3 flex-1 overflow-auto">
+                        <div v-for="conversation in conversationStart" :key="conversation.id" 
+                            class="flex items-center p-3 border-b cursor-pointer hover:bg-gray-100 transition duration-200" 
+                            @click="selectChat(conversation.id)">
+                            <img :src="conversation.chat_partner_avatar || defaultAvatar" class="w-12 h-12 rounded-full border mr-3" alt="Avatar" />
                             <div class="flex-1">
                                 <span class="font-semibold">{{ conversation.chat_partner_name }}</span>
-                                <p class="text-xs text-gray-500 truncate">{{ conversation.message }}</p>
+                                <!-- <p class="text-xs text-gray-500 truncate">{{ conversation.message || 'No messages' }}</p> -->
                             </div>
-                            <span v-if="conversation.unread_messages_count" class="text-xs bg-red-500 text-white px-2 py-1 rounded-full">
+                            <span v-if="conversation.unread_messages_count" 
+                                class="text-xs bg-red-500 text-white px-2 py-1 rounded-full">
                                 {{ conversation.unread_messages_count }}
                             </span>
-
-                            <!-- Delete Button -->
-                            <button class="text-white rounded" @click="openDeleteModal(conversation.id, $event)">
+                            <button @click="openDeleteModal(conversation.id, $event)">
                                 <Icon icon="mdi-light:delete" width="20" height="20" style="color: #ad1414" />
                             </button>
-
-                            <!-- Modal -->
                             <div v-if="isModalVisible" class="fixed inset-0 bg-gray-500 bg-opacity-75 flex justify-center items-center z-50">
                                 <div class="bg-white p-6 rounded shadow-lg w-96">
-                                <h3 class="text-xl font-semibold text-center">Are you sure you want to delete this conversation?</h3>
-                                <div class="flex justify-around mt-4">
-                                    <button @click="deleteConversation" class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">Yes, Delete</button>
-                                    <button @click="closeDeleteModal($event)" class="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400">Cancel</button>
-                                </div>
+                                    <h3 class="text-xl font-semibold text-center">Are you sure you want to delete this conversation?</h3>
+                                    <div class="flex justify-around mt-4">
+                                        <button @click="deleteConversation" 
+                                            class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">Yes, Delete</button>
+                                        <button @click="closeDeleteModal($event)" 
+                                            class="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400">Cancel</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Chat Window -->
                 <div class="w-full flex flex-col">
-                  <!-- If No Chat is Selected -->
-                  <div v-if="!selectedChat" class="flex-1 flex items-center justify-center text-gray-400">
-                    <p class="text-xl">Welcome to Pagsasaka Chat</p>
-                  </div>
-
-                  <!-- If a Chat is Selected -->
-                  <div v-else class="flex flex-col flex-1">
-                    <div class="p-4 border-b text-lg font-bold flex justify-between items-center bg-gray-100">
-                      <span>{{ selectedChat.chat_partner_name }}</span>
-                      <button @click="closeChat" class="text-gray-500">Close</button>
+                    <div v-if="!selectedChat" class="flex-1 flex items-center justify-center text-gray-400">
+                        <p class="text-xl">Welcome to Pagsasaka Chat</p>
                     </div>
-
-                    <!-- Base code for rendering messages -->
-                    <div class="flex-1 bg-gray-50 p-4 overflow-auto space-y-4 2xl:text-sm 2xs:text-sm max-h-[400px]">
-                        <div v-for="message in messageStart" :key="message.id" class="flex items-start space-x-3" 
-                            :class="{'justify-end': message.sender.id === userName, 'justify-start': message.sender.id !== userName}">
-                            
-                            <!-- Avatar (Only for others' messages) -->
-                            <img v-if="message.sender.id !== userName" :src="message.sender.avatar || defaultAvatar" class="w-8 h-8 rounded-full" />
-                            <div class="p-3 rounded-lg shadow-md w-auto max-w-xs" :class="{'bg-green-500 text-white': message.sender.id === userName, 'bg-gray-200 text-black': message.sender.id !== userName}">
-                                <p class="text-sm font-bold" :class="{'text-white': message.sender.id === userName, 'text-green-600': message.sender.id !== userName}">
-                                    {{ message.sender.first_name }} {{ message.sender.last_name }}
-                                </p>
-                                <p class="text-xs">
-                                    {{ message.message }}
-                                </p>
+                    <div v-else class="flex flex-col h-full">
+                        <div class="p-4 border-b flex justify-between items-center bg-gray-100">
+                            <h2 class="text-lg font-semibold">{{ selectedChat.chat_partner_name }}</h2>
+                            <button @click="closeChat" class="text-gray-500">Close</button>
+                        </div>
+                        <div class="flex-1 bg-gray-50 p-4 overflow-auto space-y-4 2xl:text-sm 2xs:text-sm max-h-[400px]">
+                            <div v-for="message in messageStart" :key="message.id" class="flex items-start space-x-3" 
+                                :class="{'justify-end': message.sender.id === userId, 'justify-start': message.sender.id !== userId}">
+                                <img v-if="message.sender.id !== userId" :src="message.sender.avatar || defaultAvatar" 
+                                    class="w-8 h-8 rounded-full" />
+                                <div class="p-3 rounded-lg shadow-md w-auto max-w-xs" 
+                                    :class="{'bg-green-500 text-white': message.sender.id === userId, 'bg-gray-200 text-black': message.sender.id !== userId}">
+                                    <p class="text-sm font-bold" 
+                                        :class="{'text-white': message.sender.id === userId, 'text-green-600': message.sender.id !== userId}">
+                                        {{ message.sender.id === userId ? 'You' : message.sender.first_name + ' ' + message.sender.last_name }}
+                                    </p>
+                                    <p class="text-xs">{{ message.message }}</p>
+                                </div>
+                                <img v-if="message.sender.id === userId" :src="userAvatar || defaultAvatar" class="w-8 h-8 rounded-full" />
                             </div>
-
-                            <!-- Avatar Placeholder for Sent Messages (Align Right) -->
-                            <div v-if="message.sender.id === userName" class="w-8 h-8 rounded-full bg-gray-300"></div>
+                        </div>
+                        <div class="p-4 border-t bg-gray-50 flex items-center">
+                            <input v-model="messageData.message" type="text" placeholder="Type a message..." 
+                                class="flex-1 p-2 border rounded-md text-sm"/>
+                            <button @click="sendMessage" 
+                                class="ml-2 bg-green-500 text-white px-4 py-2 rounded-md transition duration-200 hover:bg-green-700">
+                                Send
+                            </button>
                         </div>
                     </div>
-
-                    <!-- Input Area for Sending a Message -->
-                    <div class="p-4 border-t bg-white flex items-center">
-                        <!-- Message Input -->
-                        <input v-model="messageText" type="text" placeholder="Type a message here" class="flex-1 p-2 border rounded-md text-sm"/>
-
-                        <!-- Send Button -->
-                        <button class="ml-2 bg-green-600 text-white px-4 py-2 rounded-md transition duration-200 hover:bg-green-700" @click="sendMessage">
-                            Send
-                        </button>
-                    </div>
-                  </div>
                 </div>
-              </div>
+            </div>
 			</div>
         </div>
         <Footer/>
@@ -321,6 +304,8 @@ const productItemList = computed(() => store.state.Consumer.productItem.data);
 const moreProductList = computed(() => store.state.Consumer.moreProduct.data);
 const currentPage = computed(() => store.state.currentPage);
 const totalPages = computed(() => store.state.totalPages);
+const userId = computed(() => store.state.userData.data?.user?.id || null); // Assuming user ID is stored in userData
+const userAvatar = computed(() => store.state.userData.data?.user?.avatar || defaultAvatar.value); // Assuming user avatar is stored in userData
 const productRatings = computed(() => store.state.Consumer.productRatings);
 const showComments = ref({});
 
@@ -432,7 +417,7 @@ function goToNextPage() {
 ******************************************************************/
 const isshowChatModal = ref(false);
 const selectedChat = ref(null);
-const messageText = ref('');
+const messageData = reactive({ message: '' });
 
 const closeChat = () => {
     selectedChat.value = null;
@@ -447,29 +432,28 @@ const closeshowChatModal = () => {
 };
 
 const selectChat = (id) => {
-    console.log("Selected chat ID: ", id);
+    console.log("Selected chat ID:", id);
     const selected = conversationStart.value.find(c => c.id === id);
     selectedChat.value = selected;
     store.dispatch('Consumer/getMessages', id);
 };
 
 const sendMessage = async () => {
-    if (!messageText.value.trim() || !selectedChat.value) return;
+    if (!messageData.message.trim() || !selectedChat.value) return;
 
     const payload = {
-        conversation_id: selectedChat.value.id,
-        message: messageText.value,
+        id: selectedChat.value.id,
+        message: messageData.message,
     };
 
     try {
         await store.dispatch('Consumer/sendMessage', payload);
         await store.dispatch('Consumer/getMessages', selectedChat.value.id);
-        messageText.value = '';
+        messageData.message = '';
     } catch (error) {
         console.error('Failed to send message:', error);
     }
 };
-
 /******************************************************************
   FUNCTION FOR DELETE MESSAGE
 ******************************************************************/

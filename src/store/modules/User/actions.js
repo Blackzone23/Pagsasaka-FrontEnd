@@ -178,7 +178,7 @@ export default {
 
     //API for get cancellation list
     async getCancelList({commit}) {
-        return await axiosClient.get('cancelled')
+        return await axiosClient.get('cancelled-sa-seller')
         .then((response) => {
             commit('setCancelListData', response.data.orders.data);
             return response.data.orders.data;
@@ -200,7 +200,7 @@ export default {
 
     //API for get refund/return list
     async getRefundList({commit}) {
-        return await axiosClient.get('refund')
+        return await axiosClient.get('refund-farmer')
         .then((response) => {
             commit('setRefundListData', response.data.orders.data);
             return response.data.orders.data;
@@ -284,27 +284,72 @@ export default {
     },
 
 /******************************************************************
- API FOR MESSAGE
+ API FOR PAYMENT
 ******************************************************************/
-    // async getConversation({commit}) {
-    //     return await axiosClient.get('chat-sessions')
-    //     .then((response) => {
-    //         commit('setConversation', response.data.data);
-    //         return response.data.data;
-    //     })
-    //     .catch((error) => {
-    //         commit('toggleLoader', false, { root: true })
-    //         if(error.response && error.response.data) {
-    //             const errorMessage = error.response.data.message;
-    //             setTimeout(() => {
-    //                 commit('showToast', { showToast: true, toastMessage: errorMessage, toastType: 'error'}, { root: true });
-    //             }, toastDelay);
 
-    //             setTimeout(() => {
-    //                 commit('showToast', { showToast: false, toastMessage: '', toastType: 'default'}, { root: true });
-    //             }, toastDuration);
-    //         }   
-    //     })
-    // },
+//get payment
+async getPayMent({commit}) {
+    return await axiosClient.get('payment-history')
+    .then((response) => {
+        commit('setPaymentListData', response.data.transactions);
+        return response.data.transactions;
+    })
+    .catch((error) => {
+        commit('toggleLoader', false, { root: true })
+        if(error.response && error.response.data) {
+            const errorMessage = error.response.data.message;
+            setTimeout(() => {
+                commit('showToast', { showToast: true, toastMessage: errorMessage, toastType: 'error'}, { root: true });
+            }, toastDelay);
+
+            setTimeout(() => {
+                commit('showToast', { showToast: false, toastMessage: '', toastType: 'default'}, { root: true });
+            }, toastDuration);
+        }   
+    })
+},
+
+async getSlots({commit}) {
+    return await axiosClient.get('available-slots')
+    .then((response) => {
+        commit('setSlotListData', response.data.available_slots);
+        return response.data.available_slots;
+    })
+    .catch((error) => {
+        commit('toggleLoader', false, { root: true })
+        if(error.response && error.response.data) {
+            const errorMessage = error.response.data.message;
+            setTimeout(() => {
+                commit('showToast', { showToast: true, toastMessage: errorMessage, toastType: 'error'}, { root: true });
+            }, toastDelay);
+
+            setTimeout(() => {
+                commit('showToast', { showToast: false, toastMessage: '', toastType: 'default'}, { root: true });
+            }, toastDuration);
+        }   
+    })
+},
+
+async getCSV({commit}) {
+    return await axiosClient.get('export-payment-history')
+    .then((response) => {
+        commit('setExportListData', response.data.available_slots);
+        return response.data.available_slots;
+    })
+    .catch((error) => {
+        commit('toggleLoader', false, { root: true })
+        if(error.response && error.response.data) {
+            const errorMessage = error.response.data.message;
+            setTimeout(() => {
+                commit('showToast', { showToast: true, toastMessage: errorMessage, toastType: 'error'}, { root: true });
+            }, toastDelay);
+
+            setTimeout(() => {
+                commit('showToast', { showToast: false, toastMessage: '', toastType: 'default'}, { root: true });
+            }, toastDuration);
+        }   
+    })
+},
+
 
 }

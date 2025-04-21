@@ -435,7 +435,7 @@ API FOR ADD TO CART
 API FOR MY PURCHASE
 ******************************************************************/
 
-    // API for getting list
+    // Purchase Pay
     async getPurchase({commit}) {
         return await axiosClient.get('my-placed-orders')
         .then((response) => {
@@ -457,11 +457,100 @@ API FOR MY PURCHASE
         })
     },
 
+    //Purchase Ship
     async getPurchaseShip({commit}) {
         return await axiosClient.get('toship-orders')
         .then((response) => {
             commit('setPurchaseShipList', response.data.waiting_courrier);
             return response.data.waiting_courrier;
+        })
+        .catch((error) => {
+            commit('toggleLoader', false, { root: true })
+            if(error.response && error.response.data) {
+                const errorMessage = error.response.data.message;
+                setTimeout(() => {
+                    commit('showToast', { showToast: true, toastMessage: errorMessage, toastType: 'error'}, { root: true });
+                }, toastDelay);
+
+                setTimeout(() => {
+                    commit('showToast', { showToast: false, toastMessage: '', toastType: 'default'}, { root: true });
+                }, toastDuration);
+            }   
+        })
+    },
+
+    //Purchase Receive
+    async getPurchaseReceive({commit}) {
+        return await axiosClient.get('order-intransit-status')
+        .then((response) => {
+            commit('setPurchaseReceiveList', response.data.in_transit_orders);
+            return response.data.in_transit_orders;
+        })
+        .catch((error) => {
+            commit('toggleLoader', false, { root: true })
+            if(error.response && error.response.data) {
+                const errorMessage = error.response.data.message;
+                setTimeout(() => {
+                    commit('showToast', { showToast: true, toastMessage: errorMessage, toastType: 'error'}, { root: true });
+                }, toastDelay);
+
+                setTimeout(() => {
+                    commit('showToast', { showToast: false, toastMessage: '', toastType: 'default'}, { root: true });
+                }, toastDuration);
+            }   
+        })
+    },
+
+    //Purchase Completed
+    async getPurchaseCompleted({commit}) {
+        return await axiosClient.get('delivered')
+        .then((response) => {
+            commit('setPurchaseCompleteList', response.data.delivered_orders);
+            return response.data.delivered_orders;
+        })
+        .catch((error) => {
+            commit('toggleLoader', false, { root: true })
+            if(error.response && error.response.data) {
+                const errorMessage = error.response.data.message;
+                setTimeout(() => {
+                    commit('showToast', { showToast: true, toastMessage: errorMessage, toastType: 'error'}, { root: true });
+                }, toastDelay);
+
+                setTimeout(() => {
+                    commit('showToast', { showToast: false, toastMessage: '', toastType: 'default'}, { root: true });
+                }, toastDuration);
+            }   
+        })
+    },
+
+    //Purchase Cancel
+    async getPurchaseCancel({commit}) {
+        return await axiosClient.get('Cancelled')
+        .then((response) => {
+            commit('setPurchaseCancelList', response.data.cancelled_orders);
+            return response.data.cancelled_orders;
+        })
+        .catch((error) => {
+            commit('toggleLoader', false, { root: true })
+            if(error.response && error.response.data) {
+                const errorMessage = error.response.data.message;
+                setTimeout(() => {
+                    commit('showToast', { showToast: true, toastMessage: errorMessage, toastType: 'error'}, { root: true });
+                }, toastDelay);
+
+                setTimeout(() => {
+                    commit('showToast', { showToast: false, toastMessage: '', toastType: 'default'}, { root: true });
+                }, toastDuration);
+            }   
+        })
+    },
+
+    //Purchase Refund
+    async getPurchaseRefund({commit}) {
+        return await axiosClient.get('Refund')
+        .then((response) => {
+            commit('setPurchaseRefundList', response.data.refund_orders);
+            return response.data.refund_orders;
         })
         .catch((error) => {
             commit('toggleLoader', false, { root: true })
@@ -512,7 +601,7 @@ API FOR MESSAGE
                     commit('showToast', { showToast: false, toastMessage: '', toastType: 'default' }, { root: true });
                 }, toastDuration);
                 throw error;
-            });
+        });
     },
 
     // Conversation list
@@ -613,28 +702,6 @@ API FOR MESSAGE
                     commit('showToast', { showToast: true, toastMessage: errorMessage, toastType: 'error'}, { root: true });
                 }, toastDelay);
 
-                setTimeout(() => {
-                    commit('showToast', { showToast: false, toastMessage: '', toastType: 'default'}, { root: true });
-                }, toastDuration);
-            }   
-        })
-    },
-
-    // Get rating
-    async getRating({commit}) {
-        return await axiosClient.get('ratings')
-        .then((response) => {
-            commit('setRatings', response.data.ratings);
-            return response.data.ratings;
-        })
-        .catch((error) => {
-            commit('toggleLoader', false, { root: true })
-            if(error.response && error.response.data) {
-                const errorMessage = error.response.data.message;
-                setTimeout(() => {
-                    commit('showToast', { showToast: true, toastMessage: errorMessage, toastType: 'error'}, { root: true });
-                }, toastDelay);
-    
                 setTimeout(() => {
                     commit('showToast', { showToast: false, toastMessage: '', toastType: 'default'}, { root: true });
                 }, toastDuration);
@@ -792,7 +859,7 @@ API FOR ADDRESS
     },
 
 /******************************************************************
-API FOR RATINGS
+API FOR REVIEWS
 ******************************************************************/
 
     // Get rating list

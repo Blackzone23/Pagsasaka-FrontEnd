@@ -1,5 +1,5 @@
 <template>
-    <div class="relative">
+    <div class="relative min-h-screen">
         <!-- Drawer Toggle Button for Small Screens (2xl and below) -->
         <button class="absolute top-1 text-white p-2 rounded-md z-50 2xl:hidden"  
             @click="isOpen = !isOpen"> 
