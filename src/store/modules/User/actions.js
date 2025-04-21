@@ -294,6 +294,60 @@ export default {
       });
   },
 
+//   async getPrintList({commit}, productId) {
+//         commit('toggleLoader', true, { root: true })
+//         return await axiosClient.get(`orders-details/${productId}`, productId)
+//         .then((response) => {
+//             commit('toggleLoader', false, { root: true });
+//             commit('setPrintListData', response.data.data);
+//             setTimeout(() => {
+//                 commit('showToast', { showToast: true, toastMessage: response.data.message, toastType: 'success'}, { root: true });
+//             }, toastDelay);
+
+//             setTimeout(() => {
+//                 commit('showToast', { showToast: false, toastMessage: '', toastType: 'default'}, { root: true });
+//             }, toastDuration);
+
+//             return response.data;
+//         })
+//         .catch((error) => {
+//             commit('toggleLoader', false, { root: true })
+//             if(error.response && error.response.data) {
+//                 const errorMessage = error.response.data.message;
+//                 setTimeout(() => {
+//                     commit('showToast', { showToast: true, toastMessage: errorMessage, toastType: 'error'}, { root: true });
+//                 }, toastDelay);
+
+//                 setTimeout(() => {
+//                     commit('showToast', { showToast: false, toastMessage: '', toastType: 'default'}, { root: true });
+//                 }, toastDuration);
+//             }   
+//         })
+//   },
+
+
+async getPrintList({ commit }) {
+    return await axiosClient.get('Orders-details')
+      .then((response) => {
+        commit('setPrintListData', response.data);
+        return response.data;
+      })
+      .catch((error) => {
+        commit('toggleLoader', false, { root: true });
+        if (error.response && error.response.data) {
+          const errorMessage = error.response.data.message;
+          setTimeout(() => {
+            commit('showToast', { showToast: true, toastMessage: errorMessage, toastType: 'error' }, { root: true });
+          }, toastDelay);
+
+          setTimeout(() => {
+            commit('showToast', { showToast: false, toastMessage: '', toastType: 'default' }, { root: true });
+          }, toastDuration);
+        }
+        throw error;
+      });
+  },
+
   /******************************************************************
    API FOR PAYMENT
   ******************************************************************/

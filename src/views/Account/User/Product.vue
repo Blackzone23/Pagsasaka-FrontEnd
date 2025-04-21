@@ -37,7 +37,7 @@
                 <div class="flex items-center space-x-4 justify-end">
                     <div class="space-x-4 items-center flex">
                         <!-- Button to toggle drafts or all products -->
-                        <button class="px-4 py-2 bg-[#608C54] text-white rounded-md text-sm" @click="openAddProductModal">
+                        <button class="px-4 py-2 bg-[#285a19]  text-white rounded-md text-sm" @click="openAddProductModal">
                             + Add New Product
                         </button>
                     </div>

@@ -37,6 +37,10 @@ export default {
         state.history.data = history;
     },  
 
+    setPrintListData: (state, print) => {
+        state.print.data = print;
+    },  
+
     // setConversation: (state, conversation) => {
     //     state.conversation.data = conversation;
     // },  

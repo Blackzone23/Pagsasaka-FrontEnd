@@ -35,9 +35,6 @@ export default {
         data:[],
     },
 
-    
-
-   
 
     searchTerm: '',
     currentPage: 1,

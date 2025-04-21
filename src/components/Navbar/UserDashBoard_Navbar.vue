@@ -8,7 +8,7 @@
 
         <!-- Sidebar / Drawer -->
         <div  
-            class="h-[800px] w-64 bg-[#285a19]  fixed 2xl:relative z-50 transition-transform duration-300 ease-in-out transform" 
+            class="h-[890px] w-64 bg-[#285a19]  fixed 2xl:relative z-50 transition-transform duration-300 ease-in-out transform" 
             :class="{'-translate-x-full pointer-events-none': !isOpen && screenSize < 1536, 'translate-x-0': isOpen || screenSize >= 1536}" 
         >
             <nav class="p-5">
@@ -34,10 +34,6 @@
                     <div class="flex items-center space-x-2">
                         <Icon icon="fluent:payment-20-filled" width="24" height="24" style="color: white" />
                         <router-link :to="{ name: 'Payments' }" active-class="text-gray-400" class="hover:text-gray-400">Payments</router-link>
-                    </div>
-                    <div class="flex items-center space-x-2">
-                        <Icon icon="icon-park-outline:transaction-order" width="24" height="24" style="color: white" />
-                        <router-link :to="{ name: 'Order' }" active-class="text-gray-400" class="hover:text-gray-400">Order</router-link>
                     </div>
                     <div class="flex items-center space-x-2">
                         <Icon icon="ic:twotone-archive" width="24" height="24" style="color: white" />

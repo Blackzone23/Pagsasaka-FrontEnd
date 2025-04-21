@@ -461,8 +461,8 @@ API FOR MY PURCHASE
     async getPurchaseShip({commit}) {
         return await axiosClient.get('toship-orders')
         .then((response) => {
-            commit('setPurchaseShipList', response.data.waiting_courrier);
-            return response.data.waiting_courrier;
+            commit('setPurchaseShipList', response.data.waiting_for_courier);
+            return response.data.waiting_for_courier;
         })
         .catch((error) => {
             commit('toggleLoader', false, { root: true })

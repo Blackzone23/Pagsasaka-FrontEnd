@@ -1,6 +1,6 @@
 <template>
 
-	<div class="flex h-[800px] bg-gray-100">
+	<div class="flex min-h-screen bg-gray-100">
 		<div class="flex-1 flex flex-col">
 		<!-- Header -->
 		<header class="bg-[#285a19]  shadow p-4 flex justify-between items-center text-white">
@@ -161,16 +161,106 @@
 								<span v-for="status in trackingSteps" :key="status.id">{{ status.label }}</span>
 							</div>
 
+							<div class="mt-8">
+								<button @click="openPrintModal" class="py-2 px-3 font-semibold rounded-lg shadow-md text-white bg-blue-700 hover:bg-red-600 border-2  text-sm border-gray-300">
+                                        Print Packing Slip
+								</button>
+
+								<div v-if="isshowPrintModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+									<div class="bg-white w-[700px] p-4 rounded-lg relative packing-slip-modal-content">
+											<!-- Packing Slip Content -->
+											<div class="mt-10 w-full">
+											<div  v-for="print in printList" :key="print.id" class="bg-white p- border border-gray-400 rounded-lg text-sm font-sans">
+												<!-- Header -->
+												<div class="flex justify-between items-center border-b pb-2 mb-2">
+													<div class="flex items-center gap-2">
+														<!-- <img src="/path-to-pagsasaka-logo.png" alt="Pagsasaka Logo" class="h-10" /> -->
+														<div>
+															<h1 class="text-lg font-bold text-green-700">Pagsasaka</h1>
+															<p class="text-xs text-gray-600">Farmers & Consumer</p>
+														</div>
+													</div>
+													<div class="text-right">
+														<p class="font-semibold text-lg">Logistics Logo</p>
+													</div>
+												</div>
+
+												<!-- Order ID -->
+												<div class="text-center mb-2">
+													<p class="font-semibold">Product Name: {{ print.orderId }}</p>
+														<!-- <img src="/path-to-barcode.png" alt="Barcode" class="h-10 mx-auto my-1" /> -->
+													<p class="text-xs">{{ print.orderId }}</p>
+												</div>
+
+												<!-- Buyer & Seller Info -->
+												<div class="grid grid-cols-2 gap-2 border-y py-2 mb-2">
+												<div>
+													<p class="font-semibold border-b pb-1">Buyer</p>
+													<p class="font-bold">{{ print.name }}</p>
+													<p v-html="print.address"></p>
+												</div>
+													<div>
+														<p class="font-semibold border-b pb-1">Seller</p>
+														<p class="font-bold">{{ print.name }}</p>
+														<p v-html="print.address"></p>
+													</div>
+												</div>
+
+												<!-- Product Info -->
+												<div class="grid grid-cols-4 gap-2 items-start border-b pb-2 mb-2">
+													<div class="col-span-1 flex flex-col items-center">
+															<!-- <img src="/path-to-qr.png" alt="QR Code" class="h-20 w-20 mb-1" /> -->
+														<p class="text-xs text-gray-600">{{ print.orderId }}</p>
+													</div>
+													<div class="col-span-3">
+														<table class="w-full text-left text-sm">
+															<thead>
+																<tr class="border-b">
+																<th class="py-1">Product (Qty)</th>
+																<th class="py-1">Price</th>
+																<th class="py-1">Total</th>
+																</tr>
+															</thead>
+															<tbody>
+																<tr v-for="(item, index) in order.items" :key="index">
+																<td class="py-1">
+																	<strong>{{ item.name }}</strong><br />
+																	<span class="text-xs text-gray-600">Variants: {{ item.variant }}</span>
+																</td>
+																<td class="py-1">₱{{ item.price.toFixed(2) }}</td>
+																<td class="py-1">₱{{ (item.price * item.quantity).toFixed(2) }}</td>
+																</tr>
+															</tbody>
+														</table>
+													</div>
+												</div>
+
+												<!-- Footer Order ID -->
+												<div class="text-center font-semibold text-sm mt-4">
+													Order ID: {{ order.orderId }}
+												</div>
+											</div>
+										</div>
+
+										<!-- Print Button Inside Modal -->
+										<div class="mt-4 text-center">
+											<button @click="downloadPackingSlipAsPDF" class="py-2 px-4 rounded-md bg-green-700 text-white"> Download Packing Slip as PDF
+											</button>
+										</div>
+									</div>
+								</div>
+							</div>
+
 							<!-- Approval Button -->
 							<div class="flex justify-center mt-4">
-								<button @click="updateStatus()" class="px-4 py-2 md:px-6 md:py-2 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg shadow-md transition">
+								<button @click="updateStatus()" :disabled="!hasDownloadedSlip" class="px-12 py-2 text-sm font-semibold rounded-lg shadow-md transition text-white  bg-green-600 hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed">
 									Approve
 								</button>
 							</div>
 						</div>
 
 						<!-- Back Button -->
-						<button class="mt-8 md:mt-12 px-4 py-2 bg-gray-300 rounded text-sm" @click="selectedShipment = null">
+						<button class="mt-4 px-4 py-2 bg-gray-300 font-semibold rounded-lg shadow-md  text-sm" @click="selectedShipment = null">
 							Back to Shipments
 						</button>
 					</div>
@@ -195,6 +285,8 @@ import { required, helpers } from "@vuelidate/validators";
 import { Icon } from "@iconify/vue";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
+import { jsPDF } from 'jspdf';
+import html2canvas from 'html2canvas';
 
 const store = useStore();
 const router = useRouter();
@@ -202,6 +294,7 @@ const router = useRouter();
 const orderList= computed(() => store.state.User.order.data);
 const cancellationList= computed(() => store.state.User.cancel.data);
 const refundList= computed(() => store.state.User.refund.data);
+const printList= computed(() => store.state.User.print.data);
 const image= computed(() => store.state.User.order.image);
 const selectedShipment = ref(null);
 const activeTab = ref('orders');
@@ -357,6 +450,107 @@ const handleRefundClick = (refund) => {
   selectedShipment.value = refund;
 };
 
+/******************************************************************
+FUNCTION FOR PRINT LIST
+******************************************************************/
+function getPrintList() {
+    store.dispatch('User/getPrintList');
+}
+
+
+onMounted(() => {
+    getPrintList();
+})
+
+
+/******************************************************************
+ FUNCTION FOR PRINT SLIP
+******************************************************************/
+const isshowPrintModal = ref(false);
+const hasDownloadedSlip = ref(false);
+
+const openPrintModal = () => {
+    isshowPrintModal.value = true;
+};
+
+// Function to handle closing modal
+function closePrintModal() {
+    isshowPrintModal.value = false;
+}
+
+
+// State to control modal visibility
+const showModal = ref(false);
+
+// Order data for the packing slip
+const order = ref({
+  orderId: '123456789',
+  buyer: {
+    name: 'Juan Dela Cruz',
+    address: '123 Farm Rd, Barangay, City',
+  },
+  seller: {
+    name: 'Maria Santos',
+    address: '456 Market St, Barangay, City',
+  },
+  items: [
+    {
+      name: 'Rice',
+      variant: '5kg',
+      price: 250.00,
+      quantity: 2,
+    },
+    {
+      name: 'Cocomelon',
+      variant: '1kg',
+      price: 100.00,
+      quantity: 3,
+    },
+  ],
+});
+
+const orders = ref([
+  {
+    daysAgo: 2,
+    orderDate: "10/28/2024",
+    time: "11:04 am UTC",
+    orderId: "123-123-123123",
+    buyerName: "Norman Cruz",
+    address: "Los Angeles blk 14 lot 3 Longos, Malolos City, Bulacan, North Luzon, 3000",
+    phone: "09123123123",
+    itemSubtotal: "800.00",
+    shipByDate: "Nov 3 2024 to Nov 5 2024",
+    deliverByDate: "Nov 12 2024 to Nov 15 2024",
+    carrier: "Standard (Light Parcel) LBC",
+  },
+  // Add more orders as needed
+]);
+
+const downloadPackingSlipAsPDF = () => {
+  const modalContent = document.querySelector('.packing-slip-modal-content');
+  if (!modalContent) {
+    console.error('Modal content not found');
+    return;
+  }
+
+  html2canvas(modalContent).then(canvas => {
+    const imgData = canvas.toDataURL('image/png');
+    const doc = new jsPDF();
+
+    const pdfWidth = 210; // A4 width in mm
+    const imgWidth = pdfWidth - 40; // leave some margin
+    const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+    doc.addImage(imgData, 'PNG', 20, 20, imgWidth, imgHeight);
+    doc.save('packing-slip.pdf');
+
+    // ✅ Set to true after successful download
+    hasDownloadedSlip.value = true;
+
+    // Close modal
+    closePrintModal();
+  });
+};
 
 /******************************************************************
 FUNCTION FOR LOG OUT

@@ -273,6 +273,7 @@ import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 import { jsPDF } from 'jspdf';
 import html2canvas from 'html2canvas';
+
 const store = useStore();
 const router = useRouter();
 

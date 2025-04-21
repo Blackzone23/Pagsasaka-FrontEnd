@@ -34,4 +34,9 @@ export default {
         data:[],
     },
 
+    print: {
+        data:[],
+    },
+
+
 }
