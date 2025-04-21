@@ -90,17 +90,14 @@ export default {
             });
     },
 
-/******************************************************************
- API FOR PROFILE
-******************************************************************/
 
 /******************************************************************
  API FOR PAYOUTS
 ******************************************************************/
 
-     // Fetch all payment requests (pending payouts)
-     async getPaymentRequests({ commit }, params = {}) {
-        return await axiosClient.get('payments/pending', { params })
+    // API for get item list 1
+    async getPaymentRequests({ commit }) {
+        return await axiosClient.get('payments/pending')
             .then((response) => {
                 commit('setPaymentList', response.data);
                 return response.data;
@@ -117,26 +114,52 @@ export default {
                         commit('showToast', { showToast: false, toastMessage: '', toastType: 'default' }, { root: true });
                     }, toastDuration);
                 }
-                throw error;
             });
     },
 
-    // Approve a payment by ID
+
     async approvePayment({ commit }, paymentId) {
         commit('toggleLoader', true, { root: true });
-        return await axiosClient.post(`payments/approve/${paymentId}`, {})
+        try {
+          // Make sure the paymentId is correct (i.e., just the ID)
+          const response = await axiosClient.post(`payments/approve/${paymentId}`);
+          
+          commit('toggleLoader', false, { root: true });
+          
+          // Show success toast after approval
+          setTimeout(() => {
+            commit('showToast', { showToast: true, toastMessage: response.data.message, toastType: 'success' }, { root: true });
+          }, toastDelay);
+          
+          // Hide toast after a certain duration
+          setTimeout(() => {
+            commit('showToast', { showToast: false, toastMessage: '', toastType: 'default' }, { root: true });
+          }, toastDuration);
+          
+          return response.data;
+        } catch (error) {
+          commit('toggleLoader', false, { root: true });
+          
+          // Handle error and display the message in toast
+          const errorMessage = error.response?.data?.message || 'An error occurred';
+          setTimeout(() => {
+            commit('showToast', { showToast: true, toastMessage: errorMessage, toastType: 'error' }, { root: true });
+          }, toastDelay);
+          
+          // Hide error toast after a duration
+          setTimeout(() => {
+            commit('showToast', { showToast: false, toastMessage: '', toastType: 'default' }, { root: true });
+          }, toastDuration);
+          
+          // Rethrow the error if you want to propagate it
+          throw error;
+        }
+    },
+      
+    async getApproveRequests({ commit }) {
+        return await axiosClient.get('payments/approved')
             .then((response) => {
-                commit('toggleLoader', false, { root: true });
-                // Remove the approved payout from the state
-                commit('removePayment', paymentId);
-                setTimeout(() => {
-                    commit('showToast', { showToast: true, toastMessage: response.data.message, toastType: 'success' }, { root: true });
-                }, toastDelay);
-
-                setTimeout(() => {
-                    commit('showToast', { showToast: false, toastMessage: '', toastType: 'default' }, { root: true });
-                }, toastDuration);
-
+                commit('setApproveList', response.data);
                 return response.data;
             })
             .catch((error) => {
@@ -151,8 +174,6 @@ export default {
                         commit('showToast', { showToast: false, toastMessage: '', toastType: 'default' }, { root: true });
                     }, toastDuration);
                 }
-                throw error;
             });
-    }
-
+    },
 }
