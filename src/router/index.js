@@ -211,6 +211,18 @@ const routes = [
                 component: () => import('../views/Account/Administrator/Administrator_Profile.vue'),
             },
 
+            {
+                path: '/payouts',
+                name: 'Payouts',
+                component: () => import('../views/Account/Administrator/Payouts.vue'),
+            },
+
+
+            {
+                path: '/approve',
+                name: 'Approve',
+                component: () => import('../views/Account/Administrator/Approve.vue'),
+            },
 
            
         ]
