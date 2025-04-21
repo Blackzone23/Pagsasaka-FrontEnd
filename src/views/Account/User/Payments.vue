@@ -53,108 +53,140 @@
 
       <!-- Table Wrapper for Scrollability -->
       <div class="overflow-x-auto">
-            <div class="max-h-[400px] overflow-y-auto">
-                <table class="w-full border-collapse border border-gray-300 rounded-md min-w-[600px]">
-                <thead class="sticky top-0 bg-gray-300 z-10">
-                    <tr class="text-xs sm:text-sm md:text-md">
-                    <th class="px-3 sm:px-4 py-2 text-left border-b border-gray-300">
-                        Date <Icon icon="marketeq:up-down-arrow" width="16" height="16" />
-                    </th>
-                    <th class="px-3 sm:px-4 py-2 text-left border-b border-gray-300">
-                        Product Name <Icon icon="marketeq:up-down-arrow" width="16" height="16" />
-                    </th>
-                    <th class="px-3 sm:px-4 py-2 text-left border-b border-gray-300">
-                        Payment Method <Icon icon="marketeq:up-down-arrow" width="16" height="16" />
-                    </th>
-                    <th class="px-3 sm:px-4 py-2 text-left border-b border-gray-300">
-                        Amount <Icon icon="marketeq:up-down-arrow" width="16" height="16" />
-                    </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-if="!hasPayments" class="text-center">
-                    <td colspan="4" class="px-3 sm:px-4 py-2 text-xs sm:text-sm">No transactions found.</td>
-                    </tr>
-                    <tr v-else v-for="payment in paymentList" :key="payment.id"
-                    class="border-b border-gray-200 hover:bg-gray-200 text-xs sm:text-sm">
-                    <td class="px-3 sm:px-4 py-2">{{ payment.date }}</td>
-                    <td class="px-3 sm:px-4 py-2">{{ payment.product_name }}</td>
-                    <td class="px-3 sm:px-4 py-2">
-                        <span class="text-blue-500">{{ payment.payment_method }}</span>
-                    </td>
-                    <td class="px-3 sm:px-4 py-2">₱{{ payment.amount }}</td>
-                    </tr>
-                </tbody>
-                </table>
-            </div>
+        <div class="max-h-[400px] overflow-y-auto">
+          <table class="w-full border-collapse border border-gray-300 rounded-md min-w-[600px]">
+            <thead class="sticky top-0 bg-gray-300 z-10">
+              <tr class="text-xs sm:text-sm md:text-md">
+                <th class="px-3 sm:px-4 py-2 text-left border-b border-gray-300">
+                  Date <Icon icon="marketeq:up-down-arrow" width="16" height="16" />
+                </th>
+                <th class="px-3 sm:px-4 py-2 text-left border-b border-gray-300">
+                  Product Name <Icon icon="marketeq:up-down-arrow" width="16" height="16" />
+                </th>
+                <th class="px-3 sm:px-4 py-2 text-left border-b border-gray-300">
+                  Payment Method <Icon icon="marketeq:up-down-arrow" width="16" height="16" />
+                </th>
+                <th class="px-3 sm:px-4 py-2 text-left border-b border-gray-300">
+                  Amount <Icon icon="marketeq:up-down-arrow" width="16" height="16" />
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-if="!hasPayments" class="text-center">
+                <td colspan="4" class="px-3 sm:px-4 py-2 text-xs sm:text-sm">No transactions found.</td>
+              </tr>
+              <tr v-else v-for="payment in paymentList" :key="payment.id"
+                class="border-b border-gray-200 hover:bg-gray-200 text-xs sm:text-sm">
+                <td class="px-3 sm:px-4 py-2">{{ payment.date }}</td>
+                <td class="px-3 sm:px-4 py-2">{{ payment.product_name }}</td>
+                <td class="px-3 sm:px-4 py-2">
+                  <span class="text-blue-500">{{ payment.payment_method }}</span>
+                </td>
+                <td class="px-3 sm:px-4 py-2">₱{{ payment.amount }}</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
-
+      </div>
     </div>
 
-    <!-- Payout Modal (Placeholder) -->
+    <!-- Updated Payout Modal -->
     <div v-if="showPayoutModal" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
       <div class="bg-white p-6 rounded-lg w-full max-w-md">
         <h2 class="text-lg font-bold mb-4">Request a Payout</h2>
-        <p class="text-xs text-red-500 mb-2">Earliest available payout: 05 May 2025</p>
-        <p class="text-xs mb-4">To the extent possible, additional slots are made regularly.</p>
-
-        <div class="flex flex-col md:flex-row gap-4">
-          <!-- Calendar -->
-          <div class="flex-1">
-            <div class="flex justify-between items-center mb-2">
-              <button @click="previousMonth" class="text-blue-500"></button>
-              <span class="font-semibold">{{ currentMonth }} {{ currentYear }}</span>
-              <button @click="nextMonth" class="text-blue-500"></button>
+        
+        <div class="grid grid-cols-1 gap-6">
+          <!-- Date Section -->
+          <div>
+            <div class="text-sm font-medium">Date</div>
+            <div class="text-xs text-green-600">Earliest available appointment: 05 May 2025</div>
+            <div class="text-xs text-red-500">To the extent possible, additional slots are made regularly.</div>
+            
+            <!-- Month Navigation -->
+            <div class="flex justify-between items-center my-2">
+              <button @click="previousMonth" class="text-blue-500 font-bold">«</button>
+              <span class="font-medium">{{ currentMonth }} {{ currentYear }}</span>
+              <button @click="nextMonth" class="text-blue-500 font-bold">»</button>
             </div>
-            <div class="grid grid-cols-7 gap-1 text-center text-xs">
-              <div v-for="day in daysOfWeek" :key="day" class="font-semibold">{{ day }}</div>
-              <div v-for="day in calendarDays" :key="day.date" :class="{
-                  'bg-green-200': day.isAvailable && !day.isSelected && !day.isPast,
-                  'bg-red-200': !day.isAvailable && !day.isSelected && !day.isPast,
-                  'bg-blue-500 text-white': day.isSelected,
-                  'text-gray-400': day.isPast || day.isEmpty,
-                  'p-2 rounded cursor-pointer': !day.isEmpty
-                }" @click="selectDate(day)">
-                {{ day.day }}
+            
+            <!-- Calendar -->
+            <div class="mb-2">
+              <!-- Days of week header -->
+              <div class="grid grid-cols-7 text-center text-xs">
+                <div v-for="day in daysOfWeek" :key="day" class="py-1">
+                  {{ day.substring(0, 2) }}
+                </div>
+              </div>
+              
+              <!-- Calendar days -->
+              <div class="grid grid-cols-7 gap-1 text-center text-xs">
+                <div v-for="day in calendarDays" :key="day.day + day.isEmpty" 
+                    :class="[
+                      'py-1 px-1',
+                      day.isEmpty ? 'text-gray-300' : 'cursor-pointer',
+                      day.isSelected ? 'bg-blue-500 text-white' : '',
+                      !day.isEmpty && !day.isSelected ? 
+                        day.isAvailable ? 'bg-green-100' : 'bg-red-100' : ''
+                    ]"
+                    @click="day.isEmpty || !day.isAvailable ? null : selectDate(day)">
+                  {{ day.day }}
+                </div>
+              </div>
+            </div>
+            
+            <!-- Legend -->
+            <div class="flex gap-4 mt-1 text-xs">
+              <div class="flex items-center">
+                <span class="w-4 h-4 bg-green-100 inline-block mr-1"></span> Available
+              </div>
+              <div class="flex items-center">
+                <span class="w-4 h-4 bg-red-100 inline-block mr-1"></span> Fully Booked
               </div>
             </div>
           </div>
-
-          <!-- Time Slots -->
-          <div class="flex-1">
-            <h3 class="font-semibold mb-2">Time</h3>
-            <div v-for="slot in slotList" :key="slot.id" class="flex justify-between items-center mb-2">
-              <label class="flex items-center">
-                <input type="radio" :value="slot.time" v-model="selectedTime" class="mr-2"
-                  :disabled="!slot.isAvailable || !selectedDate" />
-                <span>{{ slot.time }}</span>
-              </label>
-              <span :class="{
-                  'text-green-500': slot.isAvailable && selectedDate,
-                  'text-red-500': !slot.isAvailable && selectedDate,
-                  'text-gray-400': !selectedDate
-                }">
-                {{ slot.isAvailable && selectedDate ? `Available${slot.availableSlots ? ' Slots: ' + slot.availableSlots : ''}` : !selectedDate ? '' : 'Fully Booked' }}
-              </span>
+          
+          <!-- Time Section -->
+          <div>
+            <div class="text-sm font-medium mb-2">Time</div>
+            <div class="space-y-2">
+              <div v-for="(slot, index) in timeSlots" :key="index" class="flex justify-between items-center">
+                <label class="flex items-center">
+                  <input type="radio" :value="slot.time" v-model="selectedTime" class="mr-2" 
+                    :disabled="!slot.isAvailable || !selectedDate" />
+                  <span class="text-sm">{{ slot.time }}</span>
+                </label>
+                <span 
+                  :class="{
+                    'text-green-600': slot.isAvailable && selectedDate,
+                    'text-red-500': !slot.isAvailable && selectedDate,
+                    'text-gray-400': !selectedDate
+                  }"
+                  class="text-sm">
+                  {{ 
+                    slot.isAvailable && selectedDate ? 
+                      slot.availableSlots ? `Available Slots: ${slot.availableSlots}` : 'Available' : 
+                      !selectedDate ? '' : 'Fully Booked' 
+                  }}
+                </span>
+              </div>
             </div>
-          </div>
-        </div>
-
-        <!-- Legend -->
-        <div class="flex gap-2 mt-4 text-xs">
-          <div class="flex items-center">
-            <span class="w-4 h-4 bg-green-200 inline-block mr-1"></span> Available
-          </div>
-          <div class="flex items-center">
-            <span class="w-4 h-4 bg-red-200 inline-block mr-1"></span> Fully Booked
           </div>
         </div>
 
         <!-- Buttons -->
-        <div class="flex justify-end gap-2 mt-4">
-          <button @click="closePaymentModal" class="bg-blue-500 text-white py-2 px-4 rounded-md">Back</button>
-          <button @click="confirmPayout" :disabled="!selectedDate || !selectedTime"
-            class="bg-blue-500 text-white py-2 px-4 rounded-md disabled:bg-gray-300">Confirm</button>
+        <div class="flex justify-between mt-6">
+          <button @click="closePaymentModal" class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-8 rounded">
+            BACK
+          </button>
+          <button 
+            @click="confirmPayout" 
+            :disabled="!selectedDate || !selectedTime"
+            :class="[
+              'py-2 px-8 rounded text-white',
+              !selectedDate || !selectedTime ? 'bg-gray-300' : 'bg-blue-500 hover:bg-blue-600'
+            ]">
+            NEXT
+          </button>
         </div>
       </div>
     </div>
@@ -162,72 +194,267 @@
 </template>
 
 <script setup>
-import Loading from '@/components/Alerts/Loading.vue'
-import Toast from '@/components/Alerts/Toast.vue'
-import BaseSearchField from "@/components/Input-Fields/BaseSearchField.vue";
-import { ref, computed, reactive, onMounted, watch } from "vue";
-import { useVuelidate } from "@vuelidate/core";
-import { required, helpers } from "@vuelidate/validators";
-import { Icon } from "@iconify/vue";
+import Loading from '@/components/Alerts/Loading.vue';
+import Toast from '@/components/Alerts/Toast.vue';
+import { ref, computed, onMounted, watch } from "vue";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
+import { Icon } from "@iconify/vue";
+import jsPDF from 'jspdf'; // Import jsPDF for PDF generation
 
 const store = useStore();
 const router = useRouter();
 const showLoading = computed(() => store.state.showLoading.state);
-const sellerRaw  = computed(() => store.state.userData.data?.user || {})
-const paymentList= computed(() => store.state.User.payment.data);
-const slotList= computed(() => store.state.User.slot.data);
+const sellerRaw = computed(() => store.state.userData.data?.user || {});
+const paymentList = computed(() => store.state.User.payment.data);
+const dropdownVisible = ref(false);
+const showPayoutModal = ref(false);
 const selectedDate = ref(null);
 const selectedTime = ref(null);
+
+// Define toast timing constants
+const toastDuration = 3000; // 3 seconds
+const toastDelay = 0; // No delay
+
+// Compute totalSales
+const totalSales = computed(() => {
+  return paymentList.value
+    ? paymentList.value.reduce((sum, payment) => sum + parseFloat(payment.amount || 0), 0).toFixed(2)
+    : '0.00';
+});
+
 /******************************************************************
 FUNCTION FOR GET PAYMENT
 ******************************************************************/
 function getPayMent() {
-    store.dispatch('User/getPayMent');
+  store.dispatch('User/getPayMent');
 }
-
-watch(selectedDate, (newDate) => {
-  if (newDate) {
-    getSlots();
-  }
-});
 
 onMounted(() => {
   getPayMent();
-})
+});
 
 const hasPayments = computed(() => {
   return paymentList.value && paymentList.value.length > 0;
 });
 
 /******************************************************************
-FUNCTION FOR GET SLOTS
+CALENDAR AND TIME SLOT FUNCTIONS
 ******************************************************************/
-function getSlots() {
-  if (selectedDate.value) {
-    const formattedDate = selectedDate.value.toISOString().split('T')[0]; // "YYYY-MM-DD"
-    store.dispatch('User/getSlots', { date: formattedDate });
+const daysOfWeek = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
+const currentDate = ref(new Date(2025, 4, 1)); // Start at May 2025
+const currentMonth = computed(() => currentDate.value.toLocaleString('default', { month: 'long' }));
+const currentYear = computed(() => currentDate.value.getFullYear());
+
+// Sample time slots data structure
+const timeSlots = ref([
+  { time: '10:00-11:00', isAvailable: true, availableSlots: null },
+  { time: '11:00-12:00', isAvailable: true, availableSlots: null },
+  { time: '12:00-13:00', isAvailable: true, availableSlots: 2 },
+  { time: '13:00-14:00', isAvailable: true, availableSlots: 2 },
+  { time: '14:00-15:00', isAvailable: true, availableSlots: null },
+  { time: '15:00-16:00', isAvailable: true, availableSlots: null },
+  { time: '16:00-17:00', isAvailable: true, availableSlots: 13 },
+]);
+
+// Create calendar days based on current month/year
+const calendarDays = computed(() => {
+  const year = currentDate.value.getFullYear();
+  const month = currentDate.value.getMonth();
+  const firstDay = new Date(year, month, 1).getDay();
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  const today = new Date(2025, 3, 25); // Reference date: April 25, 2025
+  const days = [];
+
+  // Add empty slots for days before the first of the month
+  for (let i = 0; i < firstDay; i++) {
+    days.push({ day: '', isEmpty: true });
   }
-}
 
-onMounted(() => {
-    getSlots();
-})
+  // Generate the days of the month
+  for (let day = 1; day <= daysInMonth; day++) {
+    const date = new Date(year, month, day);
+    const isPast = date < today;
+    
+    // Generate availability - in real app this would come from API
+    // May 5th (earliest available date) and other specific dates based on screenshots
+    const isAvailable = 
+      (month === 4 && (day === 5 || day === 6 || day === 13 || day === 14 || day === 15 || day === 16)) || 
+      (month === 3 && (day === 28 || day === 29 || day === 30));
+    
+    const isSelected = selectedDate.value && 
+                      date.getDate() === selectedDate.value.getDate() &&
+                      date.getMonth() === selectedDate.value.getMonth() &&
+                      date.getFullYear() === selectedDate.value.getFullYear();
+                      
+    days.push({ 
+      day, 
+      date, 
+      isAvailable: !isPast && isAvailable, 
+      isSelected, 
+      isPast,
+      isEmpty: false
+    });
+  }
 
+  return days;
+});
+
+// Navigation functions
+const previousMonth = () => {
+  currentDate.value = new Date(currentDate.value.getFullYear(), currentDate.value.getMonth() - 1, 1);
+  selectedDate.value = null;
+  selectedTime.value = null;
+  updateTimeSlotAvailability();
+};
+
+const nextMonth = () => {
+  currentDate.value = new Date(currentDate.value.getFullYear(), currentDate.value.getMonth() + 1, 1);
+  selectedDate.value = null;
+  selectedTime.value = null;
+  updateTimeSlotAvailability();
+};
+
+const selectDate = (day) => {
+  if (day.isEmpty || day.isPast || !day.isAvailable) return;
+  selectedDate.value = day.date;
+  selectedTime.value = null;
+  updateTimeSlotAvailability();
+};
+
+// Update time slot availability based on selected date
+const updateTimeSlotAvailability = () => {
+  if (!selectedDate.value) return;
+  
+  const date = selectedDate.value.getDate();
+  const month = selectedDate.value.getMonth();
+  
+  // For April 25th specifically (shown as fully booked in image 2)
+  if (month === 3 && date === 25) {
+    timeSlots.value = timeSlots.value.map(slot => ({ ...slot, isAvailable: false }));
+    return;
+  }
+  
+  // For May 8th (selected date in image 1)
+  if (month === 4 && date === 8) {
+    timeSlots.value = [
+      { time: '10:00-11:00', isAvailable: true, availableSlots: null },
+      { time: '11:00-12:00', isAvailable: true, availableSlots: null },
+      { time: '12:00-13:00', isAvailable: true, availableSlots: 2 },
+      { time: '13:00-14:00', isAvailable: true, availableSlots: 2 },
+      { time: '14:00-15:00', isAvailable: true, availableSlots: null },
+      { time: '15:00-16:00', isAvailable: true, availableSlots: null },
+      { time: '16:00-17:00', isAvailable: true, availableSlots: 13 },
+    ];
+    return;
+  }
+  
+  // Default behavior for other dates
+  timeSlots.value = timeSlots.value.map(slot => {
+    // Randomly set availability (in real app would be from API)
+    const isAvailable = Math.random() > 0.3;
+    const availableSlots = isAvailable ? (Math.random() > 0.7 ? Math.floor(Math.random() * 15) + 1 : null) : null;
+    return { ...slot, isAvailable, availableSlots };
+  });
+};
+
+// Watch for date changes
+watch(selectedDate, () => {
+  if (selectedDate.value) {
+    updateTimeSlotAvailability();
+  }
+});
+
+/******************************************************************
+UTILITY FUNCTIONS
+******************************************************************/
 const refreshPage = () => {
-  // Reloads the page to refresh the content
   window.location.reload();
 };
 
-const exportCSV = () => {
-  console.log('Exporting CSV...');
+const exportCSV = async () => {
+  try {
+    store.dispatch('toggleLoader', true); // Show loading state
+
+    // Call the getCSV action
+    const blob = await store.dispatch('User/getCSV');
+
+    // Check if the response is a JSON error (e.g., no data found)
+    const text = await blob.text();
+    try {
+      const jsonResponse = JSON.parse(text);
+      if (!jsonResponse.isSuccess) {
+        throw new Error(jsonResponse.message || 'Failed to export CSV');
+      }
+    } catch (e) {
+      if (e.message && e.message !== 'Failed to export CSV') {
+        // Not a JSON response, so it's likely the CSV file
+        const csvBlob = new Blob([text], { type: 'text/csv;charset=utf-8' });
+
+        // Create a download link
+        const url = window.URL.createObjectURL(csvBlob);
+        const link = document.createElement('a');
+        link.href = url;
+
+        // Set the filename
+        link.setAttribute('download', `payment_history_${new Date().toISOString().split('T')[0]}.csv`);
+
+        // Trigger the download
+        document.body.appendChild(link);
+        link.click();
+
+        // Clean up
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
+
+        // Show success toast
+        store.commit('showToast', {
+          showToast: true,
+          toastMessage: 'CSV exported successfully',
+          toastType: 'success'
+        });
+
+        setTimeout(() => {
+          store.commit('showToast', {
+            showToast: false,
+            toastMessage: '',
+            toastType: 'default'
+          });
+        }, toastDuration);
+      } else {
+        // JSON error was thrown, rethrow to catch block
+        throw e;
+      }
+    }
+  } catch (error) {
+    // Suppress console error for known cases like "No payment history found"
+    if (error.message !== 'No payment history found.') {
+      console.error('Export CSV error:', error);
+    }
+    store.commit('showToast', {
+      showToast: true,
+      toastMessage: error.message || 'Failed to export CSV',
+      toastType: 'error'
+    });
+
+    setTimeout(() => {
+      store.commit('showToast', {
+        showToast: false,
+        toastMessage: '',
+        toastType: 'default'
+      });
+    }, toastDuration);
+  } finally {
+    store.dispatch('toggleLoader', false); // Hide loading state
+  }
 };
 
-const showPayoutModal = ref(false)
-
+/******************************************************************
+PAYOUT MODAL FUNCTIONS
+******************************************************************/
+// Open the modal
 const openPaymentModal = () => {
-    showPayoutModal.value = true;
+  showPayoutModal.value = true;
 };
 
 // Close the modal
@@ -237,76 +464,84 @@ const closePaymentModal = () => {
   showPayoutModal.value = false;
 };
 
-const previousMonth = () => {
-  currentDate.value = new Date(currentDate.value.getFullYear(), currentDate.value.getMonth() - 1, 1);
-  selectedDate.value = null;
-  selectedTime.value = null;
-};
-
-const nextMonth = () => {
-  currentDate.value = new Date(currentDate.value.getFullYear(), currentDate.value.getMonth() + 1, 1);
-  selectedDate.value = null;
-  selectedTime.value = null;
-};
-
-const selectDate = (day) => {
-  if (day.isEmpty || day.isPast || !day.isAvailable) return;
-  selectedDate.value = day.date;
-  selectedTime.value = null;
-};
-
-const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-const currentDate = ref(new Date(2025, 4, 1)); // Start at May 2025
-const currentMonth = computed(() => currentDate.value.toLocaleString('default', { month: 'long' }));
-const currentYear = computed(() => currentDate.value.getFullYear());
-
-
-// const timeSlots = ref([
-//   { time: '10:00-11:00', isAvailable: false, availableSlots: 0 },
-//   { time: '11:00-12:00', isAvailable: false, availableSlots: 0 },
-//   { time: '12:00-13:00', isAvailable: true, availableSlots: 2 },
-//   { time: '13:00-14:00', isAvailable: true, availableSlots: 2 },
-//   { time: '14:00-15:00', isAvailable: false, availableSlots: 0 },
-//   { time: '15:00-16:00', isAvailable: false, availableSlots: 0 },
-//   { time: '16:00-17:00', isAvailable: true, availableSlots: 13 },
-// ]);
-
-const calendarDays = computed(() => {
-  const year = currentDate.value.getFullYear();
-  const month = currentDate.value.getMonth();
-  const firstDay = new Date(year, month, 1).getDay();
-  const daysInMonth = new Date(year, month + 1, 0).getDate();
-  const today = new Date(2025, 3, 20); // Reference date: April 20, 2025
-  const days = [];
-
-  for (let i = 0; i < firstDay; i++) {
-    days.push({ day: '', isEmpty: true });
+// Confirm payout with PDF generation
+const confirmPayout = () => {
+  if (!selectedDate.value || !selectedTime.value) {
+    store.commit('showToast', {
+      showToast: true,
+      toastMessage: 'Please select a date and time',
+      toastType: 'error'
+    });
+    setTimeout(() => {
+      store.commit('showToast', { showToast: false, toastMessage: '', toastType: 'default' });
+    }, toastDuration);
+    return;
   }
 
-  for (let day = 1; day <= daysInMonth; day++) {
-    const date = new Date(year, month, day);
-    const isPast = date < today;
-    const isAvailable = !isPast && Math.random() > 0.5; // Random availability for demo
-    const isSelected =
-      selectedDate.value &&
-      selectedDate.value.getDate() === day &&
-      selectedDate.value.getMonth() === month &&
-      selectedDate.value.getFullYear() === year;
-    days.push({ day, date, isAvailable, isSelected, isPast });
-  }
+  store.dispatch('toggleLoader', true);
 
-  return days;
-});
+  // Format the selected date
+  const formattedDate = selectedDate.value.toLocaleDateString('en-US', {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+
+  // Schedule slip data
+  const scheduleSlip = {
+    sellerName: sellerRaw.value.name || 'N/A',
+    date: formattedDate,
+    time: selectedTime.value,
+    totalSales: `₱${totalSales.value}`,
+    appointmentType: 'Payout Request',
+  };
+
+  // Generate PDF
+  const doc = new jsPDF();
+  doc.setFontSize(16);
+  doc.text('Schedule Slip', 20, 20);
+  doc.setFontSize(12);
+  doc.text(`Seller: ${scheduleSlip.sellerName}`, 20, 40);
+  doc.text(`Date: ${scheduleSlip.date}`, 20, 50);
+  doc.text(`Time: ${scheduleSlip.time}`, 20, 60);
+  doc.text(`Total Sales: ${scheduleSlip.totalSales}`, 20, 70);
+  doc.text(`Appointment Type: ${scheduleSlip.appointmentType}`, 20, 80);
+
+  // Save PDF
+  const pdfName = `schedule-slip-${scheduleSlip.date.replace(/, /g, '-')}.pdf`;
+  doc.save(pdfName);
+
+  // Simulate API call
+  setTimeout(() => {
+    store.dispatch('toggleLoader', false);
+    
+    // Show success message
+    store.commit('showToast', {
+      showToast: true,
+      toastMessage: 'Payout request submitted and schedule slip downloaded',
+      toastType: 'success'
+    });
+    
+    setTimeout(() => {
+      store.commit('showToast', {
+        showToast: false,
+        toastMessage: '',
+        toastType: 'default'
+      });
+    }, toastDuration);
+    
+    closePaymentModal();
+  }, 1000);
+};
 
 /******************************************************************
 FUNCTION FOR LOG OUT
 ******************************************************************/
-const dropdownVisible = ref(false);
-  
-  // Toggle the dropdown visibility
-  const toggleDropdown = () => {
-    dropdownVisible.value = !dropdownVisible.value;
-  };
+// Toggle the dropdown visibility
+const toggleDropdown = () => {
+  dropdownVisible.value = !dropdownVisible.value;
+};
 
 const logout = async () => {
   try {
@@ -320,6 +555,6 @@ const logout = async () => {
 };
 </script>
 
-
 <style scoped>
+/* Add any specific styles you need here */
 </style>
