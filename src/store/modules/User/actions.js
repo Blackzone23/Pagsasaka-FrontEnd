@@ -300,25 +300,35 @@ export default {
 
   // Get payment
   async getPayMent({ commit }) {
-    return await axiosClient.get('payment-history')
-      .then((response) => {
-        commit('setPaymentListData', response.data.transactions);
-        return response.data.transactions;
-      })
-      .catch((error) => {
-        commit('toggleLoader', false, { root: true });
-        if (error.response && error.response.data) {
-          const errorMessage = error.response.data.message;
-          setTimeout(() => {
-            commit('showToast', { showToast: true, toastMessage: errorMessage, toastType: 'error' }, { root: true });
-          }, toastDelay);
-
-          setTimeout(() => {
-            commit('showToast', { showToast: false, toastMessage: '', toastType: 'default' }, { root: true });
-          }, toastDuration);
-        }
-        throw error;
-      });
+    try {
+      commit('toggleLoader', true, { root: true });
+      const response = await axiosClient.get('payment-history');
+      commit('setPaymentListData', response.data.transactions);
+      return response.data.transactions;
+    } catch (error) {
+      commit('toggleLoader', false, { root: true });
+      let errorMessage = 'Failed to fetch payment history';
+      if (error.response && error.response.data) {
+        errorMessage = error.response.data.message || errorMessage;
+      }
+      setTimeout(() => {
+        commit('showToast', {
+          showToast: true,
+          toastMessage: errorMessage,
+          toastType: 'error',
+        }, { root: true });
+      }, toastDelay);
+      setTimeout(() => {
+        commit('showToast', {
+          showToast: false,
+          toastMessage: '',
+          toastType: 'default',
+        }, { root: true });
+      }, toastDuration);
+      throw error;
+    } finally {
+      commit('toggleLoader', false, { root: true });
+    }
   },
 
   // Get available payout slots
@@ -350,7 +360,7 @@ export default {
       }, toastDuration);
       throw error;
     } finally {
-      commit('toggleLoader', false, { root: true });
+      commit('toggleLoader',  false, { root: true });
     }
   },
 
@@ -431,7 +441,6 @@ export default {
     }
   },
 
-
   // Check payout eligibility
   async checkPayoutEligibility({ commit }) {
     try {
@@ -465,52 +474,57 @@ export default {
     }
   },
 
+ // In src/store/actions.js
+async requestPayout({ commit, dispatch }, payoutData) {
+  try {
+    commit('toggleLoader', true, { root: true });
+    const response = await axiosClient.post('request-payout', payoutData); // Fixed endpoint
+    setTimeout(() => {
+      commit('showToast', {
+        showToast: true,
+        toastMessage: response.data.message || 'Payout request submitted successfully',
+        toastType: 'success',
+      }, { root: true });
+    }, toastDelay);
+    setTimeout(() => {
+      commit('showToast', {
+        showToast: false,
+        toastMessage: '',
+        toastType: 'default',
+      }, { root: true });
+    }, toastDuration);
 
-  // Request a payout
-  async requestPayout({ commit }, payoutData) {
-    try {
-      commit('toggleLoader', true, { root: true });
-      const response = await axiosClient.post('request-payout', payoutData);
-      setTimeout(() => {
-        commit('showToast', {
-          showToast: true,
-          toastMessage: response.data.message || 'Payout request submitted successfully',
-          toastType: 'success',
-        }, { root: true });
-      }, toastDelay);
-      setTimeout(() => {
-        commit('showToast', {
-          showToast: false,
-          toastMessage: '',
-          toastType: 'default',
-        }, { root: true });
-      }, toastDuration);
-      return response.data;
-    } catch (error) {
-      commit('toggleLoader', false, { root: true });
-      let errorMessage = 'Failed to request payout';
-      if (error.response && error.response.data) {
-        errorMessage = error.response.data.message || errorMessage;
-      }
-      setTimeout(() => {
-        commit('showToast', {
-          showToast: true,
-          toastMessage: errorMessage,
-          toastType: 'error',
-        }, { root: true });
-      }, toastDelay);
-      setTimeout(() => {
-        commit('showToast', {
-          showToast: false,
-          toastMessage: '',
-          toastType: 'default',
-        }, { root: true });
-      }, toastDuration);
-      throw error;
-    } finally {
-      commit('toggleLoader', false, { root: true });
+    // Refresh payment list and eligibility after payout request
+    await dispatch('getPayMent');
+    await dispatch('checkPayoutEligibility');
+
+    return response.data;
+  } catch (error) {
+    commit('toggleLoader', false, { root: true });
+    let errorMessage = 'Failed to request payout';
+    if (error.response && error.response.data) {
+      errorMessage = error.response.data.message || errorMessage;
     }
-  },
+    setTimeout(() => {
+      commit('showToast', {
+        showToast: true,
+        toastMessage: errorMessage,
+        toastType: 'error',
+      }, { root: true });
+    }, toastDelay);
+    setTimeout(() => {
+      commit('showToast', {
+        showToast: false,
+        toastMessage: '',
+        toastType: 'default',
+      }, { root: true });
+    }, toastDuration);
+    throw error;
+  } finally {
+    commit('toggleLoader', false, { root: true });
+  }
+},
+
 
 
 };
