@@ -162,9 +162,9 @@
 							</div>
 
 							<div class="mt-8">
-								<button @click="openPrintModal" class="py-2 px-3 font-semibold rounded-lg shadow-md text-white bg-blue-700 hover:bg-red-600 border-2  text-sm border-gray-300">
+								<!-- <button @click="openPrintModal" class="py-2 px-3 font-semibold rounded-lg shadow-md text-white bg-blue-700 hover:bg-red-600 border-2  text-sm border-gray-300">
                                         Print Packing Slip
-								</button>
+								</button> -->
 
 								<div v-if="isshowPrintModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
 									<div class="bg-white w-[700px] p-4 rounded-lg relative packing-slip-modal-content">
@@ -254,10 +254,11 @@
 							<!-- Approval Button -->
 							<div class="flex justify-center mt-4">
 								<button @click="updateStatus()"
-								:disabled="selectedShipment?.status === 'Order placed' && !hasDownloadedSlip"
+								
 								class="px-12 py-2 text-sm font-semibold rounded-lg shadow-md transition text-white bg-green-600 hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
 								>Approve</button>
 							</div>
+							<!-- :disabled="selectedShipment?.status === 'Order placed' && !hasDownloadedSlip" -->
 						</div>
 
 						<!-- Back Button -->
