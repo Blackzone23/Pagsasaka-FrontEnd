@@ -1,1 +1,0 @@
-import{_ as t,c as o,o as s,P as c}from"./index-DBPCak3D.js";const n={},a={class:"fontBodySize text-[#608C54] tracking-wide block mt-6 mb-2 font-sm"};function r(e,l){return s(),o("label",a,[c(e.$slots,"default")])}const f=t(n,[["render",r]]);export{f as B};

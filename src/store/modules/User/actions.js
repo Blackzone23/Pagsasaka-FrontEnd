@@ -348,6 +348,28 @@ export default {
 //       });
 //   },
 
+async getDasboardList({ commit }) {
+  return await axiosClient.get('product-ko')
+    .then((response) => {
+      commit('setDashboardListData', response.data.products);
+      return response.data.products;
+    })
+    .catch((error) => {
+      commit('toggleLoader', false, { root: true });
+      if (error.response && error.response.data) {
+        const errorMessage = error.response.data.message;
+        setTimeout(() => {
+          commit('showToast', { showToast: true, toastMessage: errorMessage, toastType: 'error' }, { root: true });
+        }, toastDelay);
+
+        setTimeout(() => {
+          commit('showToast', { showToast: false, toastMessage: '', toastType: 'default' }, { root: true });
+        }, toastDuration);
+      }
+      throw error;
+    });
+},
+
   /******************************************************************
    API FOR PAYMENT
   ******************************************************************/

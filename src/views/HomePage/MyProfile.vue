@@ -199,9 +199,9 @@
                                                         <!-- <button class="px-3 py-1 text-xs sm:text-sm 2xl:text-base font-semibold text-green-700 border border-green-600 rounded hover:bg-green-50" @click="startChatWithShop">
                                                             Contact Seller
                                                         </button> -->
-                                                        <button class="px-3 py-1 text-xs sm:text-sm 2xl:text-base font-semibold text-red-600 border border-red-500 rounded hover:bg-red-50"  @click="openshowCancelModal">
+                                                        <!-- <button class="px-3 py-1 text-xs sm:text-sm 2xl:text-base font-semibold text-red-600 border border-red-500 rounded hover:bg-red-50" @click="openshowCancelModal(purchase.id)">
                                                             Cancel Order
-                                                        </button>
+                                                        </button> -->
                                                     </div>
                                                 </div>
                                             </div>
@@ -230,7 +230,7 @@
                                                 </div>
 
                                                 <div class="text-sm mt-3">
-                                                    <BaseRadioButton v-for="option in ['Need to change delivery address', 'Seller is not responsive to my inquiries', 'Others / Change of mind']" :key="option" :name="'tinIdOption'" :label="option" :value="option" v-model="tinIdSelected"/>
+                                                    <BaseRadioButton v-for="option in ['Need to change delivery address', 'Seller is not responsive to my inquiries', 'Others / Change of mind']" :key="option" :name="'tinIdOption'" :label="option" :value="option" v-model="cancelData.reasons"/>
                                                 </div>
 
                                                 <!-- Buttons -->
@@ -242,7 +242,7 @@
                                         </div>
 
                                         <!-- Confirmation Modal -->
-                                        <div v-if="isConfirmationModalVisible"  class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+                                        <!-- <div v-if="isConfirmationModalVisible"  class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
                                             <div class="bg-white p-5 md:p-7 rounded-lg shadow-lg w-full max-w-[90%] md:max-w-[400px]" >
                                                 <div class="text-end">
                                                     <button
@@ -269,7 +269,7 @@
                                                     <p class="ml-auto font-semibold">₱820</p>
                                                     </div>
 
-                                                    <!-- Refund Details -->
+                                                   
                                                     <div class="mt-3 space-y-2">
                                                         <p><span class="font-semibold">Refund Amount:</span> ₱820</p>
                                                         <p><span class="font-semibold">Refund to:</span> GCASH</p>
@@ -283,12 +283,12 @@
                                                         <p><span class="font-semibold">Reason:</span> Others / Change of mind</p>
                                                     </div>
                                                 </div>
-                                                <!-- Button -->
+                                              
                                                 <div class="mt-4 flex justify-center">
                                                     <button @click="closeConfirmationModal" class="px-5 py-2 text-sm font-semibold text-white bg-green-600 rounded hover:bg-green-700" > Okay </button>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div> -->
                                     </div>
                                 </div>
 
@@ -342,9 +342,9 @@
                                                         <!-- <button class="px-3 py-1 text-xs sm:text-sm 2xl:text-base font-semibold text-green-700 border border-green-600 rounded hover:bg-green-50" @click="startChatWithShop">
                                                             Contact Seller
                                                         </button> -->
-                                                        <button class="px-3 py-1 text-xs sm:text-sm 2xl:text-base font-semibold text-red-600 border border-red-500 rounded hover:bg-red-50"  @click="openshowCancelModal">
+                                                        <!-- <button class="px-3 py-1 text-xs sm:text-sm 2xl:text-base font-semibold text-red-600 border border-red-500 rounded hover:bg-red-50"  @click="openshowCancelModal">
                                                             Cancel Order
-                                                        </button>
+                                                        </button> -->
                                                     </div>
                                                 </div>
                                             </div>
@@ -384,7 +384,7 @@
                                             </div>
                                         </div>
 
-                                        <!-- Confirmation Modal -->
+                                        <!--                                        
                                         <div v-if="isConfirmationModalVisible"  class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
                                             <div class="bg-white p-5 md:p-7 rounded-lg shadow-lg w-full max-w-[90%] md:max-w-[400px]" >
                                                 <div class="text-end">
@@ -412,7 +412,7 @@
                                                     <p class="ml-auto font-semibold">₱820</p>
                                                     </div>
 
-                                                    <!-- Refund Details -->
+                                                 
                                                     <div class="mt-3 space-y-2">
                                                         <p><span class="font-semibold">Refund Amount:</span> ₱820</p>
                                                         <p><span class="font-semibold">Refund to:</span> GCASH</p>
@@ -426,12 +426,12 @@
                                                         <p><span class="font-semibold">Reason:</span> Others / Change of mind</p>
                                                     </div>
                                                 </div>
-                                                <!-- Button -->
+                                             
                                                 <div class="mt-4 flex justify-center">
                                                     <button @click="closeConfirmationModal" class="px-5 py-2 text-sm font-semibold text-white bg-green-600 rounded hover:bg-green-700" > Okay </button>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div> -->
                                     </div>
                                 </div>
 
@@ -1503,7 +1503,12 @@ function hasPagination(tab) {
  FUNCTION FOR CANCEL MODAL
 ******************************************************************/
 const isshowCancelModal = ref(false);
-const isConfirmationModalVisible = ref(false);
+// const isConfirmationModalVisible = ref(false);
+const tinIdSelected = ref('');
+
+const cancelData = reactive({
+    reasons: '',
+});
 
 const openshowCancelModal = () => {
     isshowCancelModal.value = true;
@@ -1513,10 +1518,23 @@ const closeshowCancelModal = () => {
     isshowCancelModal.value = false;
 };
 
-// Function to handle confirmation
-const Save = () => {
-    isshowCancelModal.value = false;
-    isConfirmationModalVisible.value = true; // Show the second modal
+const Save = async () => {
+  if (!cancelData.reasons) {
+    // optional validation if needed
+    return;
+  }
+
+  const payload = {
+  id: tinIdSelected.value,
+  cancellation_reason: cancelData.reasons
+};
+
+  try {
+    await store.dispatch('Consumer/cancelProduct', payload);
+    closeshowCancelModal();
+  } catch (error) {
+    console.error('Cancellation failed:', error);
+  }
 };
 
 // Function to close the confirmation modal

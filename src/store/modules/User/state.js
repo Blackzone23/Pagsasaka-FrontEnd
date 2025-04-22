@@ -38,5 +38,9 @@ export default {
         data:[],
     },
 
+    allProduct: {
+        data:[],
+    },
+
 
 }

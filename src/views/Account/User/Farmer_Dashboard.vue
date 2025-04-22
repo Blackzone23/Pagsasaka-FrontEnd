@@ -42,13 +42,13 @@
 
                     <div class="flex justify-around">
                         <!-- Out of Stock Product -->
-                        <div class="flex flex-col justify-center items-center text-center">
+                        <!-- <div class="flex flex-col justify-center items-center text-center">
                             <div class="bg-green-200 p-4 rounded-full">
                                 <Icon icon="solar:box-bold" width="36" height="36" style="color: #276d22" />
                             </div>
                             <p class="text-lg font-semibold mt-2">Out of Stock Product</p>
                             <p class="text-2xl font-bold">{{ outOfStockProducts }}</p>
-                        </div>
+                        </div> -->
 
                         <!-- All Products -->
                         <div class="flex flex-col justify-center items-center text-center">
@@ -56,7 +56,7 @@
                                 <Icon icon="solar:box-bold" width="36" height="36" style="color: #276d22" />
                             </div>
                             <p class="text-lg font-semibold mt-2">All Products</p>
-                            <p class="text-2xl font-bold">{{ allProducts }}</p>
+                            <p class="text-2xl font-bold">{{ dashboardList.length }}</p>
                         </div>
 
                     </div>
@@ -88,6 +88,19 @@ const store = useStore();
 const router = useRouter();
 const showLoading = computed(() => store.state.showLoading.state);
 const sellerRaw  = computed(() => store.state.userData.data?.user || {})
+const dashboardList = computed(() => store.state.User.allProduct.data || []);
+
+/******************************************************************
+FUNCTION FOR ORDER
+******************************************************************/
+function getDasboardList() {
+    store.dispatch('User/getDasboardList');
+}
+
+
+onMounted(() => {
+  getDasboardList();
+})
 
 /******************************************************************
  FUNCTION INSIDE THE DASHBOARD

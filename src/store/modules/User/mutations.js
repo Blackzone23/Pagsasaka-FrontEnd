@@ -41,6 +41,11 @@ export default {
         state.print.data = print;
     },  
 
+    
+    setDashboardListData: (state, allProduct) => {
+        state.allProduct.data = allProduct;
+    }, 
+
     // setConversation: (state, conversation) => {
     //     state.conversation.data = conversation;
     // },  
