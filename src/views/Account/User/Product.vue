@@ -44,7 +44,7 @@
                 </div>
 
                 <!-- Add New Product Modal -->
-                <div v-if="isAddProductModalOpen" class="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-40">
+                <div v-if="isAddProductModalOpen" class="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-40 z-50">
                     <div class="bg-white rounded-lg 2xl:w-[900px] 2xs:w-[400px] md:w-[700px] p-4 border-4 border-gray-300 flex flex-col 2xl:h-[650px] 2xs:h-[500px] 2xs:overflow-y-auto">
                         <!-- Header -->
                         <div class="flex justify-between items-center">
@@ -148,9 +148,9 @@
 
                         <!-- Submit Buttons -->
                         <div class="mt-6 flex justify-end space-x-2 text-xs">
-                            <button type="submit" class="px-2 py-2 bg-white border-2 rounded-md hover:bg-gray-400">
+                            <!-- <button type="submit" class="px-2 py-2 bg-white border-2 rounded-md hover:bg-gray-400">
                                 Save as Draft
-                            </button>
+                            </button> -->
                             <button @click="createProduct" class="px-6 py-2 bg-[#007C80] text-white rounded-md hover:bg-gray-400">
                                 Publish
                             </button>
@@ -159,7 +159,7 @@
                 </div>
 
                 <!-- Update Product Modal -->
-                <div v-if="isUpdateProductModalOpen" class="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-40">
+                <div v-if="isUpdateProductModalOpen" class="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-40 z-50">
                     <div class="bg-white rounded-lg 2xl:w-[900px] 2xs:w-[400px] md:w-[700px] p-4 border-4 border-gray-300 flex flex-col 2xl:h-[650px] 2xs:h-[500px] 2xs:overflow-y-auto">
                         <!-- Header -->
                         <div class="flex justify-between items-center">
@@ -279,9 +279,9 @@
 
                         <!-- Submit Buttons -->
                         <div class="mt-6 flex justify-end space-x-2 text-xs">
-                            <button type="submit" class="px-2 py-2 bg-white border-2 rounded-md hover:bg-gray-400">
+                            <!-- <button type="submit" class="px-2 py-2 bg-white border-2 rounded-md hover:bg-gray-400">
                                 Save as Draft
-                            </button>
+                            </button> -->
                             <button @click="updateProduct" class="px-6 py-2 bg-[#007C80] text-white rounded-md hover:bg-gray-400">
                                 Update
                             </button>

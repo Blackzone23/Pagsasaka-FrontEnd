@@ -26,23 +26,29 @@
             </div>
         </div>
     </header>
-    <div class="w-full h-[727px] flex items-center justify-center bg-gray-200 px-4 sm:px-6 lg:px-8">
-      <div class="w-1/2 max-w-4xl p-6 bg-white shadow-lg rounded-lg">
-            <div class="text-center">
-                <img :src="sellerRaw.profilePic" alt="Profile Picture" class="w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40 lg:w-44 lg:h-44 mx-auto rounded-full">
-                <h2 class="mt-4 text-lg sm:text-xl font-semibold">{{ sellerRaw.first_name }} {{ sellerRaw.middle_name }} {{ sellerRaw.last_name }}</h2>
-                <p class="text-gray-600 text-sm sm:text-base">{{ sellerRaw.email }}</p>
-                <p class="text-gray-600 text-sm sm:text-base">{{ sellerRaw.phone_number }}</p>
+  
+    <div class="w-full flex justify-center px-4 py-20">
+            <div class="2xs:w-full 2xl:w-1/2 md:w-1/2 max-w-4xl p-6 bg-white shadow-lg rounded-lg">
+                <div class="flex flex-col items-center">
+                    <label class="relative cursor-pointer">
+                        <input type="file" accept="image/*" class="hidden" @change="handleImageUpload"/>
+                        <img :src="imageData.avatar" alt="Profile" class="w-32 h-32 rounded-full object-cover border-4 border-white shadow-md hover:opacity-80 transition duration-200" />
+                        <!-- Optional overlay icon -->
+                        <div class="absolute bottom-0 right-0 bg-white p-1 rounded-full shadow">
+                        <Icon icon="ic:twotone-plus" width="24" height="24" style="color: #9faba4" />
+                        </div>
+                    </label>
+                    <h2 class="mt-4 text-lg sm:text-xl font-semibold">{{ sellerRaw.first_name }} {{ sellerRaw.middle_name }} {{ sellerRaw.last_name }}</h2>
+                    <p class="text-gray-600 text-sm sm:text-base">{{ sellerRaw.email }}</p>
+                    <p class="text-gray-600 text-sm sm:text-base">{{ sellerRaw.phone_number }}</p>
+
+                    <div class="flex flex-col sm:flex-row justify-center mt-8 gap-4 text-sm">
+                        <button @click="openEditProfileModal" class="px-6 py-2 rounded-full bg-green-800 text-white hover:bg-green-600 transition">Edit Profile</button>
+                        <button @click="openPasswordModal" class="px-6 py-2 rounded-full bg-red-700 text-white hover:bg-red-500 transition">Change Password</button>
+                    </div>
+                </div>
             </div>
-    
-            <div class="flex justify-center gap-4 text-xs mt-6 sm:mt-10">
-                <button @click="openEditProfileModal" class=" px-6 max-w-xs sm:max-w-sm lg:max-w-md bg-green-800 text-white py-2  rounded-full hover:bg-green-600">
-                    Edit Profile
-                </button>
-                <button class="bg-red-700 text-white px-2 py-2 rounded-full hover:bg-red-500 transition" @click="openPasswordModal"> Change Password</button>
-            </div>
-      </div>
-    </div>
+        </div>
   
     <div v-if="isProfileEditingModalOpen" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center px-4">
         <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-md relative">
@@ -181,6 +187,41 @@ const isProfileEditingModalOpen = ref(false);
  function closeEditProfileModal() {
    isProfileEditingModalOpen.value = false;
 }
+
+/******************************************************************
+ FUNCTION FOR UPLOADING IMAGE PROFILE
+******************************************************************/
+
+const imageData = reactive({
+  avatar: sellerRaw.value.avatar || '', // Initial avatar
+});
+
+const handleImageUpload = async (event) => {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const formData = new FormData();
+  formData.append('avatar', file);
+  formData.append('id', sellerRaw.value.id); // if your backend needs the user ID
+
+  try {
+    const response = await store.dispatch('Consumer/addImage', formData);
+
+    if (response && response.avatar) {
+      // Update the avatar locally
+      const newAvatarUrl = response.avatar;
+      imageData.avatar = newAvatarUrl;
+      sellerRaw.value.avatar =  sellerRaw.value.avatar;
+
+      // Optional: update sessionStorage and Vuex state
+      sessionStorage.setItem('userAvatar', newAvatarUrl);
+      store.commit('setAvatar', newAvatarUrl); // if you’re managing avatar in global state
+    }
+  } catch (error) {
+    console.error("Image upload failed:", error);
+    alert("Image upload failed. Please try again.");
+  }
+};
 /******************************************************************
  FUNCTION FOR UPDATE CHANGE PASSWORD
 ******************************************************************/
