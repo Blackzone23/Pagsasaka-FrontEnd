@@ -296,10 +296,10 @@ export default {
 
   async getPrintList({commit}, productId) {
         commit('toggleLoader', true, { root: true })
-        return await axiosClient.get(`orders-details/${productId}`, productId)
+        return await axiosClient.get(`orders/${productId}`)
         .then((response) => {
             commit('toggleLoader', false, { root: true });
-            commit('setPrintListData', response.data.data);
+            commit('setPrintListData', response.data.payslip);
             setTimeout(() => {
                 commit('showToast', { showToast: true, toastMessage: response.data.message, toastType: 'success'}, { root: true });
             }, toastDelay);

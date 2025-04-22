@@ -82,9 +82,9 @@
                             >
                                 <Icon icon="mdi:chat" width="20" height="20" style="color: white" /> Chat Now
                             </button>
-                            <button @click="goToItemInfo(productItemInfo.id)" class="flex items-center gap-1 px-4 py-2 bg-white text-sm font-medium rounded-lg hover:bg-gray-300 transition border border-gray-300">
+                            <!-- <button @click="goToItemInfo(productItemInfo.id)" class="flex items-center gap-1 px-4 py-2 bg-white text-sm font-medium rounded-lg hover:bg-gray-300 transition border border-gray-300">
                                 <Icon icon="bx:store" width="20" height="20" style="color: black" /> View Shop
-                            </button>
+                            </button> -->
                         </div>
                     </div>
                     <!-- Divider for Desktop -->

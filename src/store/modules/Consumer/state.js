@@ -67,6 +67,10 @@ export default {
         data: [],
     },
 
+    quantity: {
+        data:[],
+    },
+
     // productItemInfo: {
     //     data: [],
     //     farmerInfo: [],

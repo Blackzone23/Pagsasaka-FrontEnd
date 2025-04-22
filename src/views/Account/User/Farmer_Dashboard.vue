@@ -3,7 +3,7 @@
     <Loading v-if="showLoading" class="loading"></Loading>
     <Toast></Toast>
 
-    <div class="flex h-[800px] bg-gray-100">
+    <div class="flex h-[900px] bg-gray-100">
       <!-- Main Content -->
       <div class="flex-1 flex flex-col">
             <!-- Header -->
@@ -34,20 +34,7 @@
             </header>
     
             <!-- Dashboard Content -->
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 p-2">
-                <!-- Open Orders -->
-                <div class="bg-white shadow-lg rounded-lg p-4">
-                    <h3 class="font-semibold text-lg">Open Orders</h3>
-                    <p class="text-xl font-bold mt-2">{{ openOrders }}</p>
-                    <Icon icon="dashicons:arrow-down" width="32" height="32" style="color: #276d22" />
-                </div>
-
-                <!-- Buyers Message -->
-                <div class="bg-white shadow-lg rounded-lg p-4">
-                    <h3 class="font-semibold text-lg">Buyers Message</h3>
-                    <p class="text-xl font-bold mt-2">{{ buyersMessage }}</p>
-                    <Icon icon="dashicons:arrow-down" width="32" height="32" style="color: #276d22" />
-                </div>
+            <div class="mt-4 grid grid-cols-1 lg:grid-cols-2 gap-4 p-2">
 
                 <!-- Out of Stock Products -->
                 <div class="col-span-2 bg-white shadow-lg rounded-lg p-4 h-96 flex flex-col justify-between">

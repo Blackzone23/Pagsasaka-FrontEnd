@@ -89,6 +89,9 @@ export default {
         state.toRefund.data = toRefund;
     },
 
+    setUpdateQuantity: (state, quantity) => {
+        state.quantity.data = quantity;
+    },
 
 
     setUpdateAddress: (state, updateAddress) => {

@@ -431,6 +431,38 @@ API FOR ADD TO CART
         }
     },
 
+      async updateQuantity({ commit }, updatedQuantity) {
+        commit('toggleLoader', true, { root: true });
+        return await axiosClient.post(`product/cart-update/${updatedQuantity.id}`, updatedQuantity)
+          .then((response) => {
+            commit('toggleLoader', false, { root: true });
+            commit('setUpdateQuantity', response.data.data);
+            setTimeout(() => {
+              commit('showToast', { showToast: true, toastMessage: response.data.message, toastType: 'success' }, { root: true });
+            }, toastDelay);
+    
+            setTimeout(() => {
+              commit('showToast', { showToast: false, toastMessage: '', toastType: 'default' }, { root: true });
+            }, toastDuration);
+    
+            return response.data;
+          })
+          .catch((error) => {
+            commit('toggleLoader', false, { root: true });
+            if (error.response && error.response.data) {
+              const errorMessage = error.response.data.message;
+              setTimeout(() => {
+                commit('showToast', { showToast: true, toastMessage: errorMessage, toastType: 'error' }, { root: true });
+              }, toastDelay);
+    
+              setTimeout(() => {
+                commit('showToast', { showToast: false, toastMessage: '', toastType: 'default' }, { root: true });
+              }, toastDuration);
+            }
+            throw error;
+          });
+      },
+
 /******************************************************************
 API FOR MY PURCHASE
 ******************************************************************/

@@ -139,9 +139,8 @@
                                 </div>
 
                                 <!-- Visibility Selection -->
-                                <BaseLabel class="font-bold">Visibility</BaseLabel>
                                 <div class="flex space-x-5">
-                                    <BaseRadioButton v-for="option in ['Published', 'Schedule']" :key="option" :name="'visibility'" :label="option" :value="option" v-model="productData.visibility" class="text-xs"></BaseRadioButton>
+                                    <BaseRadioButton v-for="option in ['Published']" :key="option" :name="'visibility'" :label="option" :value="option" v-model="productData.visibility" class="text-xs"></BaseRadioButton>
                                 </div>
                                 <BaseError v-if="$validateAddCategoryRules.visibility.$error">{{ $validateAddCategoryRules.visibility.$errors[0].$message }}</BaseError>
                             </div>
@@ -269,9 +268,8 @@
                                 </div>
 
                                 <!-- Visibility Selection -->
-                                <BaseLabel class="font-bold">Visibility</BaseLabel>
                                 <div class="flex space-x-5">
-                                    <BaseRadioButton v-for="option in ['Published', 'Schedule']" :key="option" :name="'visibility'" :label="option" :value="option" v-model="updatedProduct.visibility" class="text-xs"></BaseRadioButton>
+                                    <BaseRadioButton v-for="option in ['Published']" :key="option" :name="'visibility'" :label="option" :value="option" v-model="updatedProduct.visibility" class="text-xs"></BaseRadioButton>
                                 </div>
                                 <BaseError v-if="$validateUpdateProductRules.visibility.$error">
                                     {{ $validateUpdateProductRules.visibility.$errors[0].$message }}

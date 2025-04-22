@@ -26,14 +26,14 @@
 
                     <!-- Notifications and Help Section -->
                     <div class="flex items-center space-x-6">
-                        <a href="#" class="flex items-center space-x-2 hover:underline">
+                        <!-- <a href="#" class="flex items-center space-x-2 hover:underline">
                             <Icon icon="mdi:bell" width="16" height="16" style="color: #fff" />
                             <p>Notifications</p>
-                        </a>
-                        <a href="#" class="flex items-center space-x-2 hover:underline">
+                        </a> -->
+                        <!-- <a href="#" class="flex items-center space-x-2 hover:underline">
                             <Icon icon="mingcute:question-line" width="16" height="16" style="color: #fff" />
                             <span>Help</span>
-                        </a>
+                        </a> -->
                     </div>
 
                     <!-- User profile section -->
@@ -62,14 +62,14 @@
                     <a href="#"><Icon icon="mage:instagram-circle" width="20" height="20" style="color: white" /></a>
                 </div>
                 <div class="flex items-center space-x-3">
-                    <a href="#" class="flex items-center space-x-2 hover:underline text-white">
+                    <!-- <a href="#" class="flex items-center space-x-2 hover:underline text-white">
                         <Icon icon="mdi:bell" width="20" height="20" style="color: #fff"/> 
                         <span>Notifications</span>
-                    </a>
-                    <a href="#" class="flex items-center space-x-2 hover:underline text-white">
+                    </a> -->
+                    <!-- <a href="#" class="flex items-center space-x-2 hover:underline text-white">
                         <Icon icon="mingcute:question-line" width="20" height="20" style="color: #fff" />
                         <span>Help</span>
-                    </a>
+                    </a> -->
                 </div>
                 
                  <!-- User profile section -->
@@ -97,7 +97,7 @@
     
             <!-- Search bar with cart -->
             <div class="flex items-center space-x-2">
-                <BaseSearchField placeholder="Search..."></BaseSearchField>
+                <!-- <BaseSearchField placeholder="Search..."></BaseSearchField> -->
                 <a href="/cart" class="text-white hover:underline">
                     <Icon icon="bx:cart" width="35" height="35" style="color: white" />
                 </a>

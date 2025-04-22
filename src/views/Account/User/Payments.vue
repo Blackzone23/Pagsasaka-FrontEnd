@@ -48,16 +48,16 @@
             <thead class="sticky top-0 bg-gray-300 z-10">
               <tr class="text-xs sm:text-sm md:text-md">
                 <th class="px-3 sm:px-4 py-2 text-left border-b border-gray-300">
-                  Date <Icon icon="marketeq:up-down-arrow" width="16" height="16" />
+                  Date 
                 </th>
                 <th class="px-3 sm:px-4 py-2 text-left border-b border-gray-300">
-                  Product Name <Icon icon="marketeq:up-down-arrow" width="16" height="16" />
+                  Product Name 
                 </th>
                 <th class="px-3 sm:px-4 py-2 text-left border-b border-gray-300">
-                  Payment Method <Icon icon="marketeq:up-down-arrow" width="16" height="16" />
+                  Payment Method 
                 </th>
                 <th class="px-3 sm:px-4 py-2 text-left border-b border-gray-300">
-                  Amount <Icon icon="marketeq:up-down-arrow" width="16" height="16" />
+                  Amount 
                 </th>
               </tr>
             </thead>

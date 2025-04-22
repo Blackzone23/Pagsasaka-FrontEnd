@@ -43,7 +43,7 @@
             <!-- Main Layout -->
             <div class="flex flex-col md:flex-row">
                 <!-- Filter Section -->
-                <div class="w-full md:w-1/4 bg-white shadow-md rounded-lg p-4 mb-4 md:mb-0">
+                <div class="w-full h-64 md:w-1/4 bg-white shadow-md rounded-lg p-4 mb-4 md:mb-0">
                     <div class="space-y-2 bg-white shadow-md rounded-lg p-4">
                         <!-- Box Grouping -->
                         <div class="border border-gray-300 rounded-lg p-4">
@@ -58,9 +58,9 @@
                             </div>
                         </div>
                        
-                        <div class="border border-gray-300 flex flex-col rounded-lg p-4">
+                        <!-- <div class="border border-gray-300 flex flex-col rounded-lg p-4">
                             <BaseLabel class="font-bold">Product Type</BaseLabel>
-                            <!-- Example Filters -->
+                        
                             <div class="mb-4 text-xs">
                                 <label class="block mb-2">
                                     <input type="checkbox" v-model="filters.all" @change="toggleAll" /> All
@@ -87,7 +87,7 @@
                                     <input type="checkbox" v-model="filters.process" @change="selectCategory('process')" /> Processed
                                 </label>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
 

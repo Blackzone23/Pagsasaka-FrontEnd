@@ -37,7 +37,6 @@
                     <img :src="conversation.chat_partner_avatar || defaultAvatar" alt="Avatar" class="w-10 h-10 rounded-full mr-3" />
                     <div class="flex-1">
                         <span class="font-medium block">{{ conversation.chat_partner_name }}</span>
-                        <span class="text-sm text-gray-500">{{ conversation.message || 'No messages' }}</span>
                     </div>
                     <span v-if="conversation.unread_messages_count" class="text-xs bg-red-500 text-white px-2 py-1 rounded-full">
                         {{ conversation.unread_messages_count }}

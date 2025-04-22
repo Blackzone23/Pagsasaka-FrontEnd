@@ -26,9 +26,9 @@
 
         <div class="flex h-96 ">
             <main class="flex-1 p-6">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <!-- <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                     
-                    <!-- Earnings Overview -->
+                    
                     <div class="bg-gray-100 p-4 shadow rounded-lg">
                         <h3 class="text-lg font-semibold mb-2">Earnings</h3>
                         <p>Today: <span class="font-bold">{{ earnings.today }}</span></p>
@@ -36,7 +36,7 @@
                         <p>This Month: <span class="font-bold">{{ earnings.month }}</span></p>
                     </div>
 
-                    <!-- Upcoming Orders -->
+                  
                     <div class="bg-gray-100 p-4 shadow rounded-lg">
                         <h3 class="text-lg font-semibold mb-2">Upcoming Orders</h3>
                         <ul>
@@ -45,7 +45,7 @@
                             </li>
                         </ul>
                     </div>
-                </div>
+                </div> -->
 
                 <!-- Recent Deliveries -->
                 <div v-if="!selectedTransit" class="p-4">

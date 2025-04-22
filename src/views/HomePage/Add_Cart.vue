@@ -112,161 +112,184 @@
 </template>
   
 <script setup>
-    import Market_NavBar from "@/components/Navbar/Market_NavBar.vue";
-    import Footer from "@/components/Input-Fields/Footer.vue";
-    import BaseCheckBox from "@/components/Input-Fields/BaseCheckBox.vue";
-    import BaseInputField from "@/components/Input-Fields/BaseInputField.vue";
-    import Toast from "@/components/Alerts/Toast.vue";
-    import Loading from "@/components/Alerts/Loading.vue";
-    import { debounce } from 'lodash';
-    import { ref, computed, reactive, onMounted, watch  } from "vue";
-    import { useVuelidate } from "@vuelidate/core";
-    import { required, helpers } from "@vuelidate/validators";
-    import { Icon } from "@iconify/vue";
-    import { useRouter } from "vue-router";
-    import { useStore } from "vuex";
+import Market_NavBar from "@/components/Navbar/Market_NavBar.vue";
+import Footer from "@/components/Input-Fields/Footer.vue";
+import BaseCheckBox from "@/components/Input-Fields/BaseCheckBox.vue";
+import BaseInputField from "@/components/Input-Fields/BaseInputField.vue";
+import Toast from "@/components/Alerts/Toast.vue";
+import Loading from "@/components/Alerts/Loading.vue";
+import { debounce } from 'lodash';
+import { ref, computed, reactive, onMounted, watch  } from "vue";
+import { useVuelidate } from "@vuelidate/core";
+import { required, helpers } from "@vuelidate/validators";
+import { Icon } from "@iconify/vue";
+import { useRouter } from "vue-router";
+import { useStore } from "vuex";
 
-    const store = useStore();
-    const router = useRouter();
+const store = useStore();
+const router = useRouter();
 
 
-    // Fetch Cart Items from Vuex Store
-    const showLoading = computed(() => store.state.showLoading.state);
-    const cartList = computed(() => store.state.Consumer.cartItem.data);
+// Fetch Cart Items from Vuex Store
+const showLoading = computed(() => store.state.showLoading.state);
+const cartList = computed(() => store.state.Consumer.cartItem.data);
 
-    /******************************************************************
-     FUNCTION FOR GETTING LIST
-    ******************************************************************/
-    function getCartList() {
-        store.dispatch('Consumer/getCartList')
-        .then(() => {
-            // Ensure all items are selected after they are fetched
-            cartList.value.forEach(cartItem => {
-                if (cartItem.selected === undefined) {
-                    cartItem.selected = false;  // Default to false for new items
-                }
-            });
-            // Reset `selectAll` after fetching
-            selectAll.value = cartList.value.every(item => item.selected);
-        });
-    }
-
-    onMounted(() => {
-        getCartList();
-        
-        // Ensure newly added cart items are checked by default
-        watch(cartList, (newCartList) => {
-            newCartList.forEach(cartItem => {
-                if (cartItem.selected === undefined) {
-                    cartItem.selected = true;
-                }
-            });
-        });
-    });
-    
-    /******************************************************************
-     FUNCTION FOR QUANTITY
-    ******************************************************************/
-    // Track "Select All" state
-    const selectAll = ref(false);
-
-    function toggleSelectAll() {
+/******************************************************************
+ FUNCTION FOR GETTING LIST
+******************************************************************/
+function getCartList() {
+    store.dispatch('Consumer/getCartList')
+    .then(() => {
+        // Ensure all items are selected after they are fetched
         cartList.value.forEach(cartItem => {
-            cartItem.selected = selectAll.value;
-        });
-    }
-
-    // Watch individual item selections to update `selectAll` state
-    watch(
-        () => cartList.value.map(item => item.selected),
-        (selectedStates) => {
-            const selectedCount = selectedStates.filter(Boolean).length;
-            // If all items are selected, set `selectAll` to true
-            selectAll.value = selectedCount === cartList.value.length;
-            // Automatically check 'Select All' when two or more items are selected
-            if (selectedCount >= 2) {
-                selectAll.value = true;
+            if (cartItem.selected === undefined) {
+                cartItem.selected = false;  // Default to false for new items
             }
-        },
-        { deep: true }
-    );
-
-    
-    //selected count
-    const selectedItemsCount = computed(() =>
-      cartList.value.filter((cartItem) => cartItem.selected).length
-    );
-
-    //calculation
-    const calculateGrandTotal = computed(() => {
-      return cartList.value
-      .filter((cartItem) => cartItem.selected)
-      .reduce((sum, cartItem) => sum + cartItem.price * cartItem.quantity, 0)
-      .toFixed(2);
+        });
+        // Reset `selectAll` after fetching
+        selectAll.value = cartList.value.every(item => item.selected);
     });
-
-    // Increase item quantity
-    function increaseQuantity(id) {
-    const product = cartList.value.find((cartItem) => cartItem.id === id);
-    if (product) product.quantity++;
-    }
-
-    // Decrease item quantity
-    function decreaseQuantity(id) {
-    const product = cartList.value.find((cartItem) => cartItem.id === id);
-    if (product && product.quantity > 1) product.quantity--;
-    }
-    
-
-    /******************************************************************
-     FUNCTION FOR DELETE
-    ******************************************************************/
-    const selectedCount = computed(() =>
-    cartList.value.filter(cartItem => cartItem.selected).length
-);
- 
-    // Delete selected items
-    async function deleteSelectedItems() {
-    const selectedIds = cartList.value
-        .filter(cartItem => cartItem.selected)
-        .map(cartItem => cartItem.id);
-
-    await Promise.all(
-        selectedIds.map(id => store.dispatch("Consumer/deleteCart", id))
-    );
-
-    await store.dispatch("Consumer/getCartList");
 }
 
-    /******************************************************************
-     FUNCTION FOR DELETE
-    ******************************************************************/
-
-   //checkout button
-   const checkoutSelected = async () => {
-  const selectedItems = cartList.value.filter(cartItem => cartItem.selected);
-  if (selectedItems.length === 0) {
-    // Maybe trigger a toast
-    return;
-  }
-
-  for (const cartItem of selectedItems) {
-    try {
-      await store.dispatch('Consumer/Checkout', { id: cartItem.id });
-    } catch (error) {
-      console.error('Checkout failed for item:', cartItem.id, error);
-    }
-  }
-
-  router.push('/checkout');
-};
+onMounted(() => {
+    getCartList();
     
-    const loading = ref(true);
-
-    onMounted(() => {
-    setTimeout(() => {
-    loading.value = false; // Simulate loading completion
-    }, 2000); // Adjust delay as needed
+    // Ensure newly added cart items are checked by default
+    watch(cartList, (newCartList) => {
+        newCartList.forEach(cartItem => {
+            if (cartItem.selected === undefined) {
+                cartItem.selected = true;
+            }
+        });
     });
+});
+
+/******************************************************************
+ FUNCTION FOR QUANTITY
+******************************************************************/
+// Track "Select All" state
+const selectAll = ref(false);
+
+function toggleSelectAll() {
+    cartList.value.forEach(cartItem => {
+        cartItem.selected = selectAll.value;
+    });
+}
+
+// Watch individual item selections to update `selectAll` state
+watch(
+    () => cartList.value.map(item => item.selected),
+    (selectedStates) => {
+        const selectedCount = selectedStates.filter(Boolean).length;
+        // If all items are selected, set `selectAll` to true
+        selectAll.value = selectedCount === cartList.value.length;
+        // Automatically check 'Select All' when two or more items are selected
+        if (selectedCount >= 2) {
+            selectAll.value = true;
+        }
+    },
+    { deep: true }
+);
+
+
+//selected count
+const selectedItemsCount = computed(() =>
+    cartList.value.filter((cartItem) => cartItem.selected).length
+);
+
+//calculation
+const calculateGrandTotal = computed(() => {
+    return cartList.value
+    .filter((cartItem) => cartItem.selected)
+    .reduce((sum, cartItem) => sum + cartItem.price * cartItem.quantity, 0)
+    .toFixed(2);
+});
+
+const quantityTimers = new Map(); // Key: item.id, Value: timer
+
+function triggerQuantityUpdate(item) {
+// Clear existing timer
+if (quantityTimers.has(item.id)) {
+    clearTimeout(quantityTimers.get(item.id));
+}
+
+// Set new debounce timer
+const timer = setTimeout(() => {
+    store.dispatch('Consumer/updateQuantity', {
+    id: item.id,
+    quantity: item.quantity
+    });
+    quantityTimers.delete(item.id); // clean up
+}, 900); // 600ms debounce delay
+
+quantityTimers.set(item.id, timer);
+}
+
+function increaseQuantity(id) {
+const item = cartList.value.find(i => i.id === id);
+if (item) {
+    item.quantity++;
+    triggerQuantityUpdate(item); // Delayed API call
+}
+}
+
+function decreaseQuantity(id) {
+const item = cartList.value.find(i => i.id === id);
+if (item && item.quantity > 1) {
+    item.quantity--;
+    triggerQuantityUpdate(item); // Delayed API call
+}
+}
+
+/******************************************************************
+ FUNCTION FOR DELETE
+******************************************************************/
+const selectedCount = computed(() =>
+cartList.value.filter(cartItem => cartItem.selected).length
+);
+
+// Delete selected items
+async function deleteSelectedItems() {
+const selectedIds = cartList.value
+    .filter(cartItem => cartItem.selected)
+    .map(cartItem => cartItem.id);
+
+await Promise.all(
+    selectedIds.map(id => store.dispatch("Consumer/deleteCart", id))
+);
+
+await store.dispatch("Consumer/getCartList");
+}
+
+/******************************************************************
+ FUNCTION FOR DELETE
+******************************************************************/
+
+//checkout button
+const checkoutSelected = async () => {
+const selectedItems = cartList.value.filter(cartItem => cartItem.selected);
+if (selectedItems.length === 0) {
+// Maybe trigger a toast
+return;
+}
+
+for (const cartItem of selectedItems) {
+try {
+    await store.dispatch('Consumer/Checkout', { id: cartItem.id });
+} catch (error) {
+    console.error('Checkout failed for item:', cartItem.id, error);
+}
+}
+
+router.push('/checkout');
+};
+
+const loading = ref(true);
+
+onMounted(() => {
+setTimeout(() => {
+loading.value = false; // Simulate loading completion
+}, 2000); // Adjust delay as needed
+});
 
 </script>

@@ -196,9 +196,9 @@
                                                         <span class="text-xs sm:text-sm 2xl:text-base font-medium text-gray-500">Pending</span>
                                                     </div>
                                                     <div class="flex space-x-2">
-                                                        <button class="px-3 py-1 text-xs sm:text-sm 2xl:text-base font-semibold text-green-700 border border-green-600 rounded hover:bg-green-50" @click="startChatWithShop">
+                                                        <!-- <button class="px-3 py-1 text-xs sm:text-sm 2xl:text-base font-semibold text-green-700 border border-green-600 rounded hover:bg-green-50" @click="startChatWithShop">
                                                             Contact Seller
-                                                        </button>
+                                                        </button> -->
                                                         <button class="px-3 py-1 text-xs sm:text-sm 2xl:text-base font-semibold text-red-600 border border-red-500 rounded hover:bg-red-50"  @click="openshowCancelModal">
                                                             Cancel Order
                                                         </button>
@@ -339,9 +339,9 @@
                                                         <span class="text-xs sm:text-sm 2xl:text-base font-medium text-gray-500">Waiting for Courier</span>
                                                     </div>
                                                     <div class="flex space-x-2">
-                                                        <button class="px-3 py-1 text-xs sm:text-sm 2xl:text-base font-semibold text-green-700 border border-green-600 rounded hover:bg-green-50" @click="startChatWithShop">
+                                                        <!-- <button class="px-3 py-1 text-xs sm:text-sm 2xl:text-base font-semibold text-green-700 border border-green-600 rounded hover:bg-green-50" @click="startChatWithShop">
                                                             Contact Seller
-                                                        </button>
+                                                        </button> -->
                                                         <button class="px-3 py-1 text-xs sm:text-sm 2xl:text-base font-semibold text-red-600 border border-red-500 rounded hover:bg-red-50"  @click="openshowCancelModal">
                                                             Cancel Order
                                                         </button>
@@ -481,14 +481,14 @@
                                                         <h1 class="text-xs sm:text-sm 2xl:text-base">Seller Has shipped your goods:</h1>
                                                         <span class="text-xs sm:text-sm 2xl:text-base font-medium text-gray-500">To Receive</span>
                                                     </div>
-                                                    <div class="flex space-x-2">
+                                                    <!-- <div class="flex space-x-2">
                                                         <button class="px-3 py-1 text-xs sm:text-sm 2xl:text-base font-semibold text-green-700 border border-green-600 rounded hover:bg-green-50" @click="openshowChatModal">
                                                             Contact Seller
                                                         </button>
                                                         <button class="px-3 py-1 text-xs sm:text-sm 2xl:text-base font-semibold text-red-600 border border-red-500 rounded hover:bg-red-50" @click="openTrackModal">
                                                         Track Order
                                                         </button>
-                                                    </div>
+                                                    </div> -->
                                                 </div>
                                             </div>
                                         </div>
@@ -601,12 +601,12 @@
                                                         <span class="text-xs sm:text-sm 2xl:text-base font-medium text-gray-500">Completed</span>
                                                     </div>
                                                     <div class="flex space-x-2">
-                                                        <button class="px-8 py-1 text-xs sm:text-sm 2xl:text-base font-semibold text-green-700 border border-green-600 rounded hover:bg-green-50" @click="openRateModal">
+                                                        <!-- <button class="px-8 py-1 text-xs sm:text-sm 2xl:text-base font-semibold text-green-700 border border-green-600 rounded hover:bg-green-50" @click="openRateModal">
                                                             Rate
                                                         </button>
                                                         <button class="px-3 py-1 text-xs sm:text-sm 2xl:text-base font-semibold text-red-600 border border-red-500 rounded hover:bg-red-50" @click="openRefundModal">
                                                             Request/Refund
-                                                        </button>
+                                                        </button> -->
                                                     </div>
                                                 </div>
                                             </div>
@@ -880,12 +880,12 @@
                                                     <span class="text-xs sm:text-sm 2xl:text-base font-medium text-gray-500">To Receive</span>
                                                 </div>
                                                 <div class="flex space-x-2">
-                                                    <button class="px-3 py-1 text-xs sm:text-sm 2xl:text-base font-semibold text-green-700 border border-green-600 rounded hover:bg-green-50" @click="openshowChatModal">
+                                                    <!-- <button class="px-3 py-1 text-xs sm:text-sm 2xl:text-base font-semibold text-green-700 border border-green-600 rounded hover:bg-green-50" @click="openshowChatModal">
                                                         Contact Seller
                                                     </button>
                                                     <button class="px-3 py-1 text-xs sm:text-sm 2xl:text-base font-semibold text-red-600 border border-red-500 rounded hover:bg-red-50" @click="openTrackModal">
                                                     Track Order
-                                                    </button>
+                                                    </button> -->
                                                 </div>
                                             </div>
                                         </div>

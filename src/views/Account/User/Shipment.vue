@@ -32,7 +32,7 @@
 					<div class="mb-4 text-sm flex flex-wrap gap-2">
 						<button class="px-4 py-2 rounded transition" :class="{ 'bg-blue-500 text-white': activeTab === 'orders', 'bg-gray-200': activeTab !== 'orders' }" @click="activeTab = 'orders'"> My Orders</button>
 						<button class="px-4 py-2 rounded transition" :class="{ 'bg-red-500 text-white': activeTab === 'cancellations', 'bg-gray-200': activeTab !== 'cancellations' }" @click="activeTab = 'cancellations'"> Cancellations</button>
-						<button class="px-4 py-2 rounded transition" :class="{ 'bg-yellow-500 text-white': activeTab === 'refunds', 'bg-gray-200': activeTab !== 'refunds' }" @click="activeTab = 'refunds'"> Return and Refund</button>
+						<!-- <button class="px-4 py-2 rounded transition" :class="{ 'bg-yellow-500 text-white': activeTab === 'refunds', 'bg-gray-200': activeTab !== 'refunds' }" @click="activeTab = 'refunds'"> Return and Refund</button> -->
 					</div>
 
 					<!-- Tables -->
@@ -94,7 +94,7 @@
 					</div>
 
 						<!-- Tables -->
-						<div>
+						<!-- <div>
 						<table v-if="activeTab === 'refunds'" class="table-auto w-full border-collapse border border-gray-300">
 						<thead>
 							<tr class="bg-gray-300">
@@ -120,7 +120,7 @@
 							</tr>
 						</tbody>
 						</table>
-					</div>
+					</div> -->
 
 					<!-- Tracking Interface -->
 					<div class="p-5 border-2 border-gray-300 rounded-md mt-2 text-center">
@@ -253,9 +253,10 @@
 
 							<!-- Approval Button -->
 							<div class="flex justify-center mt-4">
-								<button @click="updateStatus()" :disabled="!hasDownloadedSlip" class="px-12 py-2 text-sm font-semibold rounded-lg shadow-md transition text-white  bg-green-600 hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed">
-									Approve
-								</button>
+								<button @click="updateStatus()"
+								:disabled="selectedShipment?.status === 'Order placed' && !hasDownloadedSlip"
+								class="px-12 py-2 text-sm font-semibold rounded-lg shadow-md transition text-white bg-green-600 hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
+								>Approve</button>
 							</div>
 						</div>
 
@@ -360,39 +361,44 @@ const statusData = reactive({
 
 
 async function updateStatus() {
-    if (!selectedShipment.value) return;
+	if (!selectedShipment.value) return;
 
-    // Define the order of statuses
-    const statusOrder = [
-        "Order placed",
-        "Waiting for courier",
-        "In transit",
-        "Order delivered"
-    ];
+	const statusOrder = [
+		"Order placed",
+		"Waiting for courier",
+		"In transit",
+		"Order delivered"
+	];
 
-    // Find the current status index
-    const currentIndex = statusOrder.indexOf(selectedShipment.value.status);
-    
-    // Ensure the current status exists in the array and isn't the last status
-    if (currentIndex === -1 || currentIndex === statusOrder.length - 1) return;
+	const currentIndex = statusOrder.indexOf(selectedShipment.value.status);
 
-    // Get the next status
-    const nextStatus = statusOrder[currentIndex + 1];
+	if (currentIndex === -1 || currentIndex === statusOrder.length - 1) return;
 
-    // Set statusData with the new status
-    statusData.id = selectedShipment.value.id;
-    statusData.status = nextStatus;
+	// Validation: if going from "Waiting for courier" to "In transit", require slip download
+	if (
+		statusOrder[currentIndex] === "Waiting for courier" &&
+		!hasDownloadedSlip
+	) {
+		console.warn("Slip not downloaded yet.");
+		return;
+	}
 
-    await store.dispatch('User/updateStatus', statusData)
-    .then((response) => {
-        if(response.isSuccess) {
-            selectedShipment.value.status = nextStatus; // Update frontend status
-        }
-    })
-    .catch((error) => {
-        console.error("Error updating status:", error);
-    });
+	const nextStatus = statusOrder[currentIndex + 1];
+
+	statusData.id = selectedShipment.value.id;
+	statusData.status = nextStatus;
+
+	await store.dispatch("User/updateStatus", statusData)
+		.then((response) => {
+			if (response.isSuccess) {
+				selectedShipment.value.status = nextStatus;
+			}
+		})
+		.catch((error) => {
+			console.error("Error updating status:", error);
+		});
 }
+
 
 /******************************************************************
 FUNCTION FOR CANCEL
@@ -453,8 +459,8 @@ const handleRefundClick = (refund) => {
 /******************************************************************
 FUNCTION FOR PRINT LIST
 ******************************************************************/
-function getPrintList() {
-    store.dispatch('User/getPrintList');
+function getPrintList(productId) {
+  store.dispatch('User/getPrintList', productId);
 }
 
 
@@ -482,49 +488,7 @@ function closePrintModal() {
 // State to control modal visibility
 const showModal = ref(false);
 
-// Order data for the packing slip
-const order = ref({
-  orderId: '123456789',
-  buyer: {
-    name: 'Juan Dela Cruz',
-    address: '123 Farm Rd, Barangay, City',
-  },
-  seller: {
-    name: 'Maria Santos',
-    address: '456 Market St, Barangay, City',
-  },
-  items: [
-    {
-      name: 'Rice',
-      variant: '5kg',
-      price: 250.00,
-      quantity: 2,
-    },
-    {
-      name: 'Cocomelon',
-      variant: '1kg',
-      price: 100.00,
-      quantity: 3,
-    },
-  ],
-});
 
-const orders = ref([
-  {
-    daysAgo: 2,
-    orderDate: "10/28/2024",
-    time: "11:04 am UTC",
-    orderId: "123-123-123123",
-    buyerName: "Norman Cruz",
-    address: "Los Angeles blk 14 lot 3 Longos, Malolos City, Bulacan, North Luzon, 3000",
-    phone: "09123123123",
-    itemSubtotal: "800.00",
-    shipByDate: "Nov 3 2024 to Nov 5 2024",
-    deliverByDate: "Nov 12 2024 to Nov 15 2024",
-    carrier: "Standard (Light Parcel) LBC",
-  },
-  // Add more orders as needed
-]);
 
 const downloadPackingSlipAsPDF = () => {
   const modalContent = document.querySelector('.packing-slip-modal-content');
