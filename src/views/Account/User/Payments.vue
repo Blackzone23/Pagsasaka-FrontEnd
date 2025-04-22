@@ -1,10 +1,8 @@
 <template>
-  <!-- Loading screen and toast message -->
   <Loading v-if="showLoading" class="loading"></Loading>
   <Toast></Toast>
 
   <div class="h-screen w-full">
-    <!-- Header -->
     <header class="bg-[#285a19] shadow p-4 flex justify-between items-center text-white">
       <h1 class="text-lg sm:text-xl 2xl:ml-0 md:ml-10 2xs:ml-10 font-bold">Payment Transaction</h1>
       <div class="flex items-center space-x-4">
@@ -24,18 +22,26 @@
     </header>
 
     <div class="container mx-auto p-4">
-      <div class="flex flex-wrap items-center gap-4 mb-4">
-        <button @click="refreshData" class="bg-[#608C54] py-2 px-4 sm:px-6 text-white rounded-md flex items-center gap-1 hover:bg-gray-700 transition">
-          <Icon icon="material-symbols-light:refresh" width="20" height="20" />
-          <span class="hidden sm:inline">Refresh</span>
-        </button>
-        <button @click="exportCSV" class="bg-gray-300 py-2 px-4 rounded-md text-sm sm:text-base hover:bg-gray-400 transition">
-          Export to CSV
-        </button>
-        <button @click="checkEligibilityAndOpenModal" :disabled="!isPayoutEligible" class="bg-[#285a19] py-2 px-4 rounded-md text-sm sm:text-base text-white hover:bg-gray-700 transition" :class="{ 'bg-gray-300 cursor-not-allowed': !isPayoutEligible }">
-          Request a Payout
-        </button>
-        <div class="text-sm sm:text-base font-semibold">Total Sales: ₱{{ totalSales }}</div>
+      <div class="flex flex-wrap items-center justify-between gap-4 mb-4">
+        <div class="flex flex-wrap items-center gap-4">
+          <button @click="refreshData" class="bg-[#608C54] py-2 px-4 sm:px-6 text-white rounded-md flex items-center gap-1 hover:bg-gray-700 transition">
+            <Icon icon="material-symbols-light:refresh" width="20" height="20" />
+            <span class="hidden sm:inline">Refresh</span>
+          </button>
+          <button @click="exportCSV" class="bg-gray-300 py-2 px-4 rounded-md text-sm sm:text-base hover:bg-gray-400 transition">
+            Export to CSV
+          </button>
+          <button @click="checkEligibilityAndOpenModal" :disabled="!isPayoutEligible" class="bg-[#285a19] py-2 px-4 rounded-md text-sm sm:text-base text-white hover:bg-gray-700 transition" :class="{ 'bg-gray-300 cursor-not-allowed': !isPayoutEligible }">
+            Request a Payout
+          </button>
+          <div class="text-sm sm:text-base font-semibold">Total Sales: ₱{{ totalSales }}</div>
+        </div>
+        <div v-if="payoutSchedule" class="text-sm sm:text-base font-semibold">
+          <div>Payout Schedule:</div>
+          <div>Date: {{ payoutSchedule.date }}</div>
+          <div>Time: {{ payoutSchedule.time_slot }}</div>
+          <div>Status: {{ payoutSchedule.status }}</div>
+        </div>
       </div>
 
       <div class="mb-3 space-y-3">
@@ -79,12 +85,10 @@
       </div>
     </div>
 
-    <!-- Payout Modal -->
     <div v-if="showPayoutModal" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
       <div class="bg-white p-6 rounded-lg w-full max-w-md">
         <h2 class="text-lg font-bold mb-4">Request a Payout</h2>
         <div class="grid grid-cols-1 gap-6">
-          <!-- Date Section -->
           <div>
             <div class="text-sm font-medium">Date</div>
             <div class="text-xs text-green-600">Earliest available appointment: {{ earliestAvailableDate }}</div>
@@ -121,7 +125,6 @@
               </div>
             </div>
           </div>
-          <!-- Time Section -->
           <div>
             <div class="text-sm font-medium mb-2">Time</div>
             <div class="space-y-2">
@@ -153,7 +156,7 @@
               'py-2 px-8 rounded text-white',
               !selectedDate || !selectedTime ? 'bg-gray-300' : 'bg-blue-500 hover:bg-blue-600'
             ]">
-            NEXT
+            CONFIRM
           </button>
         </div>
       </div>
@@ -180,10 +183,10 @@ const showPayoutModal = ref(false);
 const selectedDate = ref(null);
 const selectedTime = ref(null);
 const isPayoutEligible = ref(false);
-const eligibilityResponse = ref(null); // Store the full eligibility response
+const eligibilityResponse = ref(null);
+const payoutSchedule = ref(null);
 
 const toastDuration = 3000;
-const toastDelay = 0;
 
 const totalSales = computed(() => {
   return eligibilityResponse.value?.totalSales || '0.00';
@@ -192,14 +195,41 @@ const totalSales = computed(() => {
 const refreshData = async () => {
   await getPayMent();
   await checkPayoutEligibility();
+  await fetchPayoutSchedule();
 };
 
 async function getPayMent() {
   try {
     await store.dispatch('User/getPayMent');
-    console.log('Payment List after fetch:', paymentList.value);
   } catch (error) {
     console.error('Failed to fetch payment list:', error);
+  }
+}
+
+async function fetchPayoutSchedule() {
+  try {
+    const response = await store.dispatch('User/getPendingPayments');
+    const payouts = response.data || [];
+    const sellerPayout = payouts.find(p => p.account_id === sellerRaw.value.id);
+    if (sellerPayout) {
+      payoutSchedule.value = {
+        date: sellerPayout.date,
+        time_slot: sellerPayout.time_slot,
+        status: sellerPayout.status
+      };
+    } else {
+      const approvedResponse = await store.dispatch('User/getApprovedPayments');
+      const approvedPayouts = approvedResponse.data || [];
+      const approvedPayout = approvedPayouts.find(p => p.account_id === sellerRaw.value.id);
+      payoutSchedule.value = approvedPayout ? {
+        date: approvedPayout.date,
+        time_slot: approvedPayout.time_slot,
+        status: approvedPayout.status
+      } : null;
+    }
+  } catch (error) {
+    console.error('Failed to fetch payout schedule:', error);
+    payoutSchedule.value = null;
   }
 }
 
@@ -412,7 +442,6 @@ const checkPayoutEligibility = async () => {
     const response = await store.dispatch('User/checkPayoutEligibility');
     eligibilityResponse.value = response;
     isPayoutEligible.value = response.eligible;
-    console.log('Payout Eligibility:', isPayoutEligible.value, 'Total Sales:', response.totalSales);
   } catch (error) {
     console.error('Eligibility check failed:', error);
     eligibilityResponse.value = null;
@@ -428,7 +457,7 @@ const checkEligibilityAndOpenModal = async () => {
   } else {
     store.commit('showToast', {
       showToast: true,
-      toastMessage: `You are not eligible for a payout. Total sales (₱${totalSales.value}) must be at least ₱500.`,
+      toastMessage: `You are not eligible for a payout. Total sales (₱${totalSales.value}) must be at least ₱500 or you have a pending payout request.`,
       toastType: 'error'
     });
     setTimeout(() => {
@@ -537,6 +566,7 @@ const confirmPayout = async () => {
       store.commit('showToast', { showToast: false, toastMessage: '', toastType: 'default' });
     }, toastDuration);
     closePaymentModal();
+    await refreshData();
   } catch (error) {
     console.error('Payout request failed:', error);
     store.commit('showToast', {
