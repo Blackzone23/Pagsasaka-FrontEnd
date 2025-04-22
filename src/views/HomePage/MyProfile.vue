@@ -1480,7 +1480,7 @@ function closeRefundModal() {
  FUNCTION FOR MY PURCHASE TAB
 ******************************************************************/
 
-const purchasetabs = ["To Pay", "To Ship", "To Receive", "Completed", "Cancelled", "Return Refund"];
+const purchasetabs = ["To Pay", "To Ship", "To Receive", "Completed", "Cancelled"];
 const currentTab = ref(purchasetabs[0]); // Default to "To Pay"
 
 const currentPage = ref(1);
