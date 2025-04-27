@@ -59,6 +59,15 @@ export default {
         data: [],
     },
 
+    reason: {
+        data: [],
+    },
+
+    cancelOrder: {
+        data: [],
+    },
+
+
     updateAddress: {
         data: [],
     },
@@ -70,6 +79,7 @@ export default {
     quantity: {
         data:[],
     },
+    
 
     // productItemInfo: {
     //     data: [],

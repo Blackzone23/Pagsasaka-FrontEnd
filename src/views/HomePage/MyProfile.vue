@@ -148,7 +148,6 @@
                                 </div>
                             </div>
 
-
                             <!-- Content for each tab -->
                             <div class="mt-6">
                                 <!--To Pay-->
@@ -199,9 +198,9 @@
                                                         <!-- <button class="px-3 py-1 text-xs sm:text-sm 2xl:text-base font-semibold text-green-700 border border-green-600 rounded hover:bg-green-50" @click="startChatWithShop">
                                                             Contact Seller
                                                         </button> -->
-                                                        <!-- <button class="px-3 py-1 text-xs sm:text-sm 2xl:text-base font-semibold text-red-600 border border-red-500 rounded hover:bg-red-50" @click="openshowCancelModal(purchase.id)">
+                                                        <button class="px-3 py-1 text-xs sm:text-sm 2xl:text-base font-semibold text-red-600 border border-red-500 rounded hover:bg-red-50" @click="openshowCancelModal(purchase.id)">
                                                             Cancel Order
-                                                        </button> -->
+                                                        </button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -230,13 +229,17 @@
                                                 </div>
 
                                                 <div class="text-sm mt-3">
-                                                    <BaseRadioButton v-for="option in ['Need to change delivery address', 'Seller is not responsive to my inquiries', 'Others / Change of mind']" :key="option" :name="'tinIdOption'" :label="option" :value="option" v-model="cancelData.reasons"/>
+                                                    <BaseLabel class="font-semibold">*Select Your Reason</BaseLabel>
+                                                    <BaseSelectField v-model="cancelData.reasons">
+                                                        <BaseOptionDefaultField>Select your reason</BaseOptionDefaultField>
+                                                        <BaseOptionField v-for="reason in reasonList" :key="reason.id" :value="reason.id">{{ reason.reasons }}</BaseOptionField>
+                                                    </BaseSelectField>
                                                 </div>
 
                                                 <!-- Buttons -->
                                                 <div class="mt-4 flex justify-end space-x-2">
                                                     <button @click="closeshowCancelModal" class="px-4 py-2 text-sm font-semibold text-gray-700 border border-gray-300 rounded hover:bg-gray-100" > Close</button>
-                                                    <button @click="Save" class="px-4 py-2 text-sm font-semibold text-red-700 bg-red-100 border border-red-500 rounded hover:bg-red-200"> Confirm </button>
+                                                    <button @click="cancelProduct" class="px-4 py-2 text-sm font-semibold text-red-700 bg-red-100 border border-red-500 rounded hover:bg-red-200"> Confirm </button>
                                                 </div>
                                             </div>
                                         </div>
@@ -1063,6 +1066,9 @@ import BaseInputField from '@/components/Input-Fields/BaseInputField.vue';
 import BaseRadioButton from '@/components/Input-Fields/BaseRadioButton.vue';
 import BaseError from '@/components/Input-Fields/BaseError.vue';
 import BaseSearchField from '@/components/Input-Fields/BaseSearchField.vue';
+import BaseSelectField from '@/components/Input-Fields/BaseSelectField.vue';
+import BaseOptionField from '@/components/Input-Fields/BaseOptionField.vue';
+import BaseOptionDefaultField from '@/components/Input-Fields/BaseOptionDefaultField.vue';
 import Footer from '@/components/Input-Fields/Footer.vue';
 import Loading from '@/components/Alerts/Loading.vue';
 import Toast from '@/components/Alerts/Toast.vue';
@@ -1072,8 +1078,6 @@ import { useVuelidate } from "@vuelidate/core";
 import { Icon } from '@iconify/vue';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
-import BaseSelectField from '@/components/Input-Fields/BaseSelectField.vue';
-import BaseOptionField from '@/components/Input-Fields/BaseOptionField.vue';
 import BaseCheckBox from '@/components/Input-Fields/BaseCheckBox.vue';
 
 const store = useStore();
@@ -1094,7 +1098,17 @@ const toReceiveList= computed(() => store.state.Consumer.toReceive.data);
 const toCompleteList= computed(() => store.state.Consumer.toComplete.data);
 const toCancelList= computed(() => store.state.Consumer.toCancel.data);
 const toRefundList= computed(() => store.state.Consumer.toRefund.data);
+const reasonList= computed(() => store.state.Consumer.reason.data);
+/******************************************************************
+ FUNCTION FOR GETTING TO SHIP
+******************************************************************/
+function getReason() {
+    store.dispatch('Consumer/getReason')
+}
 
+onMounted(() => {
+    getReason();
+})
 
 /******************************************************************
  FUNCTION FOR UPDATE PROFILE
@@ -1502,40 +1516,64 @@ function hasPagination(tab) {
 /******************************************************************
  FUNCTION FOR CANCEL MODAL
 ******************************************************************/
-const isshowCancelModal = ref(false);
-// const isConfirmationModalVisible = ref(false);
-const tinIdSelected = ref('');
-
+const selectedPurchaseId = ref(null);
 const cancelData = reactive({
     reasons: '',
 });
 
-const openshowCancelModal = () => {
-    isshowCancelModal.value = true;
-};
+const isshowCancelModal = ref(false);
+// Open cancel modal and store purchase ID
+function openshowCancelModal(purchaseId) {
+  selectedPurchaseId.value = purchaseId;
+  isshowCancelModal.value = true;
+}
 
-const closeshowCancelModal = () => {
-    isshowCancelModal.value = false;
-};
+// Close cancel modal and reset state
+function closeshowCancelModal() {
+  isshowCancelModal.value = false;
+  cancelData.reasons = '';
+  selectedPurchaseId.value = null;
+}
 
-const Save = async () => {
-  if (!cancelData.reasons) {
-    // optional validation if needed
+// Cancel product action
+async function cancelProduct() {
+  // Validate reason selection
+  if (!cancelData.reasons || cancelData.reasons === 'Select your reason') {
+    store.commit('showToast', {
+      showToast: true,
+      toastMessage: 'Please select a cancellation reason',
+      toastType: 'error'
+    }, { root: true });
     return;
   }
 
-  const payload = {
-  id: tinIdSelected.value,
-  cancellation_reason: cancelData.reasons
-};
-
   try {
+    // Prepare payload for Vuex action
+    const payload = {
+      id: selectedPurchaseId.value,
+      reasons: cancelData.reasons
+    };
+
+    // Dispatch cancelProduct action
     await store.dispatch('Consumer/cancelProduct', payload);
+    
+    // Close modal on success
     closeshowCancelModal();
   } catch (error) {
     console.error('Cancellation failed:', error);
+    // Error toast is handled in the Vuex action
   }
-};
+}
+// // Function for cancel product
+// async function cancelProduct() {
+//     await store.dispatch('Consumer/cancelProduct', cancelData)
+//     .then((response) => {
+//         if (response.isSuccess === true) {
+//             closeshowCancelModal();
+//             getPurchase();
+//         }
+//     });
+// }
 
 // Function to close the confirmation modal
 const closeConfirmationModal = () => {

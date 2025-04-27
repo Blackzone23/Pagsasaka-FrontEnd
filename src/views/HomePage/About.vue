@@ -96,7 +96,7 @@
                                 class="2xl:w-52 2xs:w-32 2xl:h-52 2xs:h-34 xs:w-28 xs:h-28 mx-auto rounded-full border-4 border-[#608C54]">
                             <hr class="2xl:w-[200px] 2xs:w-[90px] lg:w-[120px] xs:w-[110px] mt-1 justify-start ml-1 border-t-8 border-[#608C54]" />
                             <p class="2xl:text-sm 2xs:text-xs font-semibold">ARCIGA, Kurt Steven</p>
-                            <p class="text-xs">UI/UX</p>
+                            <p class="text-xs">Full Stack</p>
                         </div>
                         <!-- Member 3 -->
                         <div class="space-y-2">

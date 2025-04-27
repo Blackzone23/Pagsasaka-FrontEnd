@@ -9,4 +9,12 @@ export default {
     approve: {
         data: [],
     },
+
+    remit: {
+        data: [],
+    },
+
+    people: {
+        data: [],
+    },
 }

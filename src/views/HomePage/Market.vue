@@ -309,6 +309,15 @@ const userAvatar = computed(() => store.state.userData.data?.user?.avatar || def
 const productRatings = computed(() => store.state.Consumer.productRatings);
 const showComments = ref({});
 
+const handleSearch = debounce(() => {
+  if (searchQuery.value.trim()) {
+    router.push({ 
+      name: 'SearchResults', 
+      query: { q: searchQuery.value.trim() }
+    });
+    searchQuery.value = '';
+  }
+}, 300);
 /******************************************************************
   FUNCTION FOR GETTING CONVERSATION LIST
 ******************************************************************/

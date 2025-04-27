@@ -90,6 +90,77 @@ export default {
             });
     },
 
+    async getRemitList({ commit }) {
+        return await axiosClient.get('allriders')
+            .then((response) => {
+                commit('setRemitList', response.data);
+                return response.data;
+            })
+            .catch((error) => {
+                commit('toggleLoader', false, { root: true });
+                if (error.response && error.response.data) {
+                    const errorMessage = error.response.data.message;
+                    setTimeout(() => {
+                        commit('showToast', { showToast: true, toastMessage: errorMessage, toastType: 'error' }, { root: true });
+                    }, toastDelay);
+
+                    setTimeout(() => {
+                        commit('showToast', { showToast: false, toastMessage: '', toastType: 'default' }, { root: true });
+                    }, toastDuration);
+                }
+            });
+    },
+
+    async approveRiderRemit({ commit }, approveData) {
+        commit('toggleLoader', true, { root: true });
+        return await axiosClient.post(`rider/approve-earnings/${approveData.id}`, approveData)
+            .then((response) => {
+                commit('toggleLoader', false, { root: true });
+                setTimeout(() => {
+                    commit('showToast', { showToast: true, toastMessage: response.data.message, toastType: 'success' }, { root: true });
+                }, toastDelay);
+
+                setTimeout(() => {
+                    commit('showToast', { showToast: false, toastMessage: '', toastType: 'default' }, { root: true });
+                }, toastDuration);
+
+                return response.data;
+            })
+            .catch((error) => {
+                commit('toggleLoader', false, { root: true });
+                if (error.response && error.response.data) {
+                    const errorMessage = error.response.data.message;
+                    setTimeout(() => {
+                        commit('showToast', { showToast: true, toastMessage: errorMessage, toastType: 'error' }, { root: true });
+                    }, toastDelay);
+
+                    setTimeout(() => {
+                        commit('showToast', { showToast: false, toastMessage: '', toastType: 'default' }, { root: true });
+                    }, toastDuration);
+                }
+            });
+    },
+
+    async getAdminList({ commit }) {
+        return await axiosClient.get('counts')
+            .then((response) => {
+                commit('setPeopleList', response.data);
+                return response.data;
+            })
+            .catch((error) => {
+                commit('toggleLoader', false, { root: true });
+                if (error.response && error.response.data) {
+                    const errorMessage = error.response.data.message;
+                    setTimeout(() => {
+                        commit('showToast', { showToast: true, toastMessage: errorMessage, toastType: 'error' }, { root: true });
+                    }, toastDelay);
+
+                    setTimeout(() => {
+                        commit('showToast', { showToast: false, toastMessage: '', toastType: 'default' }, { root: true });
+                    }, toastDuration);
+                }
+            });
+    },
 
 /******************************************************************
  API FOR PAYOUTS

@@ -39,11 +39,12 @@ const routes = [
             },
 
             {
-                path: '/landing',
-                name: 'Landing',
-                component: () => import('../views/HomePage/Landing_Product.vue'),
+                path: '/search',
+                name: 'SearchResults',
+                component: () => import('../views/HomePage/SearchResults.vue'),
                 meta: { requiresAuth: true },
-            },
+              },
+            
             
             {
                 path: '/services',

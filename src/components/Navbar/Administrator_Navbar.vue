@@ -12,12 +12,12 @@
                 <div class="space-y-10 flex flex-col items-start text-lg font-semibold text-white ml-10 mt-10">
                 <div class="flex items-center space-x-2">
                     <Icon icon="material-symbols:dashboard" width="24" height="24" style="color: white" />
-                    <router-link :to="{ name: 'Admin_Dashboard' }" active-class="text-gray-400" class="hover:text-gray-400">Rider List</router-link>
+                    <router-link :to="{ name: 'Admin_Dashboard' }" active-class="text-gray-400" class="hover:text-gray-400">Dashboard</router-link>
                 </div>
-                <!-- <div class="flex items-center space-x-2">
+                <div class="flex items-center space-x-2">
                     <Icon icon="icon-park-outline:ad-product" width="24" height="24" style="color: white" />
                     <router-link :to="{ name: 'Administrator_List' }" active-class="text-gray-400" class="hover:text-gray-400">Rider List</router-link>
-                </div> -->
+                </div>
 
                 <div class="flex items-center space-x-2">
                   <Icon icon="material-symbols-light:payments-sharp" width="24" height="24"  style="color: white" />

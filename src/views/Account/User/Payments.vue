@@ -3,169 +3,171 @@
   <Toast></Toast>
 
   <div class="h-screen w-full">
-    <header class="bg-[#285a19] shadow p-4 flex justify-between items-center text-white">
-      <h1 class="text-lg sm:text-xl 2xl:ml-0 md:ml-10 2xs:ml-10 font-bold">Payment Transaction</h1>
-      <div class="flex items-center space-x-4">
-        <div class="relative inline-block text-left">
-          <div class="flex items-center space-x-2">
-            <img :src="sellerRaw.avatar" alt="Profile" class="w-10 h-10 rounded-full object-cover shadow-md" />
-            <Icon icon="uil:setting" width="24" height="24" class="cursor-pointer text-white" @click="toggleDropdown" />
-          </div>
-          <div v-if="dropdownVisible" class="absolute right-0 z-50 mt-2 w-48 bg-white rounded shadow-lg">
-            <a href="/seller-profile" class="block px-4 py-2 text-sm text-black hover:bg-gray-100"> Account Info </a>
-            <button @click="logout" class="block w-full text-left px-4 py-2 text-sm text-black hover:bg-gray-100">
-              Logout
-            </button>
-          </div>
-        </div>
-      </div>
-    </header>
-
-    <div class="container mx-auto p-4">
-      <div class="flex flex-wrap items-center justify-between gap-4 mb-4">
-        <div class="flex flex-wrap items-center gap-4">
-          <button @click="refreshData" class="bg-[#608C54] py-2 px-4 sm:px-6 text-white rounded-md flex items-center gap-1 hover:bg-gray-700 transition">
-            <Icon icon="material-symbols-light:refresh" width="20" height="20" />
-            <span class="hidden sm:inline">Refresh</span>
-          </button>
-          <button @click="exportCSV" class="bg-gray-300 py-2 px-4 rounded-md text-sm sm:text-base hover:bg-gray-400 transition">
-            Export to CSV
-          </button>
-          <button @click="checkEligibilityAndOpenModal" :disabled="!isPayoutEligible" class="bg-[#285a19] py-2 px-4 rounded-md text-sm sm:text-base text-white hover:bg-gray-700 transition" :class="{ 'bg-gray-300 cursor-not-allowed': !isPayoutEligible }">
-            Request a Payout
-          </button>
-          <div class="text-sm sm:text-base font-semibold">Total Sales: ₱{{ totalSales }}</div>
-        </div>
-        <div v-if="payoutSchedule" class="text-sm sm:text-base font-semibold">
-          <div>Payout Schedule:</div>
-          <div>Date: {{ payoutSchedule.date }}</div>
-          <div>Time: {{ payoutSchedule.time_slot }}</div>
-          <div>Status: {{ payoutSchedule.status }}</div>
-        </div>
-      </div>
-
-      <div class="mb-3 space-y-3">
-        <p class="text-xs sm:text-sm md:text-base">View the payment history here. It might take some time for payments to appear in the portal.</p>
-      </div>
-
-      <div class="overflow-x-auto">
-        <div class="max-h-[400px] overflow-y-auto">
-          <table class="w-full border-collapse border border-gray-300 rounded-md min-w-[600px]">
-            <thead class="sticky top-0 bg-gray-300 z-10">
-              <tr class="text-xs sm:text-sm md:text-md">
-                <th class="px-3 sm:px-4 py-2 text-left border-b border-gray-300">
-                  Date 
-                </th>
-                <th class="px-3 sm:px-4 py-2 text-left border-b border-gray-300">
-                  Product Name 
-                </th>
-                <th class="px-3 sm:px-4 py-2 text-left border-b border-gray-300">
-                  Payment Method 
-                </th>
-                <th class="px-3 sm:px-4 py-2 text-left border-b border-gray-300">
-                  Amount 
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-if="!hasPayments" class="text-center">
-                <td colspan="4" class="px-3 sm:px-4 py-2 text-xs sm:text-sm">No transactions found.</td>
-              </tr>
-              <tr v-else v-for="payment in paymentList" :key="payment.id" class="border-b border-gray-200 hover:bg-gray-200 text-xs sm:text-sm">
-                <td class="px-3 sm:px-4 py-2">{{ payment.date }}</td>
-                <td class="px-3 sm:px-4 py-2">{{ payment.product_name }}</td>
-                <td class="px-3 sm:px-4 py-2">
-                  <span class="text-blue-500">{{ payment.payment_method }}</span>
-                </td>
-                <td class="px-3 sm:px-4 py-2">₱{{ payment.amount }}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
-    <div v-if="showPayoutModal" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-      <div class="bg-white p-6 rounded-lg w-full max-w-md">
-        <h2 class="text-lg font-bold mb-4">Request a Payout</h2>
-        <div class="grid grid-cols-1 gap-6">
-          <div>
-            <div class="text-sm font-medium">Date</div>
-            <div class="text-xs text-green-600">Earliest available appointment: {{ earliestAvailableDate }}</div>
-            <div class="text-xs text-red-500">To the extent possible, additional slots are made regularly.</div>
-            <div class="flex justify-between items-center my-2">
-              <button @click="previousMonth" class="text-blue-500 font-bold">«</button>
-              <span class="font-medium">{{ currentMonth }} {{ currentYear }}</span>
-              <button @click="nextMonth" class="text-blue-500 font-bold">»</button>
-            </div>
-            <div class="mb-2">
-              <div class="grid grid-cols-7 text-center text-xs">
-                <div v-for="day in daysOfWeek" :key="day" class="py-1">
-                  {{ day.substring(0, 2) }}
+        <header class="bg-[#285a19] shadow p-4 flex justify-between items-center text-white">
+        <h1 class="text-lg sm:text-xl 2xl:ml-0 md:ml-10 2xs:ml-10 font-bold">Payment Transaction</h1>
+        <div class="flex items-center space-x-4">
+                <div class="relative inline-block text-left">
+                    <div class="flex items-center space-x-2">
+                        <img :src="sellerRaw.avatar" alt="Profile" class="w-10 h-10 rounded-full object-cover shadow-md" />
+                        <Icon icon="uil:setting" width="24" height="24" class="cursor-pointer text-white" @click="toggleDropdown" />
+                    </div>
+                    <div v-if="dropdownVisible" class="absolute right-0 z-50 mt-2 w-48 bg-white rounded shadow-lg">
+                        <a href="/seller-profile" class="block px-4 py-2 text-sm text-black hover:bg-gray-100"> Account Info </a>
+                        <button @click="logout" class="block w-full text-left px-4 py-2 text-sm text-black hover:bg-gray-100">
+                        Logout
+                        </button>
+                    </div>
                 </div>
-              </div>
-              <div class="grid grid-cols-7 gap-1 text-center text-xs">
-                <div v-for="day in calendarDays" :key="day.day + day.isEmpty" :class="[
-                    'py-1 px-1',
-                    day.isEmpty ? 'text-gray-300' : 'cursor-pointer',
-                    day.isSelected ? 'bg-blue-500 text-white' : '',
-                    !day.isEmpty && !day.isSelected ? 
-                      day.isAvailable ? 'bg-green-100' : 'bg-red-100' : ''
-                  ]" @click="day.isEmpty || !day.isAvailable || day.isPast || !isWeekday(day.date) ? null : selectDate(day)">
-                  {{ day.day }}
+        </div>
+        </header>
+
+        <div class="container mx-auto p-4">
+            <div class="flex flex-wrap items-center justify-between gap-4 mb-4">
+                <div class="flex flex-wrap items-center gap-4">
+                <button @click="refreshData" class="bg-[#608C54] py-2 px-4 sm:px-6 text-white rounded-md flex items-center gap-1 hover:bg-gray-700 transition">
+                    <Icon icon="material-symbols-light:refresh" width="20" height="20" />
+                    <span class="hidden sm:inline">Refresh</span>
+                </button>
+                <button @click="exportCSV" class="bg-gray-300 py-2 px-4 rounded-md text-sm sm:text-base hover:bg-gray-400 transition">
+                    Export to CSV
+                </button>
+                <button @click="checkEligibilityAndOpenModal" :disabled="!isPayoutEligible" class="bg-[#285a19] py-2 px-4 rounded-md text-sm sm:text-base text-white hover:bg-gray-700 transition" :class="{ 'bg-gray-300 cursor-not-allowed': !isPayoutEligible }">
+                    Request a Payout
+                </button>
+                <div class="text-sm sm:text-base font-semibold">Total Sales: ₱{{ totalSales }}</div>
                 </div>
-              </div>
+                <div v-if="payoutSchedule" class="text-sm sm:text-base font-semibold">
+                <div>Payout Schedule:</div>
+                <div>Date: {{ payoutSchedule.date }}</div>
+                <div>Time: {{ payoutSchedule.time_slot }}</div>
+                <div>Status: {{ payoutSchedule.status }}</div>
+                </div>
             </div>
-            <div class="flex gap-4 mt-1 text-xs">
-              <div class="flex items-center">
-                <span class="w-4 h-4 bg-green-100 inline-block mr-1"></span> Available
-              </div>
-              <div class="flex items-center">
-                <span class="w-4 h-4 bg-red-100 inline-block mr-1"></span> Fully Booked
-              </div>
+
+            <div class="mb-3 space-y-3">
+                <p class="text-xs sm:text-sm md:text-base">View the payment history here. It might take some time for payments to appear in the portal.</p>
+                <div class="flex items-center space-x-2">
+                    <label for="payment-date-filter" class="text-sm font-semibold">Filter by Date:</label>
+                    <input  id="payment-date-filter"  v-model="paymentFilterDate"  type="date"  class="p-2 border rounded-md text-sm" @input="debouncedFilterPayments"/>
+                    <button v-if="paymentFilterDate" @click="clearPaymentFilter" class="px-3 py-1 bg-gray-300 text-sm rounded-md hover:bg-gray-400">
+                        Clear
+                    </button>
+                </div>
             </div>
-          </div>
-          <div>
-            <div class="text-sm font-medium mb-2">Time</div>
-            <div class="space-y-2">
-              <div v-for="(slot, index) in timeSlots" :key="index" class="flex justify-between items-center">
-                <label class="flex items-center">
-                  <input type="radio" :value="slot.time" v-model="selectedTime" class="mr-2" :disabled="!slot.isAvailable || !selectedDate" />
-                  <span class="text-sm">{{ slot.time }}</span>
-                </label>
-                <span :class="{
-                    'text-green-600': slot.isAvailable && selectedDate,
-                    'text-red-500': !slot.isAvailable && selectedDate,
-                    'text-gray-400': !selectedDate
-                  }" class="text-sm">
-                  {{ 
-                    slot.isAvailable && selectedDate ? 
-                      slot.availableSlots ? `Available Slots: ${slot.availableSlots}` : 'Available' : 
-                      !selectedDate ? '' : 'Fully Booked' 
-                  }}
-                </span>
-              </div>
+
+            <div class="overflow-x-auto">
+                <div class="max-h-[400px] overflow-y-auto">
+                    <table class="w-full border-collapse border border-gray-300 rounded-md min-w-[600px]">
+                        <thead class="sticky top-0 bg-gray-300 z-10">
+                        <tr class="text-xs sm:text-sm md:text-md">
+                            <th class="px-3 sm:px-4 py-2 text-left border-b border-gray-300">Date</th>
+                            <th class="px-3 sm:px-4 py-2 text-left border-b border-gray-300">Product Name</th>
+                            <th class="px-3 sm:px-4 py-2 text-left border-b border-gray-300">Payment Method</th>
+                            <th class="px-3 sm:px-4 py-2 text-left border-b border-gray-300">Amount</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-if="!filteredPaymentList.length" class="text-center">
+                                <td colspan="4" class="px-3 sm:px-4 py-2 text-xs sm:text-sm">
+                                {{ paymentFilterDate ? `No transactions found for ${paymentFilterDate}` : 'No transactions found.' }}
+                                </td>
+                            </tr>
+                            <tr v-else v-for="payment in filteredPaymentList" :key="payment.id" class="border-b border-gray-200 hover:bg-gray-200 text-xs sm:text-sm">
+                                <td class="px-3 sm:px-4 py-2">{{ payment.date }}</td>
+                                <td class="px-3 sm:px-4 py-2">{{ payment.product_name }}</td>
+                                <td class="px-3 sm:px-4 py-2">
+                                <span class="text-blue-500">{{ payment.payment_method }}</span>
+                                </td>
+                                <td class="px-3 sm:px-4 py-2">₱{{ payment.amount }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
-          </div>
         </div>
-        <div class="flex justify-between mt-6">
-          <button @click="closePaymentModal" class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-8 rounded">
-            BACK
-          </button>
-          <button @click="confirmPayout" :disabled="!selectedDate || !selectedTime" :class="[
-              'py-2 px-8 rounded text-white',
-              !selectedDate || !selectedTime ? 'bg-gray-300' : 'bg-blue-500 hover:bg-blue-600'
-            ]">
-            CONFIRM
-          </button>
+
+        <div v-if="showPayoutModal" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+            <div class="bg-white p-6 rounded-lg w-full max-w-md">
+                <h2 class="text-lg font-bold mb-4">Request a Payout</h2>
+                <div class="grid grid-cols-1 gap-6">
+                    <div>
+                        <div class="text-sm font-medium">Date</div>
+                        <div class="text-xs text-green-600">Earliest available appointment: {{ earliestAvailableDate }}</div>
+                        <div class="text-xs text-red-500">To the extent possible, additional slots are made regularly.</div>
+                        <div class="flex justify-between items-center my-2">
+                        <button @click="previousMonth" class="text-blue-500 font-bold">«</button>
+                        <span class="font-medium">{{ currentMonth }} {{ currentYear }}</span>
+                        <button @click="nextMonth" class="text-blue-500 font-bold">»</button>
+                        </div>
+                        <div class="mb-2">
+                        <div class="grid grid-cols-7 text-center text-xs">
+                            <div v-for="day in daysOfWeek" :key="day" class="py-1">
+                            {{ day.substring(0, 2) }}
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-7 gap-1 text-center text-xs">
+                            <div v-for="day in calendarDays" :key="day.day + day.isEmpty" :class="[
+                                'py-1 px-1',
+                                day.isEmpty ? 'text-gray-300' : 'cursor-pointer',
+                                day.isSelected ? 'bg-blue-500 text-white' : '',
+                                !day.isEmpty && !day.isSelected ? 
+                                day.isAvailable ? 'bg-green-100' : 'bg-red-100' : ''
+                            ]" @click="day.isEmpty || !day.isAvailable || day.isPast || !isWeekday(day.date) ? null : selectDate(day)">
+                            {{ day.day }}
+                            </div>
+                        </div>
+                        </div>
+                        <div class="flex gap-4 mt-1 text-xs">
+                        <div class="flex items-center">
+                            <span class="w-4 h-4 bg-green-100 inline-block mr-1"></span> Available
+                        </div>
+                        <div class="flex items-center">
+                            <span class="w-4 h-4 bg-red-100 inline-block mr-1"></span> Fully Booked
+                        </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="text-sm font-medium mb-2">Time</div>
+                        <div class="space-y-2">
+                            <div v-for="(slot, index) in timeSlots" :key="index" class="flex justify-between items-center">
+                                <label class="flex items-center">
+                                <input type="radio" :value="slot.time" v-model="selectedTime" class="mr-2" :disabled="!slot.isAvailable || !selectedDate" />
+                                <span class="text-sm">{{ slot.time }}</span>
+                                </label>
+                                <span :class="{
+                                    'text-green-600': slot.isAvailable && selectedDate,
+                                    'text-red-500': !slot.isAvailable && selectedDate,
+                                    'text-gray-400': !selectedDate
+                                }" class="text-sm">
+                                {{ 
+                                    slot.isAvailable && selectedDate ? 
+                                    slot.availableSlots ? `Available Slots: ${slot.availableSlots}` : 'Available' : 
+                                    !selectedDate ? '' : 'Fully Booked' 
+                                }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex justify-between mt-6">
+                <button @click="closePaymentModal" class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-8 rounded">
+                    BACK
+                </button>
+                <button @click="confirmPayout" :disabled="!selectedDate || !selectedTime" :class="[
+                    'py-2 px-8 rounded text-white',
+                    !selectedDate || !selectedTime ? 'bg-gray-300' : 'bg-blue-500 hover:bg-blue-600'
+                    ]">
+                    CONFIRM
+                </button>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
   </div>
 </template>
 
 <script setup>
 import Loading from '@/components/Alerts/Loading.vue';
+import { debounce } from 'lodash';
 import Toast from '@/components/Alerts/Toast.vue';
 import { ref, computed, onMounted, watch } from "vue";
 import { useRouter } from "vue-router";
@@ -185,9 +187,57 @@ const selectedTime = ref(null);
 const isPayoutEligible = ref(false);
 const eligibilityResponse = ref(null);
 const payoutSchedule = ref(null);
-
+const paymentFilterDate = ref('');
 const toastDuration = 3000;
 
+/******************************************************************
+FUNCTION FOR FILTER PAYMENT
+******************************************************************/
+// Helper function to parse "MM/DD/YYYY" to "YYYY-MM-DD"
+const parseDate = (dateStr) => {
+  if (!dateStr) return null;
+  
+  // Handle "MM/DD/YYYY" format (e.g., "04/21/2025")
+  const regex = /^(\d{2})\/(\d{2})\/(\d{4})$/;
+  const match = dateStr.match(regex);
+  
+  if (match) {
+    const [, month, day, year] = match;
+    // Ensure valid date components
+    const formattedDate = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+    // Validate the date is valid
+    const date = new Date(formattedDate);
+    if (date.getFullYear() === parseInt(year) && date.getMonth() + 1 === parseInt(month) && date.getDate() === parseInt(day)) {
+      return formattedDate;
+    }
+  }
+  
+  console.warn(`Invalid date format: ${dateStr}`);
+  return null;
+};
+
+// Filtered payment list based on date
+const filteredPaymentList = computed(() => {
+  if (!paymentFilterDate.value) return paymentList.value || [];
+  return (paymentList.value || []).filter((payment) => {
+    const paymentDate = parseDate(payment.date);
+    return paymentDate === paymentFilterDate.value;
+  });
+});
+
+// Debounced filter function
+const debouncedFilterPayments = debounce(() => {
+  // Trigger computed property update by reactivity
+}, 300);
+
+// Clear filter method
+const clearPaymentFilter = () => {
+  paymentFilterDate.value = '';
+};
+
+/******************************************************************
+FUNCTION FOR REFRESH,EXPORT,REQUEST PAYOUTS AND TOTAL SALES
+******************************************************************/
 const totalSales = computed(() => {
   return eligibilityResponse.value?.totalSales || '0.00';
 });
@@ -581,7 +631,9 @@ const confirmPayout = async () => {
     store.dispatch('toggleLoader', false);
   }
 };
-
+/******************************************************************
+FUNCTION FOR LOG OUT
+******************************************************************/
 const toggleDropdown = () => {
   dropdownVisible.value = !dropdownVisible.value;
 };

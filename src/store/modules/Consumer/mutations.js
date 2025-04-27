@@ -27,6 +27,8 @@ export default {
         state.productItem.data = productItem;
     },
 
+    
+
     // PRODUCT LIST INFO
     setGetViewList: (state, productItemInfo) => {
         state.productItem.productItemInfo = productItemInfo;
@@ -93,6 +95,14 @@ export default {
         state.quantity.data = quantity;
     },
 
+    setCancelOrder: (state, cancelOrder) => {
+        state.cancelOrder.data = cancelOrder;
+    },
+
+    setReasons: (state, reason) => {
+        state.reason.data = reason;
+    },
+
 
     setUpdateAddress: (state, updateAddress) => {
         state.updateAddress.data = updateAddress;
@@ -112,16 +122,13 @@ export default {
 
     SET_CURRENT_CHAT_SESSION(state, chatSession) {
         state.currentChatSession = chatSession;
-      },
-      SET_ERROR(state, errorMessage) {
-        state.error = errorMessage;
-      },
-
-
-
-      
-      SET_PRODUCT_ITEM_INFO(state, productItemInfo) {
-        state.productItem.productItemInfo = productItemInfo;
+    },
+    SET_ERROR(state, errorMessage) {
+    state.error = errorMessage;
+    },
+    
+    SET_PRODUCT_ITEM_INFO(state, productItemInfo) {
+    state.productItem.productItemInfo = productItemInfo;
     },
     SET_TOAST(state, { message, type = 'error' }) {
         state.toast.message = message;

@@ -25,15 +25,15 @@
                     <BaseInputField v-model="signdata.last_name" placeholder="Enter Last Name" />
                     <BaseError v-if="$validatesignuprules.last_name.$error">{{ $validatesignuprules.last_name.$errors[0].$message }}</BaseError>
                     
-                    <BaseLabel class="font-semibold">Middle Name (optional)</BaseLabel>
-                    <BaseInputField v-model="signdata.middle_name" placeholder="Enter Middle Name" />
+                    <BaseLabel class="font-semibold">Middle Initial (optional)</BaseLabel>
+                    <BaseInputField v-model="signdata.middle_name" placeholder="Enter Middle Initial" />
                     
                     <BaseLabel class="font-semibold">*Email Address</BaseLabel>
-                    <BaseInputField v-model="signdata.email" placeholder="Enter email" />
+                    <BaseInputField v-model="signdata.email" placeholder="Enter Email" />
                     <BaseError v-if="$validatesignuprules.email.$error">{{ $validatesignuprules.email.$errors[0].$message }}</BaseError>
 
                     <BaseLabel class="font-semibold">*E-wallet Number</BaseLabel>
-                    <BaseInputField v-model="signdata.phone_number" placeholder="Enter email" />
+                    <BaseInputField v-model="signdata.phone_number" placeholder="Enter E-wallet Number" />
                     <BaseError v-if="$validatesignuprules.phone_number.$error">{{ $validatesignuprules.phone_number.$errors[0].$message }}</BaseError>
 
                     <BaseLabel class="font-semibold">*Address</BaseLabel>

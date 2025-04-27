@@ -198,6 +198,8 @@ API FOR LOGOUT
         })
     },
 
+    
+
     //update user password
     async updatePassword({commit}, userData) {
         commit('toggleLoader', true, { root: true })

@@ -1,13 +1,13 @@
 <template>
     <div class="relative">
         <!-- Drawer Toggle Button for Small Screens (2xl and below) -->
-        <button class="absolute top-1 text-white p-2 rounded-md z-50" @click="isOpen = !isOpen"> 
+        <button class="absolute top-0 2xs:top-2 text-white p-2 rounded-md z-50" @click="isOpen = !isOpen"> 
             <Icon icon="material-symbols:menu" width="32" height="32" />
         </button>
 
         <!-- Sidebar / Drawer -->
         <div  
-            class="h-full w-64 bg-[#285a19]  fixed 2xl:relative z-50 transition-transform duration-300 ease-in-out transform"
+            class="h-[900px] w-64 bg-[#285a19]  fixed 2xl:relative z-50 transition-transform duration-300 ease-in-out transform"
             :class="{
                 '-translate-x-full pointer-events-none': !isOpen && windowWidth < 1536, 
                 'translate-x-0': isOpen, 

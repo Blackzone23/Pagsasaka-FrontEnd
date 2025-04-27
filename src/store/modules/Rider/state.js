@@ -11,4 +11,12 @@ export default {
     intransitList: {
         data:[],
     },
+
+    history: {
+        data:[],
+    },
+
+    earn: {
+        data:[],
+    },
 }

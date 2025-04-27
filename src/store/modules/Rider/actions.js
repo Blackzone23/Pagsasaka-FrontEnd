@@ -30,6 +30,28 @@ export default {
         })
     },
 
+    async getHistoryList({commit}) {
+        return await axiosClient.get('rider/order-history')
+        .then((response) => {
+            commit('setHistoryList', response.data.orders);
+            return response.data.orders;
+        })
+        .catch((error) => {
+            commit('toggleLoader', false, { root: true })
+            if(error.response && error.response.data) {
+                const errorMessage = error.response.data.message;
+                setTimeout(() => {
+                    commit('showToast', { showToast: true, toastMessage: errorMessage, toastType: 'error'}, { root: true });
+                }, toastDelay);
+    
+                setTimeout(() => {
+                    commit('showToast', { showToast: false, toastMessage: '', toastType: 'default'}, { root: true });
+                }, toastDuration);
+            }   
+        })
+    },
+
+
     //claim button function
     async claimedProduct({commit}, claimedData) {
             commit('toggleLoader', true, { root: true })
@@ -149,34 +171,66 @@ export default {
         })
     },
 
-     async addImage({commit}, imageData) {
-            commit('toggleLoader', true, { root: true })
-            return await axiosClient.post('avatar-rider', imageData)
-            .then((response) => {
-                commit('toggleLoader', false, { root: true })
+    async addImage({commit}, imageData) {
+        commit('toggleLoader', true, { root: true })
+        return await axiosClient.post('avatar-rider', imageData)
+        .then((response) => {
+            commit('toggleLoader', false, { root: true })
+            setTimeout(() => {
+                commit('showToast', { showToast: true, toastMessage: response.data.message, toastType: 'success'}, { root: true });
+            }, toastDelay);
+
+            setTimeout(() => {
+                commit('showToast', { showToast: false, toastMessage: '', toastType: 'default'}, { root: true });
+            }, toastDuration);
+
+            return response.data;
+        })
+        .catch((error) => {
+            commit('toggleLoader', false, { root: true })
+            if(error.response && error.response.data) {
+                const errorMessage = error.response.data.message;
                 setTimeout(() => {
-                    commit('showToast', { showToast: true, toastMessage: response.data.message, toastType: 'success'}, { root: true });
+                    commit('showToast', { showToast: true, toastMessage: errorMessage, toastType: 'error'}, { root: true });
                 }, toastDelay);
-    
+
                 setTimeout(() => {
                     commit('showToast', { showToast: false, toastMessage: '', toastType: 'default'}, { root: true });
                 }, toastDuration);
+            }   
+        })
+    },
     
+    async cancelOrder({ commit }, cancelProduct) {
+            commit('toggleLoader', true, { root: true });
+            return await axiosClient.post(`cancel/orders/${cancelProduct.id}`, cancelProduct)
+            .then((response) => {
+                commit('toggleLoader', false, { root: true });
+                setTimeout(() => {
+                commit('showToast', { showToast: true, toastMessage: response.data.message, toastType: 'success' }, { root: true });
+                }, toastDelay);
+        
+                setTimeout(() => {
+                commit('showToast', { showToast: false, toastMessage: '', toastType: 'default' }, { root: true });
+                }, toastDuration);
+        
                 return response.data;
             })
             .catch((error) => {
-                commit('toggleLoader', false, { root: true })
-                if(error.response && error.response.data) {
-                    const errorMessage = error.response.data.message;
-                    setTimeout(() => {
-                        commit('showToast', { showToast: true, toastMessage: errorMessage, toastType: 'error'}, { root: true });
-                    }, toastDelay);
-    
-                    setTimeout(() => {
-                        commit('showToast', { showToast: false, toastMessage: '', toastType: 'default'}, { root: true });
-                    }, toastDuration);
-                }   
-            })
-        },
+                commit('toggleLoader', false, { root: true });
+                if (error.response && error.response.data) {
+                const errorMessage = error.response.data.message;
+                setTimeout(() => {
+                    commit('showToast', { showToast: true, toastMessage: errorMessage, toastType: 'error' }, { root: true });
+                }, toastDelay);
+        
+                setTimeout(() => {
+                    commit('showToast', { showToast: false, toastMessage: '', toastType: 'default' }, { root: true });
+                }, toastDuration);
+                }
+                throw error;
+            });
+    },
+
     
 }

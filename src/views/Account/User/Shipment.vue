@@ -1,136 +1,180 @@
 <template>
-
 	<div class="flex min-h-screen bg-gray-100">
-		<div class="flex-1 flex flex-col">
-		<!-- Header -->
-		<header class="bg-[#285a19]  shadow p-4 flex justify-between items-center text-white">
+	  <div class="flex-1 flex flex-col">
+			<!-- Header (unchanged) -->
+			<header class="bg-[#285a19] shadow p-4 flex justify-between items-center text-white">
 			<h1 class="text-lg sm:text-xl 2xl:ml-0 md:ml-10 2xs:ml-10 font-bold">Shipment</h1>
 			<div class="flex items-center space-x-4">
 				<div class="relative inline-block text-left">
-					<!-- Profile Picture and Settings Icon -->
-					<div class="flex items-center space-x-2">
-						<img :src="sellerRaw.avatar" alt="Profile" class="w-10 h-10 rounded-full object-cover  shadow-md"/>
-						<Icon icon="uil:setting" width="24" height="24" class="cursor-pointer text-white" @click="toggleDropdown"/>
-					</div>
-
-					<!-- Dropdown Menu -->
-					<div v-if="dropdownVisible" class="absolute right-0 z-50 mt-2 w-48 bg-white rounded shadow-lg">
-						<a href="/seller-profile" class="block px-4 py-2 text-sm text-black hover:bg-gray-100">
-							Account Info
-						</a>
-						<button @click="logout" class="block w-full text-left px-4 py-2 text-sm text-black hover:bg-gray-100">
-							Logout
-						</button>
-					</div>
+				<div class="flex items-center space-x-2">
+					<img :src="sellerRaw.avatar" alt="Profile" class="w-10 h-10 rounded-full object-cover shadow-md"/>
+					<Icon icon="uil:setting" width="24" height="24" class="cursor-pointer text-white" @click="toggleDropdown"/>
+				</div>
+				<div v-if="dropdownVisible" class="absolute right-0 z-50 mt-2 w-48 bg-white rounded shadow-lg">
+					<a href="/seller-profile" class="block px-4 py-2 text-sm text-black hover:bg-gray-100">Account Info</a>
+					<button @click="logout" class="block w-full text-left px-4 py-2 text-sm text-black hover:bg-gray-100">Logout</button>
+				</div>
 				</div>
 			</div>
-		</header>
-
+			</header>
+	
 			<div class="p-5">
-				<div v-if="!selectedShipment">
-					<!-- Tabs Navigation -->
-					<div class="mb-4 text-sm flex flex-wrap gap-2">
-						<button class="px-4 py-2 rounded transition" :class="{ 'bg-blue-500 text-white': activeTab === 'orders', 'bg-gray-200': activeTab !== 'orders' }" @click="activeTab = 'orders'"> My Orders</button>
-						<button class="px-4 py-2 rounded transition" :class="{ 'bg-red-500 text-white': activeTab === 'cancellations', 'bg-gray-200': activeTab !== 'cancellations' }" @click="activeTab = 'cancellations'"> Cancellations</button>
-						<!-- <button class="px-4 py-2 rounded transition" :class="{ 'bg-yellow-500 text-white': activeTab === 'refunds', 'bg-gray-200': activeTab !== 'refunds' }" @click="activeTab = 'refunds'"> Return and Refund</button> -->
+			<div v-if="!selectedShipment">
+				<!-- Tabs Navigation (unchanged) -->
+				<div class="mb-4 text-sm flex flex-wrap gap-2">
+				<button class="px-4 py-2 rounded transition" :class="{ 'bg-blue-500 text-white': activeTab === 'orders', 'bg-gray-200': activeTab !== 'orders' }" @click="activeTab = 'orders'">My Orders</button>
+				<button class="px-4 py-2 rounded transition" :class="{ 'bg-red-500 text-white': activeTab === 'cancellations', 'bg-gray-200': activeTab !== 'cancellations' }" @click="activeTab = 'cancellations'">Cancellations</button>
+				<button class="px-4 py-2 rounded transition" :class="{ 'bg-yellow-500 text-white': activeTab === 'refunds', 'bg-gray-200': activeTab !== 'refunds' }" @click="activeTab = 'refunds'">Return and Refund</button>
+				</div>
+	
+				<!-- Orders Table -->
+				<div v-if="activeTab === 'orders'">
+					<div class="mb-4 flex items-center space-x-2">
+						<label for="order-date-filter" class="text-sm font-semibold">Filter by Date:</label>
+						<input id="order-date-filter" v-model="orderFilterDate" type="date" class="p-2 border rounded-md text-sm" @input="debouncedFilterOrders"/>
+						<button v-if="orderFilterDate" @click="clearOrderFilter" class="px-3 py-1 bg-gray-300 text-sm rounded-md hover:bg-gray-400">
+						Clear
+						</button>
+						<label for="order-status-filter" class="text-sm font-semibold">Filter by Status:</label>
+						<select
+							id="order-status-filter"
+							v-model="orderFilterStatus"
+							class="p-2 border rounded-md text-sm"
+							@change="debouncedFilterOrders"
+						>
+							<option value="">All</option>
+							<option value="Order placed">Order placed</option>
+							<option value="Waiting for courier">Waiting for courier</option>
+							<option value="In transit">In transit</option>
+							<option value="Order delivered">Order delivered</option>
+						</select>
+						<button
+							v-if="orderFilterStatus"
+							@click="clearStatusFilter"
+							class="px-3 py-1 bg-gray-300 text-sm rounded-md hover:bg-gray-400"
+						>
+							Clear Status
+						</button>
 					</div>
-
-					<!-- Tables -->
-					<div>
-						<table v-if="activeTab === 'orders'" class="table-auto w-full border-collapse border border-gray-300">
+					<table class="table-auto w-full border-collapse border border-gray-300">
 						<thead>
-							<tr class="bg-gray-300">
+						<tr class="bg-gray-300">
 							<th class="px-4 py-2">Name</th>
 							<th class="px-4 py-2">Created</th>
 							<th class="px-4 py-2">Last Updated</th>
 							<th class="px-4 py-2">Ship To</th>
 							<th class="px-4 py-2">Status</th>
-							</tr>
+						</tr>
 						</thead>
-						<tbody>
-							<tr
-							v-for="order in orderList"
-							:key="order.id"
-							class="even:bg-gray-50 hover:bg-gray-200 text-center text-sm cursor-pointer"
-							@click="handleOrderClick(order)"
-							>
+						<tbody v-if="filteredOrderList.length > 0">
+						<tr v-for="order in filteredOrderList" :key="order.id" class="even:bg-gray-50 hover:bg-gray-200 text-center text-sm cursor-pointer" @click="handleOrderClick(order)">
 							<td class="px-4 py-2">{{ order.product_name }}</td>
 							<td class="px-4 py-2">{{ order.created_at }}</td>
 							<td class="px-4 py-2">{{ order.updated_at }}</td>
 							<td class="px-4 py-2">{{ order.ship_to }}</td>
 							<td class="px-4 py-2">{{ order.status }}</td>
-							</tr>
+						</tr>
 						</tbody>
-						</table>
-					</div>
-
-						<!-- Tables -->
-						<div>
-						<table v-if="activeTab === 'cancellations'" class="table-auto w-full border-collapse border border-gray-300">
-						<thead>
-							<tr class="bg-gray-300">
-							<th class="px-4 py-2">Name</th>
-							<th class="px-4 py-2">Created</th>
-							<th class="px-4 py-2">Last Updated</th>
-							<th class="px-4 py-2">Ship To</th>
-							<th class="px-4 py-2">Status</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr
-							v-for="cancel in cancellationList"
-							:key="cancel.id"
-							class="even:bg-gray-50 hover:bg-gray-200 text-center text-sm cursor-pointer"
-							@click="handleCancellationClick(cancel)"
-							>
-							<td class="px-4 py-2">{{ cancel.product_name }}</td>
-							<td class="px-4 py-2">{{ cancel.created_at }}</td>
-							<td class="px-4 py-2">{{ cancel.updated_at }}</td>
-							<td class="px-4 py-2">{{ cancel.ship_to }}</td>
-							<td class="px-4 py-2">{{ cancel.status }}</td>
-							</tr>
+						<tbody v-else>
+						<tr>
+							<td colspan="5" class="px-4 py-2 text-center text-sm text-gray-500">
+								{{
+								orderFilterDate || orderFilterStatus
+									? `No orders found for ${orderFilterDate || ''} ${
+										orderFilterStatus ? orderFilterStatus : ''
+									}`
+									: 'No orders available'
+								}}
+							</td>
+						</tr>
 						</tbody>
-						</table>
-					</div>
-
-						<!-- Tables -->
-						<!-- <div>
-						<table v-if="activeTab === 'refunds'" class="table-auto w-full border-collapse border border-gray-300">
-						<thead>
-							<tr class="bg-gray-300">
-							<th class="px-4 py-2">Name</th>
-							<th class="px-4 py-2">Created</th>
-							<th class="px-4 py-2">Last Updated</th>
-							<th class="px-4 py-2">Ship To</th>
-							<th class="px-4 py-2">Status</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr
-							v-for="refund in refundList"
-							:key="refund.id"
-							class="even:bg-gray-50 hover:bg-gray-200 text-center text-sm cursor-pointer"
-							@click="handleRefundClick(refund)"
-							>
-							<td class="px-4 py-2">{{ refund.product_name }}</td>
-							<td class="px-4 py-2">{{ refund.created_at }}</td>
-							<td class="px-4 py-2">{{ refund.updated_at }}</td>
-							<td class="px-4 py-2">{{ refund.ship_to }}</td>
-							<td class="px-4 py-2">{{ refund.status }}</td>
-							</tr>
-						</tbody>
-						</table>
-					</div> -->
-
-					<!-- Tracking Interface -->
-					<div class="p-5 border-2 border-gray-300 rounded-md mt-2 text-center">
-						<h1 class="text-lg font-bold">Select a Shipment</h1>
-						<p class="text-sm">Please select a shipment from the table to view tracking details.</p>
-					</div>
+					</table>
 				</div>
-
-				<!-- Order Status -->
-				<div v-else class="p-5 border-2 rounded-md mt-2 text-center flex flex-col md:flex-row items-center md:items-start" :class="{ 'border-blue-300': selectedShipment.status === 'Order', 'border-red-300 text-red-600': selectedShipment.status === 'Cancelled', 'border-yellow-300 text-yellow-600': selectedShipment.status === 'Refund', 'border-[#608C54]': selectedShipment.status !== 'Order' && selectedShipment.status !== 'Cancelled' && selectedShipment.status !== 'Refund',}">
+				<!-- Cancellations Table -->
+				<div v-if="activeTab === 'cancellations'">
+					<div class="mb-4 flex items-center space-x-2">
+						<label for="cancel-date-filter" class="text-sm font-semibold">Filter by Date:</label>
+						<input id="cancel-date-filter" v-model="cancelFilterDate" type="date" class="p-2 border rounded-md text-sm" @input="debouncedFilterCancellations"/>
+						<button v-if="cancelFilterDate" @click="clearCancelFilter" class="px-3 py-1 bg-gray-300 text-sm rounded-md hover:bg-gray-400">
+							Clear
+						</button>
+					</div>
+					<table class="table-auto w-full border-collapse border border-gray-300">
+						<thead>
+							<tr class="bg-gray-300">
+							<th class="px-4 py-2">Name</th>
+							<th class="px-4 py-2">Created</th>
+							<th class="px-4 py-2">Last Updated</th>
+							<th class="px-4 py-2">Ship To</th>
+							<th class="px-4 py-2">Status</th>
+							</tr>
+						</thead>
+						<tbody v-if="filteredCancellationList.length > 0">
+							<tr v-for="cancel in filteredCancellationList" :key="cancel.id" class="even:bg-gray-50 hover:bg-gray-200 text-center text-sm cursor-pointer" @click="handleCancellationClick(cancel)">
+								<td class="px-4 py-2">{{ cancel.product_name }}</td>
+								<td class="px-4 py-2">{{ cancel.created_at }}</td>
+								<td class="px-4 py-2">{{ cancel.updated_at }}</td>
+								<td class="px-4 py-2">{{ cancel.ship_to }}</td>
+								<td class="px-4 py-2">{{ cancel.status }}</td>
+							</tr>
+						</tbody>
+						<tbody v-else>
+							<tr>
+							<td colspan="5" class="px-4 py-2 text-center text-sm text-gray-500">
+								{{ cancelFilterDate ? `No cancellations found for ${cancelFilterDate}` : 'No cancellations available' }}
+							</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+	
+				<!-- Refunds Table -->
+				<div v-if="activeTab === 'refunds'">
+					<div class="mb-4 flex items-center space-x-2">
+						<label for="refund-date-filter" class="text-sm font-semibold">Filter by Date:</label>
+						<input id="refund-date-filter" v-model="refundFilterDate" type="date" class="p-2 border rounded-md text-sm" @input="debouncedFilterRefunds"/>
+						<button v-if="refundFilterDate" @click="clearRefundFilter" class="px-3 py-1 bg-gray-300 text-sm rounded-md hover:bg-gray-400">
+							Clear
+						</button>
+					</div>
+					<table class="table-auto w-full border-collapse border border-gray-300">
+						<thead>
+							<tr class="bg-gray-300">
+							<th class="px-4 py-2">Name</th>
+							<th class="px-4 py-2">Created</th>
+							<th class="px-4 py-2">Last Updated</th>
+							<th class="px-4 py-2">Ship To</th>
+							<th class="px-4 py-2">Status</th>
+							</tr>
+						</thead>
+						<tbody v-if="filteredRefundList.length > 0">
+							<tr v-for="refund in filteredRefundList" :key="refund.id" class="even:bg-gray-50 hover:bg-gray-200 text-center text-sm cursor-pointer" @click="handleRefundClick(refund)">
+								<td class="px-4 py-2">{{ refund.product_name }}</td>
+								<td class="px-4 py-2">{{ refund.created_at }}</td>
+								<td class="px-4 py-2">{{ refund.updated_at }}</td>
+								<td class="px-4 py-2">{{ refund.ship_to }}</td>
+								<td class="px-4 py-2">{{ refund.status }}</td>
+							</tr>
+						</tbody>
+						<tbody v-else>
+							<tr>
+							<td colspan="5" class="px-4 py-2 text-center text-sm text-gray-500">
+								{{ refundFilterDate ? `No refunds found for ${refundFilterDate}` : 'No refunds available' }}
+							</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+	
+				<!-- Tracking Interface (unchanged) -->
+				<div class="p-5 border-2 border-gray-300 rounded-md mt-2 text-center">
+				<h1 class="text-lg font-bold">Select a Shipment</h1>
+				<p class="text-sm">Please select a shipment from the table to view tracking details.</p>
+				</div>
+			</div>
+	
+			<!-- Order Status (unchanged) -->
+			<div v-else class="p-5 border-2 rounded-md mt-2 text-center flex flex-col md:flex-row items-center md:items-start" :class="{ 'border-blue-300': selectedShipment.status === 'Order', 'border-red-300 text-red-600': selectedShipment.status === 'Cancelled', 'border-yellow-300 text-yellow-600': selectedShipment.status === 'Refund', 'border-[#608C54]': selectedShipment.status !== 'Order' && selectedShipment.status !== 'Cancelled' && selectedShipment.status !== 'Refund',}">
 					<!-- Left Side - Tracking Info -->
 					<div class="flex-1 text-center">
 						<h1 class="text-lg font-bold">{{ selectedShipment.status }} Shipment</h1>
@@ -163,7 +207,7 @@
 
 							<div class="mt-8">
 								<!-- <button @click="openPrintModal" class="py-2 px-3 font-semibold rounded-lg shadow-md text-white bg-blue-700 hover:bg-red-600 border-2  text-sm border-gray-300">
-                                        Print Packing Slip
+										Print Packing Slip
 								</button> -->
 
 								<div v-if="isshowPrintModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
@@ -274,10 +318,9 @@
 					</div>
 				</div>
 			</div>
-		</div>
+	  	</div>
 	</div>
-</template>
-  
+  </template>
 
 <script setup>
 import { debounce } from 'lodash';
@@ -293,44 +336,155 @@ import html2canvas from 'html2canvas';
 const store = useStore();
 const router = useRouter();
 
-const orderList= computed(() => store.state.User.order.data);
-const cancellationList= computed(() => store.state.User.cancel.data);
-const refundList= computed(() => store.state.User.refund.data);
-const printList= computed(() => store.state.User.print.data);
-const image= computed(() => store.state.User.order.image);
+const orderList = computed(() => store.state.User.order.data);
+const cancellationList = computed(() => store.state.User.cancel.data);
+const refundList = computed(() => store.state.User.refund.data);
+const printList = computed(() => store.state.User.print.data);
+const image = computed(() => store.state.User.order.image);
 const selectedShipment = ref(null);
 const activeTab = ref('orders');
-const sellerRaw  = computed(() => store.state.userData.data?.user || {})
+const sellerRaw = computed(() => store.state.userData.data?.user || {});
 
+// Date filter variables
+const orderFilterDate = ref('');
+const cancelFilterDate = ref('');
+const refundFilterDate = ref('');
+const orderFilterStatus = ref(''); // New status filter
+
+/******************************************************************
+FUNCTION FOR DATE
+******************************************************************/
+// Helper function to parse "Month DD YYYY" to "YYYY-MM-DD"
+
+const parseDate = (dateStr) => {
+  if (!dateStr) return null;
+  // Split "April 21 2025" into parts
+  const months = {
+    'January': '01', 
+	'February': '02', 
+	'March': '03',
+	'April': '04',
+    'May': '05',
+	'June': '06',
+	'July': '07', 
+	'August': '08',
+    'September': '09',
+	'October': '10', 
+	'November': '11', 
+	'December': '12'
+  };
+  const [month, day, year] = dateStr.split(' ');
+  if (!month || !day || !year || !months[month]) {
+    console.warn(`Invalid date format: ${dateStr}`);
+    return null;
+  }
+  const formattedDate = `${year}-${months[month]}-${day.padStart(2, '0')}`;
+  console.log(`Input: ${dateStr}, Formatted: ${formattedDate}`);
+  return formattedDate;
+};
+
+// Computed properties for filtered lists
+const filteredOrderList = computed(() => {
+  let filtered = orderList.value;
+
+  // Filter by date
+  if (orderFilterDate.value) {
+    filtered = filtered.filter((order) => {
+      const createdDate = parseDate(order.created_at);
+      return createdDate === orderFilterDate.value;
+    });
+  }
+
+  // Filter by status
+  if (orderFilterStatus.value) {
+    filtered = filtered.filter(
+      (order) => order.status.toLowerCase() === orderFilterStatus.value.toLowerCase()
+    );
+  }
+
+  return filtered;
+});
+
+
+const filteredCancellationList = computed(() => {
+  if (!cancelFilterDate.value) return cancellationList.value;
+  const filtered = cancellationList.value.filter(cancel => {
+    const createdDate = parseDate(cancel.created_at);
+    const matches = createdDate === cancelFilterDate.value;
+    return matches;
+  });
+  console.log('Filtered Cancellations:', filtered);
+  return filtered;
+});
+
+const filteredRefundList = computed(() => {
+  if (!refundFilterDate.value) return refundList.value;
+  const filtered = refundList.value.filter(refund => {
+    const createdDate = parseDate(refund.created_at);
+    const matches = createdDate === refundFilterDate.value;
+    return matches;
+  });
+  console.log('Filtered Refunds:', filtered);
+  return filtered;
+});
+
+// Debounced filter functions
+const debouncedFilterOrders = debounce(() => {
+  // Trigger computed property update by reactivity
+}, 300);
+
+const debouncedFilterCancellations = debounce(() => {
+  // Trigger computed property update by reactivity
+}, 300);
+
+const debouncedFilterRefunds = debounce(() => {
+  // Trigger computed property update by reactivity
+}, 300);
+
+// Clear filter methods
+const clearStatusFilter = () => {
+	orderFilterStatus.value = '';
+};
+
+// Clear filter methods
+const clearOrderFilter = () => {
+  orderFilterDate.value = '';
+};
+
+
+const clearCancelFilter = () => {
+  cancelFilterDate.value = '';
+};
+
+const clearRefundFilter = () => {
+  refundFilterDate.value = '';
+};
 
 /******************************************************************
 FUNCTION FOR ORDER
 ******************************************************************/
 function getOrderList() {
-    store.dispatch('User/getOrderList');
+  store.dispatch('User/getOrderList');
 }
 
-
 onMounted(() => {
-    getOrderList();
-})
-
+  getOrderList();
+});
 
 /******************************************************************
 FUNCTION FOR IMAGE
 ******************************************************************/
 function getImage() {
-	store.dispatch('User/getImage');
+  store.dispatch('User/getImage');
 }
 
-
 onMounted(() => {
-    getImage();
-})
+  getImage();
+});
 
 const handleOrderClick = (order) => {
-    selectedShipment.value = order;
-    store.dispatch('User/getImage', order.id);
+  selectedShipment.value = order;
+  store.dispatch('User/getImage', order.id);
 };
 
 const trackingSteps = [
@@ -340,78 +494,74 @@ const trackingSteps = [
   { id: "Order delivered", label: "Order delivered", icon: "hugeicons:package-receive" },
 ];
 
-
-
 const getStatusClass = (id) => {
   if (!selectedShipment.value) return "bg-gray-300";
 
   const statusOrder = trackingSteps.map((step) => step.id.toLowerCase());
-  const currentIndex = statusOrder.indexOf(selectedShipment.value.status.toLowerCase());
+  const currenthyphen = statusOrder.indexOf(selectedShipment.value.status.toLowerCase());
   const stepIndex = statusOrder.indexOf(id.toLowerCase());
 
-  if (stepIndex < currentIndex) return "bg-green-500"; // Completed steps
-  if (stepIndex === currentIndex) return "bg-[#608C54]"; // Current step
+  if (stepIndex < currenthyphen) return "bg-green-500"; // Completed steps
+  if (stepIndex === currenthyphen) return "bg-[#608C54]"; // Current step
   return "bg-gray-300"; // Pending steps
 };
 
-//approval status
-const statusData = reactive({ 
-    id: '', 
-    status: ''
+// Approval status
+const statusData = reactive({
+  id: '',
+  status: ''
 });
 
-
 async function updateStatus() {
-	if (!selectedShipment.value) return;
+  if (!selectedShipment.value) return;
 
-	const statusOrder = [
-		"Order placed",
-		"Waiting for courier",
-		"In transit",
-		"Order delivered"
-	];
+  const statusOrder = [
+    "Order placed",
+    "Waiting for courier",
+    "In transit",
+    "Order delivered"
+  ];
 
-	const currentIndex = statusOrder.indexOf(selectedShipment.value.status);
+  const currentIndex = statusOrder.indexOf(selectedShipment.value.status);
 
-	if (currentIndex === -1 || currentIndex === statusOrder.length - 1) return;
+  if (currentIndex === -1 || currentIndex === statusOrder.length - 1) return;
 
-	// Validation: if going from "Waiting for courier" to "In transit", require slip download
-	if (
-		statusOrder[currentIndex] === "Waiting for courier" &&
-		!hasDownloadedSlip
-	) {
-		console.warn("Slip not downloaded yet.");
-		return;
-	}
+  // Validation: if going from "Waiting for courier" to "In transit", require slip download
+  if (
+    statusOrder[currentIndex] === "Waiting for courier" &&
+    !hasDownloadedSlip
+  ) {
+    console.warn("Slip not downloaded yet.");
+    return;
+  }
 
-	const nextStatus = statusOrder[currentIndex + 1];
+  const nextStatus = statusOrder[currentIndex + 1];
 
-	statusData.id = selectedShipment.value.id;
-	statusData.status = nextStatus;
+  statusData.id = selectedShipment.value.id;
+  statusData.status = nextStatus;
 
-	await store.dispatch("User/updateStatus", statusData)
-		.then((response) => {
-			if (response.isSuccess) {
-				selectedShipment.value.status = nextStatus;
-			}
-		})
-		.catch((error) => {
-			console.error("Error updating status:", error);
-		});
+  await store.dispatch("User/updateStatus", statusData)
+    .then((response) => {
+      if (response.isSuccess) {
+        selectedShipment.value.status = nextStatus;
+      }
+    })
+    .catch((error) => {
+      console.error("Error updating status:", error);
+    });
 }
-
 
 /******************************************************************
 FUNCTION FOR CANCEL
 ******************************************************************/
 function getCancelList() {
-    store.dispatch('User/getCancelList');
+  store.dispatch('User/getCancelList');
 }
 
-
 onMounted(() => {
-    getCancelList();
-})
+  getCancelList();
+});
+
 const handleCancellationClick = (cancel) => {
   selectedShipment.value = cancel;
 };
@@ -430,13 +580,10 @@ function cancelDeletion() {
 }
 
 function deleteCancellation(id) {
-  // Find the cancellation by ID and delete it from the list
   const index = cancellations.value.findIndex(cancellation => cancellation.id === id);
   if (index !== -1) {
     cancellations.value.splice(index, 1);
   }
-
-  // Close the confirmation modal
   showConfirmDelete.value = false;
   confirmCancellationId.value = null;
 }
@@ -445,13 +592,12 @@ function deleteCancellation(id) {
 FUNCTION FOR REFUND/RETURN
 ******************************************************************/
 function getRefundList() {
-    store.dispatch('User/getRefundList');
+  store.dispatch('User/getRefundList');
 }
 
-
 onMounted(() => {
-    getRefundList();
-})
+  getRefundList();
+});
 
 const handleRefundClick = (refund) => {
   selectedShipment.value = refund;
@@ -464,32 +610,23 @@ function getPrintList(productId) {
   store.dispatch('User/getPrintList', productId);
 }
 
-
 onMounted(() => {
-    getPrintList();
-})
-
+  getPrintList();
+});
 
 /******************************************************************
- FUNCTION FOR PRINT SLIP
+FUNCTION FOR PRINT SLIP
 ******************************************************************/
 const isshowPrintModal = ref(false);
 const hasDownloadedSlip = ref(false);
 
 const openPrintModal = () => {
-    isshowPrintModal.value = true;
+  isshowPrintModal.value = true;
 };
 
-// Function to handle closing modal
 function closePrintModal() {
-    isshowPrintModal.value = false;
+  isshowPrintModal.value = false;
 }
-
-
-// State to control modal visibility
-const showModal = ref(false);
-
-
 
 const downloadPackingSlipAsPDF = () => {
   const modalContent = document.querySelector('.packing-slip-modal-content');
@@ -509,10 +646,7 @@ const downloadPackingSlipAsPDF = () => {
     doc.addImage(imgData, 'PNG', 20, 20, imgWidth, imgHeight);
     doc.save('packing-slip.pdf');
 
-    // ✅ Set to true after successful download
     hasDownloadedSlip.value = true;
-
-    // Close modal
     closePrintModal();
   });
 };
@@ -521,21 +655,19 @@ const downloadPackingSlipAsPDF = () => {
 FUNCTION FOR LOG OUT
 ******************************************************************/
 const dropdownVisible = ref(false);
-  
-  // Toggle the dropdown visibility
-  const toggleDropdown = () => {
-    dropdownVisible.value = !dropdownVisible.value;
-  };
-  
-  const logout = async () => {
+
+const toggleDropdown = () => {
+  dropdownVisible.value = !dropdownVisible.value;
+};
+
+const logout = async () => {
   try {
     const response = await store.dispatch('logout');
     if (response.isSuccess) {
-      router.push({ name: 'Login' }); // Redirect to the Login page
+      router.push({ name: 'Login' });
     }
   } catch (error) {
-    console.error('Logout error:', error); // Handle any errors
+    console.error('Logout error:', error);
   }
 };
-  </script>
-  
+</script>

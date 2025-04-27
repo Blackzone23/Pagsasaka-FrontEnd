@@ -14,4 +14,12 @@ export default {
         state.intransitList.data = intransitList;
     },
 
+    setHistoryList: (state, history) => {
+        state.history.data = history;
+    },
+
+    setEarningList: (state, earn) => {
+        state.earn.data = earn;
+    },
+
 }
