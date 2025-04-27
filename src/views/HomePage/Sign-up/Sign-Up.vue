@@ -37,7 +37,7 @@
                     <BaseError v-if="$validatesignuprules.phone_number.$error">{{ $validatesignuprules.phone_number.$errors[0].$message }}</BaseError>
 
                     <BaseLabel class="font-semibold">*Address</BaseLabel>
-                    <BaseInputField v-model="signdata.delivery_address" placeholder="Enter email" />
+                    <BaseInputField v-model="signdata.delivery_address" placeholder="Enter address" />
                     <BaseError v-if="$validatesignuprules.delivery_address.$error">{{ $validatesignuprules.delivery_address.$errors[0].$message }}</BaseError>
                     
                     <!-- Password Fields -->
