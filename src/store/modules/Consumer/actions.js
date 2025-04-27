@@ -599,9 +599,9 @@ API FOR MY PURCHASE
         })
     },
 
-      async createRefund({ commit }, refundData) {
+      async createRefund({ commit }, {orderId, formData}) {
         commit('toggleLoader', true, { root: true });
-        return await axiosClient.post(`request-refund/${refundData.id}`, refundData)
+        return await axiosClient.post(`request-refund/${orderId}`, formData)
           .then((response) => {
             commit('toggleLoader', false, { root: true });
             setTimeout(() => {

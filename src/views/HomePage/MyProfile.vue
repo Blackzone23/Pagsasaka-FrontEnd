@@ -607,7 +607,7 @@
                                                         <!-- <button class="px-8 py-1 text-xs sm:text-sm 2xl:text-base font-semibold text-green-700 border border-green-600 rounded hover:bg-green-50" @click="openRateModal">
                                                             Rate
                                                         </button> -->
-                                                        <!-- <button class="px-3 py-1 text-xs sm:text-sm 2xl:text-base font-semibold text-red-600 border border-red-500 rounded hover:bg-red-50" @click="openRefundModal">
+                                                        <!-- <button class="px-3 py-1 text-xs sm:text-sm 2xl:text-base font-semibold text-red-600 border border-red-500 rounded hover:bg-red-50" @click="openRefundModal(toComplete)">
                                                             Request/Refund
                                                         </button> -->
                                                     </div>
@@ -1465,6 +1465,7 @@ function closeRateModal() {
 /******************************************************************
  FUNCTION FOR REQUEST REFUND
 ******************************************************************/
+const selectedOrderId = ref(null);
 const refundData = reactive({
   reason: '',
   return_method: '',
@@ -1509,11 +1510,17 @@ async function createRefund() {
         formData.append('return_method', refundData.return_method);
         formData.append('payment_method', refundData.payment_method);
         formData.append('solution', refundData.solution);
+
         if (refundData.product_refund_img) {
             formData.append('product_refund_img', refundData.product_refund_img);
         }
 
-        await store.dispatch("Consumer/createRefund", formData)
+        if (!selectedOrderId.value) {
+            console.error('No order selected for refund.');
+            return;
+        }
+
+        await store.dispatch("Consumer/createRefund", { orderId: selectedOrderId.value, formData })
             .then((response) => {
                 if (response.isSuccess == true) {
                     closeRefundModal();
@@ -1526,15 +1533,17 @@ async function createRefund() {
 
 const isshowRefundModal = ref(false);
 
-const openRefundModal = () => {
+function openRefundModal(order) {
+    selectedOrderId.value = order.id;  // Save the order ID
     isshowRefundModal.value = true;
-};
+}
 
 // Function to handle closing modal
 function closeRefundModal() {
     isshowRefundModal.value = false;
     clearValues();
     $validateRefundRules.value.$reset(); // ✅ no await
+    
 }
 function clearValues() {
     refundData.reason = '';
@@ -1542,6 +1551,7 @@ function clearValues() {
     refundData.payment_method = '';
     refundData.solution = '';
     refundData.product_refund_img = null; // set to null
+    selectedOrderId.value = null;  // Reset order ID
 }
 
 
