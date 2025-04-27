@@ -198,9 +198,9 @@
                                                         <!-- <button class="px-3 py-1 text-xs sm:text-sm 2xl:text-base font-semibold text-green-700 border border-green-600 rounded hover:bg-green-50" @click="startChatWithShop">
                                                             Contact Seller
                                                         </button> -->
-                                                        <button class="px-3 py-1 text-xs sm:text-sm 2xl:text-base font-semibold text-red-600 border border-red-500 rounded hover:bg-red-50" @click="openshowCancelModal(purchase.id)">
+                                                        <!-- <button class="px-3 py-1 text-xs sm:text-sm 2xl:text-base font-semibold text-red-600 border border-red-500 rounded hover:bg-red-50" @click="openshowCancelModal(purchase.id)">
                                                             Cancel Order
-                                                        </button>
+                                                        </button> -->
                                                     </div>
                                                 </div>
                                             </div>
@@ -565,7 +565,7 @@
                                             <div class="flex flex-wrap md:flex-nowrap items-center mb-4">
                                                 <!-- Image -->
                                                 <img :src="toComplete.product_images[0] || 'https://via.placeholder.com/80'" alt="Product Image" class="w-16 h-16 sm:w-20 sm:h-20 2xl:w-24 2xl:h-24 rounded object-cover border"/>
-
+                                                
                                                 <!-- Details -->
                                                 <div class="ml-3 sm:ml-4 flex-grow">
                                                     <h3 class="text-xs sm:text-sm 2xl:text-lg font-semibold">
@@ -606,8 +606,8 @@
                                                     <div class="flex space-x-2">
                                                         <!-- <button class="px-8 py-1 text-xs sm:text-sm 2xl:text-base font-semibold text-green-700 border border-green-600 rounded hover:bg-green-50" @click="openRateModal">
                                                             Rate
-                                                        </button>
-                                                        <button class="px-3 py-1 text-xs sm:text-sm 2xl:text-base font-semibold text-red-600 border border-red-500 rounded hover:bg-red-50" @click="openRefundModal">
+                                                        </button> -->
+                                                        <!-- <button class="px-3 py-1 text-xs sm:text-sm 2xl:text-base font-semibold text-red-600 border border-red-500 rounded hover:bg-red-50" @click="openRefundModal">
                                                             Request/Refund
                                                         </button> -->
                                                     </div>
@@ -626,7 +626,7 @@
                                                 <div class="bg-green-700 text-white p-4 rounded-lg flex items-center gap-3 mt-4">
                                                     <img :src="product" alt="Product Image" class="w-12 h-12 sm:w-14 sm:h-14 rounded-md" />
                                                     <div>
-                                                        <p class="font-bold">{{ productName }}</p>
+                                                        <p class="font-bold">{{ product_name }}</p>
                                                         <p class="text-xs sm:text-sm">Variants: {{ productVariant }}</p>
                                                     </div>
                                                 </div>
@@ -653,28 +653,13 @@
 
                                                 <!-- Left Column -->
                                                 <div class="w-full md:w-1/2 flex flex-col">
-                                                    <div class="flex items-start gap-3">
-                                                        <img :src="productImage" alt="Product Image" class="w-16 h-16 sm:w-20 sm:h-20 object-cover rounded" />
-                                                        <div>
-                                                            <p class="font-semibold text-xs sm:text-sm">{{ productName }}</p>
-                                                            <p class="text-xs sm:text-sm text-gray-600">Variants: {{ productVariant }}</p>
-                                                        </div>
-                                                    </div>
-
-                                                    <hr class="my-2 border-gray-300" />
-
                                                     <div class="mt-1">
                                                         <BaseLabel class="font-medium text-xs sm:text-sm">*Reason:</BaseLabel>
-                                                        <BaseSelectField v-model="reason" class="w-full mt-1 p-2 border rounded text-xs sm:text-sm">
-                                                            <BaseOptionField value="">Select Reason</BaseOptionField>
-                                                            <BaseOptionField value="damaged">Damaged</BaseOptionField>
-                                                            <BaseOptionField value="wrong-item">Wrong Item</BaseOptionField>
-                                                        </BaseSelectField>
-                                                    </div>
-
-                                                    <textarea v-model="description"
+                                                        <textarea v-model="refundData.reason"
                                                         class="text-xs sm:text-sm w-full mt-1 p-2 border rounded resize-none h-20"
-                                                        placeholder="Leave your comment here (optional)"></textarea>
+                                                        placeholder="Leave your comment here"></textarea>
+                                                        <BaseError v-if="$validateRefundRules.reason.$error">{{ $validateRefundRules.reason.$errors[0].$message }}</BaseError>
+                                                    </div>
 
                                                     <hr class="my-2 border-gray-300" />
 
@@ -682,39 +667,38 @@
                                                         *Upload a clear photo/video showing the received parcel and product(s)
                                                     </div>
 
-                                                    <input type="file" @change="uploadFile($event, 'photo')" accept="image/*"
-                                                        class="w-full mt-3 text-xs sm:text-sm" />
+                                                    <BaseLabel class="font-semibold">Upload Image</BaseLabel>
+                                                    <input type="file" @change="handleRefundUpload" accept="image/*,application/pdf" class="w-full border p-2 rounded" />
+                                                    <BaseError v-if="$validateRefundRules.product_refund_img.$error">{{ $validateRefundRules.product_refund_img.$errors[0].$message }}</BaseError>
                                                 </div>
 
                                                 <!-- Right Column -->
                                                 <div class="w-full md:w-1/2 flex flex-col">
                                                     <BaseLabel class="font-medium text-xs sm:text-sm">Solution:</BaseLabel>
-                                                    <BaseSelectField v-model="solution" class="w-full mt-1 p-2 border rounded text-xs sm:text-sm">
+                                                    <BaseSelectField v-model="refundData.solution" class="w-full mt-1 p-2 border rounded text-xs sm:text-sm">
                                                         <BaseOptionField value="">Type</BaseOptionField>
-                                                        <BaseOptionField value="refund">Refund</BaseOptionField>
-                                                        <BaseOptionField value="replacement">Replacement</BaseOptionField>
+                                                        <BaseOptionField value="Refund">Refund</BaseOptionField>
+                                                        <BaseOptionField value="Replace">Replacement</BaseOptionField>
                                                     </BaseSelectField>
+                                                    <BaseError v-if="$validateRefundRules.solution.$error">{{ $validateRefundRules.solution.$errors[0].$message }}</BaseError>
 
                                                     <hr class="my-3 border-gray-300" />
 
                                                     <BaseLabel class="font-medium text-xs sm:text-sm">Refund Amount:</BaseLabel>
-                                                    <p class="text-gray-700 text-xs sm:text-sm">{{ refundAmount }}</p>
+                                                    <p class="text-gray-700 text-xs sm:text-sm">{{ refund_amount }}</p>
 
                                                     <hr class="my-1 border-gray-300" />
 
                                                     <BaseLabel class="font-medium text-xs sm:text-sm">Choose return method</BaseLabel>
-                                                    <BaseRadioButton v-for="option in ['Pick Up', 'Drop-off']" :key="option"
-                                                        :name="'returnOption'" :label="option" :value="option" v-model="returnMethod" />
+                                                    <BaseRadioButton v-for="option in ['Pick Up', 'Drop-off']" :key="option" :name="'returnMethod'" :label="option" :value="option" v-model="refundData.return_method" />
+                                                    <BaseError v-if="$validateRefundRules.return_method.$error">{{ $validateRefundRules.return_method.$errors[0].$message }}</BaseError>
 
                                                     <hr class="my-2 border-gray-300" />
 
                                                     <BaseLabel class="font-medium text-xs sm:text-sm">Payment Method:</BaseLabel>
-                                                    <button class="border px-4 py-2 mt-1 text-xs sm:text-sm w-full hover:bg-gray-50">Gcash</button>
+                                                    <BaseRadioButton v-for="option in ['E-Wallet']" :key="option" :name="'paymentMethod'" :label="option" :value="option" v-model="refundData.payment_method" />
 
-                                                    <BaseLabel class="font-medium text-xs sm:text-sm">Email address</BaseLabel>
-                                                    <BaseInputField type="text" v-model="emailaddress" class="w-full mt-1 p-2 border rounded text-xs sm:text-sm" />
-
-                                                    <button @click="submitRefundRequest" class="bg-green-600 text-white border py-2 px-6 rounded mt-3 text-xs sm:text-sm">
+                                                    <button @click="createRefund" class="bg-green-600 text-white border py-2 px-6 rounded mt-3 text-xs sm:text-sm">
                                                         Confirm
                                                     </button>
                                                 </div>
@@ -840,55 +824,57 @@
 
                                 <!--Return Refund-->
                                 <div v-else-if="currentTab === 'Return Refund'">
-                                    <div v-for="toRefund in toRefundList" :key="toRefund.id" class="bg-green-100 border border-green-300 rounded-lg p-4">
-                                        <div class="flex flex-wrap md:flex-nowrap items-center mb-4">
-                                            <!-- Image -->
-                                            <img :src="toRefund.product_images[0] || 'https://via.placeholder.com/80'" alt="Product Image" class="w-16 h-16 sm:w-20 sm:h-20 2xl:w-24 2xl:h-24 rounded object-cover border"/>
+                                    <div  class="mt-4 space-y-4 max-h-[500px] overflow-y-auto">
+                                        <div v-for="toRefund in toRefundList" :key="toRefund.id" class="bg-green-100 border border-green-300 rounded-lg p-4">
+                                            <div class="flex flex-wrap md:flex-nowrap items-center mb-4">
+                                                <!-- Image -->
+                                                <img :src="toRefund.product_img[0] || 'https://via.placeholder.com/80'" alt="Product Image" class="w-16 h-16 sm:w-20 sm:h-20 2xl:w-24 2xl:h-24 rounded object-cover border"/>
 
-                                            <!-- Details -->
-                                            <div class="ml-3 sm:ml-4 flex-grow">
-                                                <h3 class="text-xs sm:text-sm 2xl:text-lg font-semibold">
-                                                {{ toRefund.product_name }}
-                                                </h3>
-                                                <p class="text-[10px] sm:text-xs 2xl:text-sm text-gray-600">
-                                                Variants: {{ toRefund.unit }}
-                                                </p>
-                                                <div class="mt-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-                                                    <p class="text-xs sm:text-sm 2xl:text-base font-medium text-gray-700">
-                                                        Seller: <span class="font-semibold">{{ toRefund.farmer_name }}</span>
+                                                <!-- Details -->
+                                                <div class="ml-3 sm:ml-4 flex-grow">
+                                                    <h3 class="text-xs sm:text-sm 2xl:text-lg font-semibold">
+                                                    {{ toRefund.product_name }}
+                                                    </h3>
+                                                    <p class="text-[10px] sm:text-xs 2xl:text-sm text-gray-600">
+                                                    Variants: {{ toRefund.unit }}
                                                     </p>
-                                                    <div class="flex items-center gap-2 sm:gap-3">
-                                                        <h1 class="text-xs sm:text-sm 2xl:text-base">Quantity:</h1>
-                                                        <p
-                                                        class="text-xs sm:text-sm 2xl:text-lg font-semibold text-green-700"
-                                                        >
-                                                        {{ toRefund.quantity }}
+                                                    <div class="mt-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                                                        <p class="text-xs sm:text-sm 2xl:text-base font-medium text-gray-700">
+                                                            Seller: <span class="font-semibold">{{ toRefund.seller_name }}</span>
                                                         </p>
-                                                        <h1 class="text-xs sm:text-sm 2xl:text-base">Order Total:</h1>
-                                                        <p
-                                                        class="text-xs sm:text-sm 2xl:text-lg font-semibold text-green-700"
-                                                        >
-                                                        ₱{{ toRefund.total_amount }}
-                                                        </p>
+                                                        <div class="flex items-center gap-2 sm:gap-3">
+                                                            <h1 class="text-xs sm:text-sm 2xl:text-base">Quantity:</h1>
+                                                            <p
+                                                            class="text-xs sm:text-sm 2xl:text-lg font-semibold text-green-700"
+                                                            >
+                                                            {{ toRefund.quantity }}
+                                                            </p>
+                                                            <h1 class="text-xs sm:text-sm 2xl:text-base">Order Total:</h1>
+                                                            <p
+                                                            class="text-xs sm:text-sm 2xl:text-lg font-semibold text-green-700"
+                                                            >
+                                                            ₱{{ toRefund.total_amount }}
+                                                            </p>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
 
-                                        <!-- Order Status -->
-                                        <div>
-                                            <div class="mt-4 flex flex-col sm:flex-row sm:justify-between gap-2 sm:gap-4">
-                                                <div class="flex items-center gap-2 sm:gap-3">
-                                                    <h1 class="text-xs sm:text-sm 2xl:text-base">Seller Has shipped your goods:</h1>
-                                                    <span class="text-xs sm:text-sm 2xl:text-base font-medium text-gray-500">To Receive</span>
-                                                </div>
-                                                <div class="flex space-x-2">
-                                                    <!-- <button class="px-3 py-1 text-xs sm:text-sm 2xl:text-base font-semibold text-green-700 border border-green-600 rounded hover:bg-green-50" @click="openshowChatModal">
-                                                        Contact Seller
-                                                    </button>
-                                                    <button class="px-3 py-1 text-xs sm:text-sm 2xl:text-base font-semibold text-red-600 border border-red-500 rounded hover:bg-red-50" @click="openTrackModal">
-                                                    Track Order
-                                                    </button> -->
+                                            <!-- Order Status -->
+                                            <div>
+                                                <div class="mt-4 flex flex-col sm:flex-row sm:justify-between gap-2 sm:gap-4">
+                                                    <div class="flex items-center gap-2 sm:gap-3">
+                                                        <!-- <h1 class="text-xs sm:text-sm 2xl:text-base">Seller Has shipped your goods:</h1>
+                                                        <span class="text-xs sm:text-sm 2xl:text-base font-medium text-gray-500">To Receive</span> -->
+                                                    </div>
+                                                    <div class="flex space-x-2">
+                                                        <!-- <button class="px-3 py-1 text-xs sm:text-sm 2xl:text-base font-semibold text-green-700 border border-green-600 rounded hover:bg-green-50" @click="openshowChatModal">
+                                                            Contact Seller
+                                                        </button>
+                                                        <button class="px-3 py-1 text-xs sm:text-sm 2xl:text-base font-semibold text-red-600 border border-red-500 rounded hover:bg-red-50" @click="openTrackModal">
+                                                        Track Order
+                                                        </button> -->
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -1078,7 +1064,6 @@ import { useVuelidate } from "@vuelidate/core";
 import { Icon } from '@iconify/vue';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
-import BaseCheckBox from '@/components/Input-Fields/BaseCheckBox.vue';
 
 const store = useStore();
 const router = useRouter();
@@ -1310,7 +1295,6 @@ onMounted(() => {
 })
 
 
-
 /******************************************************************
  FUNCTION FOR UPDATE ADDRESS
 ******************************************************************/
@@ -1434,6 +1418,7 @@ const product = ref({
 });
 
 const imageUrl = ref('https://via.placeholder.com/300'); // Replace with actual image URL
+
 /******************************************************************
  FUNCTION FOR VIEW CANCELLATION MODAL
 ******************************************************************/
@@ -1475,9 +1460,69 @@ const openRateModal = () => {
 function closeRateModal() {
     isshowRateModal.value = false;
 }
+
+
 /******************************************************************
  FUNCTION FOR REQUEST REFUND
 ******************************************************************/
+const refundData = reactive({
+  reason: '',
+  return_method: '',
+  payment_method:'',
+  solution: '',
+  product_refund_img:'',
+});
+
+const handleRefundUpload = (event) => {
+    if (event.target.files && event.target.files.length > 0) {
+        refundData.product_refund_img = event.target.files[0];
+    }
+};
+
+const refundDataRules = computed(() => {
+  return {
+    reason: {
+          required: helpers.withMessage('Reason is required', required)
+      },
+      return_method: {
+          required: helpers.withMessage('Return method is required', required)
+      },
+      payment_method: {
+          required: helpers.withMessage('Payment method is required', required)
+      },
+      solution: {
+          required: helpers.withMessage('Solution is required', required)
+      },
+      product_refund_img: {
+          required: helpers.withMessage('Image is required', required)
+      }
+  };
+});
+
+const $validateRefundRules = useVuelidate(refundDataRules, refundData);
+
+async function createRefund() {
+    const validationResult = await $validateRefundRules.value.$validate();
+    if (validationResult) {
+        const formData = new FormData();
+        formData.append('reason', refundData.reason);
+        formData.append('return_method', refundData.return_method);
+        formData.append('payment_method', refundData.payment_method);
+        formData.append('solution', refundData.solution);
+        if (refundData.product_refund_img) {
+            formData.append('product_refund_img', refundData.product_refund_img);
+        }
+
+        await store.dispatch("Consumer/createRefund", formData)
+            .then((response) => {
+                if (response.isSuccess == true) {
+                    closeRefundModal();
+                    getPurchaseCompleted();
+                }
+            });
+    }
+}
+
 
 const isshowRefundModal = ref(false);
 
@@ -1488,31 +1533,25 @@ const openRefundModal = () => {
 // Function to handle closing modal
 function closeRefundModal() {
     isshowRefundModal.value = false;
+    clearValues();
+    $validateRefundRules.value.$reset(); // ✅ no await
 }
+function clearValues() {
+    refundData.reason = '';
+    refundData.return_method = '';
+    refundData.payment_method = '';
+    refundData.solution = '';
+    refundData.product_refund_img = null; // set to null
+}
+
 
 /******************************************************************
  FUNCTION FOR MY PURCHASE TAB
 ******************************************************************/
 
-const purchasetabs = ["To Pay", "To Ship", "To Receive", "Completed", "Cancelled"];
+const purchasetabs = ["To Pay", "To Ship", "To Receive", "Completed", "Cancelled", "Return Refund"];
 const currentTab = ref(purchasetabs[0]); // Default to "To Pay"
 
-const currentPage = ref(1);
-const totalPages = 3;
-
-// Pagination logic
-function prevPage() {
-  if (currentPage.value > 1) currentPage.value--;
-}
-
-function nextPage() {
-  if (currentPage.value < totalPages) currentPage.value++;
-}
-
-// Utility to check if pagination is needed for specific tabs
-function hasPagination(tab) {
-  return ["To Ship", "To Receive","Completed", "Cancelled","Return Refund"].includes(tab);
-}
 /******************************************************************
  FUNCTION FOR CANCEL MODAL
 ******************************************************************/
@@ -1621,54 +1660,6 @@ const sendMessage = async () => {
         console.error('Failed to send message:', error);
     }
 };
-
-// const startChatWithShop = () => {
-//     isshowChatModal.value = true;
-//     console.log('productItemListinfo:', productItemListinfo.value);
-//     if (!productItemListinfo.value || productItemListinfo.value.length === 0) {
-//         console.error('productItemListinfo is empty or undefined');
-//         setTimeout(() => {
-//             store.commit('showToast', { showToast: true, toastMessage: 'Product data not loaded', toastType: 'error' }, { root: true });
-//         }, toastDelay);
-//         setTimeout(() => {
-//             store.commit('showToast', { showToast: false, toastMessage: '', toastType: 'default' }, { root: true });
-//         }, toastDuration);
-//         return;
-//     }
-//     const user2Id = productItemListinfo.value[0]?.account_id;
-//     if (!user2Id) {
-//         console.error('Seller ID not found in productItemListinfo[0].account_id');
-//         setTimeout(() => {
-//             store.commit('showToast', { showToast: true, toastMessage: 'Seller ID not found', toastType: 'error' }, { root: true });
-//         }, toastDelay);
-//         setTimeout(() => {
-//             store.commit('showToast', { showToast: false, toastMessage: '', toastType: 'default' }, { root: true });
-//         }, toastDuration);
-//         return;
-//     }
-//     console.log('Starting chat with user2_id:', user2Id);
-//     store.dispatch('Consumer/startChatWithShop', { user2_id: user2Id })
-//         .then((response) => {
-//             if (!response) {
-//                 console.error('No response received from startChatWithShop');
-//                 return;
-//             }
-//             console.log('startChatWithShop response:', response);
-//             const createdConversation = {
-//                 id: response.id,
-//                 chat_partner_name: response.chat_partner_name,
-//                 chat_partner_avatar: response.chat_partner_avatar,
-//                 message: response.message || '',
-//                 unread_messages_count: response.unread_messages_count || 0,
-//             };
-//             selectedChat.value = createdConversation;
-//             messageData.conversation_id = createdConversation.id;
-//             store.dispatch('Consumer/getMessages', createdConversation.id);
-//         })
-//         .catch((error) => {
-//             console.error('Failed to start chat:', error);
-//         });
-// };
 
 /******************************************************************
   FUNCTION FOR GETTING CONVERSATION LIST

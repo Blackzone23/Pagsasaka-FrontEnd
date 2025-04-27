@@ -579,9 +579,9 @@ API FOR MY PURCHASE
 
     //Purchase Refund
     async getPurchaseRefund({commit}) {
-        return await axiosClient.get('Refund')
+        return await axiosClient.get('refund-list-user')
         .then((response) => {
-            commit('setPurchaseRefundList', response.data.refund_orders);
+            commit('setPurchaseRefundList', response.data.orders);
             return response.data.refund_orders;
         })
         .catch((error) => {
@@ -599,6 +599,36 @@ API FOR MY PURCHASE
         })
     },
 
+      async createRefund({ commit }, refundData) {
+        commit('toggleLoader', true, { root: true });
+        return await axiosClient.post(`request-refund/${refundData.id}`, refundData)
+          .then((response) => {
+            commit('toggleLoader', false, { root: true });
+            setTimeout(() => {
+              commit('showToast', { showToast: true, toastMessage: response.data.message, toastType: 'success' }, { root: true });
+            }, toastDelay);
+    
+            setTimeout(() => {
+              commit('showToast', { showToast: false, toastMessage: '', toastType: 'default' }, { root: true });
+            }, toastDuration);
+    
+            return response.data;
+          })
+          .catch((error) => {
+            commit('toggleLoader', false, { root: true });
+            if (error.response && error.response.data) {
+              const errorMessage = error.response.data.message;
+              setTimeout(() => {
+                commit('showToast', { showToast: true, toastMessage: errorMessage, toastType: 'error' }, { root: true });
+              }, toastDelay);
+    
+              setTimeout(() => {
+                commit('showToast', { showToast: false, toastMessage: '', toastType: 'default' }, { root: true });
+              }, toastDuration);
+            }
+            throw error;
+          });
+      },
     
     async cancelProduct({ commit }, cancelProduct) {
         commit('toggleLoader', true, { root: true });

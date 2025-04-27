@@ -100,11 +100,11 @@ const headerTitle = ref('');
 const updateHeaderTitle = (routeName) => {
   switch (routeName) {
     case 'Admin_Dashboard':
+      headerTitle.value = 'Welcome to Admin Dashboard';
+      break;
+    case 'Administrator_List':
       headerTitle.value = 'Welcome to Admin List';
       break;
-    // case 'Administrator_List':
-    //   headerTitle.value = 'Welcome to Admin List';
-    //   break;
     case 'Administrator_Profile':
       headerTitle.value = 'Welcome to Admin Profile';
       break;
