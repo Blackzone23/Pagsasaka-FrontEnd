@@ -9,156 +9,156 @@ export default {
    API FOR PRODUCT
   ******************************************************************/
 
-  // API for Create Product
-  async createProduct({ commit }, productdata) {
-    commit('toggleLoader', true, { root: true });
-    return await axiosClient.post('product/add', productdata)
-      .then((response) => {
-        commit('toggleLoader', false, { root: true });
+// API for Create Product
+async createProduct({ commit }, productdata) {
+commit('toggleLoader', true, { root: true });
+return await axiosClient.post('product/add', productdata)
+.then((response) => {
+commit('toggleLoader', false, { root: true });
+setTimeout(() => {
+    commit('showToast', { showToast: true, toastMessage: response.data.message, toastType: 'success' }, { root: true });
+}, toastDelay);
+
+setTimeout(() => {
+    commit('showToast', { showToast: false, toastMessage: '', toastType: 'default' }, { root: true });
+}, toastDuration);
+
+return response.data;
+})
+.catch((error) => {
+commit('toggleLoader', false, { root: true });
+if (error.response && error.response.data) {
+    const errorMessage = error.response.data.message;
+    setTimeout(() => {
+    commit('showToast', { showToast: true, toastMessage: errorMessage, toastType: 'error' }, { root: true });
+    }, toastDelay);
+
+    setTimeout(() => {
+    commit('showToast', { showToast: false, toastMessage: '', toastType: 'default' }, { root: true });
+    }, toastDuration);
+}
+throw error;
+});
+},
+
+// API for category dropdown
+async getCategoryDropdown({ commit }) {
+return await axiosClient.get('dropdown/category')
+.then((response) => {
+commit('setCategoryDropdown', response.data.category);
+return response.data.category;
+})
+.catch((error) => {
+commit('toggleLoader', false, { root: true });
+if (error.response && error.response.data) {
+    const errorMessage = error.response.data.message;
+    setTimeout(() => {
+    commit('showToast', { showToast: true, toastMessage: errorMessage, toastType: 'error' }, { root: true });
+    }, toastDelay);
+
+    setTimeout(() => {
+    commit('showToast', { showToast: false, toastMessage: '', toastType: 'default' }, { root: true });
+    }, toastDuration);
+}
+throw error;
+});
+},
+
+// API Farmer Product list
+async getProductList({ commit }, { currentPage, search }) {
+commit('toggleLoader', true, { root: true });
+return await axiosClient.post('product/account', { search, page: currentPage })
+.then((response) => {
+commit('toggleLoader', false, { root: true });
+commit('setProductListData', response.data.products);
+commit('setCurrentPage', response.data.pagination.current_page, { root: true });
+commit('setItemsPerPage', response.data.pagination.per_page, { root: true });
+commit('setTotalPages', response.data.pagination.last_page, { root: true });
+return response.data;
+})
+.catch((error) => {
+commit('toggleLoader', false, { root: true });
+if (error.response && error.response.data) {
+    const errorMessage = error.response.data.message;
+    setTimeout(() => {
+    commit('showToast', { showToast: true, toastMessage: errorMessage, toastType: 'error' }, { root: true });
+    }, toastDelay);
+
+    setTimeout(() => {
+    commit('showToast', { showToast: false, toastMessage: '', toastType: 'default' }, { root: true });
+    }, toastDuration);
+}
+throw error;
+});
+},
+
+// API for updating product
+async updateProduct({ commit }, updatedProduct) {
+commit('toggleLoader', true, { root: true });
+return await axiosClient.post(`product/edit/${updatedProduct.id}`, updatedProduct)
+    .then((response) => {
+    commit('toggleLoader', false, { root: true });
+    commit('setUpdateData', response.data.product);
+    setTimeout(() => {
+        commit('showToast', { showToast: true, toastMessage: response.data.message, toastType: 'success' }, { root: true });
+    }, toastDelay);
+
+    setTimeout(() => {
+        commit('showToast', { showToast: false, toastMessage: '', toastType: 'default' }, { root: true });
+    }, toastDuration);
+
+    return response.data;
+    })
+    .catch((error) => {
+    commit('toggleLoader', false, { root: true });
+    if (error.response && error.response.data) {
+        const errorMessage = error.response.data.message;
         setTimeout(() => {
-          commit('showToast', { showToast: true, toastMessage: response.data.message, toastType: 'success' }, { root: true });
+        commit('showToast', { showToast: true, toastMessage: errorMessage, toastType: 'error' }, { root: true });
         }, toastDelay);
 
         setTimeout(() => {
-          commit('showToast', { showToast: false, toastMessage: '', toastType: 'default' }, { root: true });
+        commit('showToast', { showToast: false, toastMessage: '', toastType: 'default' }, { root: true });
         }, toastDuration);
+    }
+    throw error;
+    });
+},
 
-        return response.data;
-      })
-      .catch((error) => {
-        commit('toggleLoader', false, { root: true });
-        if (error.response && error.response.data) {
-          const errorMessage = error.response.data.message;
-          setTimeout(() => {
-            commit('showToast', { showToast: true, toastMessage: errorMessage, toastType: 'error' }, { root: true });
-          }, toastDelay);
+// API for delete product
+async deleteProduct({ commit }, deleteProductData) {
+return await axiosClient.post(`product/delete/${deleteProductData}`)
+    .then((response) => {
+    commit('toggleLoader', false, { root: true });
+    setTimeout(() => {
+        commit('showToast', { showToast: true, toastMessage: response.data.message, toastType: 'success' }, { root: true });
+    }, toastDelay);
 
-          setTimeout(() => {
-            commit('showToast', { showToast: false, toastMessage: '', toastType: 'default' }, { root: true });
-          }, toastDuration);
-        }
-        throw error;
-      });
-  },
+    setTimeout(() => {
+        commit('showToast', { showToast: false, toastMessage: '', toastType: 'default' }, { root: true });
+    }, toastDuration);
 
-  // API for category dropdown
-  async getCategoryDropdown({ commit }) {
-    return await axiosClient.get('dropdown/category')
-      .then((response) => {
-        commit('setCategoryDropdown', response.data.category);
-        return response.data.category;
-      })
-      .catch((error) => {
-        commit('toggleLoader', false, { root: true });
-        if (error.response && error.response.data) {
-          const errorMessage = error.response.data.message;
-          setTimeout(() => {
-            commit('showToast', { showToast: true, toastMessage: errorMessage, toastType: 'error' }, { root: true });
-          }, toastDelay);
-
-          setTimeout(() => {
-            commit('showToast', { showToast: false, toastMessage: '', toastType: 'default' }, { root: true });
-          }, toastDuration);
-        }
-        throw error;
-      });
-  },
-
-  // API Farmer Product list
-  async getProductList({ commit }, { currentPage, search }) {
-    commit('toggleLoader', true, { root: true });
-    return await axiosClient.post('product/account', { search, page: currentPage })
-      .then((response) => {
-        commit('toggleLoader', false, { root: true });
-        commit('setProductListData', response.data.products);
-        commit('setCurrentPage', response.data.pagination.current_page, { root: true });
-        commit('setItemsPerPage', response.data.pagination.per_page, { root: true });
-        commit('setTotalPages', response.data.pagination.last_page, { root: true });
-        return response.data;
-      })
-      .catch((error) => {
-        commit('toggleLoader', false, { root: true });
-        if (error.response && error.response.data) {
-          const errorMessage = error.response.data.message;
-          setTimeout(() => {
-            commit('showToast', { showToast: true, toastMessage: errorMessage, toastType: 'error' }, { root: true });
-          }, toastDelay);
-
-          setTimeout(() => {
-            commit('showToast', { showToast: false, toastMessage: '', toastType: 'default' }, { root: true });
-          }, toastDuration);
-        }
-        throw error;
-      });
-  },
-
-  // API for updating product
-  async updateProduct({ commit }, updatedProduct) {
-    commit('toggleLoader', true, { root: true });
-    return await axiosClient.post(`product/edit/${updatedProduct.id}`, updatedProduct)
-      .then((response) => {
-        commit('toggleLoader', false, { root: true });
-        commit('setUpdateData', response.data.product);
+    return response.data;
+    })
+    .catch((error) => {
+    commit('toggleLoader', false, { root: true });
+    if (error.response && error.response.data) {
+        const errorMessage = error.response.data.message;
         setTimeout(() => {
-          commit('showToast', { showToast: true, toastMessage: response.data.message, toastType: 'success' }, { root: true });
+        commit('showToast', { showToast: true, toastMessage: errorMessage, toastType: 'error' }, { root: true });
         }, toastDelay);
 
         setTimeout(() => {
-          commit('showToast', { showToast: false, toastMessage: '', toastType: 'default' }, { root: true });
+        commit('showToast', { showToast: false, toastMessage: '', toastType: 'default' }, { root: true });
         }, toastDuration);
+    }
+    throw error;
+    });
+},
 
-        return response.data;
-      })
-      .catch((error) => {
-        commit('toggleLoader', false, { root: true });
-        if (error.response && error.response.data) {
-          const errorMessage = error.response.data.message;
-          setTimeout(() => {
-            commit('showToast', { showToast: true, toastMessage: errorMessage, toastType: 'error' }, { root: true });
-          }, toastDelay);
-
-          setTimeout(() => {
-            commit('showToast', { showToast: false, toastMessage: '', toastType: 'default' }, { root: true });
-          }, toastDuration);
-        }
-        throw error;
-      });
-  },
-
-  // API for delete product
-  async deleteProduct({ commit }, deleteProductData) {
-    return await axiosClient.post(`product/delete/${deleteProductData}`)
-      .then((response) => {
-        commit('toggleLoader', false, { root: true });
-        setTimeout(() => {
-          commit('showToast', { showToast: true, toastMessage: response.data.message, toastType: 'success' }, { root: true });
-        }, toastDelay);
-
-        setTimeout(() => {
-          commit('showToast', { showToast: false, toastMessage: '', toastType: 'default' }, { root: true });
-        }, toastDuration);
-
-        return response.data;
-      })
-      .catch((error) => {
-        commit('toggleLoader', false, { root: true });
-        if (error.response && error.response.data) {
-          const errorMessage = error.response.data.message;
-          setTimeout(() => {
-            commit('showToast', { showToast: true, toastMessage: errorMessage, toastType: 'error' }, { root: true });
-          }, toastDelay);
-
-          setTimeout(() => {
-            commit('showToast', { showToast: false, toastMessage: '', toastType: 'default' }, { root: true });
-          }, toastDuration);
-        }
-        throw error;
-      });
-  },
-
-  /******************************************************************
-   API FOR SHIPMENT
-  ******************************************************************/
+/******************************************************************
+ API FOR SHIPMENT
+******************************************************************/
 
   // API for get order list
   async getOrderList({ commit }) {
@@ -181,7 +181,7 @@ export default {
         }
         throw error;
       });
-  },
+},
 
   // API for get cancellation list
   async getCancelList({ commit }) {
@@ -204,7 +204,7 @@ export default {
         }
         throw error;
       });
-  },
+},
 
   // API for get refund/return list
   async getRefundList({ commit }) {
@@ -227,7 +227,7 @@ export default {
         }
         throw error;
       });
-  },
+},
 
   // API Update status
   async updateStatus({ commit }, statusData) {
@@ -259,7 +259,7 @@ export default {
         }
         throw error;
       });
-  },
+},
 
   // API for get delivery proof
   async getImage({ commit }, orderId) {
@@ -292,39 +292,85 @@ export default {
         }
         throw error;
       });
-  },
+},
 
-  async getPrintList({commit}, productId) {
-        commit('toggleLoader', true, { root: true })
-        return await axiosClient.get(`orders/${productId}`)
+//list of records
+async getRecordList({ commit }) {
+return await axiosClient.get('order-consumer')
+    .then((response) => {
+    commit('setRecord', response.data.data);
+    return response.data.data;
+    })
+    .catch((error) => {
+    commit('toggleLoader', false, { root: true });
+    if (error.response && error.response.data) {
+        const errorMessage = error.response.data.message;
+        setTimeout(() => {
+        commit('showToast', { showToast: true, toastMessage: errorMessage, toastType: 'error' }, { root: true });
+        }, toastDelay);
+
+        setTimeout(() => {
+        commit('showToast', { showToast: false, toastMessage: '', toastType: 'default' }, { root: true });
+        }, toastDuration);
+    }
+    throw error;
+    });
+},
+
+//approve refund
+async approveRefund({ commit }, approveData) {
+    commit('toggleLoader', true, { root: true });
+    return await axiosClient.post(`refund-approve/${approveData.id}`, approveData)
         .then((response) => {
             commit('toggleLoader', false, { root: true });
-            commit('setPrintListData', response.data.payslip);
             setTimeout(() => {
-                commit('showToast', { showToast: true, toastMessage: response.data.message, toastType: 'success'}, { root: true });
+                commit('showToast', { showToast: true, toastMessage: response.data.message, toastType: 'success' }, { root: true });
             }, toastDelay);
 
             setTimeout(() => {
-                commit('showToast', { showToast: false, toastMessage: '', toastType: 'default'}, { root: true });
+                commit('showToast', { showToast: false, toastMessage: '', toastType: 'default' }, { root: true });
             }, toastDuration);
 
             return response.data;
         })
         .catch((error) => {
-            commit('toggleLoader', false, { root: true })
-            if(error.response && error.response.data) {
+            commit('toggleLoader', false, { root: true });
+            if (error.response && error.response.data) {
                 const errorMessage = error.response.data.message;
                 setTimeout(() => {
-                    commit('showToast', { showToast: true, toastMessage: errorMessage, toastType: 'error'}, { root: true });
+                    commit('showToast', { showToast: true, toastMessage: errorMessage, toastType: 'error' }, { root: true });
                 }, toastDelay);
 
                 setTimeout(() => {
-                    commit('showToast', { showToast: false, toastMessage: '', toastType: 'default'}, { root: true });
+                    commit('showToast', { showToast: false, toastMessage: '', toastType: 'default' }, { root: true });
                 }, toastDuration);
-            }   
-        })
-  },
+            }
+        });
+},
 
+//dashboard list
+async getDasboardList({ commit }) {
+    return await axiosClient.get('product-ko')
+    .then((response) => {
+        commit('setDashboardListData', response.data.products);
+        return response.data.products;
+    })
+    .catch((error) => {
+        commit('toggleLoader', false, { root: true });
+        if (error.response && error.response.data) {
+        const errorMessage = error.response.data.message;
+        setTimeout(() => {
+            commit('showToast', { showToast: true, toastMessage: errorMessage, toastType: 'error' }, { root: true });
+        }, toastDelay);
+
+        setTimeout(() => {
+            commit('showToast', { showToast: false, toastMessage: '', toastType: 'default' }, { root: true });
+        }, toastDuration);
+        }
+        throw error;
+    });
+},
+  
 
 // async getPrintList({ commit }) {
 //     return await axiosClient.get('Orders-details')
@@ -348,287 +394,271 @@ export default {
 //       });
 //   },
 
-async getDasboardList({ commit }) {
-  return await axiosClient.get('product-ko')
-    .then((response) => {
-      commit('setDashboardListData', response.data.products);
-      return response.data.products;
-    })
-    .catch((error) => {
-      commit('toggleLoader', false, { root: true });
-      if (error.response && error.response.data) {
-        const errorMessage = error.response.data.message;
-        setTimeout(() => {
-          commit('showToast', { showToast: true, toastMessage: errorMessage, toastType: 'error' }, { root: true });
-        }, toastDelay);
 
-        setTimeout(() => {
-          commit('showToast', { showToast: false, toastMessage: '', toastType: 'default' }, { root: true });
-        }, toastDuration);
-      }
-      throw error;
-    });
-},
 
-  /******************************************************************
-   API FOR PAYMENT
-  ******************************************************************/
+/******************************************************************
+ API FOR PAYMENT
+******************************************************************/
 
-  // Get payment
-  async getPayMent({ commit }) {
-    try {
-      commit('toggleLoader', true, { root: true });
-      const response = await axiosClient.get('payment-history');
-      commit('setPaymentListData', response.data.transactions);
-      return response.data.transactions;
-    } catch (error) {
-      commit('toggleLoader', false, { root: true });
-      let errorMessage = 'Failed to fetch payment history';
-      if (error.response && error.response.data) {
-        errorMessage = error.response.data.message || errorMessage;
-      }
-      setTimeout(() => {
-        commit('showToast', {
-          showToast: true,
-          toastMessage: errorMessage,
-          toastType: 'error',
-        }, { root: true });
-      }, toastDelay);
-      setTimeout(() => {
-        commit('showToast', {
-          showToast: false,
-          toastMessage: '',
-          toastType: 'default',
-        }, { root: true });
-      }, toastDuration);
-      throw error;
-    } finally {
-      commit('toggleLoader', false, { root: true });
-    }
-  },
-
-  // Get available payout slots
-  async getSlots({ commit }, { date }) {
-    try {
-      commit('toggleLoader', true, { root: true });
-      const response = await axiosClient.get('available-slots', { params: { date } });
-      commit('setSlotListData', response.data.available_slots);
-      return response.data.available_slots;
-    } catch (error) {
-      commit('toggleLoader', false, { root: true });
-      let errorMessage = 'Failed to fetch available slots';
-      if (error.response && error.response.data) {
-        errorMessage = error.response.data.message || errorMessage;
-      }
-      setTimeout(() => {
-        commit('showToast', {
-          showToast: true,
-          toastMessage: errorMessage,
-          toastType: 'error',
-        }, { root: true });
-      }, toastDelay);
-      setTimeout(() => {
-        commit('showToast', {
-          showToast: false,
-          toastMessage: '',
-          toastType: 'default',
-        }, { root: true });
-      }, toastDuration);
-      throw error;
-    } finally {
-      commit('toggleLoader',  false, { root: true });
-    }
-  },
-
-  // Export payment history to CSV
-  async getCSV({ commit }) {
-    try {
-      commit('toggleLoader', true, { root: true });
-      const response = await axiosClient.get('export-payment-history', {
-        responseType: 'blob' // Important for handling file downloads
-      });
-
-      // Check if the response is a JSON error
-      const text = await response.data.text();
-      try {
-        const jsonResponse = JSON.parse(text);
-        if (!jsonResponse.isSuccess) {
-          commit('toggleLoader', false, { root: true });
-          setTimeout(() => {
-            commit('showToast', {
-              showToast: true,
-              toastMessage: jsonResponse.message || 'Failed to export CSV',
-              toastType: 'error'
-            }, { root: true });
-          }, toastDelay);
-
-          setTimeout(() => {
-            commit('showToast', {
-              showToast: false,
-              toastMessage: '',
-              toastType: 'default'
-            }, { root: true });
-          }, toastDuration);
-
-          throw new Error(jsonResponse.message || 'Failed to export CSV');
-        }
-      } catch (e) {
-        // Not a JSON response, so it's the CSV file
-        commit('toggleLoader', false, { root: true });
-        return new Blob([text], { type: 'text/csv;charset=utf-8' });
-      }
-    } catch (error) {
-      commit('toggleLoader', false, { root: true });
-
-      let errorMessage = 'Failed to export CSV';
-      if (error.response) {
-        if (error.response.status === 401) {
-          errorMessage = 'Authentication required. Please log in.';
-        } else if (error.response.data) {
-          try {
-            const text = await error.response.data.text();
-            const jsonResponse = JSON.parse(text);
-            errorMessage = jsonResponse.message || errorMessage;
-          } catch (e) {
-            // Not a JSON response, use default error message
-          }
-        }
-      } else if (error.message) {
-        errorMessage = error.message;
-      }
-
-      setTimeout(() => {
-        commit('showToast', {
-          showToast: true,
-          toastMessage: errorMessage,
-          toastType: 'error'
-        }, { root: true });
-      }, toastDelay);
-
-      setTimeout(() => {
-        commit('showToast', {
-          showToast: false,
-          toastMessage: '',
-          toastType: 'default'
-        }, { root: true });
-      }, toastDuration);
-
-      throw new Error(errorMessage); // Re-throw for the component to handle
-    }
-  },
-
-  // Check payout eligibility
-  async checkPayoutEligibility({ commit }) {
-    try {
-      commit('toggleLoader', true, { root: true });
-      const response = await axiosClient.get('payout-eligibility');
-      commit('setPayoutEligibility', response.data.eligible);
-      return response.data;
-    } catch (error) {
-      commit('toggleLoader', false, { root: true });
-      let errorMessage = 'Failed to check payout eligibility';
-      if (error.response && error.response.data) {
-        errorMessage = error.response.data.message || errorMessage;
-      }
-      setTimeout(() => {
-        commit('showToast', {
-          showToast: true,
-          toastMessage: errorMessage,
-          toastType: 'error',
-        }, { root: true });
-      }, toastDelay);
-      setTimeout(() => {
-        commit('showToast', {
-          showToast: false,
-          toastMessage: '',
-          toastType: 'default',
-        }, { root: true });
-      }, toastDuration);
-      throw error;
-    } finally {
-      commit('toggleLoader', false, { root: true });
-    }
-  },
-
- // In src/store/actions.js
-async requestPayout({ commit, dispatch }, payoutData) {
-  try {
+// Get payment
+async getPayMent({ commit }) {
+try {
     commit('toggleLoader', true, { root: true });
-    const response = await axiosClient.post('request-payout', payoutData); // Fixed endpoint
-    setTimeout(() => {
-      commit('showToast', {
-        showToast: true,
-        toastMessage: response.data.message || 'Payout request submitted successfully',
-        toastType: 'success',
-      }, { root: true });
-    }, toastDelay);
-    setTimeout(() => {
-      commit('showToast', {
-        showToast: false,
-        toastMessage: '',
-        toastType: 'default',
-      }, { root: true });
-    }, toastDuration);
-
-    // Refresh payment list and eligibility after payout request
-    await dispatch('getPayMent');
-    await dispatch('checkPayoutEligibility');
-
-    return response.data;
-  } catch (error) {
+    const response = await axiosClient.get('payment-history');
+    commit('setPaymentListData', response.data.transactions);
+    return response.data.transactions;
+} catch (error) {
     commit('toggleLoader', false, { root: true });
-    let errorMessage = 'Failed to request payout';
+    let errorMessage = 'Failed to fetch payment history';
     if (error.response && error.response.data) {
-      errorMessage = error.response.data.message || errorMessage;
+    errorMessage = error.response.data.message || errorMessage;
     }
     setTimeout(() => {
-      commit('showToast', {
+    commit('showToast', {
         showToast: true,
         toastMessage: errorMessage,
         toastType: 'error',
-      }, { root: true });
+    }, { root: true });
     }, toastDelay);
     setTimeout(() => {
-      commit('showToast', {
+    commit('showToast', {
         showToast: false,
         toastMessage: '',
         toastType: 'default',
-      }, { root: true });
+    }, { root: true });
     }, toastDuration);
     throw error;
-  } finally {
+} finally {
     commit('toggleLoader', false, { root: true });
-  }
+}
 },
-    async addImage({commit}, imageData) {
-            commit('toggleLoader', true, { root: true })
-            return await axiosClient.post('avatar-rider', imageData)
-            .then((response) => {
-                commit('toggleLoader', false, { root: true })
-                setTimeout(() => {
-                    commit('showToast', { showToast: true, toastMessage: response.data.message, toastType: 'success'}, { root: true });
-                }, toastDelay);
-    
-                setTimeout(() => {
-                    commit('showToast', { showToast: false, toastMessage: '', toastType: 'default'}, { root: true });
-                }, toastDuration);
-    
-                return response.data;
-            })
-            .catch((error) => {
-                commit('toggleLoader', false, { root: true })
-                if(error.response && error.response.data) {
-                    const errorMessage = error.response.data.message;
-                    setTimeout(() => {
-                        commit('showToast', { showToast: true, toastMessage: errorMessage, toastType: 'error'}, { root: true });
-                    }, toastDelay);
-    
-                    setTimeout(() => {
-                        commit('showToast', { showToast: false, toastMessage: '', toastType: 'default'}, { root: true });
-                    }, toastDuration);
-                }   
-            })
-        },
+
+// Get available payout slots
+async getSlots({ commit }, { date }) {
+try {
+    commit('toggleLoader', true, { root: true });
+    const response = await axiosClient.get('available-slots', { params: { date } });
+    commit('setSlotListData', response.data.available_slots);
+    return response.data.available_slots;
+} catch (error) {
+    commit('toggleLoader', false, { root: true });
+    let errorMessage = 'Failed to fetch available slots';
+    if (error.response && error.response.data) {
+    errorMessage = error.response.data.message || errorMessage;
+    }
+    setTimeout(() => {
+    commit('showToast', {
+        showToast: true,
+        toastMessage: errorMessage,
+        toastType: 'error',
+    }, { root: true });
+    }, toastDelay);
+    setTimeout(() => {
+    commit('showToast', {
+        showToast: false,
+        toastMessage: '',
+        toastType: 'default',
+    }, { root: true });
+    }, toastDuration);
+    throw error;
+} finally {
+    commit('toggleLoader',  false, { root: true });
+}
+},
+
+// Export payment history to CSV
+async getCSV({ commit }) {
+try {
+    commit('toggleLoader', true, { root: true });
+    const response = await axiosClient.get('export-payment-history', {
+    responseType: 'blob' // Important for handling file downloads
+    });
+
+    // Check if the response is a JSON error
+    const text = await response.data.text();
+    try {
+    const jsonResponse = JSON.parse(text);
+    if (!jsonResponse.isSuccess) {
+        commit('toggleLoader', false, { root: true });
+        setTimeout(() => {
+        commit('showToast', {
+            showToast: true,
+            toastMessage: jsonResponse.message || 'Failed to export CSV',
+            toastType: 'error'
+        }, { root: true });
+        }, toastDelay);
+
+        setTimeout(() => {
+        commit('showToast', {
+            showToast: false,
+            toastMessage: '',
+            toastType: 'default'
+        }, { root: true });
+        }, toastDuration);
+
+        throw new Error(jsonResponse.message || 'Failed to export CSV');
+    }
+    } catch (e) {
+    // Not a JSON response, so it's the CSV file
+    commit('toggleLoader', false, { root: true });
+    return new Blob([text], { type: 'text/csv;charset=utf-8' });
+    }
+} catch (error) {
+    commit('toggleLoader', false, { root: true });
+
+    let errorMessage = 'Failed to export CSV';
+    if (error.response) {
+    if (error.response.status === 401) {
+        errorMessage = 'Authentication required. Please log in.';
+    } else if (error.response.data) {
+        try {
+        const text = await error.response.data.text();
+        const jsonResponse = JSON.parse(text);
+        errorMessage = jsonResponse.message || errorMessage;
+        } catch (e) {
+        // Not a JSON response, use default error message
+        }
+    }
+    } else if (error.message) {
+    errorMessage = error.message;
+    }
+
+    setTimeout(() => {
+    commit('showToast', {
+        showToast: true,
+        toastMessage: errorMessage,
+        toastType: 'error'
+    }, { root: true });
+    }, toastDelay);
+
+    setTimeout(() => {
+    commit('showToast', {
+        showToast: false,
+        toastMessage: '',
+        toastType: 'default'
+    }, { root: true });
+    }, toastDuration);
+
+    throw new Error(errorMessage); // Re-throw for the component to handle
+}
+},
+
+// Check payout eligibility
+async checkPayoutEligibility({ commit }) {
+try {
+    commit('toggleLoader', true, { root: true });
+    const response = await axiosClient.get('payout-eligibility');
+    commit('setPayoutEligibility', response.data.eligible);
+    return response.data;
+} catch (error) {
+    commit('toggleLoader', false, { root: true });
+    let errorMessage = 'Failed to check payout eligibility';
+    if (error.response && error.response.data) {
+    errorMessage = error.response.data.message || errorMessage;
+    }
+    setTimeout(() => {
+    commit('showToast', {
+        showToast: true,
+        toastMessage: errorMessage,
+        toastType: 'error',
+    }, { root: true });
+    }, toastDelay);
+    setTimeout(() => {
+    commit('showToast', {
+        showToast: false,
+        toastMessage: '',
+        toastType: 'default',
+    }, { root: true });
+    }, toastDuration);
+    throw error;
+} finally {
+    commit('toggleLoader', false, { root: true });
+}
+},
+
+// In src/store/actions.js
+async requestPayout({ commit, dispatch }, payoutData) {
+try {
+commit('toggleLoader', true, { root: true });
+const response = await axiosClient.post('request-payout', payoutData); // Fixed endpoint
+setTimeout(() => {
+    commit('showToast', {
+    showToast: true,
+    toastMessage: response.data.message || 'Payout request submitted successfully',
+    toastType: 'success',
+    }, { root: true });
+}, toastDelay);
+setTimeout(() => {
+    commit('showToast', {
+    showToast: false,
+    toastMessage: '',
+    toastType: 'default',
+    }, { root: true });
+}, toastDuration);
+
+// Refresh payment list and eligibility after payout request
+await dispatch('getPayMent');
+await dispatch('checkPayoutEligibility');
+
+return response.data;
+} catch (error) {
+commit('toggleLoader', false, { root: true });
+let errorMessage = 'Failed to request payout';
+if (error.response && error.response.data) {
+    errorMessage = error.response.data.message || errorMessage;
+}
+setTimeout(() => {
+    commit('showToast', {
+    showToast: true,
+    toastMessage: errorMessage,
+    toastType: 'error',
+    }, { root: true });
+}, toastDelay);
+setTimeout(() => {
+    commit('showToast', {
+    showToast: false,
+    toastMessage: '',
+    toastType: 'default',
+    }, { root: true });
+}, toastDuration);
+throw error;
+} finally {
+commit('toggleLoader', false, { root: true });
+}
+},
+
+//add image
+async addImage({commit}, imageData) {
+    commit('toggleLoader', true, { root: true })
+    return await axiosClient.post('avatar-rider', imageData)
+    .then((response) => {
+        commit('toggleLoader', false, { root: true })
+        setTimeout(() => {
+            commit('showToast', { showToast: true, toastMessage: response.data.message, toastType: 'success'}, { root: true });
+        }, toastDelay);
+
+        setTimeout(() => {
+            commit('showToast', { showToast: false, toastMessage: '', toastType: 'default'}, { root: true });
+        }, toastDuration);
+
+        return response.data;
+    })
+    .catch((error) => {
+        commit('toggleLoader', false, { root: true })
+        if(error.response && error.response.data) {
+            const errorMessage = error.response.data.message;
+            setTimeout(() => {
+                commit('showToast', { showToast: true, toastMessage: errorMessage, toastType: 'error'}, { root: true });
+            }, toastDelay);
+
+            setTimeout(() => {
+                commit('showToast', { showToast: false, toastMessage: '', toastType: 'default'}, { root: true });
+            }, toastDuration);
+        }   
+    })
+},
+
+
 
 
 };

@@ -46,6 +46,11 @@ export default {
         state.allProduct.data = allProduct;
     }, 
 
+    setRecord: (state, record) => {
+        state.record.data = record;
+    }, 
+
+
     // setConversation: (state, conversation) => {
     //     state.conversation.data = conversation;
     // },  

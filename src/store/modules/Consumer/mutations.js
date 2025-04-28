@@ -103,6 +103,10 @@ export default {
         state.reason.data = reason;
     },
 
+    setReportList: (state, report) => {
+        state.report.data = report;
+    },
+
 
     setUpdateAddress: (state, updateAddress) => {
         state.updateAddress.data = updateAddress;

@@ -607,9 +607,12 @@
                                                         <!-- <button class="px-8 py-1 text-xs sm:text-sm 2xl:text-base font-semibold text-green-700 border border-green-600 rounded hover:bg-green-50" @click="openRateModal">
                                                             Rate
                                                         </button> -->
-                                                        <!-- <button class="px-3 py-1 text-xs sm:text-sm 2xl:text-base font-semibold text-red-600 border border-red-500 rounded hover:bg-red-50" @click="openRefundModal(toComplete)">
+                                                        <button class="px-3 py-1 text-xs sm:text-sm 2xl:text-base font-semibold text-red-600 border border-red-500 rounded hover:bg-red-50"
+                                                            :disabled="!toComplete.order_id"
+                                                            :title="!toComplete.order_id ? 'Order ID is missing' : ''"
+                                                            @click="openRefundModal(toComplete.order_id)">
                                                             Request/Refund
-                                                        </button> -->
+                                                        </button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -1038,6 +1041,73 @@
                             </ul>
                         </div>
                     </div>
+
+                    <!--Report-->
+                    <div v-if="activeTab === 'Report'" class="tab-content"> 
+
+                        <BaseLabel class="text-lg sm:text-xl md:text-2xl font-semibold text-left mb-4 w-full">List of Orders</BaseLabel>
+                        <div class="mb-4 flex items-center space-x-2">
+                            <label for="order-date-filter" class="text-sm font-semibold">Filter by Date:</label>
+                            <input id="order-date-filter" v-model="orderFilterDate" type="date" class="p-2 border rounded-md text-sm" />
+                            <button v-if="orderFilterDate" @click="clearOrderFilter" class="px-3 py-1 bg-gray-300 text-sm rounded-md hover:bg-gray-400">
+                            Clear
+                            </button>
+                            <label for="order-status-filter" class="text-sm font-semibold">Filter by Status:</label>
+                            <select id="order-status-filter" v-model="orderFilterStatus" class="p-2 border rounded-md text-sm">
+                                <option value="">All</option>
+                                <option value="Order placed">Order placed</option>
+                                <option value="Waiting for courier">Waiting for courier</option>
+                                <option value="In transit">In transit</option>
+                                <option value="Order delivered">Order delivered</option>
+                            </select>
+                            <button v-if="orderFilterStatus"  @click="clearStatusFilter" class="px-3 py-1 bg-gray-300 text-sm rounded-md hover:bg-gray-400">
+                                Clear Status
+                            </button>
+                            <!-- Print Button -->
+                            <button @click="printOrders" class="flex items-center gap-2 px-3 py-1 bg-green-700 text-white text-sm rounded-md hover:bg-green-600"><Icon icon="arcticons:print" width="24" height="24"  style="color: #f9fffb" />
+                                Print
+                            </button>
+                        </div>
+                        <div class="flex flex-col items-center">
+                            <div class="max-h-[300px] sm:max-h-[400px] overflow-y-auto w-full">
+                                <table class="min-w-full bg-white">
+                                    <thead class="bg-gray-200 sticky top-0 z-10">
+                                        <tr>
+                                        <th class="px-2 xs:px-4 py-2 text-center text-sm sm:text-base">Orders</th>
+                                        <th class="px-2 xs:px-4 py-2 text-center text-sm sm:text-base">Quantity</th>
+                                        <th class="px-2 xs:px-4 py-2 text-center text-sm sm:text-base">Payment Method</th>
+                                        <th class="px-2 xs:px-4 py-2 text-center text-sm sm:text-base">Status</th>
+                                        <th class="px-2 xs:px-4 py-2 text-center text-sm sm:text-base">Total Amount</th>
+                                        <th class="px-2 xs:px-4 py-2 text-center text-sm sm:text-base">Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody v-if="filteredReports.length > 0">
+                                        <tr v-for="report in filteredReports" :key="report.id" class="hover:bg-gray-50">
+                                            <td class="px-2 xs:px-4 py-2 text-center text-sm sm:text-base">{{ report.product_name }}</td>
+                                            <td class="px-2 xs:px-4 py-2 text-center text-sm sm:text-base">{{ report.quantity }}</td>
+                                            <td class="px-2 xs:px-4 py-2 text-center text-sm sm:text-base">{{ report.payment_method }}</td>
+                                            <td class="px-2 xs:px-4 py-2 text-center text-sm sm:text-base">{{ report.status }}</td>
+                                            <td class="px-2 xs:px-4 py-2 text-center text-sm sm:text-base">{{ report.total_amount }}</td>
+                                            <td class="px-2 xs:px-4 py-2 text-center text-sm sm:text-base">{{ report.created_at }}</td>   
+                                        </tr>
+                                    </tbody>
+                                    <tbody v-else>
+                                        <tr>
+                                            <td colspan="5" class="px-4 py-2 text-center text-sm text-gray-500">
+                                                {{
+                                                orderFilterDate || orderFilterStatus
+                                                    ? `No orders found for ${orderFilterDate || ''} ${
+                                                        orderFilterStatus ? orderFilterStatus : ''
+                                                    }`
+                                                    : 'No orders available'
+                                                }}
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1058,8 +1128,9 @@ import BaseOptionDefaultField from '@/components/Input-Fields/BaseOptionDefaultF
 import Footer from '@/components/Input-Fields/Footer.vue';
 import Loading from '@/components/Alerts/Loading.vue';
 import Toast from '@/components/Alerts/Toast.vue';
+import { debounce } from 'lodash';
 import { ref, computed, reactive, onMounted, watch  } from "vue";
-import { required, email, helpers } from '@vuelidate/validators';
+import { required, email, helpers, maxLength } from '@vuelidate/validators';
 import { useVuelidate } from "@vuelidate/core";
 import { Icon } from '@iconify/vue';
 import { useRouter } from 'vue-router';
@@ -1070,7 +1141,7 @@ const router = useRouter();
 
 const showLoading = computed(() => store.state.showLoading.state);
 const activeTab = ref('My Purchase'); // Default active tab
-const tabs = ref(['My Purchase', 'My Profile','Billing Address']); // List of tabs
+const tabs = ref(['My Purchase', 'My Profile','Billing Address', 'Report']); // List of tabs
 const consumerRaw  = computed(() => store.state.userData.data?.user || {})
 const conversationStart = computed(() => store.state.Consumer.conversation.data);
 const messageStart = computed(() => store.state.Consumer.message.data);
@@ -1084,6 +1155,154 @@ const toCompleteList= computed(() => store.state.Consumer.toComplete.data);
 const toCancelList= computed(() => store.state.Consumer.toCancel.data);
 const toRefundList= computed(() => store.state.Consumer.toRefund.data);
 const reasonList= computed(() => store.state.Consumer.reason.data);
+const reportList= computed(() => store.state.Consumer.report.data);
+
+/******************************************************************
+ FUNCTION FOR FILTER REPORT
+******************************************************************/
+const orderFilterDate = ref('')
+const orderFilterStatus = ref('')
+
+// Helper function to parse "April 21 2025" into "2025-04-21"
+const parseDateString = (dateStr) => {
+  const [month, day, year] = dateStr.split(' ');
+  const monthMap = {
+    January: '01',
+    February: '02',
+    March: '03',
+    April: '04',
+    May: '05',
+    June: '06',
+    July: '07',
+    August: '08',
+    September: '09',
+    October: '10',
+    November: '11',
+    December: '12',
+  };
+  const monthNum = monthMap[month];
+  return `${year}-${monthNum}-${day.padStart(2, '0')}`;
+};
+// Computed property for filtered records
+const filteredReports = computed(() => {
+  let filtered = [...reportList.value];
+
+  // Filter by status
+  if (orderFilterStatus.value) {
+    filtered = filtered.filter((report) => report.status === orderFilterStatus.value);
+  }
+
+  // Filter by date
+  if (orderFilterDate.value) {
+    filtered = filtered.filter((report) => {
+      // Parse the created_at string to YYYY-MM-DD format
+      const reportDate = parseDateString(report.created_at);
+      return reportDate === orderFilterDate.value;
+    });
+  }
+
+  return filtered;
+});
+
+
+
+// Debounced filter function
+const debouncedFilterOrders = debounce(() => {
+  // Filters are automatically applied through the computed filteredReports
+}, 300)
+
+// Clear filters
+const clearOrderFilter = () => {
+  orderFilterDate.value = ''
+  debouncedFilterOrders()
+}
+
+const clearStatusFilter = () => {
+  orderFilterStatus.value = ''
+  debouncedFilterOrders()
+}
+
+/******************************************************************
+ FUNCTION FOR PRINTING REPORT
+******************************************************************/
+const printOrders = () => {
+    // Create a new window for printing
+    const printWindow = window.open('', '_blank');
+    
+    // Generate HTML for the print window
+    let printContent = `
+        <html>
+        <head>
+            <title>Print Report</title>
+            <style>
+                body { font-family: Arial, sans-serif; }
+                table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+                th, td { border: 1px solid #ddd; padding: 8px; text-align: center; }
+                th { background-color: #f2f2f2; }
+                h1 { text-align: center; }
+            </style>
+        </head>
+        <body>
+            <h1>Order Report</h1>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Orders</th>
+                        <th>Quantity</th>
+                        <th>Payment Method</th>
+                        <th>Status</th>
+                        <th>Total Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+    `;
+
+    // Add filtered reports to the table
+    if (filteredReports.value.length > 0) {
+        filteredReports.value.forEach(report => {
+            printContent += `
+                <tr>
+                    <td>${report.product_name}</td>
+                    <td>${report.quantity}</td>
+                    <td>${report.payment_method}</td>
+                    <td>${report.status}</td>
+                    <td>${report.total_amount}</td>
+                </tr>
+            `;
+        });
+    } else {
+        printContent += `
+            <tr>
+                <td colspan="5">No orders found for the selected filters</td>
+            </tr>
+        `;
+    }
+
+    printContent += `
+                </tbody>
+            </table>
+        </body>
+        </html>
+    `;
+
+    // Write content to the print window and trigger print
+    printWindow.document.write(printContent);
+    printWindow.document.close();
+    printWindow.focus();
+    printWindow.print();
+    printWindow.close();
+};
+/******************************************************************
+ FUNCTION FOR GETTING REPORT
+******************************************************************/
+function getReport() {
+    store.dispatch('Consumer/getReport')
+}
+
+onMounted(() => {
+    getReport();
+})
+
 /******************************************************************
  FUNCTION FOR GETTING TO SHIP
 ******************************************************************/
@@ -1465,95 +1684,133 @@ function closeRateModal() {
 /******************************************************************
  FUNCTION FOR REQUEST REFUND
 ******************************************************************/
-const selectedOrderId = ref(null);
+const isshowRefundModal = ref(false);
 const refundData = reactive({
+  id: '', // Fixed: ChangedERNEL: Changed 'null' string to null
   reason: '',
-  return_method: '',
-  payment_method:'',
   solution: '',
-  product_refund_img:'',
+  return_method: '',
+  payment_method: '',
+  product_refund_img: '',
 });
+const refund_amount = ref(null);
 
-const handleRefundUpload = (event) => {
-    if (event.target.files && event.target.files.length > 0) {
-        refundData.product_refund_img = event.target.files[0];
-    }
+// Validation rules for refund form
+const $validateRefundRules = useVuelidate(
+  {
+    reason: { required, maxLength: maxLength(255) },
+    solution: { required },
+    return_method: { required },
+    product_refund_img: { maxLength: maxLength(2048) }, // Adjust based on file size validation
+    payment_method: {
+      required: (value, vm) => (vm.solution !== 'Replace' ? !!value : true),
+    },
+  },
+  refundData
+);
+
+// Open refund modal and set order ID
+const openRefundModal = (orderId) => {
+  console.log('Order ID:', orderId);
+  console.log('toCompleteList:', toCompleteList.value);
+  if (!orderId) {
+    store.commit('showToast', {
+      showToast: true,
+      toastMessage: 'Invalid order ID.',
+      toastType: 'error',
+    }, { root: true });
+    return;
+  }
+  const order = toCompleteList.value.find((item) => item.order_id === orderId); // Fixed: item.order_id
+  if (!order) {
+    store.commit('showToast', {
+      showToast: true,
+      toastMessage: 'Order not found.',
+      toastType: 'error',
+    }, { root: true });
+    return;
+  }
+  refundData.id = orderId;
+  refund_amount.value = order.total_amount;
+  isshowRefundModal.value = true;
 };
 
-const refundDataRules = computed(() => {
-  return {
-    reason: {
-          required: helpers.withMessage('Reason is required', required)
-      },
-      return_method: {
-          required: helpers.withMessage('Return method is required', required)
-      },
-      payment_method: {
-          required: helpers.withMessage('Payment method is required', required)
-      },
-      solution: {
-          required: helpers.withMessage('Solution is required', required)
-      },
-      product_refund_img: {
-          required: helpers.withMessage('Image is required', required)
-      }
-  };
-});
+// Close refund modal and reset form
+const closeRefundModal = () => {
+  isshowRefundModal.value = false;
+  // Update properties individually to preserve reactivity
+  refundData.id = '';
+  refundData.reason = '';
+  refundData.solution = '';
+  refundData.return_method = '';
+  refundData.payment_method = '';
+  refundData.product_refund_img = '';
+  refund_amount.value = null;
+  $validateRefundRules.value.$reset();
+};
 
-const $validateRefundRules = useVuelidate(refundDataRules, refundData);
+// Handle file upload for refund image
+const handleRefundUpload = (event) => {
+  const file = event.target.files[0];
+  if (file && file.size > 2048 * 1024) {
+    store.commit('showToast', {
+      showToast: true,
+      toastMessage: 'File size exceeds 2MB limit.',
+      toastType: 'error',
+    }, { root: true });
+    return;
+  }
+  refundData.product_refund_img = file;
+};
 
-async function createRefund() {
-    const validationResult = await $validateRefundRules.value.$validate();
-    if (validationResult) {
-        const formData = new FormData();
-        formData.append('reason', refundData.reason);
-        formData.append('return_method', refundData.return_method);
-        formData.append('payment_method', refundData.payment_method);
-        formData.append('solution', refundData.solution);
+// Submit refund request
+const createRefund = async () => {
+  $validateRefundRules.value.$touch();
+  if ($validateRefundRules.value.$error) {
+    console.log('Validation errors:', $validateRefundRules.value.$errors);
+    return;
+  }
 
-        if (refundData.product_refund_img) {
-            formData.append('product_refund_img', refundData.product_refund_img);
-        }
-
-        if (!selectedOrderId.value) {
-            console.error('No order selected for refund.');
-            return;
-        }
-
-        await store.dispatch("Consumer/createRefund", { orderId: selectedOrderId.value, formData })
-            .then((response) => {
-                if (response.isSuccess == true) {
-                    closeRefundModal();
-                    getPurchaseCompleted();
-                }
-            });
+  try {
+    // Prepare form data for API
+    const formData = new FormData();
+    formData.append('reason', refundData.reason);
+    formData.append('solution', refundData.solution);
+    formData.append('return_method', refundData.return_method);
+    if (refundData.product_refund_img) {
+      formData.append('product_refund_img', refundData.product_refund_img);
     }
-}
+    if (refundData.solution !== 'Replace') {
+      formData.append('payment_method', refundData.payment_method);
+    }
 
+    // Log the data being sent
+    const formDataObj = Object.fromEntries(formData);
+    console.log('Refund request data:', {
+      id: refundData.id,
+      ...formDataObj,
+    });
 
-const isshowRefundModal = ref(false);
+    // Dispatch Vuex action to call backend
+    const response = await store.dispatch('Consumer/createRefund', {
+      id: refundData.id,
+      ...formDataObj,
+    });
 
-function openRefundModal(order) {
-    selectedOrderId.value = order.id;  // Save the order ID
-    isshowRefundModal.value = true;
-}
+    // Log the response from the backend
+    console.log('Refund creation response:', response);
 
-// Function to handle closing modal
-function closeRefundModal() {
-    isshowRefundModal.value = false;
-    clearValues();
-    $validateRefundRules.value.$reset(); // ✅ no await
-    
-}
-function clearValues() {
-    refundData.reason = '';
-    refundData.return_method = '';
-    refundData.payment_method = '';
-    refundData.solution = '';
-    refundData.product_refund_img = null; // set to null
-    selectedOrderId.value = null;  // Reset order ID
-}
-
+    closeRefundModal();
+  } catch (error) {
+    console.error('Refund request failed:', error);
+    console.log('Error response:', error.response?.data);
+    store.commit('showToast', {
+      showToast: true,
+      toastMessage: error.response?.data?.message || 'Failed to submit refund request.',
+      toastType: 'error',
+    }, { root: true });
+  }
+};
 
 /******************************************************************
  FUNCTION FOR MY PURCHASE TAB

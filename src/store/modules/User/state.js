@@ -38,6 +38,10 @@ export default {
         data:[],
     },
 
+    record: {
+        data:[],
+    },
+
     allProduct: {
         data:[],
     },

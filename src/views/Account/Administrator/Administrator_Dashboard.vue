@@ -6,7 +6,7 @@
     <div class="flex h-screen bg-gray-100">
         <div class="flex-1 flex flex-col">
             <!-- Dashboard Content -->
-            <main class="px-2 2xs:px-3 sm:px-4 md:px-6 lg:px-8 pt-16 2xs:pt-24 sm:pt-20 flex flex-col gap-4 overflow-auto">
+            <main class="px-2 2xs:px-3 sm:px-4 md:px-6 lg:px-8 pt-16 2xs:pt-18 sm:pt-20 flex flex-col gap-4 overflow-auto">
                 <div>
                     <!-- Counts Section -->
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-3 2xs:gap-4 md:gap-6 mb-3 2xs:mb-4 md:mb-6">

@@ -79,6 +79,10 @@ export default {
     quantity: {
         data:[],
     },
+
+    report: {
+        data:[],
+    },
     
 
     // productItemInfo: {
