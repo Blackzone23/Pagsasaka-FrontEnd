@@ -1,0 +1,1 @@
+import{L as r,T as s}from"./Toast-BNKVjH82.js";import{g as t,j as n,c,E as m,l,a as u,F as d,o as e}from"./index-_Jf2QutT.js";const k={__name:"Consumer_Dashboard",setup(p){const a=n();return t(()=>{a.replace("/market")}),(o,_)=>(e(),c(d,null,[o.showLoading?(e(),m(r,{key:0,class:"loading"})):l("",!0),u(s)],64))}};export{k as default};

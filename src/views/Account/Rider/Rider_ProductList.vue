@@ -46,7 +46,7 @@
                             <td class="px-2 xs:px-4 py-2 text-center text-sm sm:text-base">{{ productList.total_amount }}</td>
                             <td class="px-2 xs:px-4 py-2 text-end">
                                 <button @click="claimProduct(productList.id)" class="text-white bg-green-600 hover:bg-green-500 px-3 xs:px-5 py-1 rounded-lg text-xs sm:text-sm">
-                                    Claim
+                                    Accept
                                 </button>
                             </td>
                         </tr>
