@@ -19,7 +19,7 @@
                     <router-link :to="{ name: 'Administrator_List' }" active-class="text-gray-400" class="hover:text-gray-400">Rider List</router-link>
                 </div>
 
-                <div class="flex items-center space-x-2">
+                <!-- <div class="flex items-center space-x-2">
                   <Icon icon="material-symbols-light:payments-sharp" width="24" height="24"  style="color: white" />
                     <router-link :to="{ name: 'Payouts' }" active-class="text-gray-400" class="hover:text-gray-400">Payouts</router-link>
                 </div>
@@ -28,7 +28,7 @@
                 <div class="flex items-center space-x-2">
                   <Icon icon="material-symbols-light:order-approve-outline-sharp" width="24" height="24"  style="color: white" />
                     <router-link :to="{ name: 'Approve' }" active-class="text-gray-400" class="hover:text-gray-400">Approve</router-link>
-                </div>
+                </div> -->
 
 
                 </div>
