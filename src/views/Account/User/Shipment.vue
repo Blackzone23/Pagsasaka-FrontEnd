@@ -378,6 +378,7 @@ import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 import { jsPDF } from 'jspdf';
 import html2canvas from 'html2canvas';
+import logo from '@/assets/Logo2.png'
 
 const store = useStore();
 const router = useRouter();
@@ -459,72 +460,90 @@ const clearstatusFilter = () => {
 /******************************************************************
  FUNCTION FOR PRINTING
 ******************************************************************/
+
 const printOrders = () => {
-    // Create a new window for printing
-    const printWindow = window.open('', '_blank');
-    
-    // Generate HTML for the print window
-    let printContent = `
-        <html>
-        <head>
-            <title>Print Records</title>
-            <style>
-                body { font-family: Arial, sans-serif; }
-                table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-                th, td { border: 1px solid #ddd; padding: 8px; text-align: center; }
-                th { background-color: #f2f2f2; }
-                h1 { text-align: center; }
-            </style>
-        </head>
-        <body>
-            <h1>Order Record</h1>
-            <table>
-                <thead>
-                    <tr>
-						<th>Name</th>
-                        <th>Orders</th>
-                        <th>Quantity</th>
-						<th>Total Amount</th>
-                        <th>Date</th>
-                    </tr>
-                </thead>
-                <tbody>
-    `;
+  const printWindow = window.open('', '_blank');
 
-    // Add filtered reports to the table
-    if (filteredRecord.value.length > 0) {
-        filteredRecord.value.forEach(record => {
-            printContent += `
-                <tr>
-					<td>${record.full_name}</td>
-                    <td>${record.product_name}</td>
-                    <td>${record.quantity}</td>
-					<td>${record.total_amount}</td>
-                    <td>${record.created_at}</td>
-                </tr>
-            `;
-        });
-    } else {
-        printContent += `
-            <tr>
-                <td colspan="5">No orders found for the selected filters</td>
-            </tr>
-        `;
-    }
+  let printContent = `
+    <html>
+    <head>
+      <title>Pagsasaka Report</title>
+      <style>
+        body { font-family: Arial, sans-serif; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: center; }
+        th { background-color: #f2f2f2; }
+        h1 { text-align: start; font-size: 1.5rem; } 
+        .logo { max-width: 200px; display: block; margin: 0 auto 20px; }
+      </style>
+    </head>
+    <body>
+      <img src="${logo}" class="logo" alt="Company Logo" />
+     	<h1>Order Record</h1>
+      <table>
+        <thead>
+          <tr>
+           	<th>Name</th>
+			<th>Orders</th>
+			<th>Quantity</th>
+			<th>Total Amount</th>
+			<th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+`;
 
+  if (filteredRecord.value.length > 0) {
+    filteredRecord.value.forEach(record => {
+      printContent += `
+        <tr>
+         	<td>${record.full_name}</td>
+			<td>${record.product_name}</td>
+			<td>${record.quantity}</td>
+			<td>${record.total_amount}</td>
+			<td>${record.created_at}</td>
+        </tr>
+      `;
+    });
+  } else {
     printContent += `
-                </tbody>
-            </table>
-        </body>
-        </html>
+      <tr>
+        <td colspan="5">No orders found for the selected filters</td>
+      </tr>
     `;
+  }
 
-    // Write content to the print window and trigger print
-    printWindow.document.write(printContent);
-    printWindow.document.close();
+  printContent += `
+        </tbody>
+      </table>
+    </body>
+    </html>
+  `;
+
+  printWindow.document.write(printContent);
+  printWindow.document.close();
+
+  // Wait for the logo image to load before printing
+  const logoImg = printWindow.document.querySelector('.logo');
+  if (logoImg) {
+    logoImg.onload = () => {
+      printWindow.focus();
+      printWindow.print();
+      printWindow.close();
+    };
+    // Handle case where the image fails to load
+    logoImg.onerror = () => {
+      console.error('Failed to load logo image');
+      printWindow.focus();
+      printWindow.print();
+      printWindow.close();
+    };
+  } else {
+    // If there's no logo, proceed with printing
     printWindow.focus();
     printWindow.print();
     printWindow.close();
+  }
 };
 /******************************************************************
 FUNCTION FOR ORDER

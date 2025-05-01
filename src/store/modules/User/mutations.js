@@ -50,6 +50,10 @@ export default {
         state.record.data = record;
     }, 
 
+    setPayoutEligibility: (state, payout) => {
+        state.payout.data = payout;
+    }, 
+
 
     // setConversation: (state, conversation) => {
     //     state.conversation.data = conversation;

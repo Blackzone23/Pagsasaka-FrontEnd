@@ -45,14 +45,51 @@
             </div>
 
             <div class="mb-3 space-y-3">
-                <p class="text-xs sm:text-sm md:text-base">View the payment history here. It might take some time for payments to appear in the portal.</p>
-                <div class="flex items-center space-x-2">
-                    <label for="payment-date-filter" class="text-sm font-semibold">Filter by Date:</label>
-                    <input  id="payment-date-filter"  v-model="paymentFilterDate"  type="date"  class="p-2 border rounded-md text-sm" @input="debouncedFilterPayments"/>
-                    <button v-if="paymentFilterDate" @click="clearPaymentFilter" class="px-3 py-1 bg-gray-300 text-sm rounded-md hover:bg-gray-400">
-                        Clear
-                    </button>
-                </div>
+              <p class="text-xs sm:text-sm md:text-base">View the payment history here. It might take some time for payments to appear in the portal.</p>
+              <div class="flex items-center space-x-2">
+                <label for="payment-date-filter" class="text-sm font-semibold">Filter by Date:</label>
+                <input
+                  id="payment-date-filter"
+                  v-model="paymentFilterDate"
+                  type="date"
+                  class="p-2 border rounded-md text-sm"
+                  @input="debouncedFilterPayments"
+                />
+                <button
+                  v-if="paymentFilterDate"
+                  @click="clearPaymentFilter"
+                  class="px-3 py-1 bg-gray-300 text-sm rounded-md hover:bg-gray-400"
+                >
+                  Clear
+                </button>
+                <button
+                  @click="printPayment"
+                  class="flex items-center gap-2 px-3 py-1 xs:px-4 xs:py-1 bg-green-700 text-white text-xs sm:text-sm rounded-md hover:bg-green-600"
+                >
+                  <Icon icon="arcticons:print" width="24" height="24" style="color: #f9fffb" />Print
+                </button>
+              </div>
+              <!-- Add Payment Method Filter -->
+              <div class="flex items-center space-x-2">
+                <label for="payment-method-filter" class="text-sm font-semibold">Filter by Payment Method:</label>
+                <select
+                  id="payment-method-filter"
+                  v-model="paymentMethodFilter"
+                  class="p-2 border rounded-md text-sm"
+                  @change="debouncedFilterPaymentRecord"
+                >
+                  <option value="">All</option>
+                  <option value="E-Wallet">E-wallet</option>
+                  <option value="COD">COD</option>
+                </select>
+                <button
+                  v-if="paymentMethodFilter"
+                  @click="clearPaymentMethodFilter"
+                  class="px-3 py-1 bg-gray-300 text-sm rounded-md hover:bg-gray-400"
+                >
+                  Clear
+                </button>
+              </div>
             </div>
 
             <div class="overflow-x-auto">
@@ -174,6 +211,7 @@ import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 import { Icon } from "@iconify/vue";
 import jsPDF from 'jspdf';
+import logo from '@/assets/Logo2.png'
 
 const store = useStore();
 const router = useRouter();
@@ -188,8 +226,37 @@ const isPayoutEligible = ref(false);
 const eligibilityResponse = ref(null);
 const payoutSchedule = ref(null);
 const paymentFilterDate = ref('');
-const toastDuration = 3000;
+const paymentMethodFilter = ref('');
 
+const filteredPaymentList = computed(() => {
+  let filtered = paymentList.value || [];
+  
+  // Filter by date
+  if (paymentFilterDate.value) {
+    filtered = filtered.filter((payment) => {
+      const paymentDate = parseDate(payment.date);
+      return paymentDate === paymentFilterDate.value;
+    });
+  }
+
+  // Filter by payment method
+  if (paymentMethodFilter.value) {
+    filtered = filtered.filter((payment) => payment.payment_method === paymentMethodFilter.value);
+  }
+
+  return filtered;
+});
+
+// Debounced filter function
+const debouncedFilterPaymentRecord = debounce(() => {
+  // Trigger computed property update by reactivity
+}, 300);
+
+
+// Clear payment method filter method
+const clearPaymentMethodFilter = () => {
+  paymentMethodFilter.value = '';
+};
 /******************************************************************
 FUNCTION FOR FILTER PAYMENT
 ******************************************************************/
@@ -216,14 +283,7 @@ const parseDate = (dateStr) => {
   return null;
 };
 
-// Filtered payment list based on date
-const filteredPaymentList = computed(() => {
-  if (!paymentFilterDate.value) return paymentList.value || [];
-  return (paymentList.value || []).filter((payment) => {
-    const paymentDate = parseDate(payment.date);
-    return paymentDate === paymentFilterDate.value;
-  });
-});
+
 
 // Debounced filter function
 const debouncedFilterPayments = debounce(() => {
@@ -236,12 +296,15 @@ const clearPaymentFilter = () => {
 };
 
 /******************************************************************
-FUNCTION FOR REFRESH,EXPORT,REQUEST PAYOUTS AND TOTAL SALES
+FUNCTION FOR TOTAL SALES
 ******************************************************************/
 const totalSales = computed(() => {
   return eligibilityResponse.value?.totalSales || '0.00';
 });
 
+/******************************************************************
+FUNCTION FOR REFRESH
+******************************************************************/
 const refreshData = async () => {
   await getPayMent();
   await checkPayoutEligibility();
@@ -429,6 +492,9 @@ watch(currentDate, () => {
   fetchAvailableSlots();
 });
 
+/******************************************************************
+FUNCTION FOR EXPORT
+******************************************************************/
 const exportCSV = async () => {
   try {
     store.dispatch('toggleLoader', true);
@@ -450,18 +516,6 @@ const exportCSV = async () => {
         link.click();
         document.body.removeChild(link);
         window.URL.revokeObjectURL(url);
-        store.commit('showToast', {
-          showToast: true,
-          toastMessage: 'CSV exported successfully',
-          toastType: 'success'
-        });
-        setTimeout(() => {
-          store.commit('showToast', {
-            showToast: false,
-            toastMessage: '',
-            toastType: 'default'
-          });
-        }, toastDuration);
       } else {
         throw e;
       }
@@ -470,23 +524,14 @@ const exportCSV = async () => {
     if (error.message !== 'No payment history found.') {
       console.error('Export CSV error:', error);
     }
-    store.commit('showToast', {
-      showToast: true,
-      toastMessage: error.message || 'Failed to export CSV',
-      toastType: 'error'
-    });
-    setTimeout(() => {
-      store.commit('showToast', {
-        showToast: false,
-        toastMessage: '',
-        toastType: 'default'
-      });
-    }, toastDuration);
   } finally {
     store.dispatch('toggleLoader', false);
   }
 };
 
+/******************************************************************
+FUNCTION FOR REQUEST PAYOUTS
+******************************************************************/
 const checkPayoutEligibility = async () => {
   try {
     const response = await store.dispatch('User/checkPayoutEligibility');
@@ -504,15 +549,6 @@ const checkEligibilityAndOpenModal = async () => {
   if (isPayoutEligible.value) {
     showPayoutModal.value = true;
     fetchAvailableSlots();
-  } else {
-    store.commit('showToast', {
-      showToast: true,
-      toastMessage: `You are not eligible for a payout. Total sales (₱${totalSales.value}) must be at least ₱500 or you have a pending payout request.`,
-      toastType: 'error'
-    });
-    setTimeout(() => {
-      store.commit('showToast', { showToast: false, toastMessage: '', toastType: 'default' });
-    }, toastDuration);
   }
 };
 
@@ -535,30 +571,12 @@ const generateRandomCode = () => {
 
 const confirmPayout = async () => {
   if (!selectedDate.value || !selectedTime.value) {
-    store.commit('showToast', {
-      showToast: true,
-      toastMessage: 'Please select a date and time',
-      toastType: 'error'
-    });
-    setTimeout(() => {
-      store.commit('showToast', { showToast: false, toastMessage: '', toastType: 'default' });
-    }, toastDuration);
     return;
   }
 
   if (!isPayoutEligible.value || parseFloat(totalSales.value) < 500) {
-    store.commit('showToast', {
-      showToast: true,
-      toastMessage: `You are not eligible for a payout. Total sales (₱${totalSales.value}) must be at least ₱500.`,
-      toastType: 'error'
-    });
-    setTimeout(() => {
-      store.commit('showToast', { showToast: false, toastMessage: '', toastType: 'default' });
-    }, toastDuration);
     return;
   }
-
-  store.dispatch('toggleLoader', true);
 
   const formattedDate = selectedDate.value.toLocaleDateString('en-US', {
     weekday: 'long',
@@ -607,28 +625,96 @@ const confirmPayout = async () => {
     const pdfName = `schedule-slip-${dateStr}.pdf`;
     doc.save(pdfName);
 
-    store.commit('showToast', {
-      showToast: true,
-      toastMessage: 'Payout request submitted and schedule slip downloaded',
-      toastType: 'success'
-    });
-    setTimeout(() => {
-      store.commit('showToast', { showToast: false, toastMessage: '', toastType: 'default' });
-    }, toastDuration);
     closePaymentModal();
     await refreshData();
   } catch (error) {
     console.error('Payout request failed:', error);
-    store.commit('showToast', {
-      showToast: true,
-      toastMessage: error.message || 'Failed to request payout. Please try again.',
-      toastType: 'error'
+  }
+};
+/******************************************************************
+ FUNCTION FOR PRINTING
+******************************************************************/
+
+const printPayment = () => {
+  const printWindow = window.open('', '_blank');
+
+  let printContent = `
+    <html>
+    <head>
+      <title>Pagsasaka Report</title>
+      <style>
+        body { font-family: Arial, sans-serif; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: center; }
+        th { background-color: #f2f2f2; }
+        h1 { text-align: start; font-size: 1.5rem; } 
+        .logo { max-width: 200px; display: block; margin: 0 auto 20px; }
+      </style>
+    </head>
+    <body>
+      <img src="${logo}" class="logo" alt="Company Logo" />
+     	<h1>Payment Record</h1>
+      <table>
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Product Name</th>
+            <th>Payment Method</th>
+            <th>Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+`;
+
+  if (filteredPaymentList.value.length > 0) {
+    filteredPaymentList.value.forEach(payment => {
+      printContent += `
+        <tr>
+          <td>${payment.date}</td>
+          <td>${payment.product_name}</td>
+          <td>${payment.payment_method}</td>
+          <td>${payment.amount}</td>
+        </tr>
+      `;
     });
-    setTimeout(() => {
-      store.commit('showToast', { showToast: false, toastMessage: '', toastType: 'default' });
-    }, toastDuration);
-  } finally {
-    store.dispatch('toggleLoader', false);
+  } else {
+    printContent += `
+      <tr>
+        <td colspan="5">No orders found for the selected filters</td>
+      </tr>
+    `;
+  }
+
+  printContent += `
+        </tbody>
+      </table>
+    </body>
+    </html>
+  `;
+
+  printWindow.document.write(printContent);
+  printWindow.document.close();
+
+  // Wait for the logo image to load before printing
+  const logoImg = printWindow.document.querySelector('.logo');
+  if (logoImg) {
+    logoImg.onload = () => {
+      printWindow.focus();
+      printWindow.print();
+      printWindow.close();
+    };
+    // Handle case where the image fails to load
+    logoImg.onerror = () => {
+      console.error('Failed to load logo image');
+      printWindow.focus();
+      printWindow.print();
+      printWindow.close();
+    };
+  } else {
+    // If there's no logo, proceed with printing
+    printWindow.focus();
+    printWindow.print();
+    printWindow.close();
   }
 };
 /******************************************************************

@@ -1064,7 +1064,7 @@
                                 Clear Status
                             </button>
                             <!-- Print Button -->
-                            <button @click="printOrders" class="flex items-center gap-2 px-3 py-1 bg-green-700 text-white text-sm rounded-md hover:bg-green-600"><Icon icon="arcticons:print" width="24" height="24"  style="color: #f9fffb" />
+                            <button @click="printOrders" class="flex items-center gap-2 px-4 py-1 bg-green-700 text-white text-sm rounded-md hover:bg-green-600"><Icon icon="arcticons:print" width="24" height="24"  style="color: #f9fffb" />
                                 Print
                             </button>
                         </div>
@@ -1135,6 +1135,8 @@ import { useVuelidate } from "@vuelidate/core";
 import { Icon } from '@iconify/vue';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
+import logo from '@/assets/Logo2.png'
+console.log('Imported logo URL:', logo);
 
 const store = useStore();
 const router = useRouter();
@@ -1226,71 +1228,88 @@ const clearStatusFilter = () => {
  FUNCTION FOR PRINTING REPORT
 ******************************************************************/
 const printOrders = () => {
-    // Create a new window for printing
-    const printWindow = window.open('', '_blank');
-    
-    // Generate HTML for the print window
-    let printContent = `
-        <html>
-        <head>
-            <title>Print Report</title>
-            <style>
-                body { font-family: Arial, sans-serif; }
-                table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-                th, td { border: 1px solid #ddd; padding: 8px; text-align: center; }
-                th { background-color: #f2f2f2; }
-                h1 { text-align: center; }
-            </style>
-        </head>
-        <body>
-            <h1>Order Report</h1>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Orders</th>
-                        <th>Quantity</th>
-                        <th>Payment Method</th>
-                        <th>Status</th>
-                        <th>Total Amount</th>
-                    </tr>
-                </thead>
-                <tbody>
-    `;
+  const printWindow = window.open('', '_blank');
 
-    // Add filtered reports to the table
-    if (filteredReports.value.length > 0) {
-        filteredReports.value.forEach(report => {
-            printContent += `
-                <tr>
-                    <td>${report.product_name}</td>
-                    <td>${report.quantity}</td>
-                    <td>${report.payment_method}</td>
-                    <td>${report.status}</td>
-                    <td>${report.total_amount}</td>
-                </tr>
-            `;
-        });
-    } else {
-        printContent += `
-            <tr>
-                <td colspan="5">No orders found for the selected filters</td>
-            </tr>
-        `;
-    }
+  let printContent = `
+    <html>
+    <head>
+      <title>Pagsasaka Report</title>
+      <style>
+        body { font-family: Arial, sans-serif; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: center; }
+        th { background-color: #f2f2f2; }
+        h1 { text-align: start; font-size: 1.5rem; } 
+        .logo { max-width: 200px; display: block; margin: 0 auto 20px; }
+      </style>
+    </head>
+    <body>
+      <img src="${logo}" class="logo" alt="Company Logo" />
+      <h1>Order Report</h1>
+      <table>
+        <thead>
+          <tr>
+            <th>Orders</th>
+            <th>Quantity</th>
+            <th>Payment Method</th>
+            <th>Status</th>
+            <th>Total Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+`;
 
+  if (filteredReports.value.length > 0) {
+    filteredReports.value.forEach(report => {
+      printContent += `
+        <tr>
+          <td>${report.product_name}</td>
+          <td>${report.quantity}</td>
+          <td>${report.payment_method}</td>
+          <td>${report.status}</td>
+          <td>${report.total_amount}</td>
+        </tr>
+      `;
+    });
+  } else {
     printContent += `
-                </tbody>
-            </table>
-        </body>
-        </html>
+      <tr>
+        <td colspan="5">No orders found for the selected filters</td>
+      </tr>
     `;
+  }
 
-    // Write content to the print window and trigger print
-    printWindow.document.write(printContent);
-    printWindow.document.close();
+  printContent += `
+        </tbody>
+      </table>
+    </body>
+    </html>
+  `;
+
+  printWindow.document.write(printContent);
+  printWindow.document.close();
+
+  // Wait for the logo image to load before printing
+  const logoImg = printWindow.document.querySelector('.logo');
+  if (logoImg) {
+    logoImg.onload = () => {
+      printWindow.focus();
+      printWindow.print();
+      printWindow.close();
+    };
+    // Handle case where the image fails to load
+    logoImg.onerror = () => {
+      console.error('Failed to load logo image');
+      printWindow.focus();
+      printWindow.print();
+      printWindow.close();
+    };
+  } else {
+    // If there's no logo, proceed with printing
     printWindow.focus();
     printWindow.print();
     printWindow.close();
+  }
 };
 /******************************************************************
  FUNCTION FOR GETTING REPORT

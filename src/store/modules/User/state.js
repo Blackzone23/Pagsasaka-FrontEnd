@@ -46,5 +46,9 @@ export default {
         data:[],
     },
 
+    payout: {
+        data:[],
+    },
+
 
 }
